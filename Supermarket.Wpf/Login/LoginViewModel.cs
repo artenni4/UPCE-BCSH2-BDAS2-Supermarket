@@ -38,6 +38,7 @@ namespace Supermarket.Wpf.Login
                 OnPropertyChanged(nameof(EmployeeLoginData));
             }
         }
+
         private async void EmployeeLoginAsync(object? obj)
         {
             if (employeeLoginData.Login != null && employeeLoginData.Password != null) 

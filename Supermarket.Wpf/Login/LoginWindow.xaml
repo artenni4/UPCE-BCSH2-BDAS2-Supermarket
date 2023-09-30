@@ -3,7 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Supermarket.Wpf.Login"
+        
+        xmlns:local="clr-namespace:Supermarket.Wpf.Components"
         mc:Ignorable="d"
         Title="Login" Height="1080" Width="1920" WindowState="Maximized">
     <Grid>
@@ -23,11 +24,12 @@
                         <DropShadowEffect BlurRadius="5" ShadowDepth="2" Color="LightGray"/>
                     </TextBox.Effect>
                 </TextBox>
-                <TextBox Width="350" Height="60" Text="{Binding EmployeeLoginData.Password, Mode=TwoWay}" FontSize="40" Grid.Row="1" Margin="0 0 0 80" Padding="5 0 0 0" VerticalAlignment="Center"  Background="#ECECEC" BorderThickness="1" BorderBrush="Black">
-                    <TextBox.Effect>
+
+                <PasswordBox local:PasswordBoxHelper.Password="{Binding EmployeeLoginData.Password, Mode=TwoWay}" Width="350" Height="60" FontSize="40" Grid.Row="1" Margin="0 0 0 80" Padding="5 0 0 0" VerticalAlignment="Center" Background="#ECECEC" BorderThickness="1" BorderBrush="Black">
+                    <PasswordBox.Effect>
                         <DropShadowEffect BlurRadius="5" ShadowDepth="2" Color="LightGray"/>
-                    </TextBox.Effect>
-                </TextBox>
+                    </PasswordBox.Effect>
+                </PasswordBox>
 
                 <StackPanel Grid.Row="2" Orientation="Vertical" HorizontalAlignment="Center">
                     <Button Command="{Binding EmployeeLoginCommand}" Content="LOGIN" FontSize="25" Background="#0471C7" Foreground="White" Width="350" Margin="0 0 0 20" Height="55">
