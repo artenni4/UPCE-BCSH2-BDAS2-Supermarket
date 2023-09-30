@@ -10,28 +10,28 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Supermarket.Wpf.Login
+namespace Supermarket.Wpf.Menu
 {
     /// <summary>
-    /// Interaction logic for LoginWindow.xaml
+    /// Interaction logic for PopupMenu.xaml
     /// </summary>
-    public partial class LoginWindow : Window
+    public partial class PopupMenu : UserControl
     {
-        public LoginWindow(LoginViewModel viewModel)
+        public PopupMenu()
         {
             InitializeComponent();
-            DataContext = viewModel;
         }
 
         private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Escape)
             {
-                popupMenu.Visibility = Visibility.Visible;
-                popupMenu.Focus();
+                this.Visibility = Visibility.Collapsed;
             }
         }
+
     }
 }

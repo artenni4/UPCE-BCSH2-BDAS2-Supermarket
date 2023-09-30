@@ -1,0 +1,32 @@
+﻿<UserControl x:Class="Supermarket.Wpf.Menu.PopupMenu"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Supermarket.Wpf.Menu"
+             mc:Ignorable="d" 
+             PreviewKeyDown="Window_PreviewKeyDown"
+             d:DesignHeight="1080" d:DesignWidth="1920">
+    <Grid Background="#0471C7" Width="1920" Height="1080">
+        <Border BorderBrush="Transparent" Background="White" Width="450" Height="450">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="20" ShadowDepth="2" Color="LightGray"/>
+            </Border.Effect>
+            <Grid Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+
+                </Grid.RowDefinitions>
+
+                <ListBox Foreground="White" BorderBrush="Transparent">
+                    <ListBoxItem>
+                        <Button Content="Item 2" VerticalAlignment="Top" Background="#0471C7" BorderBrush="#005699" Margin="10,10,10,0" Width="120" Height="40"/>
+                    </ListBoxItem>
+                    <ListBoxItem>
+                        <Button Content="Item 2" VerticalAlignment="Top" Background="#0471C7" BorderBrush="#005699" Margin="10,10,10,0" Width="120" Height="40"/>
+                    </ListBoxItem>
+                </ListBox>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>
