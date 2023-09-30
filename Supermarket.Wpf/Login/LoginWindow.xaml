@@ -1,0 +1,47 @@
+﻿<Window x:Class="Supermarket.Wpf.Login.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Supermarket.Wpf.Login"
+        mc:Ignorable="d"
+        Title="Login" Height="1080" Width="1920" WindowState="Maximized">
+    <Grid>
+        <Border BorderBrush="Transparent" Background="White" Width="450" Height="450">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="20" ShadowDepth="2" Color="LightGray"/>
+            </Border.Effect>
+            <Grid Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <TextBox Width="350" Height="60" Text="viktor" FontSize="40" Margin="0 40 0 30" Padding="5 0 0 0" VerticalAlignment="Center" Background="#ECECEC" BorderThickness="1" BorderBrush="Black">
+                    <TextBox.Effect>
+                        <DropShadowEffect BlurRadius="5" ShadowDepth="2" Color="LightGray"/>
+                    </TextBox.Effect>
+                </TextBox>
+                <PasswordBox Width="350" Height="60" Password="viktor" FontSize="40" Grid.Row="1" Margin="0 0 0 80" Padding="5 0 0 0" VerticalAlignment="Center"  Background="#ECECEC" BorderThickness="1" BorderBrush="Black">
+                    <PasswordBox.Effect>
+                        <DropShadowEffect BlurRadius="5" ShadowDepth="2" Color="LightGray"/>
+                    </PasswordBox.Effect>
+                </PasswordBox>
+
+                <StackPanel Grid.Row="2" Orientation="Vertical" HorizontalAlignment="Center">
+                    <Button Command="{Binding EmployeeLoginCommand}" Content="LOGIN" FontSize="25" Background="#0471C7" Foreground="White" Width="350" Margin="0 0 0 20" Height="55">
+                        <Button.Effect>
+                            <DropShadowEffect BlurRadius="5" ShadowDepth="2" Color="LightGray"/>
+                        </Button.Effect>
+                    </Button>
+                    <Button Command="{Binding CustomerLoginCommand}" Content="NEPRIHLASENY UZIVATEL" FontSize="25" Background="#1B2060" Foreground="White" Width="350" Margin="5" Height="55">
+                        <Button.Effect>
+                            <DropShadowEffect BlurRadius="5" ShadowDepth="2" Color="LightGray"/>
+                        </Button.Effect>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
