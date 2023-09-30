@@ -1,4 +1,6 @@
-﻿using Supermarket.Core.Employees;
+﻿using Supermarket.Core.Common.Paging;
+using Supermarket.Core.Employees;
+using Supermarket.Infrastructure.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Supermarket.Infrastructure.Employees
 {
-    public class EmployeeRepository : IEmployeeRepository
+    public class EmployeeRepository : CrudRepositoryBase<Employee, int, PagingQueryObject>, IEmployeeRepository
     {
         public Task<Employee?> GetByLoginAsync(string login)
         {

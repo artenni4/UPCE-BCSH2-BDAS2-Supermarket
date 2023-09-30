@@ -1,13 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Supermarket.Core.Common;
 using Supermarket.Core.Employees;
+using Supermarket.Infrastructure.Common;
 using Supermarket.Infrastructure.Employees;
 using Supermarket.Wpf.Login;
 using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace Supermarket.Wpf
@@ -42,6 +39,7 @@ namespace Supermarket.Wpf
 
         private void AddInfrastructure(IServiceCollection serviceCollection)
         {
+            serviceCollection.AddScoped<IUnitOfWork, UnitOfWork>();
             serviceCollection.AddScoped<IEmployeeRepository, EmployeeRepository>();
         }
 

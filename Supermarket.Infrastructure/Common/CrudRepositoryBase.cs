@@ -1,29 +1,37 @@
 ﻿using Supermarket.Core.Common;
+using Supermarket.Core.Common.Paging;
 
 namespace Supermarket.Infrastructure.Common
 {
-    internal abstract class CrudRepositoryBase<TEntity, TId> where TEntity : IEntity<TId>
+    public abstract class CrudRepositoryBase<TEntity, TId, TQueryObject> : ICrudRepository<TEntity, TId, TQueryObject>
+        where TEntity : IEntity<TId>
+        where TQueryObject : IQueryObject
     {
         // TODO add basic CRUD operations for entities
 
-        protected Task<TEntity> GetByIdAsync(TId id)
+        public Task<PagedResult<TEntity>> GetPagedAsync(TQueryObject queryObject)
         {
-            return null!;
+            throw new NotImplementedException();
         }
 
-        protected Task<TId> AddAsync(TEntity entity)
+        public Task<TEntity?> GetByIdAsync(TId id)
         {
-            return null!;
+            throw new NotImplementedException();
         }
 
-        protected Task UpdateAsync(TEntity entity)
+        public Task<TId> AddAsync(TEntity entity)
         {
-            return null!;
+            throw new NotImplementedException();
         }
 
-        protected Task DeleteAsync(TId id)
+        public Task UpdateAsync(TEntity entity)
         {
-            return null!;
+            throw new NotImplementedException();
+        }
+
+        public Task DeleteAsync(TId id)
+        {
+            throw new NotImplementedException();
         }
     }
 }
