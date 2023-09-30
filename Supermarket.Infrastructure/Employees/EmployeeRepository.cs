@@ -12,6 +12,8 @@ namespace Supermarket.Infrastructure.Employees
 {
     public class EmployeeRepository : CrudRepositoryBase<Employee, int, PagingQueryObject>, IEmployeeRepository
     {
+        public override Task<PagedResult<Employee>> GetPagedAsync(PagingQueryObject queryObject) => GetRecordsRangeAsync(queryObject.RecordsRange);
+
         public Task<Employee?> GetByLoginAsync(string login)
         {
             if (login != "BIBA") return Task.FromResult((Employee?)null);
