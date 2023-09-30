@@ -19,11 +19,9 @@ namespace Supermarket.Wpf.Login
     /// </summary>
     public partial class LoginWindow : Window
     {
-        public LoginWindow()
+        public LoginWindow(LoginViewModel viewModel)
         {
             InitializeComponent();
-
-            LoginViewModel viewModel = new LoginViewModel();
             DataContext = viewModel;
         }
 

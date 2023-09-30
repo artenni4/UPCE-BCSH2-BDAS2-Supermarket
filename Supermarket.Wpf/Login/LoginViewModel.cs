@@ -18,17 +18,16 @@ namespace Supermarket.Wpf.Login
         public ICommand CustomerLoginCommand { get; set; }
         private readonly IEmployeeService _employeeService;
 
-        public LoginViewModel()
+        public LoginViewModel(IEmployeeService employeeService)
         {
+            _employeeService = employeeService;
+
             EmployeeLoginCommand = new RelayCommand(EmployeeLoginAsync, CanLogin);
             CustomerLoginCommand = new RelayCommand(CustomerLogin, CanLogin);
-            _employeeService = new EmployeeService(new EmployeeRepository());
-
-            employeeLoginData = new();
         }
 
 
-        private LoginModel employeeLoginData;
+        private LoginModel employeeLoginData = new();
         public LoginModel EmployeeLoginData
         {
             get { return employeeLoginData; }
