@@ -1,4 +1,7 @@
-﻿namespace Supermarket.Core.Employees
+﻿using Supermarket.Core.Employees.LoggedEmployees;
+using Supermarket.Core.Employees.Roles;
+
+namespace Supermarket.Core.Employees
 {
     public class EmployeeService : IEmployeeService
     {
@@ -9,7 +12,16 @@
             _employeeRepository = employeeRepository;
         }
 
-        public async Task<LoggedEmployee> LoginEmployeeAsync(LoginData loginData)
+        public async Task<ILoggedEmployee> LoginEmployeeAsync(LoginData loginData)
+        {
+            var employee = await AuthenticateEmployee(loginData);
+            return AuthorizeEmployee(employee);
+        }
+        
+        /// <summary>
+        /// Authenticates employee by credentials
+        /// </summary>
+        private async Task<Employee> AuthenticateEmployee(LoginData loginData)
         {
             var employee = await _employeeRepository.GetByLoginAsync(loginData.Login) ?? throw new InvalidCredentialsException();
 
@@ -19,7 +31,38 @@
                 throw new InvalidCredentialsException();
             }
 
-            return LoggedEmployee.FromEmployee(employee);
+            return employee;
+        }
+
+        /// <summary>
+        /// Retrieves roles for employee
+        /// </summary>
+        private ILoggedEmployee AuthorizeEmployee(Employee employee)
+        {
+            if (employee.Roles.Contains(DbRoleNames.SuperAdmin))
+            {
+                if (employee.Roles.Count > 1)
+                {
+                    throw new InconsistencyException($"Employee [{employee.Id}] with super admin role cannot have other roles");
+                }
+
+                return new LoggedSuperAdmin(employee.Id);
+            }
+
+            if (employee.SupermarketId.HasValue == false)
+            {
+                throw new InconsistencyException($"Employee [{employee.Id}] is not super admin but does not have an assigned supermarket");
+            }
+
+            var roles = employee.Roles.Select<string, IEmployeeRole>(r => r switch
+            {
+                DbRoleNames.Manager => new ManagerRole(employee.SupermarketId.Value),
+                DbRoleNames.GoodsKeeper => new GoodsKeeperRole(employee.SupermarketId.Value),
+                DbRoleNames.Cashier => new CashierRole(employee.SupermarketId.Value),
+                _ => throw new InconsistencyException($"Role [{r}] does not exist")
+            }).ToList();
+
+            return new LoggedSupermarketEmployee(employee.Id, roles);
         }
     }
 }

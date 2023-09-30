@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Supermarket.Core.Employees.Roles
+namespace Supermarket.Core.Employees.LoggedEmployees
 {
-    public record Manager(int SupermarketId);
+    public record LoggedSuperAdmin(int Id) : ILoggedEmployee;
 }

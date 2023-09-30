@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace Supermarket.Core.Employees.Roles
 {
-    public record Cashier(int SupermarketId);
+    public record ManagerRole(int SupermarketId) : IEmployeeRole;
 }
