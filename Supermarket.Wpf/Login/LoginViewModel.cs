@@ -1,4 +1,6 @@
-﻿using Supermarket.Wpf.Common;
+﻿using Supermarket.Core.Employees;
+using Supermarket.Infrastructure.Employees;
+using Supermarket.Wpf.Common;
 using Supermarket.Wpf.Login;
 using System;
 using System.Collections.Generic;
@@ -14,14 +16,17 @@ namespace Supermarket.Wpf.Login
     {
         public ICommand EmployeeLoginCommand { get; set; }
         public ICommand CustomerLoginCommand { get; set; }
+        private readonly IEmployeeService _employeeService;
 
         public LoginViewModel()
         {
-            EmployeeLoginCommand = new RelayCommand(EmployeeLogin, CanLogin);
+            EmployeeLoginCommand = new RelayCommand(EmployeeLoginAsync, CanLogin);
             CustomerLoginCommand = new RelayCommand(CustomerLogin, CanLogin);
+            _employeeService = new EmployeeService(new EmployeeRepository());
 
             employeeLoginData = new();
         }
+
 
         private LoginModel employeeLoginData;
         public LoginModel EmployeeLoginData
@@ -33,8 +38,13 @@ namespace Supermarket.Wpf.Login
                 OnPropertyChanged(nameof(EmployeeLoginData));
             }
         }
-        private void EmployeeLogin(object? obj)
+        private async void EmployeeLoginAsync(object? obj)
         {
+            if (employeeLoginData.Login != null && employeeLoginData.Password != null) 
+            {
+                LoginData loginData = new LoginData { Login = employeeLoginData.Login, Password = employeeLoginData.Password };        
+                var userId = await _employeeService.LoginEmployeeAsync(loginData);
+            }
             // authorization
             // kakaja pokladna
         }

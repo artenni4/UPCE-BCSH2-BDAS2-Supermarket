@@ -22,6 +22,9 @@ namespace Supermarket.Wpf.Login
         public LoginWindow()
         {
             InitializeComponent();
+
+            LoginViewModel viewModel = new LoginViewModel();
+            DataContext = viewModel;
         }
     }
 }

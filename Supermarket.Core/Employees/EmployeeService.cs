@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Supermarket.Core.Employees
 {
-    internal class EmployeeService : IEmployeeService
+    public class EmployeeService : IEmployeeService
     {
         private readonly IEmployeeRepository _employeeRepository;
 

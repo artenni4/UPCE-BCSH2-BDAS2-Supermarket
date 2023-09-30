@@ -18,16 +18,16 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <TextBox Width="350" Height="60" Text="viktor" FontSize="40" Margin="0 40 0 30" Padding="5 0 0 0" VerticalAlignment="Center" Background="#ECECEC" BorderThickness="1" BorderBrush="Black">
+                <TextBox Width="350" Height="60" Text="{Binding EmployeeLoginData.Login, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="40" Margin="0 40 0 30" Padding="5 0 0 0" VerticalAlignment="Center" Background="#ECECEC" BorderThickness="1" BorderBrush="Black">
                     <TextBox.Effect>
                         <DropShadowEffect BlurRadius="5" ShadowDepth="2" Color="LightGray"/>
                     </TextBox.Effect>
                 </TextBox>
-                <PasswordBox Width="350" Height="60" Password="viktor" FontSize="40" Grid.Row="1" Margin="0 0 0 80" Padding="5 0 0 0" VerticalAlignment="Center"  Background="#ECECEC" BorderThickness="1" BorderBrush="Black">
-                    <PasswordBox.Effect>
+                <TextBox Width="350" Height="60" Text="{Binding EmployeeLoginData.Password, Mode=TwoWay}" FontSize="40" Grid.Row="1" Margin="0 0 0 80" Padding="5 0 0 0" VerticalAlignment="Center"  Background="#ECECEC" BorderThickness="1" BorderBrush="Black">
+                    <TextBox.Effect>
                         <DropShadowEffect BlurRadius="5" ShadowDepth="2" Color="LightGray"/>
-                    </PasswordBox.Effect>
-                </PasswordBox>
+                    </TextBox.Effect>
+                </TextBox>
 
                 <StackPanel Grid.Row="2" Orientation="Vertical" HorizontalAlignment="Center">
                     <Button Command="{Binding EmployeeLoginCommand}" Content="LOGIN" FontSize="25" Background="#0471C7" Foreground="White" Width="350" Margin="0 0 0 20" Height="55">
