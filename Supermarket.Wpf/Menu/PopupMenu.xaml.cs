@@ -25,13 +25,5 @@ namespace Supermarket.Wpf.Menu
             InitializeComponent();
         }
 
-        private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Escape)
-            {
-                this.Visibility = Visibility.Collapsed;
-            }
-        }
-
     }
 }

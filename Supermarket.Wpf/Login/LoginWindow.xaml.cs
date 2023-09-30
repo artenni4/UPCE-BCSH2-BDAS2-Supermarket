@@ -29,9 +29,12 @@ namespace Supermarket.Wpf.Login
         {
             if (e.Key == Key.Escape)
             {
-                popupMenu.Visibility = Visibility.Visible;
-                popupMenu.Focus();
+                if (popupMenu.Visibility == Visibility.Collapsed)
+                    popupMenu.Visibility = Visibility.Visible;
+                else
+                    popupMenu.Visibility = Visibility.Collapsed;
             }
         }
+
     }
 }
