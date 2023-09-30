@@ -1,18 +1,14 @@
 ﻿using Supermarket.Core.Common.Paging;
 using Supermarket.Core.Employees;
 using Supermarket.Infrastructure.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Supermarket.Infrastructure.Employees
 {
-    public class EmployeeRepository : CrudRepositoryBase<Employee, int, PagingQueryObject>, IEmployeeRepository
+    public class EmployeeRepository : CrudRepositoryBase<Employee, int>, IEmployeeRepository
     {
-        public override Task<PagedResult<Employee>> GetPagedAsync(PagingQueryObject queryObject) => GetRecordsRangeAsync(queryObject.RecordsRange);
+        public Task<PagedResult<Employee>> GetPagedAsync(PagingQueryObject queryObject) => GetRecordsRangeAsync(queryObject.RecordsRange);
 
         public Task<Employee?> GetByLoginAsync(string login)
         {

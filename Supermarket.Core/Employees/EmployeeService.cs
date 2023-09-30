@@ -37,7 +37,7 @@ namespace Supermarket.Core.Employees
         /// <summary>
         /// Retrieves roles for employee
         /// </summary>
-        private ILoggedEmployee AuthorizeEmployee(Employee employee)
+        private static ILoggedEmployee AuthorizeEmployee(Employee employee)
         {
             if (employee.Roles.Contains(DbRoleNames.SuperAdmin))
             {
