@@ -19,6 +19,8 @@ namespace Supermarket.Wpf.Login
         {
             EmployeeLoginCommand = new RelayCommand(EmployeeLogin, CanLogin);
             CustomerLoginCommand = new RelayCommand(CustomerLogin, CanLogin);
+
+            employeeLoginData = new();
         }
 
         private LoginModel employeeLoginData;
@@ -31,18 +33,18 @@ namespace Supermarket.Wpf.Login
                 OnPropertyChanged(nameof(EmployeeLoginData));
             }
         }
-        private void EmployeeLogin(object obj)
+        private void EmployeeLogin(object? obj)
         {
             // authorization
             // kakaja pokladna
         }
 
-        private void CustomerLogin(object obj)
+        private void CustomerLogin(object? obj)
         {
             // goto unauth view
         }
 
-        private bool CanLogin(object arg) { return true; }
+        private bool CanLogin(object? arg) { return true; }
 
         public event PropertyChangedEventHandler? PropertyChanged;
 

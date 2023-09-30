@@ -4,15 +4,15 @@ namespace Supermarket.Wpf.Login
 {
     public class LoginModel : INotifyPropertyChanged
     {
-        private string login;
-        private string password;
+        private string? login;
+        private string? password;
 
-        public string Login
+        public string? Login
         {
             get { return login; } set { login = value; OnPropertyChanged("Login"); } 
         }
 
-        public string Password
+        public string? Password
         {
             get { return password; }
             set { password = value; OnPropertyChanged("Password"); }
