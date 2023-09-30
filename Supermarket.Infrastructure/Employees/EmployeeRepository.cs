@@ -31,7 +31,8 @@ namespace Supermarket.Infrastructure.Employees
                 Surname = "Biba",
                 StartedWorking = new DateTimeOffset(2020, 10, 1, 0, 0, 0, TimeSpan.Zero),
                 PasswordHash = hashBytes,
-                PasswordHashSalt = salt
+                PasswordHashSalt = salt,
+                Roles = new[] { EmployeeRole.Cashier },
             });
         }
     }

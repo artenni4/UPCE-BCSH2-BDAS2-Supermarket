@@ -10,10 +10,12 @@ namespace Supermarket.Core.Employees
     public class LoggedEmployee : IEntity<int>
     {
         public required int Id { get; init; }
+        public required IReadOnlyList<EmployeeRole> Roles { get; init; }
 
         public static LoggedEmployee FromEmployee(Employee employee) => new ()
         {
-            Id = employee.Id
+            Id = employee.Id,
+            Roles = employee.Roles,
         };
     }
 }

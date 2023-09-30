@@ -16,5 +16,6 @@ namespace Supermarket.Core.Employees
         public required string Name { get; init; }
         public required string Surname { get; init; }
         public required DateTimeOffset StartedWorking { get; init; }
+        public required IReadOnlyList<EmployeeRole> Roles { get; init; }
     }
 }
