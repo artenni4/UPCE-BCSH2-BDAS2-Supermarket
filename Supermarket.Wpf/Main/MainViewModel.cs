@@ -11,18 +11,14 @@ using System.Threading.Tasks;
 
 namespace Supermarket.Wpf.Main
 {
-    public class MainViewModel : INotifyPropertyChanged, INavigationService
+    public class MainViewModel : INotifyPropertyChanged
     {
-        private readonly IServiceProvider _serviceProvider;
-
-        public MainViewModel(IServiceProvider serviceProvider)
+        public MainViewModel()
         {
-            _currentViewModel = serviceProvider.GetRequiredService<CashboxViewModel>();
-            _serviceProvider = serviceProvider;
         }
 
-        private object _currentViewModel;
-        public object CurrentViewModel
+        private object? _currentViewModel;
+        public object? CurrentViewModel
         {
             get { return _currentViewModel; }
             set
@@ -32,25 +28,11 @@ namespace Supermarket.Wpf.Main
             }
         }
 
-        public void ShowCustomerCashbox()
-        {
-            CurrentViewModel = new CashboxViewModel();
-        }
-
         public event PropertyChangedEventHandler? PropertyChanged;
+
         protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        public void NavigateTo(string viewModelName)
-        {
-            if (viewModelName == "CashboxViewModel")
-            {
-                object? viewModel = _serviceProvider.GetRequiredService<CashboxViewModel>();
-                _currentViewModel = viewModel;
-
-            }
         }
     }
 }

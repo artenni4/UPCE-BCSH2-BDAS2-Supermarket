@@ -20,10 +20,9 @@ namespace Supermarket.Wpf.Login
     /// </summary>
     public partial class LoginWindow : UserControl
     {
-        public LoginWindow(LoginViewModel viewModel)
+        public LoginWindow()
         {
             InitializeComponent();
-            DataContext = viewModel;
         }
 
         private void Window_PreviewKeyDown(object sender, KeyEventArgs e)

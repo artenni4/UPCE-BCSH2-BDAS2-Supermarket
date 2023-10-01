@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace Supermarket.Wpf.Navigation
 {
-    public interface INavigationService
+    public enum NavigateWindow
     {
-        void NavigateTo(NavigateWindow navigateWindow);
+        Login,
+        CashBox
     }
 }

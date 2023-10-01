@@ -56,9 +56,7 @@ namespace Supermarket.Wpf.Login
 
         private void CustomerLogin(object? obj)
         {
-            _navigationService.NavigateTo("CashboxViewModel");
-            
-            
+            _navigationService.NavigateTo(NavigateWindow.CashBox);
         }
 
         private bool CanLogin(object? arg) { return true; }
