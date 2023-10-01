@@ -1,13 +1,16 @@
 ﻿using Supermarket.Core.Employees;
 using Supermarket.Infrastructure.Employees;
+using Supermarket.Wpf.Cashbox;
 using Supermarket.Wpf.Common;
 using Supermarket.Wpf.Login;
+using Supermarket.Wpf.Navigation;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace Supermarket.Wpf.Login
@@ -17,10 +20,12 @@ namespace Supermarket.Wpf.Login
         public ICommand EmployeeLoginCommand { get; set; }
         public ICommand CustomerLoginCommand { get; set; }
         private readonly IEmployeeService _employeeService;
+        private readonly INavigationService _navigationService;
 
-        public LoginViewModel(IEmployeeService employeeService)
+        public LoginViewModel(IEmployeeService employeeService, INavigationService navigationService)
         {
             _employeeService = employeeService;
+            _navigationService = navigationService;
 
             EmployeeLoginCommand = new RelayCommand(EmployeeLoginAsync, CanLogin);
             CustomerLoginCommand = new RelayCommand(CustomerLogin, CanLogin);
@@ -51,7 +56,9 @@ namespace Supermarket.Wpf.Login
 
         private void CustomerLogin(object? obj)
         {
-            // goto unauth view
+            _navigationService.NavigateTo("CashboxViewModel");
+            
+            
         }
 
         private bool CanLogin(object? arg) { return true; }

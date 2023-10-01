@@ -7,6 +7,8 @@ using Supermarket.Infrastructure.Employees;
 using Supermarket.Infrastructure.Products;
 using Supermarket.Wpf.Cashbox;
 using Supermarket.Wpf.Login;
+using Supermarket.Wpf.Main;
+using Supermarket.Wpf.Navigation;
 using System;
 using System.Windows;
 
@@ -52,8 +54,12 @@ namespace Supermarket.Wpf
         private void AddWpf(IServiceCollection serviceCollection)
         {
             serviceCollection.AddSingleton<LoginWindow>();
-            serviceCollection.AddSingleton<CashboxWindow>();
             serviceCollection.AddSingleton<LoginViewModel>();
+            serviceCollection.AddSingleton<CashboxWindow>();
+            serviceCollection.AddSingleton<CashboxViewModel>();
+            serviceCollection.AddSingleton<MainViewModel>();
+            serviceCollection.AddSingleton<MainWindow>();
+            serviceCollection.AddSingleton<INavigationService, NavigationService>();
         }
     }
 }
