@@ -3,6 +3,7 @@ using Supermarket.Core.Common;
 using Supermarket.Core.Employees;
 using Supermarket.Infrastructure.Common;
 using Supermarket.Infrastructure.Employees;
+using Supermarket.Wpf.Cashbox;
 using Supermarket.Wpf.Login;
 using System;
 using System.Windows;
@@ -29,6 +30,7 @@ namespace Supermarket.Wpf
         protected override void OnStartup(StartupEventArgs e)
         {
             var loginWindow = _serviceProvider.GetRequiredService<LoginWindow>();
+
             loginWindow.Show();
         }
 
@@ -46,6 +48,7 @@ namespace Supermarket.Wpf
         private void AddWpf(IServiceCollection serviceCollection)
         {
             serviceCollection.AddSingleton<LoginWindow>();
+            serviceCollection.AddSingleton<CashboxWindow>();
             serviceCollection.AddSingleton<LoginViewModel>();
         }
     }
