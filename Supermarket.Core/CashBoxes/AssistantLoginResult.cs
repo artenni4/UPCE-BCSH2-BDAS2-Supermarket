@@ -17,7 +17,7 @@ namespace Supermarket.Core.CashBoxes
         public bool IsSuccess { get; }
         public AssistantLoginFail? Error { get; }
 
-        public static AssistantLoginResult Fail(AssistantLoginFail error) => new(false, error);
-        public static AssistantLoginResult Success() => new(true, error: null);
+        internal static AssistantLoginResult Fail(AssistantLoginFail error) => new(false, error);
+        internal static AssistantLoginResult Success() => new(true, error: null);
     }
 }
