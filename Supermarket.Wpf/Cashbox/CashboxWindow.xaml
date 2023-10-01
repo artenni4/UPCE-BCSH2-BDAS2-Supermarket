@@ -8,7 +8,7 @@
              d:DesignHeight="1080" d:DesignWidth="1920">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="900" />
+            <RowDefinition Height="800" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
@@ -18,23 +18,56 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <!-- Content for the first column (left side) -->
-            <Border Grid.Column="0" Background="#D9D9D9" Margin="10" BorderBrush="#E0E0E0" BorderThickness="1">
-                <StackPanel>
-                    <!-- Add your controls here for the left side -->
-                </StackPanel>
+            <Border Grid.Column="0" Background="#D9D9D9" Margin="10" BorderBrush="#8F8F8F" BorderThickness="2">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Grid.Row="0">
+                        <TextBlock Text="POKLADNA " HorizontalAlignment="Center" Foreground="#1B2060" FontSize="35" FontWeight="DemiBold" VerticalAlignment="Center"/>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <ListBox Background="Transparent" BorderThickness="0">
+                                <ListBoxItem Content="Item 1" Foreground="#1B2060" FontSize="25"/>
+                                <ListBoxItem Content="Item 2" Foreground="#1B2060" FontSize="25"/>
+                                <ListBoxItem Content="Item 3" Foreground="#1B2060" FontSize="25"/>
+                            </ListBox>
+                        </ScrollViewer>
+                    </StackPanel>
+
+                    <Button Grid.Row="1" Content="ZAPLATIT" Width="350" Height="50" Margin="10" Background="#1B2060" BorderBrush="#025394" BorderThickness="2" Foreground="White" FontSize="20" />
+                </Grid>
             </Border>
 
-            <!-- Content for the second column (right side) -->
-            <Border Grid.Column="1" Background="#D9D9D9" Margin="10" BorderBrush="#E0E0E0" BorderThickness="1">
-                <StackPanel>
-                    <!-- Add your controls here for the right side -->
-                </StackPanel>
+
+
+
+            <Border Grid.Column="1" Background="#D9D9D9" Margin="10" BorderBrush="#8F8F8F" BorderThickness="2">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Grid.Row="0" Orientation="Horizontal">
+                        
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="1" Orientation="Horizontal">
+                        <Button Content="Next" Margin="5"/>
+                        <Button Content="Back" Margin="5"/>
+                    </StackPanel>
+
+                    <TextBox Grid.Row="2" Margin="5"/>
+                </Grid>
             </Border>
+
         </Grid>
 
         <StackPanel Grid.Row="1">
-            <Border Background="#D9D9D9" Height="180" Margin="10" Padding="7 0 0 0" BorderBrush="#E0E0E0" BorderThickness="1">
+            <Border Background="#D9D9D9" Height="180" Margin="10" Padding="7 0 0 0" BorderBrush="#8F8F8F" BorderThickness="2">
                 <WrapPanel VerticalAlignment="Center">
                     <Button Content="Button 1" Margin="5" Width="225" Height="120" FontSize="25" Background="#0471C7" Foreground="White" BorderBrush="#025394" BorderThickness="4">
                         <Button.Effect>
