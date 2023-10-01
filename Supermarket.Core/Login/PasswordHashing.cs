@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 
-namespace Supermarket.Core.Employees
+namespace Supermarket.Core.Login
 {
     internal static class PasswordHashing
     {

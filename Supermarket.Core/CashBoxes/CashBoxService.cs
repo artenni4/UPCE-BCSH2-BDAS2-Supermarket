@@ -1,6 +1,7 @@
 ﻿using Supermarket.Core.Employees;
-using Supermarket.Core.Employees.LoggedEmployees;
 using Supermarket.Core.Employees.Roles;
+using Supermarket.Core.Login;
+using Supermarket.Core.Login.LoggedEmployees;
 using Supermarket.Core.Products;
 using Supermarket.Core.Products.Categories;
 
@@ -10,13 +11,13 @@ namespace Supermarket.Core.CashBoxes
     {
         private readonly IProductCategoryRepository _productCategoryRepository;
         private readonly IProductRepository _productRepository;
-        private readonly IEmployeeService _employeeService;
+        private readonly ILoginService _loginService;
 
-        public CashBoxService(IProductCategoryRepository productCategoryRepository, IProductRepository productRepository, IEmployeeService employeeService)
+        public CashBoxService(IProductCategoryRepository productCategoryRepository, IProductRepository productRepository, ILoginService loginService)
         {
             _productCategoryRepository = productCategoryRepository;
             _productRepository = productRepository;
-            _employeeService = employeeService;
+            _loginService = loginService;
         }
 
         public async Task<PagedResult<ProductCategory>> GetAllCategoriesAsync(RecordsRange recordsRange)
@@ -45,7 +46,7 @@ namespace Supermarket.Core.CashBoxes
             // TODO check if cash box is in correct supermarket
             try
             {
-                var employee = await _employeeService.LoginEmployeeAsync(loginData);
+                var employee = await _loginService.LoginEmployeeAsync(loginData);
                 if (employee is LoggedSupermarketEmployee supermarketEmployee && supermarketEmployee.Roles.Any(r => r is CashierRole))
                 {
                     return AssistantLoginResult.Success();

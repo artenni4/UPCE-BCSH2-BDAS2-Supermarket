@@ -1,16 +1,8 @@
 ﻿using Supermarket.Core.Employees;
-using Supermarket.Infrastructure.Employees;
-using Supermarket.Wpf.Cashbox;
+using Supermarket.Core.Login;
 using Supermarket.Wpf.Common;
-using Supermarket.Wpf.Login;
 using Supermarket.Wpf.Navigation;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
 
 namespace Supermarket.Wpf.Login
@@ -19,12 +11,12 @@ namespace Supermarket.Wpf.Login
     {
         public ICommand EmployeeLoginCommand { get; set; }
         public ICommand CustomerLoginCommand { get; set; }
-        private readonly IEmployeeService _employeeService;
+        private readonly ILoginService _loginService;
         private readonly INavigationService _navigationService;
 
-        public LoginViewModel(IEmployeeService employeeService, INavigationService navigationService)
+        public LoginViewModel(ILoginService loginService, INavigationService navigationService)
         {
-            _employeeService = employeeService;
+            _loginService = loginService;
             _navigationService = navigationService;
 
             EmployeeLoginCommand = new RelayCommand(EmployeeLoginAsync, CanLogin);
@@ -48,7 +40,7 @@ namespace Supermarket.Wpf.Login
             if (employeeLoginData.Login != null && employeeLoginData.Password != null) 
             {
                 LoginData loginData = new LoginData { Login = employeeLoginData.Login, Password = employeeLoginData.Password };        
-                var userId = await _employeeService.LoginEmployeeAsync(loginData);
+                var userId = await _loginService.LoginEmployeeAsync(loginData);
             }
             // authorization
             // kakaja pokladna
