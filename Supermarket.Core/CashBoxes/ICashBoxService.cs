@@ -27,6 +27,6 @@ namespace Supermarket.Core.CashBoxes
         /// <summary>
         /// Tries to authenticate assitant to the cash box
         /// </summary>
-        Task<AssistantLoginResult> AssistantLoginAsync(LoginData loginData);
+        Task<AssistantLoginResult> AssistantLoginAsync(LoginData loginData, int cashBoxId);
     }
 }

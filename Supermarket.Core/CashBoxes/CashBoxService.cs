@@ -40,8 +40,9 @@ namespace Supermarket.Core.CashBoxes
             throw new NotImplementedException();
         }
 
-        public async Task<AssistantLoginResult> AssistantLoginAsync(LoginData loginData)
+        public async Task<AssistantLoginResult> AssistantLoginAsync(LoginData loginData, int cashBoxId)
         {
+            // TODO check if cash box is in correct supermarket
             try
             {
                 var employee = await _employeeService.LoginEmployeeAsync(loginData);
