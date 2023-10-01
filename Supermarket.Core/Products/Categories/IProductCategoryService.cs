@@ -8,6 +8,6 @@ namespace Supermarket.Core.Products.Categories
 {
     public interface IProductCategoryService
     {
-        Task<PagedResult<ProductCategory>> GetAllCategoriesAsync(RecordsRange recordsRange);
+        
     }
 }
