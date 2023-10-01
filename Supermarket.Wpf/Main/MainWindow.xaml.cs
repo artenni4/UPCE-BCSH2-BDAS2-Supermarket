@@ -21,10 +21,9 @@ namespace Supermarket.Wpf.Main
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow(MainViewModel mainViewModel)
+        public MainWindow()
         {
             InitializeComponent();
-            DataContext = mainViewModel;
         }
 
     }

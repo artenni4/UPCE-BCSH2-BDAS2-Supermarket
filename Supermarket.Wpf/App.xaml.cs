@@ -35,12 +35,16 @@ namespace Supermarket.Wpf
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
+            var mainWindow = new MainWindow()
+            {
+                DataContext = _serviceProvider.GetRequiredService<MainViewModel>()
+            };
+
+            var navigationService = _serviceProvider.GetRequiredService<INavigationService>();
+            navigationService.NavigateTo(NavigateWindow.Login);
+
             mainWindow.Show();
-
-            //var loginWindow = _serviceProvider.GetRequiredService<LoginWindow>();
-
-            //loginWindow.Show();
+            base.OnStartup(e);
         }
 
         private static void AddCore(IServiceCollection serviceCollection)
@@ -60,13 +64,10 @@ namespace Supermarket.Wpf
 
         private static void AddWpf(IServiceCollection serviceCollection)
         {
-            serviceCollection.AddSingleton<LoginWindow>();
             serviceCollection.AddSingleton<LoginViewModel>();
-            serviceCollection.AddSingleton<CashboxWindow>();
             serviceCollection.AddSingleton<CashboxViewModel>();
             serviceCollection.AddSingleton<MainViewModel>();
-            serviceCollection.AddSingleton<MainWindow>();
-            serviceCollection.AddSingleton<INavigationService, MainViewModel>();
+            serviceCollection.AddSingleton<INavigationService, NavigationService>();
         }
     }
 }
