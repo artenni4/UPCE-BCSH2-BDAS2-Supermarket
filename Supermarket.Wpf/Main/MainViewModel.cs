@@ -28,12 +28,8 @@ namespace Supermarket.Wpf.Main
             }
         }
 
-        public void ShowCustomerCashbox()
-        {
-            CurrentViewModel = new CashboxViewModel();
-        }
-
         public event PropertyChangedEventHandler? PropertyChanged;
+
         protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
