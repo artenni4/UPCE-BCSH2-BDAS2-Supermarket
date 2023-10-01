@@ -1,4 +1,5 @@
-﻿using Supermarket.Core.Products;
+﻿using Supermarket.Core.Employees;
+using Supermarket.Core.Products;
 using Supermarket.Core.Products.Categories;
 
 namespace Supermarket.Core.CashBoxes
@@ -22,5 +23,10 @@ namespace Supermarket.Core.CashBoxes
         /// </summary>
         /// <returns></returns>
         Task AddSaleAsync(int cashBoxId, IReadOnlyList<SoldProductDto> soldProducts);
+
+        /// <summary>
+        /// Tries to authenticate assitant to the cash box
+        /// </summary>
+        Task<AssistantLoginResult> AssistantLoginAsync(LoginData loginData);
     }
 }

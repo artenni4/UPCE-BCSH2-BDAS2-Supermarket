@@ -1,10 +1,8 @@
-﻿using Supermarket.Core.Products;
+﻿using Supermarket.Core.Employees;
+using Supermarket.Core.Employees.LoggedEmployees;
+using Supermarket.Core.Employees.Roles;
+using Supermarket.Core.Products;
 using Supermarket.Core.Products.Categories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Supermarket.Core.CashBoxes
 {
@@ -12,11 +10,13 @@ namespace Supermarket.Core.CashBoxes
     {
         private readonly IProductCategoryRepository _productCategoryRepository;
         private readonly IProductRepository _productRepository;
+        private readonly IEmployeeService _employeeService;
 
-        public CashBoxService(IProductCategoryRepository productCategoryRepository, IProductRepository productRepository)
+        public CashBoxService(IProductCategoryRepository productCategoryRepository, IProductRepository productRepository, IEmployeeService employeeService)
         {
             _productCategoryRepository = productCategoryRepository;
             _productRepository = productRepository;
+            _employeeService = employeeService;
         }
 
         public async Task<PagedResult<ProductCategory>> GetAllCategoriesAsync(RecordsRange recordsRange)
@@ -38,6 +38,24 @@ namespace Supermarket.Core.CashBoxes
         public Task AddSaleAsync(int cashBoxId, IReadOnlyList<SoldProductDto> soldProducts)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<AssistantLoginResult> AssistantLoginAsync(LoginData loginData)
+        {
+            try
+            {
+                var employee = await _employeeService.LoginEmployeeAsync(loginData);
+                if (employee is LoggedSupermarketEmployee supermarketEmployee && supermarketEmployee.Roles.Any(r => r is CashierRole))
+                {
+                    return AssistantLoginResult.Success();
+                }
+
+                return AssistantLoginResult.Fail(AssistantLoginFail.PermissionDenied);
+            }
+            catch (InvalidCredentialsException)
+            {
+                return AssistantLoginResult.Fail(AssistantLoginFail.InvalidCredentials);
+            }
         }
     }
 }
