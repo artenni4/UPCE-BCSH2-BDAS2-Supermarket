@@ -1,17 +1,15 @@
 ﻿using Supermarket.Core.Common.Paging;
 using Supermarket.Core.Employees;
 using Supermarket.Infrastructure.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Supermarket.Infrastructure.Employees
 {
-    public class EmployeeRepository : CrudRepositoryBase<Employee, int, PagingQueryObject>, IEmployeeRepository
+    public class EmployeeRepository : CrudRepositoryBase<Employee, int>, IEmployeeRepository
     {
+        public Task<PagedResult<Employee>> GetPagedAsync(PagingQueryObject queryObject) => GetRecordsRangeAsync(queryObject.RecordsRange);
+
         public Task<Employee?> GetByLoginAsync(string login)
         {
             if (login != "BIBA") return Task.FromResult((Employee?)null);
@@ -34,7 +32,8 @@ namespace Supermarket.Infrastructure.Employees
                 StartedWorking = new DateTimeOffset(2020, 10, 1, 0, 0, 0, TimeSpan.Zero),
                 PasswordHash = hashBytes,
                 PasswordHashSalt = salt,
-                Roles = new[] { EmployeeRole.Cashier },
+                Roles = new[] { "CASHIER" },
+                SupermarketId = 1,
             });
         }
     }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Supermarket.Core.Employees.LoggedEmployees;
 
 namespace Supermarket.Core.Employees
 {
@@ -13,6 +14,6 @@ namespace Supermarket.Core.Employees
         /// </summary>
         /// <returns>logged user data</returns>
         /// <exception cref="InvalidCredentialsException">in case of invalid credentials</exception>
-        Task<LoggedEmployee> LoginEmployeeAsync(LoginData loginData);
+        Task<ILoggedEmployee> LoginEmployeeAsync(LoginData loginData);
     }
 }

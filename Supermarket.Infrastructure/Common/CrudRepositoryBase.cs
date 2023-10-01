@@ -3,33 +3,32 @@ using Supermarket.Core.Common.Paging;
 
 namespace Supermarket.Infrastructure.Common
 {
-    public abstract class CrudRepositoryBase<TEntity, TId, TQueryObject> : ICrudRepository<TEntity, TId, TQueryObject>
+    public abstract class CrudRepositoryBase<TEntity, TId>
         where TEntity : IEntity<TId>
-        where TQueryObject : IQueryObject
     {
         // TODO add basic CRUD operations for entities
 
-        public Task<PagedResult<TEntity>> GetPagedAsync(TQueryObject queryObject)
+        public virtual Task<PagedResult<TEntity>> GetRecordsRangeAsync(RecordsRange queryObject)
         {
             throw new NotImplementedException();
         }
 
-        public Task<TEntity?> GetByIdAsync(TId id)
+        public virtual Task<TEntity?> GetByIdAsync(TId id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<TId> AddAsync(TEntity entity)
+        public virtual Task<TId> AddAsync(TEntity entity)
         {
             throw new NotImplementedException();
         }
 
-        public Task UpdateAsync(TEntity entity)
+        public virtual Task UpdateAsync(TEntity entity)
         {
             throw new NotImplementedException();
         }
 
-        public Task DeleteAsync(TId id)
+        public virtual Task DeleteAsync(TId id)
         {
             throw new NotImplementedException();
         }
