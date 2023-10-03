@@ -1,28 +1,21 @@
-﻿using System.ComponentModel;
+﻿using Supermarket.Wpf.Common;
 
 namespace Supermarket.Wpf.Login
 {
-    public class LoginModel : INotifyPropertyChanged
+    public class LoginModel : NotifyPropertyChangedBase
     {
         private string? login;
-        private string? password;
-
         public string? Login
         {
-            get { return login; } set { login = value; OnPropertyChanged("Login"); } 
+            get => login;
+            set => SetProperty(ref login, value);
         }
 
+        private string? password;
         public string? Password
         {
-            get { return password; }
-            set { password = value; OnPropertyChanged("Password"); }
-        }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        protected virtual void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            get => password;
+            set => SetProperty(ref password, value);
         }
     }
 }
