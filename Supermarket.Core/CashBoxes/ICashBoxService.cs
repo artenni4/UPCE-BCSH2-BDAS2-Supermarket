@@ -1,10 +1,13 @@
-﻿using Supermarket.Core.Employees;
+﻿using Supermarket.Core.Auth;
 using Supermarket.Core.Products;
 using Supermarket.Core.Products.Categories;
 
 namespace Supermarket.Core.CashBoxes
 {
-    interface ICashBoxService
+    /// <summary>
+    /// Service for cash box screen
+    /// </summary>
+    public interface ICashBoxService
     {
         /// <summary>
         /// Returns a page with accessible products for a given supermarket

@@ -1,6 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Supermarket.Core.Auth;
+using Supermarket.Core.CashBoxes;
 using Supermarket.Core.Common;
 using Supermarket.Core.Employees;
+using Supermarket.Core.Login;
 using Supermarket.Core.Products;
 using Supermarket.Core.Products.Categories;
 using Supermarket.Infrastructure.Common;
@@ -8,6 +11,7 @@ using Supermarket.Infrastructure.Employees;
 using Supermarket.Infrastructure.Products;
 using Supermarket.Infrastructure.Products.Categories;
 using Supermarket.Wpf.Cashbox;
+using Supermarket.Wpf.Common;
 using Supermarket.Wpf.Login;
 using Supermarket.Wpf.Main;
 using Supermarket.Wpf.Navigation;
@@ -49,9 +53,10 @@ namespace Supermarket.Wpf
 
         private static void AddCore(IServiceCollection serviceCollection)
         {
-            serviceCollection.AddScoped<IEmployeeService, EmployeeService>();
-            serviceCollection.AddScoped<IProductService, ProductService>();
-            serviceCollection.AddScoped<IProductCategoryService, ProductCategoryService>();
+            serviceCollection.AddScoped<IAuthService, AuthService>();
+            
+            serviceCollection.AddScopedWithProxy<ILoginService, LoginService>();
+            serviceCollection.AddScopedWithProxy<ICashBoxService, CashBoxService>();
         }
 
         private static void AddInfrastructure(IServiceCollection serviceCollection)
@@ -64,10 +69,11 @@ namespace Supermarket.Wpf
 
         private static void AddWpf(IServiceCollection serviceCollection)
         {
-            serviceCollection.AddSingleton<LoginViewModel>();
-            serviceCollection.AddSingleton<CashboxViewModel>();
-            serviceCollection.AddSingleton<MainViewModel>();
             serviceCollection.AddSingleton<INavigationService, NavigationService>();
+            serviceCollection.AddSingleton<MainViewModel>();
+
+            serviceCollection.AddTransient<LoginViewModel>();
+            serviceCollection.AddTransient<CashboxViewModel>();
         }
     }
 }

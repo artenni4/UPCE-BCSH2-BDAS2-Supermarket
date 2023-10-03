@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Supermarket.Core.Login.LoggedEmployees
+namespace Supermarket.Core.Auth.LoggedEmployees
 {
     /// <summary>
     /// Marker for logged employee

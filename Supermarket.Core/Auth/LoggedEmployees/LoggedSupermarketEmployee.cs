@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Supermarket.Core.Login.LoggedEmployees
+namespace Supermarket.Core.Auth.LoggedEmployees
 {
     public record LoggedSupermarketEmployee(int Id, IReadOnlyList<IEmployeeRole> Roles) : ILoggedEmployee;
 }

@@ -1,4 +1,4 @@
-﻿using Supermarket.Core.Employees;
+﻿using Supermarket.Core.Auth;
 using Supermarket.Core.Login;
 using Supermarket.Wpf.Common;
 using Supermarket.Wpf.Navigation;

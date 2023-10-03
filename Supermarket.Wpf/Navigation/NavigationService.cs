@@ -27,7 +27,7 @@ namespace Supermarket.Wpf.Navigation
             {
                 NavigateWindow.Login => _serviceProvider.GetRequiredService<LoginViewModel>(),
                 NavigateWindow.CashBox => _serviceProvider.GetRequiredService<CashboxViewModel>(),
-                _ => throw new ArgumentException(nameof(navigateWindow))
+                _ => throw new NotImplementedException($"Navigation to {navigateWindow} is not supported yet, implement it by extending this swith")
             };
         }
     }

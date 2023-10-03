@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Supermarket.Core.Employees
+namespace Supermarket.Core.Auth
 {
     public class LoginData
     {
