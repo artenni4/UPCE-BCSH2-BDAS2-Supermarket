@@ -27,21 +27,24 @@ namespace Supermarket.Core.Common
 
         public virtual async Task<TId> AddAsync(TEntity entity)
         {
+            await using var transaction = await _unitOfWork.BeginTransactionAsync();
             var id = await _crudRepository.AddAsync(entity);
-            await _unitOfWork.SaveChangesAsync();
+            await transaction.CommitAsync();
             return id;
         }
 
         public virtual async Task UpdateAsync(TEntity entity)
         {
+            await using var transaction = await _unitOfWork.BeginTransactionAsync();
             await _crudRepository.UpdateAsync(entity);
-            await _unitOfWork.SaveChangesAsync();
+            await transaction.CommitAsync();
         }
 
         public virtual async Task DeleteAsync(TId id)
         {
+            await using var transaction = await _unitOfWork.BeginTransactionAsync();
             await _crudRepository.DeleteAsync(id);
-            await _unitOfWork.SaveChangesAsync();
+            await transaction.CommitAsync();
         }
     }
 }

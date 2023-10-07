@@ -11,12 +11,14 @@ namespace Supermarket.Core.CashBoxes
         private readonly IProductCategoryRepository _productCategoryRepository;
         private readonly IProductRepository _productRepository;
         private readonly IAuthService _authService;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public CashBoxService(IProductCategoryRepository productCategoryRepository, IProductRepository productRepository, IAuthService authService)
+        public CashBoxService(IProductCategoryRepository productCategoryRepository, IProductRepository productRepository, IAuthService authService, IUnitOfWork unitOfWork)
         {
             _productCategoryRepository = productCategoryRepository;
             _productRepository = productRepository;
             _authService = authService;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<PagedResult<ProductCategory>> GetAllCategoriesAsync(RecordsRange recordsRange)
@@ -37,6 +39,7 @@ namespace Supermarket.Core.CashBoxes
 
         public Task AddSaleAsync(int cashBoxId, IReadOnlyList<SoldProductDto> soldProducts)
         {
+            // do not forget use unit of work and transactions
             throw new NotImplementedException();
         }
 

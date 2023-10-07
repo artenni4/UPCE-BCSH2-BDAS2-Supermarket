@@ -1,4 +1,5 @@
-﻿using Supermarket.Core.Common;
+﻿using Oracle.ManagedDataAccess.Client;
+using Supermarket.Core.Common;
 using Supermarket.Core.Common.Paging;
 
 namespace Supermarket.Infrastructure.Common
@@ -6,7 +7,12 @@ namespace Supermarket.Infrastructure.Common
     public abstract class CrudRepositoryBase<TEntity, TId>
         where TEntity : IEntity<TId>
     {
-        // TODO add basic CRUD operations for entities
+        protected readonly OracleConnection _oracleConnection;
+
+        protected CrudRepositoryBase(OracleConnection oracleConnection)
+        {
+            _oracleConnection = oracleConnection;
+        }
 
         public virtual Task<PagedResult<TEntity>> GetRecordsRangeAsync(RecordsRange queryObject)
         {

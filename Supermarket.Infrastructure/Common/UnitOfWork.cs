@@ -1,12 +1,21 @@
-﻿using Supermarket.Core.Common;
+﻿using Oracle.ManagedDataAccess.Client;
+using Supermarket.Core.Common;
 
 namespace Supermarket.Infrastructure.Common
 {
-    public class UnitOfWork : IUnitOfWork
+    public sealed class UnitOfWork : IUnitOfWork
     {
-        public Task SaveChangesAsync()
+        private readonly OracleConnection _dbConnection;
+
+        public UnitOfWork(OracleConnection dbConnection)
         {
-            throw new NotImplementedException();
+            _dbConnection = dbConnection;
+        }
+
+        public Task<ITransaction> BeginTransactionAsync()
+        {
+            var dbTransaction = _dbConnection.BeginTransaction();
+            return Task.FromResult(new Transaction(dbTransaction) as ITransaction);
         }
     }
 }

@@ -6,9 +6,9 @@
     public interface IUnitOfWork
     {
         /// <summary>
-        /// Persists changes to database, commits transaction in case of SQL database
+        /// Stars new transaction that can be commited or rolled back
         /// </summary>
         /// <returns></returns>
-        Task SaveChangesAsync();
+        Task<ITransaction> BeginTransactionAsync();
     }
 }

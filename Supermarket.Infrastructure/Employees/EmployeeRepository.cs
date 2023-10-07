@@ -1,4 +1,5 @@
-﻿using Supermarket.Core.Common.Paging;
+﻿using Oracle.ManagedDataAccess.Client;
+using Supermarket.Core.Common.Paging;
 using Supermarket.Core.Employees;
 using Supermarket.Infrastructure.Common;
 using System.Security.Cryptography;
@@ -8,6 +9,10 @@ namespace Supermarket.Infrastructure.Employees
 {
     public class EmployeeRepository : CrudRepositoryBase<Employee, int>, IEmployeeRepository
     {
+        public EmployeeRepository(OracleConnection oracleConnection) : base(oracleConnection)
+        {
+        }
+
         public Task<PagedResult<Employee>> GetPagedAsync(PagingQueryObject queryObject) => GetRecordsRangeAsync(queryObject.RecordsRange);
 
         public Task<Employee?> GetByLoginAsync(string login)
