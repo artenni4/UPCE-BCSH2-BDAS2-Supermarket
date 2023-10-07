@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using Oracle.ManagedDataAccess.Client;
 using Supermarket.Core.Auth;
 using Supermarket.Core.CashBoxes;
 using Supermarket.Core.Common;
@@ -7,6 +10,7 @@ using Supermarket.Core.Login;
 using Supermarket.Core.Products;
 using Supermarket.Core.Products.Categories;
 using Supermarket.Infrastructure.Common;
+using Supermarket.Infrastructure.Database;
 using Supermarket.Infrastructure.Employees;
 using Supermarket.Infrastructure.Products;
 using Supermarket.Infrastructure.Products.Categories;
@@ -33,7 +37,7 @@ namespace Supermarket.Wpf
             AddCore(serviceCollection);
             AddInfrastructure(serviceCollection);
             AddWpf(serviceCollection);
-
+            
             _serviceProvider = serviceCollection.BuildServiceProvider();
         }
 
@@ -43,7 +47,7 @@ namespace Supermarket.Wpf
             {
                 DataContext = _serviceProvider.GetRequiredService<MainViewModel>()
             };
-
+            
             var navigationService = _serviceProvider.GetRequiredService<INavigationService>();
             navigationService.NavigateTo(NavigateWindow.Login);
 
@@ -53,6 +57,12 @@ namespace Supermarket.Wpf
 
         private static void AddCore(IServiceCollection serviceCollection)
         {
+            // add configuration
+            var configuration = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json", optional: false)
+                .Build();
+            serviceCollection.AddSingleton<IConfiguration>(configuration);
+
             serviceCollection.AddScoped<IAuthService, AuthService>();
             
             serviceCollection.AddScopedWithProxy<ILoginService, LoginService>();
@@ -61,6 +71,14 @@ namespace Supermarket.Wpf
 
         private static void AddInfrastructure(IServiceCollection serviceCollection)
         {
+            // add database connection driver
+            serviceCollection.AddConfigurationSection<DatabaseOptions>();
+            serviceCollection.AddScoped(sp =>
+            {
+                var options = sp.GetRequiredService<IOptions<DatabaseOptions>>().Value;
+                return ActivatorUtilities.CreateInstance<OracleConnection>(sp, options.ConnectionString);
+            });
+
             serviceCollection.AddScoped<IUnitOfWork, UnitOfWork>();
             serviceCollection.AddScoped<IEmployeeRepository, EmployeeRepository>();
             serviceCollection.AddScoped<IProductRepository, ProductRepository>();
