@@ -1,10 +1,10 @@
 ﻿using Oracle.ManagedDataAccess.Client;
-using Supermarket.Core.Common;
-using Supermarket.Core.Common.Paging;
+using Supermarket.Domain.Common;
+using Supermarket.Domain.Common.Paging;
 
 namespace Supermarket.Infrastructure.Common
 {
-    public abstract class CrudRepositoryBase<TEntity, TId>
+    internal abstract class CrudRepositoryBase<TEntity, TId>
         where TEntity : IEntity<TId>
     {
         protected readonly OracleConnection _oracleConnection;
@@ -14,7 +14,7 @@ namespace Supermarket.Infrastructure.Common
             _oracleConnection = oracleConnection;
         }
 
-        public virtual Task<PagedResult<TEntity>> GetRecordsRangeAsync(RecordsRange queryObject)
+        protected Task<PagedResult<TEntity>> GetRecordsRangeAsync(RecordsRange queryObject)
         {
             throw new NotImplementedException();
         }

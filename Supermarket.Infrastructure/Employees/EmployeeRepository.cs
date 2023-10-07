@@ -1,13 +1,13 @@
 ﻿using Oracle.ManagedDataAccess.Client;
-using Supermarket.Core.Common.Paging;
-using Supermarket.Core.Employees;
 using Supermarket.Infrastructure.Common;
 using System.Security.Cryptography;
 using System.Text;
+using Supermarket.Domain.Common.Paging;
+using Supermarket.Domain.Employees;
 
 namespace Supermarket.Infrastructure.Employees
 {
-    public class EmployeeRepository : CrudRepositoryBase<Employee, int>, IEmployeeRepository
+    internal class EmployeeRepository : CrudRepositoryBase<Employee, int>, IEmployeeRepository
     {
         public EmployeeRepository(OracleConnection oracleConnection) : base(oracleConnection)
         {

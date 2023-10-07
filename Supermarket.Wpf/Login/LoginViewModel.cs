@@ -1,9 +1,9 @@
-﻿using Supermarket.Core.Auth;
-using Supermarket.Core.Login;
+﻿using Supermarket.Core.Login;
 using Supermarket.Wpf.Common;
 using Supermarket.Wpf.Navigation;
 using System.ComponentModel;
 using System.Windows.Input;
+using Supermarket.Domain.Auth;
 
 namespace Supermarket.Wpf.Login
 {
