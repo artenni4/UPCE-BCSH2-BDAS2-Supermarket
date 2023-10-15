@@ -48,7 +48,7 @@ namespace Supermarket.Domain.Auth
                     throw new InconsistencyException($"Employee [{employee.Id}] with super admin role cannot have other roles");
                 }
 
-                return new LoggedSuperAdmin(employee.Id);
+                return new LoggedAdmin(employee.Id);
             }
 
             if (employee.SupermarketId.HasValue == false)

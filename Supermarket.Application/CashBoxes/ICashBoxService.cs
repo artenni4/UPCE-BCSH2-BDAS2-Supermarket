@@ -1,35 +1,31 @@
 ﻿using Supermarket.Domain.Auth;
 using Supermarket.Domain.Common.Paging;
-using Supermarket.Domain.Products;
 using Supermarket.Domain.Products.Categories;
 
-namespace Supermarket.Core.SelfCheckout
+namespace Supermarket.Core.CashBoxes
 {
     /// <summary>
     /// Service for cash box screen
     /// </summary>
-    public interface ISelfCheckoutService
+    public interface ICashBoxService
     {
         /// <summary>
         /// Returns a page with accessible products for a given supermarket
         /// </summary>
-        Task<PagedResult<Product>> GetCashBoxProductsPage(RecordsRange recordsRange, int supermarketId, int productCategoryId, string? searchText);
+        Task<PagedResult<CashBoxProduct>> GetProductsAsync(int supermarketId, RecordsRange recordsRange, int productCategoryId, string? searchText);
 
         /// <summary>
         /// Returns categories for display bar in cash box
         /// </summary>
-        /// <param name="recordsRange"></param>
-        /// <returns></returns>
-        Task<PagedResult<ProductCategory>> GetAllCategoriesAsync(RecordsRange recordsRange);
+        Task<PagedResult<CashBoxProductCategory>> GetCategoriesAsync(int supermarketId, RecordsRange recordsRange);
 
         /// <summary>
         /// Adds sale for the cash box
         /// </summary>
-        /// <returns></returns>
         Task AddSaleAsync(int cashBoxId, IReadOnlyList<SoldProduct> soldProducts, IReadOnlyList<Coupon> coupons);
 
         /// <summary>
-        /// Tries to authenticate assitant to the cash box
+        /// Tries to authenticate assistant to the cash box
         /// </summary>
         /// <exception cref="InvalidCredentialsException">in case of bad login or password</exception>
         /// <exception cref="PermissionDeniedException">in case when employee does not have appropriate role</exception>
@@ -40,6 +36,11 @@ namespace Supermarket.Core.SelfCheckout
         /// </summary>
         /// <param name="couponCode">code of the coupon</param>
         /// <exception cref="InvalidCouponException">in case when coupon is not valid</exception>
-        Task<Coupon> CheckCoupon(string couponCode);
+        Task<Coupon> CheckCouponAsync(string couponCode);
+        
+        /// <summary>
+        /// Gets list of cash boxes in given supermarket
+        /// </summary>
+        Task<PagedResult<SupermarketCashBox>> GetCashBoxesAsync(int supermarketId);
     }
 }

@@ -6,7 +6,7 @@
     public interface IUnitOfWork
     {
         /// <summary>
-        /// Stars new transaction that can be commited or rolled back
+        /// Stars new transaction that can be committed or rolled back
         /// </summary>
         /// <returns></returns>
         Task<ITransaction> BeginTransactionAsync();

@@ -1,5 +1,6 @@
 ﻿using Supermarket.Domain.Auth;
 using Supermarket.Domain.Auth.LoggedEmployees;
+using Supermarket.Domain.Common.Paging;
 
 namespace Supermarket.Core.Login
 {
@@ -14,5 +15,10 @@ namespace Supermarket.Core.Login
         /// <returns>logged user data</returns>
         /// <exception cref="InvalidCredentialsException">in case of invalid credentials</exception>
         Task<ILoggedEmployee> LoginEmployeeAsync(LoginData loginData);
+        
+        /// <summary>
+        /// Gets list of all supermarkets for admin to choose from
+        /// </summary>
+        Task<PagedResult<AdminLoginSupermarket>> GetSupermarketsAsync(RecordsRange recordsRange);
     }
 }

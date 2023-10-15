@@ -1,20 +1,19 @@
 ﻿using Supermarket.Domain.Auth;
 using Supermarket.Domain.Auth.LoggedEmployees;
-using Supermarket.Domain.Common.Paging;
 using Supermarket.Domain.Employees.Roles;
 using Supermarket.Domain.Products;
 using Supermarket.Domain.Products.Categories;
 
-namespace Supermarket.Core.SelfCheckout
+namespace Supermarket.Core.CashBoxes
 {
-    internal class SelfCheckoutService : ISelfCheckoutService
+    internal class CashBoxService : ICashBoxService
     {
         private readonly IProductCategoryRepository _productCategoryRepository;
         private readonly IProductRepository _productRepository;
         private readonly IAuthDomainService _authDomainService;
         private readonly IUnitOfWork _unitOfWork;
 
-        public SelfCheckoutService(IProductCategoryRepository productCategoryRepository, IProductRepository productRepository, IAuthDomainService authDomainService, IUnitOfWork unitOfWork)
+        public CashBoxService(IProductCategoryRepository productCategoryRepository, IProductRepository productRepository, IAuthDomainService authDomainService, IUnitOfWork unitOfWork)
         {
             _productCategoryRepository = productCategoryRepository;
             _productRepository = productRepository;
@@ -22,20 +21,24 @@ namespace Supermarket.Core.SelfCheckout
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<PagedResult<ProductCategory>> GetAllCategoriesAsync(RecordsRange recordsRange)
+        public async Task<PagedResult<CashBoxProductCategory>> GetCategoriesAsync(int supermarketId, RecordsRange recordsRange)
         {
-            return await _productCategoryRepository.GetPagedAsync(new PagingQueryObject { RecordsRange = recordsRange });
+            var productCategories = await _productCategoryRepository.GetPagedAsync(new PagingQueryObject { RecordsRange = recordsRange });
+
+            return productCategories.Select(CashBoxProductCategory.FromProductCategory);
         }
 
-        public async Task<PagedResult<Product>> GetCashBoxProductsPage(RecordsRange recordsRange, int supermarketId, int productCategoryId, string? searchText)
+        public async Task<PagedResult<CashBoxProduct>> GetProductsAsync(int supermarketId, RecordsRange recordsRange, int productCategoryId, string? searchText)
         {
-            return await _productRepository.GetPagedAsync(new ProductQueryObject
+            var products = await _productRepository.GetPagedAsync(new ProductQueryObject
             {
                 RecordsRange = recordsRange,
                 SupermarketId = supermarketId,
                 ProductCategoryId = productCategoryId,
                 SearchText = searchText,
             });
+
+            return products.Select(CashBoxProduct.FromProduct);
         }
 
         public Task AddSaleAsync(int cashBoxId, IReadOnlyList<SoldProduct> soldProducts, IReadOnlyList<Coupon> coupons)
@@ -59,7 +62,7 @@ namespace Supermarket.Core.SelfCheckout
             throw new PermissionDeniedException();
         }
 
-        public Task<Coupon> CheckCoupon(string couponCode)
+        public Task<Coupon> CheckCouponAsync(string couponCode)
         {
             if (couponCode == "BDAS2+BCSH2=LOVE")
             {
@@ -73,6 +76,11 @@ namespace Supermarket.Core.SelfCheckout
             }
 
             throw new InvalidCouponException();
+        }
+
+        public Task<PagedResult<SupermarketCashBox>> GetCashBoxesAsync(int supermarketId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

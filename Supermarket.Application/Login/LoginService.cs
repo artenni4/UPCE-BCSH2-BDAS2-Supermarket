@@ -1,5 +1,6 @@
 ﻿using Supermarket.Domain.Auth;
 using Supermarket.Domain.Auth.LoggedEmployees;
+using Supermarket.Domain.Common.Paging;
 
 namespace Supermarket.Core.Login
 {
@@ -16,6 +17,11 @@ namespace Supermarket.Core.Login
         {
             // TODO add logs
             return await _authDomainService.AuthEmployeeAsync(loginData);
+        }
+
+        public Task<PagedResult<AdminLoginSupermarket>> GetSupermarketsAsync(RecordsRange recordsRange)
+        {
+            throw new NotImplementedException();
         }
     }
 }

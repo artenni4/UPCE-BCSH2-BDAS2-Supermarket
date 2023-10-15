@@ -1,4 +1,4 @@
-﻿namespace Supermarket.Core.SelfCheckout
+﻿namespace Supermarket.Core.CashBoxes
 {
     public enum AssistantLoginFail
     {
