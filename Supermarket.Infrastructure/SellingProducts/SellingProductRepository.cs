@@ -1,6 +1,5 @@
 ﻿using Oracle.ManagedDataAccess.Client;
 using Supermarket.Domain.Common.Paging;
-using Supermarket.Domain.Products;
 using Supermarket.Domain.SellingProducts;
 using Supermarket.Infrastructure.Common;
 

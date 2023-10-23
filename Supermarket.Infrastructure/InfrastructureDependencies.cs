@@ -21,6 +21,10 @@ using Supermarket.Domain.Sales;
 using Supermarket.Infrastructure.Sales;
 using Supermarket.Domain.SellingProducts;
 using Supermarket.Infrastructure.SellingProducts;
+using Supermarket.Domain.SoldProducts;
+using Supermarket.Infrastructure.SoldProducts;
+using Supermarket.Domain.StoredProducts;
+using Supermarket.Infrastructure.StoredProducts;
 
 namespace Supermarket.Infrastructure;
 
@@ -51,6 +55,8 @@ public static class InfrastructureDependencies
         serviceCollection.AddScoped<IRegionRepository, RegionRepository>();
         serviceCollection.AddScoped<ISaleRepository, SaleRepository>();
         serviceCollection.AddScoped<ISellingProductRepository, SellingProductRepository>();
+        serviceCollection.AddScoped<IStoredProductRepository, StoredProductRepository>();
+        serviceCollection.AddScoped<ISoldProductRepository, SoldProductRepository>();
         
         return serviceCollection;
     }
