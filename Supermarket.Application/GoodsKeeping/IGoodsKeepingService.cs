@@ -35,9 +35,6 @@ public interface IGoodsKeepingService
     /// <summary>
     /// Gets list of all storage places 
     /// </summary>
-    /// <param name="supermarketId"></param>
-    /// <param name="recordsRange"></param>
-    /// <returns></returns>
     Task<PagedResult<StoragePlace>> GetStoragePlacesAsync(int supermarketId, RecordsRange recordsRange);
     
     /// <summary>
