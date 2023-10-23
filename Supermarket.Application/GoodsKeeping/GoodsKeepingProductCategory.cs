@@ -1,13 +1,13 @@
 ﻿using Supermarket.Domain.Products.Categories;
 
-namespace Supermarket.Core.CashBoxes;
+namespace Supermarket.Core.GoodsKeeping;
 
-public class CashBoxProductCategory
+public class GoodsKeepingProductCategory
 {
     public required int Id { get; init; }
     public required string Name { get; init; }
 
-    public static CashBoxProductCategory FromProductCategory(ProductCategory productCategory) => new()
+    public static GoodsKeepingProductCategory FromProductCategory(ProductCategory productCategory) => new()
     {
         Id = productCategory.Id,
         Name = productCategory.Name,
