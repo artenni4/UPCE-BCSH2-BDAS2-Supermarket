@@ -38,7 +38,7 @@ public static class InfrastructureDependencies
         serviceCollection.AddScoped<IEmployeeRepository, EmployeeRepository>();
         serviceCollection.AddScoped<IProductRepository, ProductRepository>();
         serviceCollection.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
-        serviceCollection.AddScoped<IStoragePlaceRepository, StoragePlaceRepository() >;
+        serviceCollection.AddScoped<IStoragePlaceRepository, StoragePlaceRepository>();
         
         return serviceCollection;
     }
