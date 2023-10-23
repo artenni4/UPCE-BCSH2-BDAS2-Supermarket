@@ -6,11 +6,13 @@ using Supermarket.Core.Common;
 using Supermarket.Domain.Employees;
 using Supermarket.Domain.Products;
 using Supermarket.Domain.Products.Categories;
+using Supermarket.Domain.StoragePlaces;
 using Supermarket.Infrastructure.Common;
 using Supermarket.Infrastructure.Database;
 using Supermarket.Infrastructure.Employees;
 using Supermarket.Infrastructure.Products;
 using Supermarket.Infrastructure.Products.Categories;
+using Supermarket.Infrastructure.StoragePlaces;
 
 namespace Supermarket.Infrastructure;
 
@@ -36,6 +38,7 @@ public static class InfrastructureDependencies
         serviceCollection.AddScoped<IEmployeeRepository, EmployeeRepository>();
         serviceCollection.AddScoped<IProductRepository, ProductRepository>();
         serviceCollection.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
+        serviceCollection.AddScoped<IStoragePlaceRepository, StoragePlaceRepository() >;
         
         return serviceCollection;
     }
