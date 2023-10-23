@@ -11,9 +11,6 @@ namespace Supermarket.Infrastructure.Sales
         {
         }
 
-        public Task<PagedResult<Sale>> GetPagedAsync(PagingQueryObject queryObject)
-        {
-            throw new NotImplementedException();
-        }
+        public Task<PagedResult<Sale>> GetPagedAsync(PagingQueryObject queryObject) => GetRecordsRangeAsync(queryObject.RecordsRange);
     }
 }

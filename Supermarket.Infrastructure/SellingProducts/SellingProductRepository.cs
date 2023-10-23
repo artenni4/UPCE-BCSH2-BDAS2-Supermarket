@@ -6,15 +6,12 @@ using Supermarket.Infrastructure.Common;
 
 namespace Supermarket.Infrastructure.SellingProducts
 {
-    internal class SellingProductRepository : CrudRepositoryBase<SellingProduct, int>, IProductRepository
+    internal class SellingProductRepository : CrudRepositoryBase<SellingProduct, int>, ISellingProductRepository
     {
         public SellingProductRepository(OracleConnection oracleConnection) : base(oracleConnection)
         {
         }
 
-        public Task<PagedResult<SellingProduct>> GetPagedAsync(SellingProduct queryObject)
-        {
-            throw new NotImplementedException();
-        }
+        public Task<PagedResult<SellingProduct>> GetPagedAsync(PagingQueryObject queryObject) => GetRecordsRangeAsync(queryObject.RecordsRange);
     }
 }
