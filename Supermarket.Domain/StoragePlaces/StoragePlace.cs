@@ -11,8 +11,8 @@ namespace Supermarket.Domain.StoragePlaces
     {
         public required int Id { get; init; }
         public required string Code { get; set; }
-        public string Location { get; set; }
-        public int SupermarketId { get; set; }
+        public string? Location { get; set; }
+        public int? SupermarketId { get; set; }
         public required StoragePlaceType Type { get; set; }
     }
 }
