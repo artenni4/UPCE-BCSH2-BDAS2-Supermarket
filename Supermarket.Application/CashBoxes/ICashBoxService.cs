@@ -22,7 +22,7 @@ namespace Supermarket.Core.CashBoxes
         /// <summary>
         /// Adds sale for the cash box
         /// </summary>
-        Task AddSaleAsync(int cashBoxId, IReadOnlyList<SoldProduct> soldProducts, IReadOnlyList<Coupon> coupons);
+        Task AddSaleAsync(int cashBoxId, IReadOnlyList<CashBoxSoldProduct> soldProducts, IReadOnlyList<Coupon> coupons);
 
         /// <summary>
         /// Tries to authenticate assistant to the cash box

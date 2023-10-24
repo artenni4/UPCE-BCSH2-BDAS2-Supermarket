@@ -41,7 +41,7 @@ namespace Supermarket.Core.CashBoxes
             return products.Select(CashBoxProduct.FromProduct);
         }
 
-        public Task AddSaleAsync(int cashBoxId, IReadOnlyList<SoldProduct> soldProducts, IReadOnlyList<Coupon> coupons)
+        public Task AddSaleAsync(int cashBoxId, IReadOnlyList<CashBoxSoldProduct> soldProducts, IReadOnlyList<Coupon> coupons)
         {
             // do not forget use unit of work and transactions
             throw new NotImplementedException();
