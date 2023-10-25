@@ -36,9 +36,12 @@ namespace Supermarket.Infrastructure.Products
             ProductCategoryId = dbEntity.druh_zbozi_id,
             MeasureUnit = dbEntity.merna_jednotka_id switch
             {
-                1 => MeasureUnit.Gram,
-                2 => MeasureUnit.Kilogram,
+                1 => MeasureUnit.Kilogram,
+                2 => MeasureUnit.Gram,
                 3 => MeasureUnit.Litre,
+                4 => MeasureUnit.Millilitre,
+                5 => MeasureUnit.Piece,
+                6 => MeasureUnit.Meter,
                 _ => throw new DatabaseException($"Measure unit [{dbEntity.merna_jednotka_id}] is not known")
             },
             ByWeight = dbEntity.naVahu != 0,
@@ -64,12 +67,12 @@ namespace Supermarket.Infrastructure.Products
 
         private static int GetMeasureUnitId(MeasureUnit measureUnit)
         {
-            if (measureUnit == MeasureUnit.Gram)
+            if (measureUnit == MeasureUnit.Kilogram)
             {
                 return 1;
             }
             
-            if (measureUnit == MeasureUnit.Kilogram)
+            if (measureUnit == MeasureUnit.Gram)
             {
                 return 2;
             }
@@ -77,6 +80,21 @@ namespace Supermarket.Infrastructure.Products
             if (measureUnit == MeasureUnit.Litre)
             {
                 return 3;
+            }
+            
+            if (measureUnit == MeasureUnit.Millilitre)
+            {
+                return 4;
+            }
+            
+            if (measureUnit == MeasureUnit.Piece)
+            {
+                return 5;
+            }
+
+            if (measureUnit == MeasureUnit.Meter)
+            {
+                return 6;
             }
 
             throw new DatabaseException($"Mapping for measure unit [{measureUnit}] is not implemented");

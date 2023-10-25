@@ -14,6 +14,9 @@
         public static readonly MeasureUnit Kilogram = new("kilogram", "kg");
         public static readonly MeasureUnit Gram = new("gram", "g");
         public static readonly MeasureUnit Litre = new("litre", "l");
+        public static readonly MeasureUnit Millilitre = new("millilitre", "ml");
+        public static readonly MeasureUnit Piece = new("piece", "p");
+        public static readonly MeasureUnit Meter = new("meter", "m");
 
         public override bool Equals(object? obj)
         {
