@@ -35,6 +35,7 @@ public static class InfrastructureDependencies
         // add configuration
         var configuration = new ConfigurationBuilder()
             .AddJsonFile("appsettings.json", optional: false)
+            .AddEnvironmentVariables()
             .Build();
         serviceCollection.AddSingleton<IConfiguration>(configuration);
         
