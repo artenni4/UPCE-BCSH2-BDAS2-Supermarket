@@ -113,11 +113,11 @@ namespace Supermarket.Infrastructure.Common
 
             var pagingSql =
                 $@"WITH NumberedResult AS 
-                   (SELECT t.*, ROW_NUMBER() OVER (ORDER BY {orderByIdentity}) AS RowNum 
+                   (SELECT t.*, ROW_NUMBER() OVER (ORDER BY {orderByIdentity}) AS RowNumber 
                        FROM {TableName} t
                        {customWhere})
                    SELECT * FROM NumberedResult
-                   WHERE RowNum BETWEEN :StartRow AND :EndRow";
+                   WHERE RowNumber BETWEEN :StartRow AND :EndRow";
 
             var pagingParameters = GetPagingParameters(queryObject.RecordsRange);
             pagingParameters.AddDynamicParams(whereParameters);

@@ -44,7 +44,7 @@ public static class InfrastructureDependencies
         serviceCollection.AddScoped(sp =>
         {
             var options = sp.GetRequiredService<IOptions<DatabaseOptions>>().Value;
-            return ActivatorUtilities.CreateInstance<OracleConnection>(sp, options.ConnectionString);
+            return new OracleConnection(options.ConnectionString);
         });
 
         serviceCollection.AddScoped<IUnitOfWork, UnitOfWork>();
