@@ -1,6 +1,5 @@
 ﻿using Supermarket.Domain.Auth;
 using Supermarket.Domain.Auth.LoggedEmployees;
-using Supermarket.Domain.Common.Paging;
 
 namespace Supermarket.Core.Login
 {

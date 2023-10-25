@@ -11,15 +11,16 @@
             Abbreviation = abbreviation;
         }
 
-        public static MeasureUnit Kilogram { get; } = new MeasureUnit("kilogram", "kg");
-        public static MeasureUnit Gram { get; } = new MeasureUnit("gram", "g");
-        public static MeasureUnit Litre { get; } = new MeasureUnit("litre", "l");
+        public static readonly MeasureUnit Kilogram = new("kilogram", "kg");
+        public static readonly MeasureUnit Gram = new("gram", "g");
+        public static readonly MeasureUnit Litre = new("litre", "l");
 
         public override bool Equals(object? obj)
         {
-            if (obj == this) return true;
-            if (!(obj is MeasureUnit other)) return false;
-            return Equals(other);
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((MeasureUnit)obj);
         }
 
         public override int GetHashCode()
@@ -29,8 +30,24 @@
 
         public bool Equals(MeasureUnit? other)
         {
-            if (other == null) return false;
-            return other.Name == Name && other.Abbreviation == Abbreviation;
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return Name == other.Name && Abbreviation == other.Abbreviation;
+        }
+
+        public override string ToString()
+        {
+            return Name;
+        }
+
+        public static bool operator ==(MeasureUnit first, MeasureUnit second)
+        {
+            return first.Equals(second);
+        }
+        
+        public static bool operator !=(MeasureUnit first, MeasureUnit second)
+        {
+            return !first.Equals(second);
         }
     }
 }

@@ -1,7 +1,4 @@
-﻿using Supermarket.Domain.Common;
-using Supermarket.Domain.Common.Paging;
-
-namespace Supermarket.Core.Common
+﻿namespace Supermarket.Core.Common
 {
     internal abstract class CrudServiceBase<TEntity, TId, TQueryObject>
         where TEntity : IEntity<TId>

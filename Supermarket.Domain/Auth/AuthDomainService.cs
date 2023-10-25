@@ -27,8 +27,8 @@ namespace Supermarket.Domain.Auth
         {
             var employee = await _employeeRepository.GetByLoginAsync(loginData.Login) ?? throw new InvalidCredentialsException();
 
-            var loginPassordHash = PasswordHashing.GenerateSaltedHash(loginData.Password, employee.PasswordHashSalt);
-            if (PasswordHashing.HashesAreEqual(loginPassordHash, employee.PasswordHash) == false)
+            var loginPasswordHash = PasswordHashing.GenerateSaltedHash(loginData.Password, employee.PasswordHashSalt);
+            if (PasswordHashing.HashesAreEqual(loginPasswordHash, employee.PasswordHash) == false)
             {
                 throw new InvalidCredentialsException();
             }

@@ -1,6 +1,4 @@
 ﻿using Supermarket.Domain.Auth;
-using Supermarket.Domain.Common.Paging;
-using Supermarket.Domain.Products.Categories;
 
 namespace Supermarket.Core.CashBoxes
 {

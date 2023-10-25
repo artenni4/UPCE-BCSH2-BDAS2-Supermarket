@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using System.Diagnostics;
+using System.Text;
 using Dapper;
 using Oracle.ManagedDataAccess.Client;
 using Supermarket.Domain.Common;
@@ -88,14 +89,11 @@ namespace Supermarket.Infrastructure.Common
         /// Gets sql where condition and parameters that is specific to current <see cref="TQueryObject"/>
         /// </summary>
         /// <param name="queryObject">query object</param>
-        /// <param name="parameters">output parameters for query</param>
-        /// <returns>sql where condition</returns>
-        protected abstract string? GetCustomPagingCondition(TQueryObject queryObject, out DynamicParameters parameters);
-
-        protected static string? EmptyCustomPagingCondition(out DynamicParameters parameters)
+        /// <param name="whereConditionBuilder">sql where condition builder</param>
+        /// <returns>output parameters for query</returns>
+        protected virtual DynamicParameters GetCustomPagingCondition(TQueryObject queryObject, StringBuilder whereConditionBuilder)
         {
-            parameters = new DynamicParameters();
-            return null;
+            return new DynamicParameters();
         }
         
         protected CrudRepositoryBase(OracleConnection oracleConnection)
@@ -107,8 +105,11 @@ namespace Supermarket.Infrastructure.Common
         {
             var orderByIdentity = string.Join(", ", IdentityColumns);
 
-            var whereCondition = GetCustomPagingCondition(queryObject, out var whereParameters);
-            var customWhere = whereCondition is null ? null : $"WHERE {whereCondition}";
+            var whereConditionBuilder = new StringBuilder();
+            var whereParameters = GetCustomPagingCondition(queryObject, whereConditionBuilder);
+            var whereCondition = whereConditionBuilder.ToString();
+            
+            var customWhere = string.IsNullOrEmpty(whereCondition) ? null : $"WHERE {whereCondition}";
 
             var pagingSql =
                 $@"WITH NumberedResult AS 
@@ -122,7 +123,7 @@ namespace Supermarket.Infrastructure.Common
             pagingParameters.AddDynamicParams(whereParameters);
 
             var pagedItems = await _oracleConnection.QueryAsync<TDbEntity>(pagingSql, pagingParameters);
-            var entities = pagedItems.Select(pi => MapToEntity(pi)).ToArray();
+            var entities = pagedItems.Select(MapToEntity).ToArray();
             
             var totalCountSql = $"SELECT COUNT(*) FROM {TableName} {customWhere}";
             var totalCount = await _oracleConnection.ExecuteScalarAsync<int>(totalCountSql, whereParameters);
