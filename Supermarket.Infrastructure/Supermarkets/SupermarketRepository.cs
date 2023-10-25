@@ -38,9 +38,4 @@ internal class SupermarketRepository : CrudRepositoryBase<Domain.Supermarkets.Su
     {
         throw new NotImplementedException();
     }
-
-    protected override string? GetCustomPagingCondition(PagingQueryObject queryObject, out DynamicParameters parameters)
-    {
-        throw new NotImplementedException();
-    }
 }

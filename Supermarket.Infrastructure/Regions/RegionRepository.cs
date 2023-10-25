@@ -37,7 +37,4 @@ internal class RegionRepository : CrudRepositoryBase<Region, int, RegionReposito
 
     protected override int ExtractIdentity(DynamicParameters dynamicParameters) =>
         ExtractSimpleIdentity(dynamicParameters);
-
-    protected override string? GetCustomPagingCondition(PagingQueryObject queryObject, out DynamicParameters parameters) =>
-        EmptyCustomPagingCondition(out parameters);
 }

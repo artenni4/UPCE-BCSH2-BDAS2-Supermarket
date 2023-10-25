@@ -41,10 +41,5 @@ namespace Supermarket.Infrastructure.Products.Categories
         {
             throw new NotImplementedException();
         }
-
-        protected override string? GetCustomPagingCondition(PagingQueryObject queryObject, out DynamicParameters parameters)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
