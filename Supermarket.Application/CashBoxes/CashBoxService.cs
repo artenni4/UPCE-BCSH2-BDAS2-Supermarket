@@ -30,12 +30,9 @@ namespace Supermarket.Core.CashBoxes
 
         public async Task<PagedResult<CashBoxProduct>> GetProductsAsync(int supermarketId, RecordsRange recordsRange, int productCategoryId, string? searchText)
         {
-            var products = await _productRepository.GetPagedAsync(new ProductQueryObject
+            var products = await _productRepository.GetPagedAsync(new PagingQueryObject
             {
                 RecordsRange = recordsRange,
-                SupermarketId = supermarketId,
-                ProductCategoryId = productCategoryId,
-                SearchText = searchText,
             });
 
             return products.Select(CashBoxProduct.FromProduct);
