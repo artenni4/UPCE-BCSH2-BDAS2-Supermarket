@@ -1,10 +1,11 @@
-﻿using Supermarket.Domain.Common;
+﻿using Dapper;
+using Supermarket.Domain.Common;
 using Supermarket.Domain.Products;
 using Supermarket.Infrastructure.Common;
 
 namespace Supermarket.Infrastructure.Products;
 
-internal class DbProduct : IDbEntity<Product, int>
+internal class DbProduct : IDbEntity<Product, int, DbProduct>
 {
     public required int zbozi_id { get; init; }
     public required int druh_zbozi_id { get; init; }
@@ -15,7 +16,14 @@ internal class DbProduct : IDbEntity<Product, int>
     public required decimal hmotnost { get; init; }
     public required string? carovyKod { get; init; }
     public required string? popis { get; init; }
-    
+
+    public static string TableName => "ZBOZI";
+
+    public static IReadOnlyList<string> IdentityColumns { get; } = new[]
+    {
+        nameof(zbozi_id)
+    };
+
     public Product ToDomainEntity() => new()
     {
         Id = zbozi_id,
@@ -37,4 +45,61 @@ internal class DbProduct : IDbEntity<Product, int>
         Barcode = carovyKod,
         Description = popis
     };
+
+    public static DbProduct MapToDbEntity(Product entity) => new()
+    {
+        zbozi_id = entity.Id,
+        druh_zbozi_id = entity.ProductCategoryId,
+        merna_jednotka_id = GetMeasureUnitId(entity.MeasureUnit),
+        carovyKod = entity.Barcode,
+        cena = entity.Price,
+        hmotnost = entity.Weight,
+        naVahu = entity.ByWeight ? 1 : 0,
+        nazev = entity.Name,
+        popis = entity.Description
+    };
+
+    public static DynamicParameters GetEntityIdParameters(int id) =>
+        new DynamicParameters().AddParameter(nameof(zbozi_id), id);
+
+    public static DynamicParameters GetOutputIdentityParameters() =>
+        new DynamicParameters().AddOutputParameter(nameof(zbozi_id));
+
+    public static int ExtractIdentity(DynamicParameters dynamicParameters) =>
+        dynamicParameters.Get<int>(nameof(zbozi_id));
+
+    private static int GetMeasureUnitId(MeasureUnit measureUnit)
+    {
+        if (measureUnit == MeasureUnit.Kilogram)
+        {
+            return 1;
+        }
+            
+        if (measureUnit == MeasureUnit.Gram)
+        {
+            return 2;
+        }
+
+        if (measureUnit == MeasureUnit.Litre)
+        {
+            return 3;
+        }
+            
+        if (measureUnit == MeasureUnit.Millilitre)
+        {
+            return 4;
+        }
+            
+        if (measureUnit == MeasureUnit.Piece)
+        {
+            return 5;
+        }
+
+        if (measureUnit == MeasureUnit.Meter)
+        {
+            return 6;
+        }
+
+        throw new DatabaseException($"Mapping for measure unit [{measureUnit}] is not implemented");
+    }
 }

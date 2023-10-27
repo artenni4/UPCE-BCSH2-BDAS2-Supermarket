@@ -1,6 +1,4 @@
-﻿using System.Data;
-using System.Diagnostics;
-using Dapper;
+﻿using Dapper;
 using Oracle.ManagedDataAccess.Client;
 using Supermarket.Domain.Common;
 using Supermarket.Domain.Common.Paging;
@@ -9,78 +7,9 @@ namespace Supermarket.Infrastructure.Common
 {
     internal abstract class CrudRepositoryBase<TEntity, TId, TDbEntity>
         where TEntity : IEntity<TId>
-        where TDbEntity : IDbEntity<TEntity, TId>
+        where TDbEntity : IDbEntity<TEntity, TId, TDbEntity>
     {
         protected readonly OracleConnection _oracleConnection;
-        
-        /// <summary>
-        /// Name of the SQL table
-        /// </summary>
-        protected abstract string TableName { get; }
-        
-        /// <summary>
-        /// Primary keys in the table
-        /// </summary>
-        protected abstract IReadOnlyList<string> IdentityColumns { get; }
-        
-        /// <summary>
-        /// Maps domain entity to db entity
-        /// </summary>
-        protected abstract TDbEntity MapToDbEntity(TEntity entity);
-        
-        /// <summary>
-        /// Gets parameter list of identity values
-        /// </summary>
-        /// <param name="id">id of entity</param>
-        protected abstract DynamicParameters GetIdentityValues(TId id);
-
-        /// <summary>
-        /// Helper method if <see cref="IdentityColumns"/> contains only one element
-        /// </summary>
-        protected DynamicParameters GetSimpleIdentityValue<TSimpleId>(TSimpleId id)
-        {
-            Debug.Assert(IdentityColumns.Count == 1, $"Identity of {TableName} is more than one column");
-            
-            var parameters = new DynamicParameters();
-            parameters.Add(IdentityColumns[0], value: id);
-
-            return parameters;
-        }
-
-        /// <summary>
-        /// Gets identity parameters for returning inserted id into it
-        /// </summary>
-        /// <returns></returns>
-        protected virtual DynamicParameters GetOutputIdentityParameters()
-        {
-            var parameters = new DynamicParameters();
-            foreach (var identityColumn in IdentityColumns)
-            {
-                parameters.Add(identityColumn, direction: ParameterDirection.Output);
-            }
-
-            return parameters;
-        }
-
-        /// <summary>
-        /// Gets insert values selector and parameters
-        /// </summary>
-        protected virtual DynamicParameters GetInsertingValues(TDbEntity entity) => new(entity);
-
-        /// <summary>
-        /// Extract <see cref="TId"/> from <see cref="DynamicParameters"/>
-        /// </summary>
-        protected abstract TId ExtractIdentity(DynamicParameters dynamicParameters);
-
-        /// <summary>
-        /// Helper method if <see cref="IdentityColumns"/> contains only one element
-        /// </summary>
-        protected TId ExtractSimpleIdentity(DynamicParameters dynamicParameters)
-        {
-            Debug.Assert(IdentityColumns.Count == 1, $"Identity of {TableName} is more than one column");
-            
-            return dynamicParameters.Get<TId>(IdentityColumns[0]);
-        }
         
         protected CrudRepositoryBase(OracleConnection oracleConnection)
         {
@@ -89,8 +18,8 @@ namespace Supermarket.Infrastructure.Common
 
         public async Task<PagedResult<TEntity>> GetPagedAsync(RecordsRange recordsRange)
         {
-            var pagedItems = await GetPagedResult<TDbEntity>(recordsRange, $"{TableName}.*");
-            return pagedItems.Select(MapToEntity);
+            var pagedItems = await GetPagedResult<TDbEntity>(recordsRange, $"{TDbEntity.TableName}.*");
+            return pagedItems.Select(i => i.ToDomainEntity());
         }
 
         protected async Task<PagedResult<TResult>> GetPagedResult<TResult>(
@@ -99,12 +28,13 @@ namespace Supermarket.Infrastructure.Common
             string? otherClauses = null,
             DynamicParameters? parameters = null)
         {
-            var orderByIdentity = string.Join(", ", IdentityColumns);
+            var orderByIdentity = string.Join(", ", TDbEntity.IdentityColumns);
 
             var pagingSql =
                 $@"WITH NumberedResult AS 
-                   (SELECT {selectColumns}, ROW_NUMBER() OVER (ORDER BY {orderByIdentity}) AS RowNumber 
-                       FROM {TableName}
+                   (SELECT {selectColumns}, 
+                       ROW_NUMBER() OVER (ORDER BY {TDbEntity.TableName}.{orderByIdentity}) AS RowNumber 
+                       FROM {TDbEntity.TableName}
                        {otherClauses})
                    SELECT * FROM NumberedResult
                    WHERE RowNumber BETWEEN :StartRow AND :EndRow";
@@ -114,7 +44,7 @@ namespace Supermarket.Infrastructure.Common
             
             var pagedItems = await _oracleConnection.QueryAsync<TResult>(pagingSql, pagingParameters);
             
-            var totalCountSql = $"SELECT COUNT(1) FROM {TableName} {otherClauses}";
+            var totalCountSql = $"SELECT COUNT(1) FROM {TDbEntity.TableName} {otherClauses}";
             var totalCount = await _oracleConnection.ExecuteScalarAsync<int>(totalCountSql, pagingParameters);
 
             return new PagedResult<TResult>(pagedItems.ToArray(), recordsRange.PageNumber, totalCount);
@@ -122,10 +52,10 @@ namespace Supermarket.Infrastructure.Common
 
         public virtual async Task<TEntity?> GetByIdAsync(TId id)
         {
-            var identity = GetIdentityValues(id);
+            var identity = TDbEntity.GetEntityIdParameters(id);
             var identityCondition = GetIdentityCondition(identity);
             
-            var sql = $"SELECT * FROM {TableName} WHERE {identityCondition}";
+            var sql = $"SELECT * FROM {TDbEntity.TableName} WHERE {identityCondition}";
             var dbEntity = await _oracleConnection.QuerySingleAsync<TDbEntity>(sql, identity);
 
             return dbEntity.ToDomainEntity();
@@ -133,34 +63,34 @@ namespace Supermarket.Infrastructure.Common
         
         public virtual async Task<TId> AddAsync(TEntity entity)
         {
-            var dbEntity = MapToDbEntity(entity);
-            var identity = GetOutputIdentityParameters();
-            var insertingValues = GetInsertingValues(dbEntity);
+            var dbEntity = TDbEntity.MapToDbEntity(entity);
+            var identity = TDbEntity.GetOutputIdentityParameters();
+            var insertingValues = dbEntity.GetInsertingValues();
 
-            var returningIdentity = string.Join(", ", IdentityColumns.Select(ic => $"{TableName}.{ic}"));
+            var returningIdentity = string.Join(", ", TDbEntity.IdentityColumns.Select(ic => $"{TDbEntity.TableName}.{ic}"));
             var returningInto = string.Join(", ", identity.ParameterNames.Select(p => $":{p}"));
             
             var selector = string.Join(", ", insertingValues.ParameterNames);
             var parameters = string.Join(", ", insertingValues.ParameterNames.Select(v => ":" + v));
             
-            var sql = $"INSERT INTO {TableName} ({selector}) VALUES {parameters} RETURNING {returningIdentity} INTO {returningInto}";
+            var sql = $"INSERT INTO {TDbEntity.TableName} ({selector}) VALUES {parameters} RETURNING {returningIdentity} INTO {returningInto}";
 
             insertingValues.AddDynamicParams(identity);
             await _oracleConnection.ExecuteAsync(sql, insertingValues);
 
-            return ExtractIdentity(insertingValues);
+            return TDbEntity.ExtractIdentity(insertingValues);
         }
 
         public virtual async Task UpdateAsync(TEntity entity)
         {
-            var dbEntity = MapToDbEntity(entity);
-            var identity = GetIdentityValues(entity.Id);
-            var insertingValues = GetInsertingValues(dbEntity);
+            var dbEntity = TDbEntity.MapToDbEntity(entity);
+            var identity = TDbEntity.GetEntityIdParameters(entity.Id);
+            var insertingValues = dbEntity.GetInsertingValues();
 
             var updater = string.Join(", ", insertingValues.ParameterNames.Select(p => $"{p} = :{p}"));
             var identityCondition = GetIdentityCondition(identity);
 
-            var sql = $"UPDATE {TableName} SET {updater} WHERE {identityCondition}";
+            var sql = $"UPDATE {TDbEntity.TableName} SET {updater} WHERE {identityCondition}";
             
             insertingValues.AddDynamicParams(identityCondition);
             await _oracleConnection.ExecuteAsync(sql, insertingValues);
@@ -168,10 +98,10 @@ namespace Supermarket.Infrastructure.Common
 
         public virtual async Task DeleteAsync(TId id)
         {
-            var identity = GetIdentityValues(id);
+            var identity = TDbEntity.GetEntityIdParameters(id);
             var identityCondition = GetIdentityCondition(identity);
 
-            var sql = $"DELETE FROM {TableName} WHERE {identityCondition}";
+            var sql = $"DELETE FROM {TDbEntity.TableName} WHERE {identityCondition}";
             await _oracleConnection.ExecuteAsync(sql, identity);
         }
 
@@ -189,7 +119,8 @@ namespace Supermarket.Infrastructure.Common
         
         protected string GetIdentityCondition(DynamicParameters identity)
         {
-            return string.Join(" AND ", IdentityColumns.Select(ic => $"{TableName}.{ic} = :{identity.Get<object>(ic)}"));
-        } 
+            return string.Join(" AND ", TDbEntity.IdentityColumns
+                .Select(ic => $"{TDbEntity.TableName}.{ic} = :{identity.Get<object>(ic)}"));
+        }
     }
 }
