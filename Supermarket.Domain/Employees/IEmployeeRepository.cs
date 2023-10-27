@@ -1,9 +1,8 @@
 ﻿using Supermarket.Domain.Common;
-using Supermarket.Domain.Common.Paging;
 
 namespace Supermarket.Domain.Employees
 {
-    public interface IEmployeeRepository : ICrudRepository<Employee, int, PagingQueryObject>
+    public interface IEmployeeRepository : ICrudRepository<Employee, int>
     {
         Task<Employee?> GetByLoginAsync(string login);
     }

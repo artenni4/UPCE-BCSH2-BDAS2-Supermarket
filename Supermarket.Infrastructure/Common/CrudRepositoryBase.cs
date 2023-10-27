@@ -1,6 +1,5 @@
 ﻿using System.Data;
 using System.Diagnostics;
-using System.Text;
 using Dapper;
 using Oracle.ManagedDataAccess.Client;
 using Supermarket.Domain.Common;
@@ -8,9 +7,9 @@ using Supermarket.Domain.Common.Paging;
 
 namespace Supermarket.Infrastructure.Common
 {
-    internal abstract class CrudRepositoryBase<TEntity, TId, TDbEntity, TQueryObject>
+    internal abstract class CrudRepositoryBase<TEntity, TId, TDbEntity>
         where TEntity : IEntity<TId>
-        where TQueryObject : IQueryObject
+        where TDbEntity : IDbEntity<TEntity, TId>
     {
         protected readonly OracleConnection _oracleConnection;
         
@@ -19,13 +18,11 @@ namespace Supermarket.Infrastructure.Common
         /// </summary>
         protected abstract string TableName { get; }
         
-        protected abstract IReadOnlyList<string> IdentityColumns { get; }
-
         /// <summary>
-        /// Maps instance of db entity to domain entity
+        /// Primary keys in the table
         /// </summary>
-        protected abstract TEntity MapToEntity(TDbEntity dbEntity);
-
+        protected abstract IReadOnlyList<string> IdentityColumns { get; }
+        
         /// <summary>
         /// Maps domain entity to db entity
         /// </summary>
@@ -84,51 +81,43 @@ namespace Supermarket.Infrastructure.Common
             
             return dynamicParameters.Get<TId>(IdentityColumns[0]);
         }
-
-        /// <summary>
-        /// Gets sql where condition and parameters that is specific to current <see cref="TQueryObject"/>
-        /// </summary>
-        /// <param name="queryObject">query object</param>
-        /// <param name="whereConditionBuilder">sql where condition builder</param>
-        /// <returns>output parameters for query</returns>
-        protected virtual DynamicParameters GetCustomPagingCondition(TQueryObject queryObject, StringBuilder whereConditionBuilder)
-        {
-            return new DynamicParameters();
-        }
         
         protected CrudRepositoryBase(OracleConnection oracleConnection)
         {
             _oracleConnection = oracleConnection;
         }
 
-        public async Task<PagedResult<TEntity>> GetPagedAsync(TQueryObject queryObject)
+        public async Task<PagedResult<TEntity>> GetPagedAsync(RecordsRange recordsRange)
+        {
+            var pagedItems = await GetPagedResult<TDbEntity>(recordsRange, $"{TableName}.*");
+            return pagedItems.Select(MapToEntity);
+        }
+
+        protected async Task<PagedResult<TResult>> GetPagedResult<TResult>(
+            RecordsRange recordsRange,
+            string selectColumns,
+            string? otherClauses = null,
+            DynamicParameters? parameters = null)
         {
             var orderByIdentity = string.Join(", ", IdentityColumns);
 
-            var whereConditionBuilder = new StringBuilder();
-            var whereParameters = GetCustomPagingCondition(queryObject, whereConditionBuilder);
-            var whereCondition = whereConditionBuilder.ToString();
-            
-            var customWhere = string.IsNullOrEmpty(whereCondition) ? null : $"WHERE {whereCondition}";
-
             var pagingSql =
                 $@"WITH NumberedResult AS 
-                   (SELECT t.*, ROW_NUMBER() OVER (ORDER BY {orderByIdentity}) AS RowNumber 
-                       FROM {TableName} t
-                       {customWhere})
+                   (SELECT {selectColumns}, ROW_NUMBER() OVER (ORDER BY {orderByIdentity}) AS RowNumber 
+                       FROM {TableName}
+                       {otherClauses})
                    SELECT * FROM NumberedResult
                    WHERE RowNumber BETWEEN :StartRow AND :EndRow";
 
-            var pagingParameters = GetPagingParameters(queryObject.RecordsRange);
-            pagingParameters.AddDynamicParams(whereParameters);
-
-            var pagedItems = await _oracleConnection.QueryAsync<TDbEntity>(pagingSql, pagingParameters);
-            var entities = pagedItems.Select(MapToEntity).ToArray();
+            var pagingParameters = GetPagingParameters(recordsRange);
+            pagingParameters.AddDynamicParams(parameters);
             
-            var totalCountSql = $"SELECT COUNT(*) FROM {TableName} {customWhere}";
-            var totalCount = await _oracleConnection.ExecuteScalarAsync<int>(totalCountSql, whereParameters);
+            var pagedItems = await _oracleConnection.QueryAsync<TResult>(pagingSql, pagingParameters);
+            
+            var totalCountSql = $"SELECT COUNT(1) FROM {TableName} {otherClauses}";
+            var totalCount = await _oracleConnection.ExecuteScalarAsync<int>(totalCountSql, pagingParameters);
 
-            return new PagedResult<TEntity>(entities, queryObject.RecordsRange.PageNumber, totalCount);
+            return new PagedResult<TResult>(pagedItems.ToArray(), recordsRange.PageNumber, totalCount);
         }
 
         public virtual async Task<TEntity?> GetByIdAsync(TId id)
@@ -139,7 +128,7 @@ namespace Supermarket.Infrastructure.Common
             var sql = $"SELECT * FROM {TableName} WHERE {identityCondition}";
             var dbEntity = await _oracleConnection.QuerySingleAsync<TDbEntity>(sql, identity);
 
-            return MapToEntity(dbEntity);
+            return dbEntity.ToDomainEntity();
         }
         
         public virtual async Task<TId> AddAsync(TEntity entity)
@@ -148,7 +137,7 @@ namespace Supermarket.Infrastructure.Common
             var identity = GetOutputIdentityParameters();
             var insertingValues = GetInsertingValues(dbEntity);
 
-            var returningIdentity = string.Join(", ", identity.ParameterNames);
+            var returningIdentity = string.Join(", ", IdentityColumns.Select(ic => $"{TableName}.{ic}"));
             var returningInto = string.Join(", ", identity.ParameterNames.Select(p => $":{p}"));
             
             var selector = string.Join(", ", insertingValues.ParameterNames);
@@ -198,9 +187,9 @@ namespace Supermarket.Infrastructure.Common
             });
         }
         
-        protected static string GetIdentityCondition(DynamicParameters identity)
+        protected string GetIdentityCondition(DynamicParameters identity)
         {
-            return string.Join(" AND ", identity.ParameterNames.Select(p => $"{p} = :{p}"));
+            return string.Join(" AND ", IdentityColumns.Select(ic => $"{TableName}.{ic} = :{identity.Get<object>(ic)}"));
         } 
     }
 }

@@ -1,21 +1,14 @@
 ﻿using Dapper;
 using Oracle.ManagedDataAccess.Client;
-using Supermarket.Domain.Common.Paging;
 using Supermarket.Domain.Regions;
 using Supermarket.Infrastructure.Common;
 
 namespace Supermarket.Infrastructure.Regions;
 
-internal class RegionRepository : CrudRepositoryBase<Region, int, RegionRepository.DbRegion, PagingQueryObject>, IRegionRepository
+internal class RegionRepository : CrudRepositoryBase<Region, int, DbRegion>, IRegionRepository
 {
     public RegionRepository(OracleConnection oracleConnection) : base(oracleConnection)
     {
-    }
-
-    public class DbRegion
-    {
-        public required int region_id { get; init; }
-        public required string nazev { get; init; }
     }
 
     protected override string TableName => "REGIONY";

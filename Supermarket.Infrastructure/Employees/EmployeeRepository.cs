@@ -3,20 +3,14 @@ using Supermarket.Infrastructure.Common;
 using System.Security.Cryptography;
 using System.Text;
 using Dapper;
-using Supermarket.Domain.Common.Paging;
 using Supermarket.Domain.Employees;
 
 namespace Supermarket.Infrastructure.Employees
 {
-    internal class EmployeeRepository : CrudRepositoryBase<Employee, int, EmployeeRepository.DbEmployee, PagingQueryObject>, IEmployeeRepository
+    internal class EmployeeRepository : CrudRepositoryBase<Employee, int, DbEmployee>, IEmployeeRepository
     {
         public EmployeeRepository(OracleConnection oracleConnection) : base(oracleConnection)
         {
-        }
-
-        public class DbEmployee
-        {
-            public required int zamestnanec_id { get; init; }
         }
 
         public Task<Employee?> GetByLoginAsync(string login)

@@ -1,4 +1,4 @@
-﻿using Supermarket.Domain.Products.Categories;
+﻿using Supermarket.Domain.ProductCategories;
 
 namespace Supermarket.Core.CashBoxes;
 

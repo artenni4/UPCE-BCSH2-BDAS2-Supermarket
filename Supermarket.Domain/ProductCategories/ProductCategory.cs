@@ -1,6 +1,6 @@
 ﻿using Supermarket.Domain.Common;
 
-namespace Supermarket.Domain.Products.Categories
+namespace Supermarket.Domain.ProductCategories
 {
     public class ProductCategory : IEntity<int>
     {
