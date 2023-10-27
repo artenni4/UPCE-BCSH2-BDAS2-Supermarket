@@ -43,7 +43,6 @@ public interface IDbEntity<TEntity, TId, TSelf>
     /// <summary>
     /// Gets identity parameters for returning inserted id into it
     /// </summary>
-    /// <returns></returns>
     static abstract DynamicParameters GetOutputIdentityParameters();
     
     /// <summary>

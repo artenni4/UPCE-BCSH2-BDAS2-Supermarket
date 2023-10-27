@@ -1,8 +1,7 @@
 ﻿using Supermarket.Domain.Common;
 
-namespace Supermarket.Domain.SoldProducts
+namespace Supermarket.Domain.SoldProducts;
+
+public interface ISoldProductRepository : ICrudRepository<SoldProduct, SoldProductId>
 {
-    public interface ISoldProductRepository : ICrudRepository<SoldProduct, int>
-    {
-    }
 }

@@ -1,5 +1,4 @@
 ﻿using Oracle.ManagedDataAccess.Client;
-using Supermarket.Infrastructure.Common;
 using System.Security.Cryptography;
 using System.Text;
 using Dapper;
@@ -38,28 +37,6 @@ namespace Supermarket.Infrastructure.Employees
                 Roles = new[] { "CASHIER" },
                 SupermarketId = 1,
             });
-        }
-
-        protected override string TableName => "ZAMESTNANCI";
-        protected override IReadOnlyList<string> IdentityColumns { get; } = new[] { nameof(DbEmployee.zamestnanec_id) };
-        protected override Employee MapToEntity(DbEmployee dbEntity)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override DbEmployee MapToDbEntity(Employee entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override DynamicParameters GetIdentityValues(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override int ExtractIdentity(DynamicParameters dynamicParameters)
-        {
-            throw new NotImplementedException();
         }
     }
 }

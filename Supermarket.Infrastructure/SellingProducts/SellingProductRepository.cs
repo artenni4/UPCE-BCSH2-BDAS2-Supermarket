@@ -4,7 +4,7 @@ using Supermarket.Domain.Common.Paging;
 using Supermarket.Domain.ProductCategories;
 using Supermarket.Domain.Products;
 using Supermarket.Domain.SellingProducts;
-using Supermarket.Infrastructure.Common;
+using Supermarket.Infrastructure.ProductCategories;
 using Supermarket.Infrastructure.Products;
 
 namespace Supermarket.Infrastructure.SellingProducts;
@@ -15,50 +15,37 @@ internal class SellingProductRepository : CrudRepositoryBase<SellingProduct, Sel
     {
     }
 
-    protected override string TableName => "PRODAVANE_ZBOZI";
-
-    protected override IReadOnlyList<string> IdentityColumns { get; } = new[]
-    {
-        nameof(DbSellingProduct.zbozi_id),
-        nameof(DbSellingProduct.supermarket_id)
-    };
-        
-    protected override SellingProduct MapToEntity(DbSellingProduct dbEntity)
-    {
-        throw new NotImplementedException();
-    }
-
-    protected override DbSellingProduct MapToDbEntity(SellingProduct entity)
-    {
-        throw new NotImplementedException();
-    }
-
-    protected override DynamicParameters GetIdentityValues(SellingProductId id)
-    {
-        throw new NotImplementedException();
-    }
-
-    protected override SellingProductId ExtractIdentity(DynamicParameters dynamicParameters)
-    {
-        throw new NotImplementedException();
-    }
-
     public async Task<PagedResult<Product>> GetSupermarketProducts(int supermarketId, RecordsRange recordsRange, int categoryId, string? searchText)
     {
-        var parameters = new DynamicParameters();
-        parameters.Add("supermarket_id", supermarketId);
+        var parameters = new DynamicParameters()
+            .AddParameter("supermarket_id", supermarketId);
+        
+        const string sql = @"SELECT z.* FROM ZBOZI z
+                     JOIN PRODAVANE_ZBOZI pz USING (zbozi_id) 
+                     WHERE pz.supermarket_id = :supermarket_id";
 
-        var result = await GetPagedResult<DbProduct>(recordsRange,
-            selectColumns: "ZBOZI.*",
-            otherClauses: @"JOIN ZBOZI USING zbozi_id
-                            WHERE PRODAVANE_ZBOZI.supermarket_id = :supermarket_id",
-            parameters: parameters);
+        var orderByColumns = DbProduct.IdentityColumns
+            .Select(ic => $"z.{ic}");
+        
+        var result = await GetPagedResult<DbProduct>(recordsRange, sql, orderByColumns, parameters);
 
-        return result.Select(MapToEntity);
+        return result.Select(dbProduct => dbProduct.ToDomainEntity());
     }
 
-    public Task<PagedResult<ProductCategory>> GetSupermarketProductCategories(int supermarketId, RecordsRange recordsRange)
+    public async Task<PagedResult<ProductCategory>> GetSupermarketProductCategories(int supermarketId, RecordsRange recordsRange)
     {
-        throw new NotImplementedException();
+        var parameters = new DynamicParameters()
+            .AddParameter("supermarket_id", supermarketId);
+        
+        const string sql = @"SELECT dz.* FROM DRUHY_ZBOZI dz
+                     JOIN PRODAVANE_ZBOZI pz USING (zbozi_id) 
+                     WHERE pz.supermarket_id = :supermarket_id";
+
+        var orderByColumns = DbProductCategory.IdentityColumns
+            .Select(ic => $"dz.{ic}");
+        
+        var result = await GetPagedResult<DbProductCategory>(recordsRange, sql, orderByColumns, parameters);
+
+        return result.Select(dbProductCategory => dbProductCategory.ToDomainEntity());
     }
 }

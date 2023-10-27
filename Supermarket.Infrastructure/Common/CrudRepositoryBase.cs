@@ -18,33 +18,28 @@ namespace Supermarket.Infrastructure.Common
 
         public async Task<PagedResult<TEntity>> GetPagedAsync(RecordsRange recordsRange)
         {
-            var pagedItems = await GetPagedResult<TDbEntity>(recordsRange, $"{TDbEntity.TableName}.*");
+            var sql = $"SELECT * FROM {TDbEntity.TableName}";
+            var pagedItems =
+                await GetPagedResult<TDbEntity>(recordsRange, sql, TDbEntity.IdentityColumns, new DynamicParameters());
+            
             return pagedItems.Select(i => i.ToDomainEntity());
         }
 
         protected async Task<PagedResult<TResult>> GetPagedResult<TResult>(
             RecordsRange recordsRange,
-            string selectColumns,
-            string? otherClauses = null,
-            DynamicParameters? parameters = null)
+            string innerSql,
+            IEnumerable<string> orderByColumns,
+            DynamicParameters parameters)
         {
-            var orderByIdentity = string.Join(", ", TDbEntity.IdentityColumns);
-
-            var pagingSql =
-                $@"WITH NumberedResult AS 
-                   (SELECT {selectColumns}, 
-                       ROW_NUMBER() OVER (ORDER BY {TDbEntity.TableName}.{orderByIdentity}) AS RowNumber 
-                       FROM {TDbEntity.TableName}
-                       {otherClauses})
-                   SELECT * FROM NumberedResult
-                   WHERE RowNumber BETWEEN :StartRow AND :EndRow";
+            var orderBy = string.Join(", ", orderByColumns);
+            var pagingSql = $"{innerSql} ORDER BY {orderBy} OFFSET :PagingOffset ROWS FETCH NEXT :PagingRowsCount ROWS ONLY";
 
             var pagingParameters = GetPagingParameters(recordsRange);
             pagingParameters.AddDynamicParams(parameters);
             
             var pagedItems = await _oracleConnection.QueryAsync<TResult>(pagingSql, pagingParameters);
             
-            var totalCountSql = $"SELECT COUNT(1) FROM {TDbEntity.TableName} {otherClauses}";
+            var totalCountSql = $"SELECT COUNT(*) FROM ({innerSql})";
             var totalCount = await _oracleConnection.ExecuteScalarAsync<int>(totalCountSql, pagingParameters);
 
             return new PagedResult<TResult>(pagedItems.ToArray(), recordsRange.PageNumber, totalCount);
@@ -105,18 +100,18 @@ namespace Supermarket.Infrastructure.Common
             await _oracleConnection.ExecuteAsync(sql, identity);
         }
 
-        protected static DynamicParameters GetPagingParameters(RecordsRange recordsRange)
+        private static DynamicParameters GetPagingParameters(RecordsRange recordsRange)
         {
             var startRow = (recordsRange.PageNumber - 1) * recordsRange.PageSize + 1;
-            var endRow = recordsRange.PageNumber * recordsRange.PageSize;
+            var rowsCount = recordsRange.PageSize;
 
             return new DynamicParameters(new
             {
-                StartRow = startRow,
-                EndRow = endRow
+                PagingOffset = startRow,
+                PagingRowsCount = rowsCount
             });
         }
-        
+
         protected string GetIdentityCondition(DynamicParameters identity)
         {
             return string.Join(" AND ", TDbEntity.IdentityColumns
