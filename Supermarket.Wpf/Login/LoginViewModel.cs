@@ -9,13 +9,15 @@ using Supermarket.Domain.Common.Paging;
 
 namespace Supermarket.Wpf.Login
 {
-    public class LoginViewModel : INotifyPropertyChanged
+    public class LoginViewModel : NotifyPropertyChangedBase
     {
-        public ICommand EmployeeLoginCommand { get; set; }
-        public ICommand CustomerLoginCommand { get; set; }
         private readonly ILoginService _loginService;
         private readonly ICashBoxService _cashBoxService;
         private readonly INavigationService _navigationService;
+
+
+        public ICommand EmployeeLoginCommand { get; }
+        public ICommand CustomerLoginCommand { get; }
 
         public LoginViewModel(ILoginService loginService, INavigationService navigationService, ICashBoxService cashBoxService)
         {
@@ -23,20 +25,16 @@ namespace Supermarket.Wpf.Login
             _navigationService = navigationService;
             _cashBoxService = cashBoxService;
 
-            EmployeeLoginCommand = new RelayCommand(EmployeeLoginAsync, CanLogin);
-            CustomerLoginCommand = new RelayCommand(CustomerLogin, CanLogin);
+            EmployeeLoginCommand = new RelayCommand(EmployeeLoginAsync, CanEmployeeLogin);
+            CustomerLoginCommand = new RelayCommand(CustomerLogin);
         }
 
 
         private LoginModel employeeLoginData = new();
         public LoginModel EmployeeLoginData
         {
-            get { return employeeLoginData; }
-            set 
-            { 
-                employeeLoginData = value;
-                OnPropertyChanged(nameof(EmployeeLoginData));
-            }
+            get => employeeLoginData;
+            set => SetProperty(ref employeeLoginData, value);
         }
 
         private async void EmployeeLoginAsync(object? obj)
@@ -65,13 +63,6 @@ namespace Supermarket.Wpf.Login
             _navigationService.NavigateTo(NavigateWindow.CashBox);
         }
 
-        private bool CanLogin(object? arg) { return true; }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        protected virtual void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+        private bool CanEmployeeLogin(object? arg) => !string.IsNullOrWhiteSpace(EmployeeLoginData.Login) && !string.IsNullOrWhiteSpace(EmployeeLoginData.Password);
     }
 }
