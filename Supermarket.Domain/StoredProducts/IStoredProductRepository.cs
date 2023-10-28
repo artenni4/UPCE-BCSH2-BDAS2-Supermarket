@@ -2,7 +2,7 @@
 
 namespace Supermarket.Domain.StoredProducts
 {
-    public interface IStoredProductRepository : ICrudRepository<StoredProduct, int>
+    public interface IStoredProductRepository : ICrudRepository<StoredProduct, StoredProductId>
     {
     }
 }
