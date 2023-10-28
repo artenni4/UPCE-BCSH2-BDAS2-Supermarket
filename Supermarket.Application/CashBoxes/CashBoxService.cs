@@ -1,41 +1,37 @@
 ﻿using Supermarket.Domain.Auth;
 using Supermarket.Domain.Auth.LoggedEmployees;
 using Supermarket.Domain.Employees.Roles;
+using Supermarket.Domain.ProductCategories;
 using Supermarket.Domain.Products;
-using Supermarket.Domain.Products.Categories;
+using Supermarket.Domain.SellingProducts;
 
 namespace Supermarket.Core.CashBoxes
 {
     internal class CashBoxService : ICashBoxService
     {
-        private readonly IProductCategoryRepository _productCategoryRepository;
-        private readonly IProductRepository _productRepository;
+        private readonly ISellingProductRepository _sellingProductRepository;
         private readonly IAuthDomainService _authDomainService;
         private readonly IUnitOfWork _unitOfWork;
 
-        public CashBoxService(IProductCategoryRepository productCategoryRepository, IProductRepository productRepository, IAuthDomainService authDomainService, IUnitOfWork unitOfWork)
+        public CashBoxService(ISellingProductRepository sellingProductRepository, IAuthDomainService authDomainService, IUnitOfWork unitOfWork)
         {
-            _productCategoryRepository = productCategoryRepository;
-            _productRepository = productRepository;
+            _sellingProductRepository = sellingProductRepository;
             _authDomainService = authDomainService;
             _unitOfWork = unitOfWork;
         }
 
         public async Task<PagedResult<CashBoxProductCategory>> GetCategoriesAsync(int supermarketId, RecordsRange recordsRange)
         {
-            var productCategories = await _productCategoryRepository.GetPagedAsync(new PagingQueryObject { RecordsRange = recordsRange });
+            var result = await _sellingProductRepository.GetSupermarketProductCategories(supermarketId, recordsRange);
 
-            return productCategories.Select(CashBoxProductCategory.FromProductCategory);
+            return result.Select(CashBoxProductCategory.FromProductCategory);
         }
 
         public async Task<PagedResult<CashBoxProduct>> GetProductsAsync(int supermarketId, RecordsRange recordsRange, int productCategoryId, string? searchText)
         {
-            var products = await _productRepository.GetPagedAsync(new PagingQueryObject
-            {
-                RecordsRange = recordsRange,
-            });
+            var result = await _sellingProductRepository.GetSupermarketProducts(supermarketId, recordsRange, productCategoryId, searchText);
 
-            return products.Select(CashBoxProduct.FromProduct);
+            return result.Select(CashBoxProduct.FromProduct);
         }
 
         public Task AddSaleAsync(int cashBoxId, IReadOnlyList<CashBoxSoldProduct> soldProducts, IReadOnlyList<Coupon> coupons)

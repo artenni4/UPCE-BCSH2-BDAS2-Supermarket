@@ -1,9 +1,8 @@
-﻿using Supermarket.Domain.Common.Paging;
-using Supermarket.Domain.Common;
+﻿using Supermarket.Domain.Common;
 
 namespace Supermarket.Domain.Sales
 {
-    public interface ISaleRepository : ICrudRepository<Sale, int, PagingQueryObject>
+    public interface ISaleRepository : ICrudRepository<Sale, int>
     {
     }
 }

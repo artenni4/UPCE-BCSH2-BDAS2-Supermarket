@@ -3,7 +3,7 @@ using Supermarket.Domain.Common.Paging;
 
 namespace Supermarket.Domain.CashBoxes;
 
-public interface ICashBoxRepository : ICrudRepository<CashBox, int, PagingQueryObject>
+public interface ICashBoxRepository : ICrudRepository<CashBox, int>
 {
     
 }
