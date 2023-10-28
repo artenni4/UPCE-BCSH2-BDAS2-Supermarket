@@ -102,7 +102,7 @@ namespace Supermarket.Infrastructure.Common
 
         private static DynamicParameters GetPagingParameters(RecordsRange recordsRange)
         {
-            var startRow = (recordsRange.PageNumber - 1) * recordsRange.PageSize + 1;
+            var startRow = (recordsRange.PageNumber - 1) * recordsRange.PageSize;
             var rowsCount = recordsRange.PageSize;
 
             return new DynamicParameters(new

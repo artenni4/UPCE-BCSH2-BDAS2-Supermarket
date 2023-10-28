@@ -21,7 +21,7 @@ internal class SellingProductRepository : CrudRepositoryBase<SellingProduct, Sel
             .AddParameter("supermarket_id", supermarketId);
         
         const string sql = @"SELECT z.* FROM ZBOZI z
-                     JOIN PRODAVANE_ZBOZI pz USING (zbozi_id) 
+                     JOIN PRODAVANE_ZBOZI pz ON (z.zbozi_id = pz.zbozi_id)
                      WHERE pz.supermarket_id = :supermarket_id";
 
         var orderByColumns = DbProduct.IdentityColumns
