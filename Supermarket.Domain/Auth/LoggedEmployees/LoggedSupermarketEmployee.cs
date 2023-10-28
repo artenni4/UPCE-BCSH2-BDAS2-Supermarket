@@ -2,5 +2,5 @@
 
 namespace Supermarket.Domain.Auth.LoggedEmployees
 {
-    public record LoggedSupermarketEmployee(int Id, IReadOnlyList<IEmployeeRole> Roles) : ILoggedEmployee;
+    public record LoggedSupermarketEmployee(int Id, string Name, string Surname, IReadOnlyList<IEmployeeRole> Roles) : ILoggedEmployee;
 }

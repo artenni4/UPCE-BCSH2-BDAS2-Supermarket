@@ -1,61 +1,63 @@
 ﻿using Supermarket.Core.Login;
 using Supermarket.Wpf.Common;
 using Supermarket.Wpf.Navigation;
-using System.ComponentModel;
 using System.Windows.Input;
-using Supermarket.Core.CashBoxes;
 using Supermarket.Domain.Auth;
-using Supermarket.Domain.Common.Paging;
+using Supermarket.Wpf.Session;
+using System.Windows;
 
 namespace Supermarket.Wpf.Login
 {
     public class LoginViewModel : NotifyPropertyChangedBase
     {
         private readonly ILoginService _loginService;
-        private readonly ICashBoxService _cashBoxService;
         private readonly INavigationService _navigationService;
-
+        private readonly ILoggedUserService _sessionService;
 
         public ICommand EmployeeLoginCommand { get; }
         public ICommand CustomerLoginCommand { get; }
 
-        public LoginViewModel(ILoginService loginService, INavigationService navigationService, ICashBoxService cashBoxService)
+        public LoginViewModel(ILoginService loginService, INavigationService navigationService, ILoggedUserService sessionService)
         {
             _loginService = loginService;
             _navigationService = navigationService;
-            _cashBoxService = cashBoxService;
+            _sessionService = sessionService;
 
             EmployeeLoginCommand = new RelayCommand(EmployeeLoginAsync, CanEmployeeLogin);
             CustomerLoginCommand = new RelayCommand(CustomerLogin);
         }
 
 
-        private LoginModel employeeLoginData = new();
+        private LoginModel _employeeLoginData = new();
         public LoginModel EmployeeLoginData
         {
-            get => employeeLoginData;
-            set => SetProperty(ref employeeLoginData, value);
+            get => _employeeLoginData;
+            set => SetProperty(ref _employeeLoginData, value);
         }
 
         private async void EmployeeLoginAsync(object? obj)
         {
-            var a = await _cashBoxService.GetProductsAsync(1, new RecordsRange
+            if (string.IsNullOrEmpty(EmployeeLoginData.Login) || string.IsNullOrEmpty(EmployeeLoginData.Password))
             {
-                PageNumber = 1,
-                PageSize = 10
-            }, 1, null);
-            
-            if (employeeLoginData.Login != null && employeeLoginData.Password != null)
-            {
-                var loginData = new LoginData
-                {
-                    Login = employeeLoginData.Login,
-                    Password = employeeLoginData.Password
-                };
-                var userId = await _loginService.LoginEmployeeAsync(loginData);
+                return;
             }
-            // authorization
-            // kakaja pokladna
+
+            var loginData = new LoginData
+            {
+                Login = EmployeeLoginData.Login,
+                Password = EmployeeLoginData.Password
+            };
+
+            try
+            {
+                var loggedEmployee = await _loginService.LoginEmployeeAsync(loginData);
+                _sessionService.SetLoggedEmployee(loggedEmployee);
+                MessageBox.Show($"Příhlašen uživatel {loggedEmployee.Name} {loggedEmployee.Surname}", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (InvalidCredentialsException)
+            {
+                MessageBox.Show("Špatné příhlašovací údaje", "Chyba", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void CustomerLogin(object? obj)

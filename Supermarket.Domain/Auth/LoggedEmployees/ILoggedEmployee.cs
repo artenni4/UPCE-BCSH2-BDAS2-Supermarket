@@ -6,5 +6,7 @@
     public interface ILoggedEmployee
     {
         int Id { get; }
+        string Name { get; }
+        string Surname { get; }
     }
 }
