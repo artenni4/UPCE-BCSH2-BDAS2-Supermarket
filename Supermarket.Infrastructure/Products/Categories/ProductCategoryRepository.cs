@@ -15,31 +15,32 @@ namespace Supermarket.Infrastructure.Products.Categories
         public class DbProductCategory
         {
             public required int druh_zbozi_id { get; init; }
+            public required string nazev { get; init; }
+            public string? popis { get; init; }
         }
 
         protected override string TableName => "DRUHY_ZBOZI";
 
         protected override IReadOnlyList<string> IdentityColumns { get; } =
             new[] { nameof(DbProductCategory.druh_zbozi_id) };
-        
-        protected override ProductCategory MapToEntity(DbProductCategory dbEntity)
-        {
-            throw new NotImplementedException();
-        }
 
-        protected override DbProductCategory MapToDbEntity(ProductCategory entity)
+        protected override ProductCategory MapToEntity(DbProductCategory dbEntity) => new()
         {
-            throw new NotImplementedException();
-        }
+            Id = dbEntity.druh_zbozi_id,
+            Name = dbEntity.nazev,
+            Description = dbEntity.popis
+        };
 
-        protected override DynamicParameters GetIdentityValues(int id)
+        protected override DbProductCategory MapToDbEntity(ProductCategory entity) => new()
         {
-            throw new NotImplementedException();
-        }
+            druh_zbozi_id = entity.Id,
+            nazev = entity.Name,
+            popis = entity.Description
+        };
 
-        protected override int ExtractIdentity(DynamicParameters dynamicParameters)
-        {
-            throw new NotImplementedException();
-        }
+        protected override DynamicParameters GetIdentityValues(int id) => GetSimpleIdentityValue(id);
+
+        protected override int ExtractIdentity(DynamicParameters dynamicParameters) =>
+            ExtractSimpleIdentity(dynamicParameters);
     }
 }

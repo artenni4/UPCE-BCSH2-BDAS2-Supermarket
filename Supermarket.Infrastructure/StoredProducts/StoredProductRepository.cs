@@ -3,11 +3,10 @@ using Oracle.ManagedDataAccess.Client;
 using Supermarket.Domain.Common.Paging;
 using Supermarket.Domain.StoredProducts;
 using Supermarket.Infrastructure.Common;
-using Supermarket.Infrastructure.SoldProducts;
 
 namespace Supermarket.Infrastructure.StoredProducts
 {
-    internal class StoredProductRepository : CrudRepositoryBase<StoredProduct, int, SoldProductRepository.DbSoldProduct, PagingQueryObject>, IStoredProductRepository
+    internal class StoredProductRepository : CrudRepositoryBase<StoredProduct, int, StoredProductRepository.DbStoredProduct, PagingQueryObject>, IStoredProductRepository
     {
         public StoredProductRepository(OracleConnection oracleConnection) : base(oracleConnection)
         {
@@ -15,6 +14,7 @@ namespace Supermarket.Infrastructure.StoredProducts
 
         public class DbStoredProduct
         {
+            public required decimal kusy { get; init; }
             public required int misto_ulozeni_id { get; init; }
             public required int supermarket_id { get; init; }
             public required int zbozi_id { get; init; }
@@ -28,25 +28,26 @@ namespace Supermarket.Infrastructure.StoredProducts
             nameof(DbStoredProduct.supermarket_id),
             nameof(DbStoredProduct.zbozi_id)
         };
-        
-        protected override StoredProduct MapToEntity(SoldProductRepository.DbSoldProduct dbEntity)
-        {
-            throw new NotImplementedException();
-        }
 
-        protected override SoldProductRepository.DbSoldProduct MapToDbEntity(StoredProduct entity)
+        protected override StoredProduct MapToEntity(DbStoredProduct dbEntity) => new()
         {
-            throw new NotImplementedException();
-        }
+            Pieces = dbEntity.kusy,
+            StoragePlaceId = dbEntity.misto_ulozeni_id,
+            SupermarketId = dbEntity.supermarket_id,
+            ProductId = dbEntity.zbozi_id
+        };
 
-        protected override DynamicParameters GetIdentityValues(int id)
+        protected override DbStoredProduct MapToDbEntity(StoredProduct entity) => new()
         {
-            throw new NotImplementedException();
-        }
+            kusy = entity.Pieces,
+            misto_ulozeni_id = entity.StoragePlaceId,
+            supermarket_id = entity.SupermarketId,
+            zbozi_id = entity.ProductId
+        };
 
-        protected override int ExtractIdentity(DynamicParameters dynamicParameters)
-        {
-            throw new NotImplementedException();
-        }
+        protected override DynamicParameters GetIdentityValues(int id) => GetSimpleIdentityValue(id);
+
+        protected override int ExtractIdentity(DynamicParameters dynamicParameters) =>
+            ExtractSimpleIdentity(dynamicParameters);
     }
 }

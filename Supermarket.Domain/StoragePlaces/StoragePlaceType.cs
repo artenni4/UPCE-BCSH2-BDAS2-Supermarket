@@ -1,5 +1,4 @@
-﻿
-namespace Supermarket.Domain.StoragePlaces
+﻿namespace Supermarket.Domain.StoragePlaces
 {
     public enum StoragePlaceType
     {

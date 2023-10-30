@@ -22,25 +22,21 @@ namespace Supermarket.Infrastructure.SellingProducts
 
         protected override IReadOnlyList<string> IdentityColumns { get; } = new[]
             { nameof(DbSellingProduct.zbozi_id), nameof(DbSellingProduct.supermarket_id) };
-        
-        protected override SellingProduct MapToEntity(DbSellingProduct dbEntity)
-        {
-            throw new NotImplementedException();
-        }
 
-        protected override DbSellingProduct MapToDbEntity(SellingProduct entity)
+        protected override SellingProduct MapToEntity(DbSellingProduct dbEntity) => new()
         {
-            throw new NotImplementedException();
-        }
+            Id = dbEntity.zbozi_id,
+            SupermarketId = dbEntity.supermarket_id
+        };
 
-        protected override DynamicParameters GetIdentityValues(int id)
+        protected override DbSellingProduct MapToDbEntity(SellingProduct entity) => new()
         {
-            throw new NotImplementedException();
-        }
+            zbozi_id = entity.Id,
+            supermarket_id = entity.SupermarketId
+        };
 
-        protected override int ExtractIdentity(DynamicParameters dynamicParameters)
-        {
-            throw new NotImplementedException();
-        }
+        protected override DynamicParameters GetIdentityValues(int id) => GetSimpleIdentityValue(id);
+
+        protected override int ExtractIdentity(DynamicParameters dynamicParameters) => ExtractSimpleIdentity(dynamicParameters);
     }
 }

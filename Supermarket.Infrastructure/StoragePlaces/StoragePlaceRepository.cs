@@ -15,31 +15,40 @@ namespace Supermarket.Infrastructure.StoragePlaces
         public class DbStoragePlace
         {
             public required int misto_ulozeni_id { get; init; }
+            public required string kod { get; init; }
+            public string? poloha { get; init; }
+            public int supermarket_id { get; init; }
+            public required string misto_ulozeni_typ { get; init; }
         }
 
         protected override string TableName => "MISTA_ULOZENI";
 
         protected override IReadOnlyList<string> IdentityColumns { get; } =
             new[] { nameof(DbStoragePlace.misto_ulozeni_id) };
-        
-        protected override StoragePlace MapToEntity(DbStoragePlace dbEntity)
-        {
-            throw new NotImplementedException();
-        }
 
-        protected override DbStoragePlace MapToDbEntity(StoragePlace entity)
+        protected override StoragePlace MapToEntity(DbStoragePlace dbEntity) => new()
         {
-            throw new NotImplementedException();
-        }
+            Id = dbEntity.misto_ulozeni_id,
+            Code = dbEntity.kod,
+            Location = dbEntity.poloha,
+            SupermarketId = dbEntity.supermarket_id,
+            Type = dbEntity.misto_ulozeni_typ switch
+            {
+                
+            }
+        };
 
-        protected override DynamicParameters GetIdentityValues(int id)
+        protected override DbStoragePlace MapToDbEntity(StoragePlace entity) => new()
         {
-            throw new NotImplementedException();
-        }
+            misto_ulozeni_id = entity.Id,
+            kod = entity.Code,
+            poloha = entity.Location,
+            supermarket_id = entity.SupermarketId,
+            misto_ulozeni_typ = entity.Type
+        };
 
-        protected override int ExtractIdentity(DynamicParameters dynamicParameters)
-        {
-            throw new NotImplementedException();
-        }
+        protected override DynamicParameters GetIdentityValues(int id) => GetSimpleIdentityValue(id);
+
+        protected override int ExtractIdentity(DynamicParameters dynamicParameters) => ExtractSimpleIdentity(dynamicParameters);
     }
 }

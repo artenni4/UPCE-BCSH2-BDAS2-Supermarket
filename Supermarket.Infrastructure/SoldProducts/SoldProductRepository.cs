@@ -16,6 +16,7 @@ namespace Supermarket.Infrastructure.SoldProducts
         public class DbSoldProduct
         {
             public required int prodej_id { get; init; }
+            public required decimal kusy { get; init; }
             public required int supermarket_id { get; init; }
             public required int zbozi_id { get; init; }
         }
@@ -24,25 +25,25 @@ namespace Supermarket.Infrastructure.SoldProducts
 
         protected override IReadOnlyList<string> IdentityColumns { get; } = new[]
             { nameof(DbSoldProduct.prodej_id), nameof(DbSoldProduct.supermarket_id), nameof(DbSoldProduct.zbozi_id) };
-        
-        protected override SoldProduct MapToEntity(DbSoldProduct dbEntity)
-        {
-            throw new NotImplementedException();
-        }
 
-        protected override DbSoldProduct MapToDbEntity(SoldProduct entity)
+        protected override SoldProduct MapToEntity(DbSoldProduct dbEntity) => new()
         {
-            throw new NotImplementedException();
-        }
+            Id = dbEntity.prodej_id,
+            Pieces = dbEntity.kusy,
+            SupermarketId = dbEntity.supermarket_id,
+            ProductId = dbEntity.zbozi_id
+        };
 
-        protected override DynamicParameters GetIdentityValues(int id)
+        protected override DbSoldProduct MapToDbEntity(SoldProduct entity) => new()
         {
-            throw new NotImplementedException();
-        }
+            prodej_id = entity.Id,
+            kusy = entity.Pieces,
+            supermarket_id = entity.SupermarketId,
+            zbozi_id = entity.ProductId
+        };
 
-        protected override int ExtractIdentity(DynamicParameters dynamicParameters)
-        {
-            throw new NotImplementedException();
-        }
+        protected override DynamicParameters GetIdentityValues(int id) => GetSimpleIdentityValue(id);
+
+        protected override int ExtractIdentity(DynamicParameters dynamicParameters) => ExtractSimpleIdentity(dynamicParameters);
     }
 }
