@@ -3,8 +3,8 @@ using Supermarket.Wpf.Common;
 using Supermarket.Wpf.Navigation;
 using System.Windows.Input;
 using Supermarket.Domain.Auth;
-using Supermarket.Wpf.Session;
 using System.Windows;
+using Supermarket.Wpf.LoggedUser;
 
 namespace Supermarket.Wpf.Login
 {

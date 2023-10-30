@@ -1,13 +1,8 @@
 ﻿using Supermarket.Domain.Auth.LoggedEmployees;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Supermarket.Wpf.Session
+namespace Supermarket.Wpf.LoggedUser
 {
-    internal class SessionService : ILoggedUserService
+    internal class LoggedUserService : ILoggedUserService
     {
         public ILoggedEmployee? LoggedEmployee { get; private set; }
 

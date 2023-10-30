@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Supermarket.Wpf.Session
+namespace Supermarket.Wpf.LoggedUser
 {
     public interface ILoggedUserService
     {
