@@ -1,7 +1,7 @@
 ﻿using Supermarket.Domain.Auth.LoggedEmployees;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Supermarket.Wpf.Session
+namespace Supermarket.Wpf.LoggedUser
 {
     internal static class LoggedUserServiceExtensions
     {
