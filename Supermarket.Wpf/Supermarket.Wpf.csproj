@@ -5,7 +5,7 @@
     <TargetFramework>net7.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <NoWarn>CS0067</NoWarn>
+    <NoWarn>CS0067,CS0168</NoWarn>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
