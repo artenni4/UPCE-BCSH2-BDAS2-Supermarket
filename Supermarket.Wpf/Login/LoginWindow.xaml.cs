@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Supermarket.Wpf.Menu;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -35,5 +36,22 @@ namespace Supermarket.Wpf.Login
                     popupMenu.Visibility = Visibility.Collapsed;
             }
         }
+
+        private void Menu_Click(object sender, RoutedEventArgs e)
+        {
+            PopupMenu newUserControl = new PopupMenu();
+
+            Window newWindow = new Window
+            {
+                Content = newUserControl,
+                WindowStyle = WindowStyle.None,
+                WindowState = WindowState.Maximized,
+                AllowsTransparency = true,
+                Background = Brushes.Transparent
+            };
+
+            newWindow.Show();
+        }
+
     }
 }
