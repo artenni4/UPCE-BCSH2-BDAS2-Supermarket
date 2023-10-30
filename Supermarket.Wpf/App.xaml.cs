@@ -6,6 +6,7 @@ using System.Windows;
 using Supermarket.Core;
 using Supermarket.Domain;
 using Supermarket.Infrastructure;
+using Supermarket.Wpf.Menu;
 
 namespace Supermarket.Wpf
 {
@@ -31,9 +32,10 @@ namespace Supermarket.Wpf
         {
             var mainWindow = new MainWindow()
             {
-                DataContext = _serviceProvider.GetRequiredService<MainViewModel>()
+                DataContext = _serviceProvider.GetRequiredService<MainViewModel>(),
             };
-            
+            mainWindow.ApplicationMenu.DataContext = _serviceProvider.GetRequiredService<MenuViewModel>();
+
             var navigationService = _serviceProvider.GetRequiredService<INavigationService>();
             navigationService.NavigateTo(NavigateWindow.Login);
 

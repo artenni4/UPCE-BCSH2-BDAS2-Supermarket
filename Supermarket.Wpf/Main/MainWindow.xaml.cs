@@ -1,4 +1,5 @@
 ﻿using Supermarket.Wpf.Main;
+using Supermarket.Wpf.Menu;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,5 +27,15 @@ namespace Supermarket.Wpf.Main
             InitializeComponent();
         }
 
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                if (ApplicationMenu.DataContext is MenuViewModel menuViewModel && menuViewModel.ToggleMenuCommand.CanExecute(null))
+                {
+                    menuViewModel.ToggleMenuCommand.Execute(null);
+                }
+            }
+        }
     }
 }

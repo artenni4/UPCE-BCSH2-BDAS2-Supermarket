@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:Supermarket.Wpf.Menu"
              xmlns:common="clr-namespace:Supermarket.Wpf.Common"
              mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance local:MenuViewModel, IsDesignTimeCreatable=False}"
              d:DesignHeight="1080" d:DesignWidth="1920">
     <UserControl.Resources>
         <common:RoleToVisibilityConverter x:Key="RoleToVisibilityConverter" />
@@ -18,7 +19,7 @@
             <Grid>
                 <ListBox Foreground="White" BorderBrush="Transparent" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
                     <ListBoxItem Visibility="{Binding LoggedEmployee, Converter={StaticResource RoleToVisibilityConverter}, ConverterParameter='Cashier,Manager,Admin'}">
-                        <Button Content="Pokladna" Background="#0471C7" BorderBrush="#005699" Height="50" FontSize="30" Foreground="White"/>
+                        <Button Content="Pokladna" Command="{Binding NavigateToCashboxCommand}" Background="#0471C7" BorderBrush="#005699" Height="50" FontSize="30" Foreground="White"/>
                     </ListBoxItem>
                     <ListBoxItem Visibility="{Binding LoggedEmployee, Converter={StaticResource RoleToVisibilityConverter}, ConverterParameter='GoodsKeeper,Manager,Admin'}">
                         <Button Content="Sklad" Background="#0471C7" BorderBrush="#005699" Height="50" FontSize="30" Foreground="White"/>
@@ -30,7 +31,6 @@
                         <Button Content="Admin" Background="#0471C7" BorderBrush="#005699" Height="50" FontSize="30" Foreground="White"/>
                     </ListBoxItem>
                 </ListBox>
-
             </Grid>
         </Border>
     </Grid>

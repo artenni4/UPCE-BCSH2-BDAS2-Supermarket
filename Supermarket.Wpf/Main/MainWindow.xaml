@@ -3,8 +3,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Supermarket.Wpf" xmlns:cashbox="clr-namespace:Supermarket.Wpf.Cashbox" xmlns:login="clr-namespace:Supermarket.Wpf.Login"
+        xmlns:local="clr-namespace:Supermarket.Wpf.Main"
+        xmlns:cashbox="clr-namespace:Supermarket.Wpf.Cashbox"
+        xmlns:login="clr-namespace:Supermarket.Wpf.Login"
+        xmlns:menu="clr-namespace:Supermarket.Wpf.Menu"
         mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance local:MainViewModel, IsDesignTimeCreatable=False}"
+        KeyDown="Window_KeyDown"
         Title="MainWindow" Height="1080" Width="1920" WindowState="Maximized">
     <Window.Resources>
         <DataTemplate DataType="{x:Type cashbox:CashboxViewModel}">
@@ -13,7 +18,15 @@
         <DataTemplate DataType="{x:Type login:LoginViewModel}">
             <login:LoginWindow />
         </DataTemplate>
-    </Window.Resources>
-    <ContentPresenter Content="{Binding CurrentViewModel}"/>
 
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    </Window.Resources>
+    <Grid>
+        <ContentPresenter Content="{Binding CurrentViewModel}"/>
+        <menu:PopupMenu
+            Focusable="True"
+            x:Name="ApplicationMenu"
+            d:DataContext="{d:DesignInstance menu:MenuViewModel, IsDesignTimeCreatable=False}" 
+            Visibility="{Binding IsMenuVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+    </Grid>
 </Window>

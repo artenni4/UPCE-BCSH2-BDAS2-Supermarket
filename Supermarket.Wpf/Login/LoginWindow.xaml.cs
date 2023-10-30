@@ -25,33 +25,5 @@ namespace Supermarket.Wpf.Login
         {
             InitializeComponent();
         }
-
-        private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Escape)
-            {
-                if (popupMenu.Visibility == Visibility.Collapsed)
-                    popupMenu.Visibility = Visibility.Visible;
-                else if (popupMenu.Visibility == Visibility.Visible)
-                    popupMenu.Visibility = Visibility.Collapsed;
-            }
-        }
-
-        private void Menu_Click(object sender, RoutedEventArgs e)
-        {
-            PopupMenu newUserControl = new PopupMenu();
-
-            Window newWindow = new Window
-            {
-                Content = newUserControl,
-                WindowStyle = WindowStyle.None,
-                WindowState = WindowState.Maximized,
-                AllowsTransparency = true,
-                Background = Brushes.Transparent
-            };
-
-            newWindow.Show();
-        }
-
     }
 }

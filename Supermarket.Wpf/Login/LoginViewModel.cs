@@ -52,7 +52,6 @@ namespace Supermarket.Wpf.Login
             {
                 var loggedEmployee = await _loginService.LoginEmployeeAsync(loginData);
                 _sessionService.SetLoggedEmployee(loggedEmployee);
-                MessageBox.Show($"Příhlašen uživatel {loggedEmployee.Name} {loggedEmployee.Surname}", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (InvalidCredentialsException)
             {

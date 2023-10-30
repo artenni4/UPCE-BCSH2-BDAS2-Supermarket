@@ -13,6 +13,16 @@ namespace Supermarket.Wpf.LoggedUser
         /// Logged employee instance
         /// </summary>
         ILoggedEmployee? LoggedEmployee { get; }
+        
+        /// <summary>
+        /// Raised when employee is logged in
+        /// </summary>
+        event EventHandler<LoggedUserArgs> EmployeeLoggedIn;
+
+        /// <summary>
+        /// Raised when employee is logged out
+        /// </summary>
+        event EventHandler EmployeeLoggedOut;
 
         /// <summary>
         /// Caches logged employee

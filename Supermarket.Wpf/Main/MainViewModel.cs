@@ -14,5 +14,7 @@ namespace Supermarket.Wpf.Main
             get => _currentViewModel;
             set => SetProperty(ref _currentViewModel, value);
         }
+
+        
     }
 }
