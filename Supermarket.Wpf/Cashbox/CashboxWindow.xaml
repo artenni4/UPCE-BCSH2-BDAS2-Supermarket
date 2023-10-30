@@ -49,16 +49,34 @@
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
 
-                        <StackPanel Grid.Row="0" Orientation="Horizontal">
 
+                        <ItemsControl ItemsSource="{Binding DisplayedProducts}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <UniformGrid Columns="5" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border BorderBrush="Black" BorderThickness="1" Width="200" Height="200" Margin="5">
+                                        <StackPanel VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding Name}" Foreground="#1B2060" FontWeight="DemiBold" HorizontalAlignment="Center" FontSize="25"/>
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Button Command="{Binding PreviousPageCommand}" Margin="5">
+                                <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE76B;" FontSize="70" Foreground="#025394"/>
+                            </Button>
+                            <Button Command="{Binding NextPageCommand}" Margin="5">
+                                <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE76C;" FontSize="70" Foreground="#025394"/>
+                            </Button>
                         </StackPanel>
 
-                        <StackPanel Grid.Row="1" Orientation="Horizontal">
-                            <Button Content="Next" Margin="5"/>
-                            <Button Content="Back" Margin="5"/>
-                        </StackPanel>
-
-                        <TextBox Grid.Row="2" Margin="5"/>
+                        <TextBox Grid.Row="2" Margin="5" Height="50" FontSize="35"/>
                     </Grid>
                 </Border>
 
