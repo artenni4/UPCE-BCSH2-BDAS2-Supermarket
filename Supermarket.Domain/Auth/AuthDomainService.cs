@@ -48,7 +48,7 @@ namespace Supermarket.Domain.Auth
                     throw new InconsistencyException($"Employee [{employee.Id}] with super admin role cannot have other roles");
                 }
 
-                return new LoggedAdmin(employee.Id);
+                return new LoggedAdmin(employee.Id, employee.Name, employee.Surname);
             }
 
             if (employee.SupermarketId.HasValue == false)
@@ -64,7 +64,7 @@ namespace Supermarket.Domain.Auth
                 _ => throw new InconsistencyException($"Role [{r}] does not exist")
             }).ToList();
 
-            return new LoggedSupermarketEmployee(employee.Id, roles);
+            return new LoggedSupermarketEmployee(employee.Id, employee.Name, employee.Surname, roles);
         }
     }
 }

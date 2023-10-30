@@ -2,9 +2,8 @@
 
 namespace Supermarket.Domain.SellingProducts
 {
-    public class SellingProduct : IEntity<int>
+    public class SellingProduct : IEntity<SellingProductId>
     {
-        public required int Id { get; set; }
-        public required int SupermarketId { get; set; }
+        public required SellingProductId Id { get; init; }
     }
 }

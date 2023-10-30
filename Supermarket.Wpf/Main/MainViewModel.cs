@@ -1,17 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Supermarket.Wpf.Cashbox;
-using Supermarket.Wpf.Login;
-using Supermarket.Wpf.Navigation;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Supermarket.Wpf.Common;
 
 namespace Supermarket.Wpf.Main
 {
-    public class MainViewModel : INotifyPropertyChanged
+    public class MainViewModel : NotifyPropertyChangedBase
     {
         public MainViewModel()
         {
@@ -20,19 +11,8 @@ namespace Supermarket.Wpf.Main
         private object? _currentViewModel;
         public object? CurrentViewModel
         {
-            get { return _currentViewModel; }
-            set
-            {
-                _currentViewModel = value;
-                OnPropertyChanged("CurrentViewModel");
-            }
-        }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        protected virtual void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            get => _currentViewModel;
+            set => SetProperty(ref _currentViewModel, value);
         }
     }
 }

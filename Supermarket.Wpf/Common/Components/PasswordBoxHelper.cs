@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows;
 
-namespace Supermarket.Wpf.Components
+namespace Supermarket.Wpf.Common.Components
 {
     public static class PasswordBoxHelper
     {

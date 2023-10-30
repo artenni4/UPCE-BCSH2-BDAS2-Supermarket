@@ -1,9 +1,8 @@
-﻿using Supermarket.Domain.Common.Paging;
-using Supermarket.Domain.Common;
+﻿using Supermarket.Domain.Common;
 
 namespace Supermarket.Domain.StoragePlaces
 {
-    public interface IStoragePlaceRepository : ICrudRepository<StoragePlace, int, PagingQueryObject>
+    public interface IStoragePlaceRepository : ICrudRepository<StoragePlace, int>
     {
     }
 }
