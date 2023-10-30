@@ -9,27 +9,10 @@ namespace Supermarket.Wpf.Cashbox
     public class CashboxViewModel : NotifyPropertyChangedBase
     {
         private readonly ICashBoxService _cashBoxService;
-        private int _currentPage = 1;
+        private int currentPage = 1;
 
-        public int CurrentPage
-        {
-            get { return _currentPage; }
-            set
-            {
-                if (value < 1)
-                {
-                    _currentPage = 1;
-                }
-                else if (value > 200)
-                {
-                    _currentPage = 200;
-                }
-                else
-                {
-                    _currentPage = value;
-                }
-            }
-        }
+        private PagedResult<CashBoxProduct>? products;
+
 
         public ObservableCollection<CashBoxProduct> DisplayedProducts { get; set; }
 
@@ -48,31 +31,32 @@ namespace Supermarket.Wpf.Cashbox
 
         public void NextPage(object? obj)
         {
-            CurrentPage++;
-            UpdateDisplayedItems();
+            if (products?.HasNext == true)
+            {
+                currentPage++;
+                UpdateDisplayedItems();
+            }
         }
 
         public void PreviousPage(object? obj)
         {
-            CurrentPage--;
-            UpdateDisplayedItems();
+            if (products?.HasPrevious == true)
+            {
+                currentPage--;
+                UpdateDisplayedItems();
+            }
         }
 
         private void UpdateDisplayedItems()
         {
-            PagedResult<CashBoxProduct> products = _cashBoxService.GetProductsAsync(1, new RecordsRange { PageSize = 10, PageNumber = CurrentPage }, 1, null).Result;
-            if (products.Items.Count != 0) 
+            products = _cashBoxService.GetProductsAsync(1, new RecordsRange { PageSize = 10, PageNumber = currentPage }, 1, null).Result;
+            DisplayedProducts.Clear();
+
+            for (int i = 0; i < products.Items.Count; i++)
             {
-                DisplayedProducts.Clear();
+                DisplayedProducts.Add(products.Items[i]);
 
-                for (int i = 0; i < products.Items.Count; i++)
-                {
-                    DisplayedProducts.Add(products.Items[i]);
-
-                }
             }
-            else // do not increment page value if the end of the list is reached
-                CurrentPage--;
         }
 
     }

@@ -17,7 +17,7 @@
         /// <summary>
         /// Whether previous page contains items
         /// </summary>
-        public bool HasPrevious => PageNumber == 1;
+        public bool HasPrevious => PageNumber > 1;
 
         /// <summary>
         /// Total count of pages in the source
