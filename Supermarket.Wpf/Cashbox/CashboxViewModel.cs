@@ -1,43 +1,56 @@
 ﻿using Supermarket.Core.CashBoxes;
 using Supermarket.Domain.Common.Paging;
+using Supermarket.Wpf.Common;
 using System.Collections.ObjectModel;
+using System.Windows.Input;
 
 namespace Supermarket.Wpf.Cashbox
 {
-    public class CashboxViewModel
+    public class CashboxViewModel : NotifyPropertyChangedBase
     {
-        private readonly ICashBoxService cashBoxService;
-        private int currentPage = 0;
+        private readonly ICashBoxService _cashBoxService;
+        private int currentPage = 1;
+
+        private PagedResult<CashBoxProduct>? products;
+
 
         public ObservableCollection<CashBoxProduct> DisplayedProducts { get; set; }
 
-        public CashboxViewModel(ICashBoxService _cashBoxService)
+        public ICommand NextPageCommand { get; }
+        public ICommand PreviousPageCommand { get; }
+
+        public CashboxViewModel(ICashBoxService cashBoxService)
         {
-            cashBoxService = _cashBoxService;
+            this._cashBoxService = cashBoxService;
             DisplayedProducts = new();
             UpdateDisplayedItems();
+
+            NextPageCommand = new RelayCommand(NextPage);
+            PreviousPageCommand = new RelayCommand(PreviousPage);
         }
 
-        public void NextPage()
+        public void NextPage(object? obj)
         {
-            currentPage++;
-            UpdateDisplayedItems();
+            if (products?.HasNext == true)
+            {
+                currentPage++;
+                UpdateDisplayedItems();
+            }
         }
 
-        public void PreviousPage()
+        public void PreviousPage(object? obj)
         {
-            currentPage--;
-            UpdateDisplayedItems();
+            if (products?.HasPrevious == true)
+            {
+                currentPage--;
+                UpdateDisplayedItems();
+            }
         }
 
         private void UpdateDisplayedItems()
         {
+            products = _cashBoxService.GetProductsAsync(1, new RecordsRange { PageSize = 10, PageNumber = currentPage }, 1, null).Result;
             DisplayedProducts.Clear();
-            //DisplayedProducts = new(new CashBoxProduct[0], 0, 0);
-
-            //int startIndex = currentPage * itemsPerPage;
-            //int endIndex = Math.Min(startIndex + itemsPerPage, products.Count);
-            PagedResult<CashBoxProduct> products = cashBoxService.GetProductsAsync(1, new RecordsRange { PageSize = 10, PageNumber = 1 }, 1, null).Result;
 
             for (int i = 0; i < products.Items.Count; i++)
             {
