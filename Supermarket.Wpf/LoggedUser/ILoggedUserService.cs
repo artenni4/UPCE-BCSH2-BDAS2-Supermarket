@@ -17,7 +17,7 @@ namespace Supermarket.Wpf.LoggedUser
         /// <summary>
         /// Raised when employee is logged in
         /// </summary>
-        event EventHandler<LoggedUserArgs> EmployeeLoggedIn;
+        event EventHandler<LoggedEmployeeArgs> EmployeeLoggedIn;
 
         /// <summary>
         /// Raised when employee is logged out

@@ -7,7 +7,7 @@ namespace Supermarket.Wpf.LoggedUser
     {
         public ILoggedEmployee? LoggedEmployee { get; private set; }
 
-        public event EventHandler<LoggedUserArgs>? EmployeeLoggedIn;
+        public event EventHandler<LoggedEmployeeArgs>? EmployeeLoggedIn;
         public event EventHandler? EmployeeLoggedOut;
 
         public void ResetLoggedEmployee()
@@ -19,7 +19,7 @@ namespace Supermarket.Wpf.LoggedUser
         public void SetLoggedEmployee(ILoggedEmployee loggedEmployee)
         {
             LoggedEmployee = loggedEmployee;
-            EmployeeLoggedIn?.Invoke(this, new LoggedUserArgs { LoggedEmployee = LoggedEmployee });
+            EmployeeLoggedIn?.Invoke(this, new LoggedEmployeeArgs { LoggedEmployee = LoggedEmployee });
         }
     }
 }

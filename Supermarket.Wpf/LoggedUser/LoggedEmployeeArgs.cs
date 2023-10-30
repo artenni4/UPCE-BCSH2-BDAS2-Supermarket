@@ -3,7 +3,7 @@ using System;
 
 namespace Supermarket.Wpf.LoggedUser
 {
-    public class LoggedUserArgs : EventArgs
+    public class LoggedEmployeeArgs : EventArgs
     {
         public required ILoggedEmployee LoggedEmployee { get; init; }
     }

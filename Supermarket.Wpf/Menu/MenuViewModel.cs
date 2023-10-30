@@ -33,7 +33,7 @@ namespace Supermarket.Wpf.Menu
             LoggedEmployee = null;
         }
 
-        private void EmployeeLoggedIn(object? sender, LoggedUserArgs e)
+        private void EmployeeLoggedIn(object? sender, LoggedEmployeeArgs e)
         {
             LoggedEmployee = e.LoggedEmployee;
             IsMenuVisible = true;
