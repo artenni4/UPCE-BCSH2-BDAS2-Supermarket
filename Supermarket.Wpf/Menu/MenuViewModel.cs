@@ -21,10 +21,13 @@ namespace Supermarket.Wpf.Menu
             _loggedUserService = loggedUserService;
 
             ToggleMenuCommand = new RelayCommand(ToggleMenu, CanToggleMenu);
-            NavigateToCashboxCommand = new RelayCommand(_ => { _navigationService.NavigateTo(NavigateWindow.CashBox); IsMenuVisible = false; });
+
+            NavigateToCashboxCommand = new RelayCommand(
+                _ => { _navigationService.NavigateTo(NavigateWindow.CashBox); IsMenuVisible = false; },
+                _ => _navigationService.CurrentWindow != NavigateWindow.CashBox);
 
             _loggedUserService.EmployeeLoggedIn += EmployeeLoggedIn;
-            _loggedUserService.EmployeeLoggedOut += EmployeeLoggedOut; ;
+            _loggedUserService.EmployeeLoggedOut += EmployeeLoggedOut;
             LoggedEmployee = _loggedUserService.LoggedEmployee;
         }
 

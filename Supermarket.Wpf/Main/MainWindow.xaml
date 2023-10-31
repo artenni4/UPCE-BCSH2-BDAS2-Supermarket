@@ -9,7 +9,6 @@
         xmlns:menu="clr-namespace:Supermarket.Wpf.Menu"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance local:MainViewModel, IsDesignTimeCreatable=False}"
-        KeyDown="Window_KeyDown"
         Title="MainWindow" Height="1080" Width="1920" WindowState="Maximized">
     <Window.Resources>
         <DataTemplate DataType="{x:Type cashbox:CashboxViewModel}">
@@ -21,12 +20,13 @@
 
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </Window.Resources>
+    <Window.InputBindings>
+        <KeyBinding Key="Esc" Command="{Binding MenuViewModel.ToggleMenuCommand}" />
+    </Window.InputBindings>
     <Grid>
         <ContentPresenter Content="{Binding CurrentViewModel}"/>
         <menu:PopupMenu
-            Focusable="True"
-            x:Name="ApplicationMenu"
-            d:DataContext="{d:DesignInstance menu:MenuViewModel, IsDesignTimeCreatable=False}" 
+            DataContext="{Binding MenuViewModel}"
             Visibility="{Binding IsMenuVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
     </Grid>
 </Window>

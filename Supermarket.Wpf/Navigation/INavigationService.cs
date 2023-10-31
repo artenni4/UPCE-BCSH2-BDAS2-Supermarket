@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace Supermarket.Wpf.Navigation
 {
-    public interface INavigationService
+    internal interface INavigationService
     {
+        NavigateWindow? CurrentWindow { get; }
+        event EventHandler<NavigationEventArgs> NavigationCompleted;
         void NavigateTo(NavigateWindow navigateWindow);
     }
 }

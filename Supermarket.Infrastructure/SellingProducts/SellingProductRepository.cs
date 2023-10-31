@@ -18,11 +18,13 @@ internal class SellingProductRepository : CrudRepositoryBase<SellingProduct, Sel
     public async Task<PagedResult<Product>> GetSupermarketProducts(int supermarketId, RecordsRange recordsRange, int categoryId, string? searchText)
     {
         var parameters = new DynamicParameters()
-            .AddParameter("supermarket_id", supermarketId);
+            .AddParameter("supermarket_id", supermarketId)
+            .AddParameter("druh_zbozi_id", categoryId)
+            .AddParameter("hledani", searchText);
         
         const string sql = @"SELECT z.* FROM ZBOZI z
                      JOIN PRODAVANE_ZBOZI pz ON (z.zbozi_id = pz.zbozi_id)
-                     WHERE pz.supermarket_id = :supermarket_id";
+                     WHERE pz.supermarket_id = :supermarket_id AND z.druh_zbozi_id = :druh_zbozi_id AND z.nazev LIKE '%' || :hledani || '%'";
 
         var orderByColumns = DbProduct.IdentityColumns
             .Select(ic => $"z.{ic}");

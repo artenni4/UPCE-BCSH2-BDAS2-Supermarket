@@ -3,32 +3,44 @@ using Supermarket.Wpf.Cashbox;
 using Supermarket.Wpf.Login;
 using Supermarket.Wpf.Main;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Supermarket.Wpf.Navigation
 {
-    public class NavigationService : INavigationService
+    internal class NavigationService : INavigationService
     {
         private readonly IServiceProvider _serviceProvider;
-        private readonly MainViewModel _mainViewModel;
+        private object? currentViewModel;
 
-        public NavigationService(IServiceProvider serviceProvider, MainViewModel mainViewModel)
+        public NavigationService(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
-            _mainViewModel = mainViewModel;
         }
+
+        public NavigateWindow? CurrentWindow { get; private set; }
+        public event EventHandler<NavigationEventArgs>? NavigationCompleted;
 
         public void NavigateTo(NavigateWindow navigateWindow)
         {
-            _mainViewModel.CurrentViewModel = navigateWindow switch
+            if (currentViewModel is IConfirmNavigation confirmNavigation && confirmNavigation.CanNavigateFrom() == false)
             {
-                NavigateWindow.Login => _serviceProvider.GetRequiredService<LoginViewModel>(),
-                NavigateWindow.CashBox => _serviceProvider.GetRequiredService<CashboxViewModel>(),
-                _ => throw new NotImplementedException($"Navigation to {navigateWindow} is not supported yet, implement it by extending this swith")
-            };
+                confirmNavigation.NavigationCancelled();
+            }
+            else
+            {
+                currentViewModel = navigateWindow switch
+                {
+                    NavigateWindow.Login => _serviceProvider.GetRequiredService<LoginViewModel>(),
+                    NavigateWindow.CashBox => _serviceProvider.GetRequiredService<CashboxViewModel>(),
+                    _ => throw new NotImplementedException($"Navigation to {navigateWindow} is not supported yet, implement it by extending this swith")
+                };
+                CurrentWindow = navigateWindow;
+
+                NavigationCompleted?.Invoke(this, new NavigationEventArgs
+                {
+                    NewViewModel = currentViewModel,
+                });
+            }
+
         }
     }
 }

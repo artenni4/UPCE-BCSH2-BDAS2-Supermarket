@@ -8,7 +8,7 @@ using Supermarket.Wpf.LoggedUser;
 
 namespace Supermarket.Wpf.Login
 {
-    public class LoginViewModel : NotifyPropertyChangedBase
+    internal class LoginViewModel : NotifyPropertyChangedBase
     {
         private readonly ILoginService _loginService;
         private readonly INavigationService _navigationService;
