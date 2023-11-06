@@ -3,47 +3,29 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Supermarket.Wpf.Login"
-             xmlns:menu="clr-namespace:Supermarket.Wpf.Menu"
              xmlns:password="clr-namespace:Supermarket.Wpf.Common.Components"
              mc:Ignorable="d"
-             d:DataContext="{d:DesignInstance local:LoginViewModel, IsDesignTimeCreatable=False}"
              d:DesignHeight="1080" d:DesignWidth="1920">
     <Grid>
-        <Border BorderBrush="Transparent" Background="White" Width="450" Height="450">
+        <Border BorderBrush="Transparent" Background="White" Width="450" MaxHeight="450">
             <Border.Effect>
                 <DropShadowEffect BlurRadius="20" ShadowDepth="2" Color="LightGray"/>
             </Border.Effect>
-            <Grid Margin="10">
+            <Grid Margin="40">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-
-                <TextBox Width="350" Height="60" Text="{Binding EmployeeLoginData.Login, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="40" Margin="0 40 0 30" Padding="5 0 0 0" VerticalAlignment="Center" Background="#ECECEC" BorderThickness="1" BorderBrush="Black">
-                    <TextBox.Effect>
-                        <DropShadowEffect BlurRadius="5" ShadowDepth="2" Color="LightGray"/>
-                    </TextBox.Effect>
-                </TextBox>
-
-                <PasswordBox password:PasswordBoxHelper.Password="{Binding EmployeeLoginData.Password, Mode=TwoWay}" Width="350" Height="60" FontSize="40" Grid.Row="1" Margin="0 0 0 80" Padding="5 0 0 0" VerticalAlignment="Center" Background="#ECECEC" BorderThickness="1" BorderBrush="Black">
-                    <PasswordBox.Effect>
-                        <DropShadowEffect BlurRadius="5" ShadowDepth="2" Color="LightGray"/>
-                    </PasswordBox.Effect>
-                </PasswordBox>
-
-                <StackPanel Grid.Row="2" Orientation="Vertical" HorizontalAlignment="Center">
-                    <Button Command="{Binding EmployeeLoginCommand}" Content="LOGIN" FontSize="25" Background="#0471C7" Foreground="White" Width="350" Margin="0 0 0 20" Height="55">
-                        <Button.Effect>
-                            <DropShadowEffect BlurRadius="5" ShadowDepth="2" Color="LightGray"/>
-                        </Button.Effect>
-                    </Button>
-                    <Button Command="{Binding CustomerLoginCommand}" Content="NEPRIHLASENY UZIVATEL" FontSize="25" Background="#1B2060" Foreground="White" Width="350" Margin="5" Height="55">
-                        <Button.Effect>
-                            <DropShadowEffect BlurRadius="5" ShadowDepth="2" Color="LightGray"/>
-                        </Button.Effect>
-                    </Button>
+                
+                <StackPanel Grid.Row="0" Orientation="Vertical" VerticalAlignment="Center">
+                    <TextBox Text="{Binding EmployeeLoginData.Login, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <PasswordBox Margin="0,20,0,0" password:PasswordBoxHelper.Password="{Binding EmployeeLoginData.Password, Mode=TwoWay}" />
+                </StackPanel>
+                
+                <StackPanel Grid.Row="2" Orientation="Vertical" VerticalAlignment="Center">
+                    <Button Command="{Binding EmployeeLoginCommand}">LOGIN</Button>
+                    <Button Margin="0,20,0,0" Command="{Binding CustomerLoginCommand}" Style="{StaticResource DarkButton}">NEPRIHLASENY UZIVATEL</Button>
                 </StackPanel>
             </Grid>
         </Border>

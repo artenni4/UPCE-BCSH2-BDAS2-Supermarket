@@ -8,7 +8,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 
-namespace Supermarket.Wpf.Common
+namespace Supermarket.Wpf.Common.Converters
 {
     internal class RoleToVisibilityConverter : IValueConverter
     {
