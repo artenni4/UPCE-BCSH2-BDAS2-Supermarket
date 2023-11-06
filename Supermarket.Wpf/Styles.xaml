@@ -10,15 +10,9 @@
         <Setter Property="BorderBrush" Value="{StaticResource PrimaryDarkColor}" />
     </Style>
 
-    <Style TargetType="Button" x:Key="DarkButton" BasedOn="{StaticResource {x:Type Button}}">
+    <Style TargetType="Button" x:Key="DarkButtonStyle" BasedOn="{StaticResource {x:Type Button}}">
         <Setter Property="Background" Value="{StaticResource TextColor}" />
         <Setter Property="BorderBrush" Value="{StaticResource TextDarkColor}" />
-    </Style>
-    
-    <Style TargetType="Border" x:Key="SurfaceBorder" BasedOn="{StaticResource {x:Type Border}}">
-        <Setter Property="Background" Value="{StaticResource PanelBackgroundColor}" />
-        <Setter Property="BorderBrush" Value="{StaticResource PanelBorderColor}" />
-        <Setter Property="BorderThickness" Value="2" />
     </Style>
     
     <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
@@ -33,5 +27,11 @@
         <Setter Property="Background" Value="{StaticResource TextBackgroundColor}" />
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="BorderBrush" Value="Black"/>
+    </Style>
+    
+    <Style TargetType="Border" x:Key="PanelBorderStyle">
+        <Setter Property="Background" Value="{StaticResource PanelBackgroundColor}" />
+        <Setter Property="BorderBrush" Value="{StaticResource PanelBorderColor}" />
+        <Setter Property="BorderThickness" Value="2" />
     </Style>
 </ResourceDictionary>
