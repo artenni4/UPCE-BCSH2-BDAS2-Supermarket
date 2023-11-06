@@ -38,8 +38,8 @@ namespace Supermarket.Wpf.Cashbox
             SelectedProducts = new();
             UpdateDisplayedItems();
 
-            NextPageCommand = new RelayCommand(NextPage);
-            PreviousPageCommand = new RelayCommand(PreviousPage);
+            NextPageCommand = new RelayCommand(NextPage, _ => products?.HasNext == true);
+            PreviousPageCommand = new RelayCommand(PreviousPage, _ => products?.HasPrevious == true);
             CategoryButtonClickCommand = new RelayCommand(CategoryButtonClick);
             ProductClickCommand = new RelayCommand(ProductClick);
 
@@ -85,7 +85,7 @@ namespace Supermarket.Wpf.Cashbox
         {
             if (obj is CashBoxProductCategory selectedCategory)
             {
-                categoryId = selectedCategory.Id;
+                categoryId = selectedCategory.CategoryId;
                 UpdateDisplayedItems();
             }
         }

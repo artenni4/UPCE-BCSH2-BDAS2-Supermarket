@@ -11,6 +11,6 @@ public static class PagedResultExtensions
     public static PagedResult<TResult> Select<TResult, TSource>(this PagedResult<TSource> source, Func<TSource, TResult> selector)
     {
         var items = source.Items.Select(selector).ToArray();
-        return new PagedResult<TResult>(items, source.PageNumber, source.TotalItems);
+        return new PagedResult<TResult>(items, source.PageNumber, source.PageSize, source.TotalItems);
     }
 }

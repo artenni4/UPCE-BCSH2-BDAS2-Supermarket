@@ -11,18 +11,25 @@ public class CashBoxServiceFake : ICashBoxService
 {
     public Task<PagedResult<CashBoxProduct>> GetProductsAsync(int supermarketId, RecordsRange recordsRange, int productCategoryId, string? searchText)
     {
-        return Task.FromResult(new PagedResult<CashBoxProduct>(Array.Empty<CashBoxProduct>(), 1, 0));
+        var products = new CashBoxProduct[]
+        {
+            new() { ProductId = 1, Name = "AAA" },
+            new() { ProductId = 2, Name = "BBB" },
+            new() { ProductId = 3, Name = "CCCCCCCC CCCC" },
+        };
+        
+        return Task.FromResult(new PagedResult<CashBoxProduct>(products, 1, products.Length, products.Length));
     }
 
     public Task<PagedResult<CashBoxProductCategory>> GetCategoriesAsync(int supermarketId, RecordsRange recordsRange)
     {
         var categories = new CashBoxProductCategory[]
         {
-            new() { Id = 1, Name = "AAA" },
-            new() { Id = 2, Name = "BBB" },
-            new() { Id = 2, Name = "CCCCCCCC CCCC" },
+            new() { CategoryId = 1, Name = "AAA" },
+            new() { CategoryId = 2, Name = "BBB" },
+            new() { CategoryId = 3, Name = "CCCCCCCC CCCC" },
         };
-        return Task.FromResult(new PagedResult<CashBoxProductCategory>(categories, 1, categories.Length));
+        return Task.FromResult(new PagedResult<CashBoxProductCategory>(categories, 1, categories.Length, categories.Length));
     }
 
     public Task AddSaleAsync(int cashBoxId, IReadOnlyList<CashBoxSoldProduct> soldProducts, IReadOnlyList<Coupon> coupons)

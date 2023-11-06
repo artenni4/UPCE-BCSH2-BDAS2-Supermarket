@@ -42,7 +42,7 @@ namespace Supermarket.Infrastructure.Common
             var totalCountSql = $"SELECT COUNT(*) FROM ({innerSql})";
             var totalCount = await _oracleConnection.ExecuteScalarAsync<int>(totalCountSql, pagingParameters);
 
-            return new PagedResult<TResult>(pagedItems.ToArray(), recordsRange.PageNumber, totalCount);
+            return new PagedResult<TResult>(pagedItems.ToArray(), recordsRange.PageNumber, recordsRange.PageSize, totalCount);
         }
 
         public virtual async Task<TEntity?> GetByIdAsync(TId id)
