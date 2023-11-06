@@ -29,13 +29,16 @@
                         <StackPanel Grid.Row="0">
                             <TextBlock Text="POKLADNA " HorizontalAlignment="Center" Foreground="#1B2060" FontSize="35" FontWeight="DemiBold" VerticalAlignment="Center"/>
                             <ScrollViewer VerticalScrollBarVisibility="Auto">
-                                <ListBox Background="Transparent" BorderThickness="0">
-                                    <ListBoxItem Content="Item 1" Foreground="#1B2060" FontSize="25"/>
-                                    <ListBoxItem Content="Item 2" Foreground="#1B2060" FontSize="25"/>
-                                    <ListBoxItem Content="Item 3" Foreground="#1B2060" FontSize="25"/>
+                                <ListBox Background="Transparent" BorderThickness="0" ItemsSource="{Binding SelectedProducts}">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Name}" Foreground="#1B2060" FontSize="25"/>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
                                 </ListBox>
                             </ScrollViewer>
                         </StackPanel>
+
 
                         <Button Grid.Row="1" Content="ZAPLATIT" Width="500" Height="75" Margin="10" Background="#1B2060" BorderBrush="#025394" BorderThickness="2" Foreground="White" FontSize="20" />
                     </Grid>
@@ -49,7 +52,6 @@
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
 
-
                         <ItemsControl ItemsSource="{Binding DisplayedProducts}">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
@@ -59,13 +61,16 @@
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <Border BorderBrush="Black" BorderThickness="1" Width="200" Height="200" Margin="5">
-                                        <StackPanel VerticalAlignment="Center">
-                                            <TextBlock Text="{Binding Name}" Foreground="#1B2060" FontWeight="DemiBold" HorizontalAlignment="Center" FontSize="25"/>
-                                        </StackPanel>
+                                        <Button Command="{Binding DataContext.ProductClickCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}" Background="Transparent" BorderBrush="Transparent">
+                                            <StackPanel VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding Name}" Foreground="#1B2060" FontWeight="DemiBold" HorizontalAlignment="Center" FontSize="25"/>
+                                            </StackPanel>
+                                        </Button>
                                     </Border>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
+
 
                         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
                             <Button Command="{Binding PreviousPageCommand}" Margin="5">
@@ -93,11 +98,15 @@
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <Button Content="{Binding Name}" Margin="5" Width="225" Height="120" FontSize="25" Background="#0471C7" Foreground="White" BorderBrush="#025394" BorderThickness="4">
+                                    <Button Content="{Binding Name}" Margin="5" Width="225" Height="120" FontSize="25"
+                                        Background="#0471C7" Foreground="White" BorderBrush="#025394" BorderThickness="4"
+                                        Command="{Binding DataContext.CategoryButtonClickCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                        CommandParameter="{Binding}">
                                         <Button.Effect>
                                             <DropShadowEffect BlurRadius="5" ShadowDepth="2" Color="LightGray"/>
                                         </Button.Effect>
                                     </Button>
+
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
