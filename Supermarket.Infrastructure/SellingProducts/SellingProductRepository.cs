@@ -39,9 +39,11 @@ internal class SellingProductRepository : CrudRepositoryBase<SellingProduct, Sel
         var parameters = new DynamicParameters()
             .AddParameter("supermarket_id", supermarketId);
         
-        const string sql = @"SELECT dz.* FROM DRUHY_ZBOZI dz
-                     JOIN PRODAVANE_ZBOZI pz USING (zbozi_id) 
-                     WHERE pz.supermarket_id = :supermarket_id";
+        const string sql = @"SELECT DISTINCT dz.*
+                            FROM DRUHY_ZBOZI dz
+                            JOIN ZBOZI z ON dz.DRUH_ZBOZI_ID = z.DRUH_ZBOZI_ID
+                            JOIN PRODAVANE_ZBOZI pz ON z.ZBOZI_ID = pz.ZBOZI_ID
+                            WHERE pz.SUPERMARKET_ID = :supermarket_id";
 
         var orderByColumns = DbProductCategory.IdentityColumns
             .Select(ic => $"dz.{ic}");

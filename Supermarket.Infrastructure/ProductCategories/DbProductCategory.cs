@@ -6,8 +6,9 @@ namespace Supermarket.Infrastructure.ProductCategories;
 internal class DbProductCategory : IDbEntity<ProductCategory, int, DbProductCategory>
 {
     public required int druh_zbozi_id { get; init; }
-    
-    
+    public required string nazev { get; init; }
+    public required string? popis { get; init; }
+
     public static string TableName => "DRUHY_ZBOZI";
 
     public static IReadOnlyList<string> IdentityColumns { get; } = new[]
@@ -17,7 +18,12 @@ internal class DbProductCategory : IDbEntity<ProductCategory, int, DbProductCate
 
     public ProductCategory ToDomainEntity()
     {
-        throw new NotImplementedException();
+        return new ProductCategory
+        {
+            Id = druh_zbozi_id, 
+            Name = nazev,
+            Description = popis
+        };
     }
 
     public static DbProductCategory MapToDbEntity(ProductCategory entity)
