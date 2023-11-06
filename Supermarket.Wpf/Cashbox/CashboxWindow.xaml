@@ -84,20 +84,24 @@
         </Grid>
 
         <Border Grid.Row="1" Margin="10" Style="{StaticResource PanelBorderStyle}">
-            <ItemsControl ItemsSource="{Binding Categories}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Button Content="{Binding Name}" Margin="5" MinHeight="70"
-                            Command="{Binding DataContext.CategoryButtonClickCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                            CommandParameter="{Binding}" />
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+                <ItemsControl ItemsSource="{Binding Categories}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Button Margin="5" MinHeight="85" Width="170"
+                                Command="{Binding DataContext.CategoryButtonClickCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                CommandParameter="{Binding}">
+                                <TextBlock TextWrapping="Wrap" TextAlignment="Center" Text="{Binding Name}" />
+                            </Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
         </Border>
     </Grid>
 </UserControl>

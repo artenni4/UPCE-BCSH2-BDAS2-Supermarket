@@ -20,6 +20,7 @@ public class CashBoxServiceFake : ICashBoxService
         {
             new() { Id = 1, Name = "AAA" },
             new() { Id = 2, Name = "BBB" },
+            new() { Id = 2, Name = "CCCCCCCC CCCC" },
         };
         return Task.FromResult(new PagedResult<CashBoxProductCategory>(categories, 1, categories.Length));
     }
