@@ -3,12 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Supermarket.Wpf.Main"
         xmlns:cashbox="clr-namespace:Supermarket.Wpf.Cashbox"
         xmlns:login="clr-namespace:Supermarket.Wpf.Login"
         xmlns:menu="clr-namespace:Supermarket.Wpf.Menu"
         mc:Ignorable="d"
-        d:DataContext="{d:DesignInstance local:MainViewModel, IsDesignTimeCreatable=False}"
+        MinHeight="600" MinWidth="800"
         Title="MainWindow" Height="1080" Width="1920" WindowState="Maximized">
     <Window.Resources>
         <DataTemplate DataType="{x:Type cashbox:CashboxViewModel}">
@@ -17,7 +16,7 @@
         <DataTemplate DataType="{x:Type login:LoginViewModel}">
             <login:LoginWindow />
         </DataTemplate>
-
+        
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </Window.Resources>
     <Window.InputBindings>

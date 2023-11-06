@@ -10,7 +10,7 @@
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="800" />
-                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
             <Grid Grid.Row="0">
@@ -83,7 +83,7 @@
             </Grid>
 
             <StackPanel Grid.Row="1">
-                <Border Background="#D9D9D9" Height="180" Margin="10" Padding="7 0 0 0" BorderBrush="#8F8F8F" BorderThickness="2">
+                <Border Background="#D9D9D9" Height="180" BorderBrush="#8F8F8F" BorderThickness="2">
                     <WrapPanel VerticalAlignment="Center">
                         <Button Content="Button 1" Margin="5" Width="225" Height="120" FontSize="25" Background="#0471C7" Foreground="White" BorderBrush="#025394" BorderThickness="4">
                             <Button.Effect>
