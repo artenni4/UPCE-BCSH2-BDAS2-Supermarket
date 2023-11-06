@@ -1,10 +1,13 @@
 ﻿using Supermarket.Core.CashBoxes;
 using Supermarket.Domain.Common.Paging;
 using Supermarket.Domain.ProductCategories;
+using Supermarket.Wpf.Cashbox.ProductInput;
 using Supermarket.Wpf.Common;
 using System.Collections.ObjectModel;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace Supermarket.Wpf.Cashbox
 {
@@ -93,8 +96,13 @@ namespace Supermarket.Wpf.Cashbox
             {
                 SelectedProducts.Add(selectedProduct);
 
+                
+
+                ProductInputWindow productInputWindow = new ProductInputWindow();
+                
             }
         }
+
 
 
     }
