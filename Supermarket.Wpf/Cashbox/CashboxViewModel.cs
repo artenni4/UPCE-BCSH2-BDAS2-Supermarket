@@ -56,8 +56,6 @@ namespace Supermarket.Wpf.Cashbox
             }
             
             await UpdateDisplayedItems();
-
-            await Task.Delay(3000);
         }
 
         public async void NextPage(object? obj)

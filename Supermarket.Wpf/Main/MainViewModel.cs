@@ -1,37 +1,78 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using Supermarket.Wpf.Common;
-using Supermarket.Wpf.Menu;
 using Supermarket.Wpf.Navigation;
 using System.Windows.Input;
+using Supermarket.Wpf.Dialog;
+using Supermarket.Wpf.LoggedUser;
 using Supermarket.Wpf.ViewModelResolvers;
 
 namespace Supermarket.Wpf.Main
 {
     public class MainViewModel : NotifyPropertyChangedBase, IViewModel
     {
-        public MainViewModel(INavigationService navigationService, IViewModelResolver viewModelResolver, MenuViewModel menuViewModel)
+        private readonly IDialogService _dialogService;
+        private readonly INavigationService _navigationService;
+        private readonly ILoggedUserService _loggedUserService;
+        
+        public ICommand ToggleMenuOrCloseDialogCommand { get; }
+        
+        public MainViewModel(INavigationService navigationService,
+            IDialogService dialogService,
+            IViewModelResolver viewModelResolver,
+            ILoggedUserService loggedUserService)
         {
-            navigationService.NavigationSucceeded += NavigationCompleted;
-
-            viewModelResolver.InitializationStarted += (_, _) =>
-            {
-                IsProgressVisible = true;
-                Debug.WriteLine($"{nameof(IsProgressVisible)} is set to true in {nameof(MainViewModel)}");
-            };
-            viewModelResolver.InitializationFinished += (_, _) =>
-            {
-                IsProgressVisible = false;
-                Debug.WriteLine($"{nameof(IsProgressVisible)} is set to false in {nameof(MainViewModel)}");
-            };
+            _dialogService = dialogService;
+            _navigationService = navigationService;
+            _loggedUserService = loggedUserService;
             
-            MenuViewModel = menuViewModel;
+            ToggleMenuOrCloseDialogCommand = new RelayCommand(ToggleMenuOrHideDialog);
+            
+            navigationService.NavigationSucceeded += NavigationSucceeded;
+            
+            dialogService.DialogShown += (_, args) => DialogViewModel = args.ViewModel;
+            dialogService.DialogHidden += (_, _) => DialogViewModel = null;
+            
+            loggedUserService.EmployeeLoggedIn += async (_, _) => await ShowMenu();
+            
+            viewModelResolver.InitializationStarted += (_, _) => IsProgressVisible = true;
+            viewModelResolver.InitializationFinished += (_, _) => IsProgressVisible = false;
         }
 
-        private void NavigationCompleted(object? sender, NavigationEventArgs e)
+        private async void ToggleMenuOrHideDialog(object? obj)
         {
-            CurrentViewModel = e.NewViewModel;
-            Debug.WriteLine($"{nameof(CurrentViewModel)} in {nameof(MainViewModel)} is set new value due to navigation completion");
+            if (_dialogService.CurrentDialog is not null)
+            {
+                _dialogService.Hide();
+                return;
+            }
+            
+            if (_loggedUserService.LoggedEmployee is not null)
+            {
+                await ShowMenu();
+            }
+        }
+
+        private async Task ShowMenu()
+        {
+            var menuViewModel = await _dialogService.TryShowAsync<MenuViewModel, ApplicationView>();
+            if (menuViewModel is null)
+            {
+                return;
+            }
+
+            menuViewModel.ResultReceived += (_, result) =>
+            {
+                _navigationService.NavigateTo(result);
+            };
+        }
+        
+        private void NavigationSucceeded(object? sender, NavigationEventArgs e)
+        {
+            _dialogService.Hide();
+            ContentViewModel = e.NewViewModel;
+            Debug.WriteLine($"{nameof(ContentViewModel)} in {nameof(MainViewModel)} is set new value due to navigation completion");
         }
         
         private bool isProgressVisible;
@@ -41,18 +82,25 @@ namespace Supermarket.Wpf.Main
             private set => SetProperty(ref isProgressVisible, value);
         }
 
-        private object? _currentViewModel;
-        public object? CurrentViewModel
+        private IViewModel? _contentViewModel;
+        public IViewModel? ContentViewModel
         {
-            get => _currentViewModel;
-            set => SetProperty(ref _currentViewModel, value);
+            get => _contentViewModel;
+            set => SetProperty(ref _contentViewModel, value);
         }
 
-        private MenuViewModel? menuViewModel;
-        public MenuViewModel? MenuViewModel
+        private bool _isDialogVisible;
+        public bool IsDialogVisible
         {
-            get => menuViewModel;
-            set => SetProperty(ref menuViewModel, value);
+            get => _isDialogVisible;
+            set => SetProperty(ref _isDialogVisible, value);
+        }
+
+        private IViewModel? _dialogViewModel;
+        public IViewModel? DialogViewModel
+        {
+            get => _dialogViewModel;
+            set => SetProperty(ref _dialogViewModel, value);
         }
     }
 }

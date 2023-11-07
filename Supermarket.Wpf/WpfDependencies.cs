@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Supermarket.Wpf.Cashbox;
+using Supermarket.Wpf.Dialog;
 using Supermarket.Wpf.LoggedUser;
 using Supermarket.Wpf.Login;
 using Supermarket.Wpf.Main;
-using Supermarket.Wpf.Menu;
 using Supermarket.Wpf.Navigation;
 using Supermarket.Wpf.ViewModelResolvers;
 
@@ -14,11 +14,12 @@ public static class WpfDependencies
     public static IServiceCollection AddWpf(this IServiceCollection serviceCollection)
     {
         serviceCollection.AddSingleton<INavigationService, NavigationService>();
+        serviceCollection.AddSingleton<IDialogService, DialogService>();
         serviceCollection.AddSingleton<IViewModelResolver, ViewModelResolver>();
         serviceCollection.AddSingleton<ILoggedUserService, LoggedUserService>();
         serviceCollection.AddSingleton<MainViewModel>();
-        serviceCollection.AddSingleton<MenuViewModel>();
 
+        serviceCollection.AddTransient<MenuViewModel>();
         serviceCollection.AddTransient<LoginViewModel>();
         serviceCollection.AddTransient<CashboxViewModel>();
 

@@ -1,5 +1,4 @@
 ﻿using Supermarket.Wpf.Main;
-using Supermarket.Wpf.Menu;
 using System;
 using System.Collections.Generic;
 using System.Linq;
