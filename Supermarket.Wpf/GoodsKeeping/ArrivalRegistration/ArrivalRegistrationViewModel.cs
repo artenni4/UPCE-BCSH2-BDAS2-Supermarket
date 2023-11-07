@@ -120,7 +120,6 @@ namespace Supermarket.Wpf.GoodsKeeping.ArrivalRegistration
             {
                 SelectedProducts.Add(selectedProduct);
 
-                ProductInputWindow productInputWindow = new ProductInputWindow();
 
             }
         }
