@@ -9,14 +9,11 @@ public class DialogServiceFake : IDialogService
     public event EventHandler<DialogViewModelEventArgs>? DialogShown;
     public event EventHandler? DialogHidden;
     public IViewModel? CurrentDialog { get; }
-    public Task<TResult> TryShowAsync<TDialog, TResult>() where TDialog : class, IDialogViewModel<TResult>
+    public Task<TResult> ShowAsync<TDialog, TResult, TParameters>(TParameters parameters) where TDialog : class, IDialogViewModel<TResult, TParameters>
     {
         throw new NotImplementedException();
     }
-    public Task TryShowAsync<TDialog>() where TDialog : class, IDialogViewModel
-    {
-        throw new NotImplementedException();
-    }
+
     public void Hide()
     {
         throw new NotImplementedException();

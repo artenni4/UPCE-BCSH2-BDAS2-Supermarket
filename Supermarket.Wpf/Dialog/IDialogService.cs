@@ -10,7 +10,6 @@ public interface IDialogService
     event EventHandler<DialogViewModelEventArgs> DialogShown;
     event EventHandler DialogHidden;
     IViewModel? CurrentDialog { get; } 
-    Task<TResult> TryShowAsync<TDialog, TResult>() where TDialog : class, IDialogViewModel<TResult>;
-    Task TryShowAsync<TDialog>() where TDialog : class, IDialogViewModel;
+    Task<TResult> ShowAsync<TDialog, TResult, TParameters>(TParameters parameters) where TDialog : class, IDialogViewModel<TResult, TParameters>;
     void Hide();
 }

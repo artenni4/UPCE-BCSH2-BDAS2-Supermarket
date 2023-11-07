@@ -20,48 +20,33 @@ public class DialogService : IDialogService
     public event EventHandler<DialogViewModelEventArgs>? DialogShown;
     public event EventHandler? DialogHidden;
     public IViewModel? CurrentDialog { get; private set; }
-    public async Task<TResult> TryShowAsync<TDialog, TResult>() where TDialog : class, IDialogViewModel<TResult>
-    {
-        CheckShowingDialogAlready();
-        var viewModel = await ShowDialog<TDialog>();
-
-        var taskCompletionSource = new TaskCompletionSource<TResult>();
-        viewModel.ResultReceived += (_, result) => taskCompletionSource.SetResult(result);
-        return await taskCompletionSource.Task;
-    }
-
-    public async Task TryShowAsync<TDialog>() where TDialog : class, IDialogViewModel
-    {
-        CheckShowingDialogAlready();
-        var viewModel = await ShowDialog<TDialog>();
-        
-        var taskCompletionSource = new TaskCompletionSource();
-        viewModel.ResultReceived += (_, _) => taskCompletionSource.SetResult();
-        await taskCompletionSource.Task;
-    }
-
+    
     private void CheckShowingDialogAlready()
     {
         lock (IsShowingLock)
         {
             if (_isShowing)
             {
-                throw new InvalidOperationException($"Other dialog is already displayed");
+                throw new InvalidOperationException("Other dialog is already displayed");
             }
 
             _isShowing = true;
         }
     }
 
-    private async Task<TDialog> ShowDialog<TDialog>() where TDialog : class, IViewModel
+    public async Task<TResult> ShowAsync<TDialog, TResult, TParameters>(TParameters parameters) where TDialog : class, IDialogViewModel<TResult, TParameters>
     {
+        CheckShowingDialogAlready();
         var viewModel = await _viewModelResolver.Resolve<TDialog>();
+        viewModel.SetParameters(parameters);
         CurrentDialog = viewModel;
         DialogShown?.Invoke(this, new DialogViewModelEventArgs { ViewModel = viewModel });
 
-        return viewModel;
+        var taskCompletionSource = new TaskCompletionSource<TResult>();
+        viewModel.ResultReceived += (_, result) => taskCompletionSource.SetResult(result);
+        return await taskCompletionSource.Task;
     }
-    
+
     public void Hide()
     {
         CurrentDialog = null;

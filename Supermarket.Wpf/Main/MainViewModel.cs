@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Supermarket.Wpf.Common;
 using Supermarket.Wpf.Navigation;
 using System.Windows.Input;
+using Supermarket.Domain.Auth.LoggedEmployees;
 using Supermarket.Wpf.Dialog;
 using Supermarket.Wpf.LoggedUser;
 using Supermarket.Wpf.ViewModelResolvers;
@@ -34,7 +35,7 @@ namespace Supermarket.Wpf.Main
             dialogService.DialogShown += (_, args) => DialogViewModel = args.ViewModel;
             dialogService.DialogHidden += (_, _) => DialogViewModel = null;
             
-            loggedUserService.EmployeeLoggedIn += async (_, _) => await ShowMenu();
+            loggedUserService.EmployeeLoggedIn += async (_, _) => await TryShowMenu();
             
             viewModelResolver.InitializationStarted += (_, _) => IsProgressVisible = true;
             viewModelResolver.InitializationFinished += (_, _) => IsProgressVisible = false;
@@ -48,16 +49,16 @@ namespace Supermarket.Wpf.Main
                 return;
             }
             
-            if (_loggedUserService.LoggedEmployee is not null)
-            {
-                await ShowMenu();
-            }
+            await TryShowMenu();
         }
 
-        private async Task ShowMenu()
+        private async Task TryShowMenu()
         {
-            var applicationView = await _dialogService.TryShowAsync<MenuViewModel, ApplicationView>();
-            _navigationService.NavigateTo(applicationView);
+            if (_loggedUserService.LoggedEmployee is not null)
+            {
+                var applicationView = await _dialogService.ShowAsync<MenuViewModel, ApplicationView, ILoggedEmployee>(_loggedUserService.LoggedEmployee);
+                _navigationService.NavigateTo(applicationView);
+            }
         }
         
         private void NavigationSucceeded(object? sender, NavigationEventArgs e)
