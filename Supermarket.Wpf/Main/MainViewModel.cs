@@ -56,16 +56,8 @@ namespace Supermarket.Wpf.Main
 
         private async Task ShowMenu()
         {
-            var menuViewModel = await _dialogService.TryShowAsync<MenuViewModel, ApplicationView>();
-            if (menuViewModel is null)
-            {
-                return;
-            }
-
-            menuViewModel.ResultReceived += (_, result) =>
-            {
-                _navigationService.NavigateTo(result);
-            };
+            var applicationView = await _dialogService.TryShowAsync<MenuViewModel, ApplicationView>();
+            _navigationService.NavigateTo(applicationView);
         }
         
         private void NavigationSucceeded(object? sender, NavigationEventArgs e)
