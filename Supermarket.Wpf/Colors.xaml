@@ -3,6 +3,7 @@
     <SolidColorBrush x:Key="PrimaryColor" Color="#0471C7" />
     <SolidColorBrush x:Key="PrimaryDarkColor" Color="#025394" />
     <SolidColorBrush x:Key="SecondaryColor" Color="#DD2F13" />
+    <SolidColorBrush x:Key="SecondaryDarkColor" Color="#AB2812" />
     <SolidColorBrush x:Key="TextColor" Color="#1B2060" />
     <SolidColorBrush x:Key="TextDarkColor" Color="#0E1461" />
     <SolidColorBrush x:Key="TextBackgroundColor" Color="#ECECEC" />

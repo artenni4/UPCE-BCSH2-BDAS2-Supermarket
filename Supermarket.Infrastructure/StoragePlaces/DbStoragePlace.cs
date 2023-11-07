@@ -6,6 +6,10 @@ namespace Supermarket.Infrastructure.StoragePlaces;
 internal class DbStoragePlace : IDbEntity<StoragePlace, int, DbStoragePlace>
 {
     public required int misto_ulozeni_id { get; init; }
+    public required string kod { get; init; }
+    public string? poloha { get; init; }
+    public required int supermarket_id { get; init; }
+    public required StoragePlaceType misto_ulozeni_typ { get; init; }
     
     public static string TableName => "MISTA_ULOZENI";
 
@@ -16,7 +20,14 @@ internal class DbStoragePlace : IDbEntity<StoragePlace, int, DbStoragePlace>
 
     public StoragePlace ToDomainEntity()
     {
-        throw new NotImplementedException();
+        return new StoragePlace
+        {
+            Id = misto_ulozeni_id,
+            Code = kod,
+            Location = poloha,
+            SupermarketId = supermarket_id,
+            Type = misto_ulozeni_typ
+        };
     }
 
     public static DbStoragePlace MapToDbEntity(StoragePlace entity)
