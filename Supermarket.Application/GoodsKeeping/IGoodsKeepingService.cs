@@ -35,7 +35,7 @@ public interface IGoodsKeepingService
     /// <summary>
     /// Gets list of all storage places 
     /// </summary>
-    Task<PagedResult<StoragePlace>> GetStoragePlacesAsync(int supermarketId, RecordsRange recordsRange);
+    Task<PagedResult<GoodsKeepingStoragePlace>> GetStoragePlacesAsync(int supermarketId, RecordsRange recordsRange);
     
     /// <summary>
     /// Deletes product from storage place

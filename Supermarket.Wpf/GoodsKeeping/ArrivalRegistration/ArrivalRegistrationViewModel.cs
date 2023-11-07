@@ -24,17 +24,28 @@ namespace Supermarket.Wpf.GoodsKeeping.ArrivalRegistration
 
         private PagedResult<GoodsKeepingProduct>? products;
         private PagedResult<GoodsKeepingProductCategory>? categories;
-        private PagedResult<StoragePlace>? storagePlaces;
+        private PagedResult<GoodsKeepingStoragePlace>? storagePlaces;
 
         public ObservableCollection<GoodsKeepingProduct> DisplayedProducts { get; set; }
         public ObservableCollection<GoodsKeepingProductCategory> Categories { get; set; }
         public ObservableCollection<GoodsKeepingProduct> SelectedProducts { get; set; }
-        public ObservableCollection<StoragePlace> StoragePlaces { get; set; }
+        public ObservableCollection<GoodsKeepingStoragePlace> StoragePlaces { get; set; }
 
         public ICommand NextPageCommand { get; }
         public ICommand PreviousPageCommand { get; }
         public ICommand CategoryButtonClickCommand { get; }
         public ICommand ProductClickCommand { get; }
+
+        private GoodsKeepingStoragePlace? _selectedPlace;
+        public GoodsKeepingStoragePlace? SelectedPlace
+        {
+            get => _selectedPlace;
+            set
+            {
+                _selectedPlace = value;
+                OnPropertyChanged();
+            }
+        }
 
         public ArrivalRegistrationViewModel(IGoodsKeepingService goodsKeepingService)
         {

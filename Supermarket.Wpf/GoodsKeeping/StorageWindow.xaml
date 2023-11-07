@@ -6,12 +6,15 @@
              xmlns:local="clr-namespace:Supermarket.Wpf.GoodsKeeping"
              xmlns:arrival="clr-namespace:Supermarket.Wpf.GoodsKeeping.ArrivalRegistration"
              xmlns:management="clr-namespace:Supermarket.Wpf.GoodsKeeping.GoodsManagement"
+             xmlns:arrivalRegistration="clr-namespace:Supermarket.Wpf.GoodsKeeping.ArrivalRegistration"
+             xmlns:goodsManagement="clr-namespace:Supermarket.Wpf.GoodsKeeping.GoodsManagement"
+             xmlns:goodsKeeping="clr-namespace:Supermarket.Wpf.GoodsKeeping"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <TabControl>
             <TabItem Header="Arrival registration">
-                <arrival:ArrivalRegistationWindow />
+                <arrival:ArrivalRegistationWindow DataContext="{Binding ArrivalViewModel}" />
             </TabItem>
             <TabItem Header="Goods management">
                 <management:GoodsManagementWindow />

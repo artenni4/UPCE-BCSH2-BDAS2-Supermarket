@@ -1,7 +1,9 @@
 ﻿using Dapper;
 using Oracle.ManagedDataAccess.Client;
 using Supermarket.Domain.Common.Paging;
+using Supermarket.Domain.ProductCategories;
 using Supermarket.Domain.StoragePlaces;
+using Supermarket.Infrastructure.ProductCategories;
 
 namespace Supermarket.Infrastructure.StoragePlaces;
 
@@ -18,10 +20,10 @@ internal class StoragePlaceRepository : CrudRepositoryBase<StoragePlace, int, Db
         const string sql = @"SELECT mu.*
                             FROM MISTA_ULOZENI mu
                             JOIN SUPERMARKETY s ON mu.supermarket_id = s.supermarket_id
-                            WHERE s.supermarket_id = :supermarket_id;";
+                            WHERE s.supermarket_id = :supermarket_id";
         var orderByColumns = DbStoragePlace.IdentityColumns.Select(ic => $"mu.{ic}");
         var result = await GetPagedResult<DbStoragePlace>(recordsRange, sql, orderByColumns, parameters);
-        return result.Select(dbStoragePlace => dbStoragePlace.ToDomainEntity());
 
+        return result.Select(dbStoragePlace => dbStoragePlace.ToDomainEntity());
     }
 }

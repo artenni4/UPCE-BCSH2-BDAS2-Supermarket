@@ -1,4 +1,6 @@
-﻿using Supermarket.Domain.StoragePlaces;
+﻿using Supermarket.Core.CashBoxes;
+using Supermarket.Domain.SellingProducts;
+using Supermarket.Domain.StoragePlaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,10 +12,12 @@ namespace Supermarket.Core.GoodsKeeping
     public class GoodsKeepingService : IGoodsKeepingService
     {
         private readonly IStoragePlaceRepository _storagePlaceRepository;
+        private readonly ISellingProductRepository _sellingProductRepository;
 
-        public GoodsKeepingService(IStoragePlaceRepository storagePlaceRepository)
+        public GoodsKeepingService(IStoragePlaceRepository storagePlaceRepository, ISellingProductRepository sellingProductRepository)
         {
             _storagePlaceRepository = storagePlaceRepository;
+            _sellingProductRepository = sellingProductRepository;
         }
 
         public Task DeleteProductStorageAsync(int storagePlaceId, int productId)
@@ -21,21 +25,25 @@ namespace Supermarket.Core.GoodsKeeping
             throw new NotImplementedException();
         }
 
-        public Task<PagedResult<GoodsKeepingProductCategory>> GetCategoriesAsync(int supermarketId, RecordsRange recordsRange)
+        public async Task<PagedResult<GoodsKeepingProductCategory>> GetCategoriesAsync(int supermarketId, RecordsRange recordsRange)
         {
-            throw new NotImplementedException();
+            var result = await _sellingProductRepository.GetSupermarketProductCategories(supermarketId, recordsRange);
+
+            return result.Select(GoodsKeepingProductCategory.FromProductCategory);
         }
 
-        public Task<PagedResult<GoodsKeepingProduct>> GetProductsAsync(int supermarketId, RecordsRange recordsRange, int productCategoryId, string? searchText)
+        public async Task<PagedResult<GoodsKeepingProduct>> GetProductsAsync(int supermarketId, RecordsRange recordsRange, int productCategoryId, string? searchText)
         {
-            throw new NotImplementedException();
+            var result = await _sellingProductRepository.GetSupermarketProducts(supermarketId, recordsRange, productCategoryId, searchText);
+
+            return result.Select(GoodsKeepingProduct.FromProduct);
         }
 
-        public Task<PagedResult<StoragePlace>> GetStoragePlacesAsync(int supermarketId, RecordsRange recordsRange)
+        public async Task<PagedResult<GoodsKeepingStoragePlace>> GetStoragePlacesAsync(int supermarketId, RecordsRange recordsRange)
         {
-            var result = _storagePlaceRepository.GetSupermarketStoragePlaces(supermarketId, recordsRange);
+            var result = await _storagePlaceRepository.GetSupermarketStoragePlaces(supermarketId, recordsRange);
 
-            throw new NotImplementedException();
+            return result.Select(GoodsKeepingStoragePlace.FromStoragePlace);
         }
 
         public Task<PagedResult<StoredProduct>> GetStoredProducts(int supermarketId, RecordsRange recordsRange)

@@ -2,8 +2,8 @@
 {
     public enum StoragePlaceType
     {
-        Warehouse = 0,
-        Counter = 1,
+        Sklad = 0,
+        PULT = 1,
         Other = 2
     }
 }

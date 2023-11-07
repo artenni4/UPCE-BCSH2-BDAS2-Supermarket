@@ -27,15 +27,15 @@
 
                     <StackPanel Grid.Row="0">
                         <TextBlock Text="PŘÍJEM " HorizontalAlignment="Center" Foreground="#1B2060" FontSize="35" FontWeight="DemiBold" VerticalAlignment="Center"/>
-                        <ComboBox ItemsSource="{Binding }"
-                          DisplayMemberPath="Name"
-                          SelectedItem="{Binding SelectedComponent}" />
+                        <ComboBox ItemsSource="{Binding StoragePlaces}"
+                          DisplayMemberPath="Code"
+                          SelectedItem="{Binding SelectedPlace}" />
 
                         <ScrollViewer VerticalScrollBarVisibility="Auto">
-                            <ListBox Background="Transparent" BorderThickness="0" ItemsSource="{Binding }">
+                            <ListBox Background="Transparent" BorderThickness="0" ItemsSource="{Binding SelectedProducts}">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding }" Foreground="#1B2060" FontSize="25"/>
+                                        <TextBlock Text="{Binding Name}" Foreground="#1B2060" FontSize="25"/>
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
                             </ListBox>
@@ -56,7 +56,7 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
-                    <ItemsControl Grid.Row="0" ItemsSource="{Binding }">
+                    <ItemsControl Grid.Row="0" ItemsSource="{Binding DisplayedProducts}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <UniformGrid Columns="5" />
@@ -68,7 +68,7 @@
                                     <Button Command="{Binding DataContext.ProductClickCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}" Background="Transparent" BorderBrush="Transparent">
                                         <StackPanel VerticalAlignment="Center">
                                             <TextBlock TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center"
-                                                       Text="{Binding }" Foreground="#1B2060" 
+                                                       Text="{Binding Name}" Foreground="#1B2060" 
                                                        FontWeight="DemiBold" />
                                         </StackPanel>
                                     </Button>
@@ -78,10 +78,10 @@
                     </ItemsControl>
 
                     <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
-                        <Button Command="{Binding }">
+                        <Button Command="{Binding PreviousPageCommand}">
                             <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE76B;" FontSize="70" Foreground="White"/>
                         </Button>
-                        <Button Command="{Binding }" Margin="10,0,0,0">
+                        <Button Command="{Binding NextPageCommand}" Margin="10,0,0,0">
                             <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE76C;" FontSize="70" Foreground="White"/>
                         </Button>
                     </StackPanel>
@@ -93,7 +93,7 @@
 
         <Border Grid.Row="1" Margin="10" Style="{StaticResource PanelBorderStyle}">
             <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
-                <ItemsControl ItemsSource="{Binding }">
+                <ItemsControl ItemsSource="{Binding Categories}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" />
@@ -105,7 +105,7 @@
                                 Command="{Binding DataContext.CategoryButtonClickCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
                                 CommandParameter="{Binding}">
                                 <TextBlock TextWrapping="Wrap" TextAlignment="Center" FontWeight="DemiBold"
-                                           Text="{Binding }" />
+                                           Text="{Binding Name}" />
                             </Button>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
