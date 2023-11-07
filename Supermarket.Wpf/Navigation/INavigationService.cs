@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Supermarket.Wpf.Common;
 
 namespace Supermarket.Wpf.Navigation
 {
-    internal interface INavigationService
+    public interface INavigationService
     {
-        NavigateWindow? CurrentWindow { get; }
-        event EventHandler<NavigationEventArgs> NavigationCompleted;
-        void NavigateTo(NavigateWindow navigateWindow);
+        ApplicationView? CurrentView { get; }
+        event EventHandler<NavigationEventArgs> NavigationSucceeded;
+        void NavigateTo(ApplicationView applicationView);
     }
 }

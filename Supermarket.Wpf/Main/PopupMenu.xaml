@@ -5,8 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Supermarket.Wpf.Menu"
              xmlns:converters="clr-namespace:Supermarket.Wpf.Common.Converters"
+             xmlns:main="clr-namespace:Supermarket.Wpf.Main"
              mc:Ignorable="d" 
-             d:DataContext="{d:DesignInstance local:MenuViewModel, IsDesignTimeCreatable=False}"
+             d:DataContext="{d:DesignInstance main:MenuViewModel, IsDesignTimeCreatable=False}"
              d:DesignHeight="1080" d:DesignWidth="1920">
     <UserControl.Resources>
         <converters:RoleToVisibilityConverter x:Key="RoleToVisibilityConverter" />

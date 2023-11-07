@@ -61,7 +61,7 @@ namespace Supermarket.Wpf.Login
 
         private void CustomerLogin(object? obj)
         {
-            _navigationService.NavigateTo(NavigateWindow.CashBox);
+            _navigationService.NavigateTo(ApplicationView.CashBox);
         }
 
         private bool CanEmployeeLogin(object? arg) => !string.IsNullOrWhiteSpace(EmployeeLoginData.Login) && !string.IsNullOrWhiteSpace(EmployeeLoginData.Password);

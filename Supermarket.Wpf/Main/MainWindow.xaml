@@ -6,7 +6,9 @@
         xmlns:cashbox="clr-namespace:Supermarket.Wpf.Cashbox"
         xmlns:login="clr-namespace:Supermarket.Wpf.Login"
         xmlns:menu="clr-namespace:Supermarket.Wpf.Menu"
+        xmlns:local="clr-namespace:Supermarket.Wpf.Main"
         mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance Type=local:MainViewModelFake, IsDesignTimeCreatable=True}"
         MinHeight="600" MinWidth="800"
         Title="MainWindow" Height="1080" Width="1920" WindowState="Maximized">
     <Window.Resources>
@@ -27,5 +29,7 @@
         <menu:PopupMenu
             DataContext="{Binding MenuViewModel}"
             Visibility="{Binding IsMenuVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+        <ProgressBar Visibility="{Binding IsProgressVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+                     IsIndeterminate="True" Height="50" Width="300"/>
     </Grid>
 </Window>

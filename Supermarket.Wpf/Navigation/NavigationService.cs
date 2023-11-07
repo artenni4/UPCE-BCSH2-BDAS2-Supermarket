@@ -3,44 +3,51 @@ using Supermarket.Wpf.Cashbox;
 using Supermarket.Wpf.Login;
 using Supermarket.Wpf.Main;
 using System;
+using System.Diagnostics;
+using System.Threading.Tasks;
+using Supermarket.Wpf.Common;
+using Supermarket.Wpf.ViewModelResolvers;
 
 namespace Supermarket.Wpf.Navigation
 {
     internal class NavigationService : INavigationService
     {
-        private readonly IServiceProvider _serviceProvider;
-        private object? currentViewModel;
+        private readonly IViewModelResolver _viewModelResolver;
+        private object? _currentViewModel;
 
-        public NavigationService(IServiceProvider serviceProvider)
+        public NavigationService(IViewModelResolver viewModelResolver)
         {
-            _serviceProvider = serviceProvider;
+            _viewModelResolver = viewModelResolver;
         }
 
-        public NavigateWindow? CurrentWindow { get; private set; }
-        public event EventHandler<NavigationEventArgs>? NavigationCompleted;
+        public ApplicationView? CurrentView { get; private set; }
+        public event EventHandler<NavigationEventArgs>? NavigationSucceeded;
 
-        public void NavigateTo(NavigateWindow navigateWindow)
+        public void NavigateTo(ApplicationView applicationView)
         {
-            if (currentViewModel is IConfirmNavigation confirmNavigation && confirmNavigation.CanNavigateFrom() == false)
+            if (_currentViewModel is IConfirmNavigation confirmNavigation && confirmNavigation.CanNavigateFrom() == false)
             {
                 confirmNavigation.NavigationCancelled();
             }
             else
             {
-                currentViewModel = navigateWindow switch
+                _viewModelResolver.Resolve(applicationView).ContinueWith(task =>
                 {
-                    NavigateWindow.Login => _serviceProvider.GetRequiredService<LoginViewModel>(),
-                    NavigateWindow.CashBox => _serviceProvider.GetRequiredService<CashboxViewModel>(),
-                    _ => throw new NotImplementedException($"Navigation to {navigateWindow} is not supported yet, implement it by extending this swith")
-                };
-                CurrentWindow = navigateWindow;
+                    if (task.IsFaulted)
+                    {
+                        throw task.Exception!;
+                    }
+                    
+                    _currentViewModel = task.Result;
+                    CurrentView = applicationView;
+                    Debug.WriteLine($"Navigated to {CurrentView}");
 
-                NavigationCompleted?.Invoke(this, new NavigationEventArgs
-                {
-                    NewViewModel = currentViewModel,
-                });
+                    NavigationSucceeded?.Invoke(this, new NavigationEventArgs
+                    {
+                        NewViewModel = _currentViewModel,
+                    });
+                }, TaskScheduler.FromCurrentSynchronizationContext());
             }
-
         }
     }
 }

@@ -2,12 +2,12 @@
 using Supermarket.Wpf.Main;
 using Supermarket.Wpf.Navigation;
 using System;
+using System.Diagnostics;
 using System.Windows;
 using Supermarket.Core;
 using Supermarket.Domain;
 using Supermarket.Infrastructure;
-using Supermarket.Wpf.Menu;
-using System.Windows.Navigation;
+using Supermarket.Wpf.Common;
 
 namespace Supermarket.Wpf
 {
@@ -20,6 +20,8 @@ namespace Supermarket.Wpf
 
         public App()
         {
+            Trace.Listeners.Add(new ConsoleTraceListener());
+            
             var serviceCollection = new ServiceCollection()
                 .AddDomain()
                 .AddApplication()
@@ -37,7 +39,7 @@ namespace Supermarket.Wpf
             };
 
             var navigationService = _serviceProvider.GetRequiredService<INavigationService>();
-            navigationService.NavigateTo(NavigateWindow.Login);
+            navigationService.NavigateTo(ApplicationView.Login);
 
             mainWindow.Show();
             base.OnStartup(e);

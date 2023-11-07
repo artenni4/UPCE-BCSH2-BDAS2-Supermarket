@@ -1,14 +1,13 @@
-﻿using Supermarket.Domain.Auth.LoggedEmployees;
+﻿using System.Windows.Input;
+using Supermarket.Domain.Auth.LoggedEmployees;
 using Supermarket.Wpf.Common;
 using Supermarket.Wpf.LoggedUser;
 using Supermarket.Wpf.Navigation;
-using System.Windows.Input;
 
-namespace Supermarket.Wpf.Menu
+namespace Supermarket.Wpf.Main
 {
-    internal class MenuViewModel : NotifyPropertyChangedBase
+    public class MenuViewModel : NotifyPropertyChangedBase
     {
-        private readonly INavigationService _navigationService;
         private readonly ILoggedUserService _loggedUserService;
 
         public ICommand ToggleMenuCommand { get; }
@@ -17,14 +16,13 @@ namespace Supermarket.Wpf.Menu
 
         public MenuViewModel(INavigationService navigationService, ILoggedUserService loggedUserService)
         {
-            _navigationService = navigationService;
             _loggedUserService = loggedUserService;
 
             ToggleMenuCommand = new RelayCommand(ToggleMenu, CanToggleMenu);
 
             NavigateToCashboxCommand = new RelayCommand(
-                _ => { _navigationService.NavigateTo(NavigateWindow.CashBox); IsMenuVisible = false; },
-                _ => _navigationService.CurrentWindow != NavigateWindow.CashBox);
+                _ => { navigationService.NavigateTo(ApplicationView.CashBox); IsMenuVisible = false; },
+                _ => navigationService.CurrentView != ApplicationView.CashBox);
 
             _loggedUserService.EmployeeLoggedIn += EmployeeLoggedIn;
             _loggedUserService.EmployeeLoggedOut += EmployeeLoggedOut;

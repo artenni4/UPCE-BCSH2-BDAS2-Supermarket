@@ -4,18 +4,21 @@ using Supermarket.Domain.ProductCategories;
 using Supermarket.Wpf.Cashbox.ProductInput;
 using Supermarket.Wpf.Common;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using Supermarket.Wpf.ViewModelResolvers;
 
 namespace Supermarket.Wpf.Cashbox
 {
-    public class CashboxViewModel : NotifyPropertyChangedBase
+    public class CashboxViewModel : NotifyPropertyChangedBase, IAsyncInitialized
     {
         private readonly ICashBoxService _cashBoxService;
         private int currentPage = 1;
-        private int categoryId = 1;
+        private int? categoryId;
 
         private PagedResult<CashBoxProduct>? products;
         private PagedResult<CashBoxProductCategory>? categories;
@@ -32,61 +35,69 @@ namespace Supermarket.Wpf.Cashbox
 
         public CashboxViewModel(ICashBoxService cashBoxService)
         {
-            this._cashBoxService = cashBoxService;
+            _cashBoxService = cashBoxService;
             DisplayedProducts = new();
             Categories = new();
             SelectedProducts = new();
-            UpdateDisplayedItems();
 
             NextPageCommand = new RelayCommand(NextPage, _ => products?.HasNext == true);
             PreviousPageCommand = new RelayCommand(PreviousPage, _ => products?.HasPrevious == true);
             CategoryButtonClickCommand = new RelayCommand(CategoryButtonClick);
             ProductClickCommand = new RelayCommand(ProductClick);
-
-            categories = _cashBoxService.GetCategoriesAsync(1, new RecordsRange { PageSize = 10, PageNumber = 1 }).Result;
+        }
+        
+        public async Task InitializeAsync()
+        {
+            categories = await _cashBoxService.GetCategoriesAsync(1, new RecordsRange { PageSize = 10, PageNumber = 1 });
+            categoryId = categories.Items.FirstOrDefault()?.CategoryId;
             for (int i = 0; i < categories.Items.Count; i++)
             {
                 Categories.Add(categories.Items[i]);
             }
+            
+            await UpdateDisplayedItems();
         }
 
-        public void NextPage(object? obj)
+        public async void NextPage(object? obj)
         {
             if (products?.HasNext == true)
             {
                 currentPage++;
-                UpdateDisplayedItems();
+                await UpdateDisplayedItems();
             }
         }
 
-        public void PreviousPage(object? obj)
+        public async void PreviousPage(object? obj)
         {
             if (products?.HasPrevious == true)
             {
                 currentPage--;
-                UpdateDisplayedItems();
+                await UpdateDisplayedItems();
             }
         }
 
-        // TODO: Async
-        private void UpdateDisplayedItems()
+        private async Task UpdateDisplayedItems()
         {
-            products = _cashBoxService.GetProductsAsync(1, new RecordsRange { PageSize = 10, PageNumber = currentPage }, categoryId, null).Result;
+            if (categoryId.HasValue == false)
+            {
+                return;
+            }
+            
+            products = await _cashBoxService.GetProductsAsync(1, new RecordsRange { PageSize = 10, PageNumber = currentPage }, categoryId.Value, null);
             DisplayedProducts.Clear();
 
             for (int i = 0; i < products.Items.Count; i++)
             {
                 DisplayedProducts.Add(products.Items[i]);
-
             }
         }
 
-        public void CategoryButtonClick(object? obj)
+        public async void CategoryButtonClick(object? obj)
         {
             if (obj is CashBoxProductCategory selectedCategory)
             {
                 categoryId = selectedCategory.CategoryId;
-                UpdateDisplayedItems();
+                await UpdateDisplayedItems();
             }
         }
 
@@ -102,8 +113,5 @@ namespace Supermarket.Wpf.Cashbox
                 
             }
         }
-
-
-
     }
 }
