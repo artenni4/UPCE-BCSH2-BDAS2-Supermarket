@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Supermarket.Wpf.Common;
 using Supermarket.Wpf.Navigation;
 using System.Windows.Input;
@@ -35,9 +34,15 @@ namespace Supermarket.Wpf.Main
             dialogService.DialogHidden += (_, _) => DialogViewModel = null;
             
             loggedUserService.EmployeeLoggedIn += async (_, _) => await TryShowMenu();
-            
-            viewModelResolver.InitializationStarted += (_, _) => IsProgressVisible = true;
-            viewModelResolver.InitializationFinished += (_, _) => IsProgressVisible = false;
+
+            viewModelResolver.ViewModelResolved += (_, args) =>
+            {
+                if (args.ViewModel is IAsyncViewModel asyncViewModel)
+                {
+                    asyncViewModel.LoadingStarted += (_, _) => IsProgressVisible = true;
+                    asyncViewModel.LoadingFinished += (_, _) => IsProgressVisible = false;
+                }
+            };
         }
 
         public async Task InitializeAsync()

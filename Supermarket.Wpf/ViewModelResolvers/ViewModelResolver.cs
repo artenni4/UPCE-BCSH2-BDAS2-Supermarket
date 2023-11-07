@@ -18,8 +18,7 @@ public class ViewModelResolver : IViewModelResolver
         _serviceProvider = serviceProvider;
     }
 
-    public event EventHandler? InitializationStarted;
-    public event EventHandler? InitializationFinished;
+    public event EventHandler<ResolvedViewModelEventArgs>? ViewModelResolved;
 
     public async Task<IViewModel> Resolve(Type viewModelType)
     {
@@ -28,21 +27,12 @@ public class ViewModelResolver : IViewModelResolver
         {
             throw new ArgumentException($"{nameof(viewModelType.Name)} is not market with {nameof(IViewModel)} interface");
         }
-
+        
+        ViewModelResolved?.Invoke(this, new ResolvedViewModelEventArgs { ViewModel = viewModel });
         if (viewModel is IAsyncInitialized asyncInitialized)
         {
-            InitializationStarted?.Invoke(this, EventArgs.Empty);
-            Debug.WriteLine($"{viewModel} initialization STARTED in thread {Environment.CurrentManagedThreadId}");
-
-            try
-            {
-                await asyncInitialized.InitializeAsync();
-            }
-            finally
-            {
-                InitializationFinished?.Invoke(this, EventArgs.Empty);
-                Debug.WriteLine($"{viewModel} initialization FINISHED in thread {Environment.CurrentManagedThreadId}");
-            }
+            await asyncInitialized.InitializeAsync();
+            Debug.WriteLine($"{viewModel} initialized in thread {Environment.CurrentManagedThreadId}");
         }
 
         return viewModel;

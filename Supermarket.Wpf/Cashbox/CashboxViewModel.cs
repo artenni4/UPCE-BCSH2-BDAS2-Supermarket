@@ -1,4 +1,5 @@
-﻿using Supermarket.Core.CashBoxes;
+﻿using System;
+using Supermarket.Core.CashBoxes;
 using Supermarket.Domain.Common.Paging;
 using Supermarket.Domain.ProductCategories;
 using Supermarket.Wpf.Cashbox.ProductInput;
@@ -13,7 +14,7 @@ using Supermarket.Wpf.ViewModelResolvers;
 
 namespace Supermarket.Wpf.Cashbox
 {
-    public class CashboxViewModel : NotifyPropertyChangedBase, IViewModel, IAsyncInitialized
+    public class CashboxViewModel : NotifyPropertyChangedBase, IAsyncViewModel, IAsyncInitialized
     {
         private readonly ICashBoxService _cashBoxService;
         private int currentPage = 1;
@@ -22,6 +23,8 @@ namespace Supermarket.Wpf.Cashbox
         private PagedResult<CashBoxProduct>? products;
         private PagedResult<CashBoxProductCategory>? categories;
 
+        public event EventHandler? LoadingStarted;
+        public event EventHandler? LoadingFinished;
 
         public ObservableCollection<CashBoxProduct> DisplayedProducts { get; set; }
         public ObservableCollection<CashBoxProductCategory> Categories { get; set; }
@@ -47,6 +50,7 @@ namespace Supermarket.Wpf.Cashbox
         
         public async Task InitializeAsync()
         {
+            LoadingStarted?.Invoke(this, EventArgs.Empty);
             categories = await _cashBoxService.GetCategoriesAsync(1, new RecordsRange { PageSize = 10, PageNumber = 1 });
             categoryId = categories.Items.FirstOrDefault()?.CategoryId;
             for (int i = 0; i < categories.Items.Count; i++)
@@ -55,24 +59,19 @@ namespace Supermarket.Wpf.Cashbox
             }
             
             await UpdateDisplayedItems();
+            LoadingFinished?.Invoke(this, EventArgs.Empty);
         }
 
         public async void NextPage(object? obj)
         {
-            if (products?.HasNext == true)
-            {
-                currentPage++;
-                await UpdateDisplayedItems();
-            }
+            currentPage++;
+            await UpdateDisplayedItems();
         }
 
         public async void PreviousPage(object? obj)
         {
-            if (products?.HasPrevious == true)
-            {
-                currentPage--;
-                await UpdateDisplayedItems();
-            }
+            currentPage--;
+            await UpdateDisplayedItems();
         }
 
         private async Task UpdateDisplayedItems()

@@ -6,7 +6,6 @@ namespace Supermarket.Wpf.ViewModelResolvers;
 
 public interface IViewModelResolver
 {
-    event EventHandler InitializationStarted;
-    event EventHandler InitializationFinished;
+    event EventHandler<ResolvedViewModelEventArgs> ViewModelResolved;
     Task<IViewModel> Resolve(Type viewModelType);
 }
