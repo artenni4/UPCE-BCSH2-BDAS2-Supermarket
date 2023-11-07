@@ -1,7 +1,9 @@
 ﻿using Supermarket.Core.CashBoxes;
 using Supermarket.Core.GoodsKeeping;
 using Supermarket.Domain.Common.Paging;
+using Supermarket.Wpf.Cashbox;
 using Supermarket.Wpf.Common;
+using Supermarket.Wpf.Dialog;
 using Supermarket.Wpf.ViewModelResolvers;
 using System;
 using System.Collections.Generic;
@@ -15,10 +17,12 @@ namespace Supermarket.Wpf.GoodsKeeping.ArrivalRegistration
 {
     public class ArrivalRegistrationViewModel : NotifyPropertyChangedBase, IAsyncViewModel, IAsyncInitialized
     {
+        private readonly IGoodsKeepingService _goodsKeepingService;
+        private readonly IDialogService _dialogService;
+
         public event EventHandler? LoadingStarted;
         public event EventHandler? LoadingFinished;
 
-        private readonly IGoodsKeepingService _goodsKeepingService;
         private int currentPage = 1;
         private int? categoryId;
 
@@ -35,6 +39,9 @@ namespace Supermarket.Wpf.GoodsKeeping.ArrivalRegistration
         public ICommand PreviousPageCommand { get; }
         public ICommand CategoryButtonClickCommand { get; }
         public ICommand ProductClickCommand { get; }
+        public ICommand AcceptCommand { get; }
+        public ICommand CancelCommand { get; }
+        public ICommand RemoveProductCommand { get; }
 
         private GoodsKeepingStoragePlace? _selectedPlace;
         public GoodsKeepingStoragePlace? SelectedPlace
@@ -47,9 +54,11 @@ namespace Supermarket.Wpf.GoodsKeeping.ArrivalRegistration
             }
         }
 
-        public ArrivalRegistrationViewModel(IGoodsKeepingService goodsKeepingService)
+        public ArrivalRegistrationViewModel(IGoodsKeepingService goodsKeepingService, IDialogService dialogService)
         {
             _goodsKeepingService = goodsKeepingService;
+            _dialogService = dialogService;
+
             DisplayedProducts = new();
             Categories = new();
             SelectedProducts = new();
@@ -59,6 +68,9 @@ namespace Supermarket.Wpf.GoodsKeeping.ArrivalRegistration
             PreviousPageCommand = new RelayCommand(PreviousPage, _ => products?.HasPrevious == true);
             CategoryButtonClickCommand = new RelayCommand(CategoryButtonClick);
             ProductClickCommand = new RelayCommand(ProductClick);
+            AcceptCommand = new RelayCommand(AcceptClick);
+            CancelCommand = new RelayCommand(CancelClick);
+            RemoveProductCommand = new RelayCommand(RemoveProduct);
         }
 
         public async Task InitializeAsync()
@@ -124,13 +136,35 @@ namespace Supermarket.Wpf.GoodsKeeping.ArrivalRegistration
             }
         }
 
-        public void ProductClick(object? obj)
+        public async void ProductClick(object? obj)
         {
             if (obj is GoodsKeepingProduct selectedProduct)
             {
+                if (selectedProduct.IsByWeight)
+                {
+                    var result = await _dialogService
+                    .ShowForResultAsync<ProductCountInputViewModel, DialogResult<decimal>, EmptyParameters>(EmptyParameters.Value);
+                }
+                
                 SelectedProducts.Add(selectedProduct);
+            }
+        }
 
+        public void AcceptClick(object? obj)
+        {
 
+        }
+
+        public void CancelClick(object? obj)
+        {
+            SelectedProducts.Clear();
+        }
+
+        private void RemoveProduct(object? parameter)
+        {
+            if (parameter is GoodsKeepingProduct item)
+            {
+                SelectedProducts.Remove(item);
             }
         }
     }

@@ -27,23 +27,31 @@
 
                     <StackPanel Grid.Row="0">
                         <TextBlock Text="PŘÍJEM " HorizontalAlignment="Center" Foreground="#1B2060" FontSize="35" FontWeight="DemiBold" VerticalAlignment="Center"/>
-                        <ComboBox ItemsSource="{Binding StoragePlaces}"
-                          DisplayMemberPath="Code"
-                          SelectedItem="{Binding SelectedPlace}" />
+                        <ComboBox ItemsSource="{Binding StoragePlaces}" DisplayMemberPath="Code" SelectedItem="{Binding SelectedPlace}" Width="350px"/>
 
                         <ScrollViewer VerticalScrollBarVisibility="Auto">
                             <ListBox Background="Transparent" BorderThickness="0" ItemsSource="{Binding SelectedProducts}">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Name}" Foreground="#1B2060" FontSize="25"/>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+
+                                            <TextBlock Grid.Column="0" Text="{Binding Name}" Foreground="#1B2060" FontSize="25"/>
+
+                                            <Button Grid.Column="1" Content="X" Command="{Binding DataContext.RemoveProductCommand, RelativeSource={RelativeSource AncestorType=ListBox}}" CommandParameter="{Binding}" Background="Transparent" BorderBrush="Transparent"/>
+                                        </Grid>
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
                             </ListBox>
                         </ScrollViewer>
+
                     </StackPanel>
                     <StackPanel Grid.Row="1" Orientation="Horizontal">
-                        <Button Style="{StaticResource DarkButtonStyle}" Content="PŘIJMOUT" Width="300" Height="70" Margin="10" />
-                        <Button  Style="{StaticResource RedButtonStyle}" Content="ZRUŠIT" Width="200" Height="70" Margin="10" />
+                        <Button Command="{Binding AcceptCommand}" Style="{StaticResource DarkButtonStyle}" Content="PŘIJMOUT" Width="300" Height="70" Margin="10" />
+                        <Button Command="{Binding CancelCommand}" Style="{StaticResource RedButtonStyle}" Content="ZRUŠIT" Width="200" Height="70" Margin="10" />
                     </StackPanel>
                 </Grid>
             </Border>

@@ -113,8 +113,11 @@ namespace Supermarket.Wpf.Cashbox
         {
             if (obj is CashBoxProduct selectedProduct)
             {
-                var result = await _dialogService
-                    .ShowForResultAsync<ProductCountInputViewModel, DialogResult<decimal>, EmptyParameters>(EmptyParameters.Value);
+                if (selectedProduct.IsByWeight)
+                {
+                    var result = await _dialogService
+                        .ShowForResultAsync<ProductCountInputViewModel, DialogResult<decimal>, EmptyParameters>(EmptyParameters.Value);
+                }
                 
                 SelectedProducts.Add(selectedProduct);
             }

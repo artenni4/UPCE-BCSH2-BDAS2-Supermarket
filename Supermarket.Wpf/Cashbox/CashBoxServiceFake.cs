@@ -13,9 +13,9 @@ public class CashBoxServiceFake : ICashBoxService
     {
         var products = new CashBoxProduct[]
         {
-            new() { ProductId = 1, Name = "AAA" },
-            new() { ProductId = 2, Name = "BBB" },
-            new() { ProductId = 3, Name = "CCCCCCCC CCCC" },
+            new() { ProductId = 1, Name = "AAA", IsByWeight = true },
+            new() { ProductId = 2, Name = "BBB", IsByWeight = true },
+            new() { ProductId = 3, Name = "CCCCCCCC CCCC", IsByWeight = true },
         };
         
         return Task.FromResult(new PagedResult<CashBoxProduct>(products, 1, products.Length, products.Length));
