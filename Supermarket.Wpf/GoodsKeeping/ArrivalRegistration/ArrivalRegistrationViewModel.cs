@@ -1,7 +1,6 @@
 ﻿using Supermarket.Core.CashBoxes;
 using Supermarket.Core.GoodsKeeping;
 using Supermarket.Domain.Common.Paging;
-using Supermarket.Wpf.Cashbox.ProductInput;
 using Supermarket.Wpf.Common;
 using Supermarket.Wpf.ViewModelResolvers;
 using System;
