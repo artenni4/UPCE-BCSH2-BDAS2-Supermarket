@@ -24,6 +24,9 @@
         <DataTemplate DataType="{x:Type local:MenuViewModel}">
             <local:PopupMenu />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type cashbox:ProductCountInputViewModel}">
+            <cashbox:ProductCountInput />
+        </DataTemplate>
         
         <converter:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />

@@ -2,7 +2,6 @@
 using Supermarket.Core.CashBoxes;
 using Supermarket.Domain.Common.Paging;
 using Supermarket.Domain.ProductCategories;
-using Supermarket.Wpf.Cashbox.ProductInput;
 using Supermarket.Wpf.Common;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -10,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Supermarket.Wpf.Dialog;
 using Supermarket.Wpf.ViewModelResolvers;
 
 namespace Supermarket.Wpf.Cashbox
@@ -17,6 +17,8 @@ namespace Supermarket.Wpf.Cashbox
     public class CashboxViewModel : NotifyPropertyChangedBase, IAsyncViewModel, IAsyncInitialized
     {
         private readonly ICashBoxService _cashBoxService;
+        private readonly IDialogService _dialogService;
+        
         private int currentPage = 1;
         private int? categoryId;
 
@@ -35,9 +37,10 @@ namespace Supermarket.Wpf.Cashbox
         public ICommand CategoryButtonClickCommand { get; }
         public ICommand ProductClickCommand { get; }
 
-        public CashboxViewModel(ICashBoxService cashBoxService)
+        public CashboxViewModel(ICashBoxService cashBoxService, IDialogService dialogService)
         {
             _cashBoxService = cashBoxService;
+            _dialogService = dialogService;
             DisplayedProducts = new();
             Categories = new();
             SelectedProducts = new();
@@ -100,21 +103,20 @@ namespace Supermarket.Wpf.Cashbox
             
             if (obj is CashBoxProductCategory selectedCategory)
             {
+                currentPage = 1;
                 categoryId = selectedCategory.CategoryId;
                 await UpdateDisplayedItems();
             }
         }
 
-        public void ProductClick(object? obj)
+        public async void ProductClick(object? obj)
         {
             if (obj is CashBoxProduct selectedProduct)
             {
+                var result = await _dialogService
+                    .ShowForResultAsync<ProductCountInputViewModel, DialogResult<decimal>, EmptyParameters>(EmptyParameters.Value);
+                
                 SelectedProducts.Add(selectedProduct);
-
-                
-
-                ProductInputWindow productInputWindow = new ProductInputWindow();
-                
             }
         }
     }

@@ -23,6 +23,8 @@ public static class WpfDependencies
         serviceCollection.AddTransient<LoginViewModel>();
         serviceCollection.AddTransient<CashboxViewModel>();
 
+        serviceCollection.AddTransient<ProductCountInputViewModel>();
+
         return serviceCollection;
     }
 }
