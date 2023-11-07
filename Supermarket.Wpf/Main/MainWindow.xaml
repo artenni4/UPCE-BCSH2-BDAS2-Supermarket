@@ -29,7 +29,10 @@
         <menu:PopupMenu
             DataContext="{Binding MenuViewModel}"
             Visibility="{Binding IsMenuVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-        <ProgressBar Visibility="{Binding IsProgressVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
-                     IsIndeterminate="True" Height="50" Width="300"/>
+        
+        <!-- Loading -->
+        <Grid Background="#80000000" Visibility="{Binding IsProgressVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <ProgressBar IsIndeterminate="True" Height="50" Width="300"/>
+        </Grid>
     </Grid>
 </Window>

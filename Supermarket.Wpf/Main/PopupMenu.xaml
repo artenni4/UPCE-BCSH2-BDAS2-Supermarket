@@ -18,20 +18,19 @@
                 <DropShadowEffect BlurRadius="20" ShadowDepth="2" Color="Gray"/>
             </Border.Effect>
             <Grid>
-                <ListBox Foreground="White" BorderBrush="Transparent" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
-                    <ListBoxItem Visibility="{Binding LoggedEmployee, Converter={StaticResource RoleToVisibilityConverter}, ConverterParameter='Cashier,Manager,Admin'}">
-                        <Button Content="Pokladna" Command="{Binding NavigateToCashboxCommand}" Background="#0471C7" BorderBrush="#005699" Height="50" FontSize="30" Foreground="White"/>
-                    </ListBoxItem>
-                    <ListBoxItem Visibility="{Binding LoggedEmployee, Converter={StaticResource RoleToVisibilityConverter}, ConverterParameter='GoodsKeeper,Manager,Admin'}">
-                        <Button Content="Sklad" Background="#0471C7" BorderBrush="#005699" Height="50" FontSize="30" Foreground="White"/>
-                    </ListBoxItem>
-                    <ListBoxItem Visibility="{Binding LoggedEmployee, Converter={StaticResource RoleToVisibilityConverter}, ConverterParameter='Manager,Admin'}">
-                        <Button Content="Manažer" Background="#0471C7" BorderBrush="#005699" Height="50" FontSize="30" Foreground="White"/>
-                    </ListBoxItem>
-                    <ListBoxItem Visibility="{Binding LoggedEmployee, Converter={StaticResource RoleToVisibilityConverter}, ConverterParameter='Admin'}">
-                        <Button Content="Admin" Background="#0471C7" BorderBrush="#005699" Height="50" FontSize="30" Foreground="White"/>
-                    </ListBoxItem>
-                </ListBox>
+                <StackPanel HorizontalAlignment="Stretch" Margin="10">
+                    <Button Visibility="{Binding LoggedEmployee, Converter={StaticResource RoleToVisibilityConverter}, ConverterParameter='Cashier,Manager,Admin'}"
+                            Content="Pokladna" Command="{Binding NavigateToCashboxCommand}" />
+                    
+                    <Button Visibility="{Binding LoggedEmployee, Converter={StaticResource RoleToVisibilityConverter}, ConverterParameter='GoodsKeeper,Manager,Admin'}"
+                            Content="Sklad" Margin="0,5,0,0"/>
+                    
+                    <Button Visibility="{Binding LoggedEmployee, Converter={StaticResource RoleToVisibilityConverter}, ConverterParameter='Manager,Admin'}"
+                            Content="Manažer" Margin="0,5,0,0" />
+                    
+                    <Button Visibility="{Binding LoggedEmployee, Converter={StaticResource RoleToVisibilityConverter}, ConverterParameter='Admin'}"
+                            Content="Admin" Margin="0,5,0,0" />
+                </StackPanel>
             </Grid>
         </Border>
     </Grid>
