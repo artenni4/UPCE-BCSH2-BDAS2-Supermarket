@@ -69,14 +69,13 @@ namespace Supermarket.Wpf.Main
         {
             _dialogService.Hide();
             ContentViewModel = e.NewViewModel;
-            Debug.WriteLine($"{nameof(ContentViewModel)} in {nameof(MainViewModel)} is set new value due to navigation completion");
         }
         
-        private bool isProgressVisible;
+        private bool _isProgressVisible;
         public bool IsProgressVisible
         {
-            get => isProgressVisible;
-            private set => SetProperty(ref isProgressVisible, value);
+            get => _isProgressVisible;
+            private set => SetProperty(ref _isProgressVisible, value);
         }
 
         private IViewModel? _contentViewModel;
@@ -84,13 +83,6 @@ namespace Supermarket.Wpf.Main
         {
             get => _contentViewModel;
             set => SetProperty(ref _contentViewModel, value);
-        }
-
-        private bool _isDialogVisible;
-        public bool IsDialogVisible
-        {
-            get => _isDialogVisible;
-            set => SetProperty(ref _isDialogVisible, value);
         }
 
         private IViewModel? _dialogViewModel;

@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:converter="clr-namespace:Supermarket.Wpf.Common.Converters"
         xmlns:cashbox="clr-namespace:Supermarket.Wpf.Cashbox"
         xmlns:login="clr-namespace:Supermarket.Wpf.Login"
         xmlns:local="clr-namespace:Supermarket.Wpf.Main"
@@ -24,16 +25,20 @@
             <local:PopupMenu />
         </DataTemplate>
         
+        <converter:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </Window.Resources>
     <Window.InputBindings>
         <KeyBinding Key="Esc" Command="{Binding ToggleMenuOrCloseDialogCommand}" />
     </Window.InputBindings>
     <Grid>
+        <!-- Main content -->
         <ContentPresenter Content="{Binding ContentViewModel}" />
         
-        <ContentPresenter Visibility="{Binding IsDialogVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
-                          Content="{Binding DialogViewModel}" />
+        <!-- Dialog view -->
+        <Grid Background="#80000000" Visibility="{Binding DialogViewModel, Converter={StaticResource NullToVisibilityConverter}}">
+            <ContentPresenter Content="{Binding DialogViewModel}" />
+        </Grid>
 
         <!-- Loading -->
         <Grid Background="#80000000" Visibility="{Binding IsProgressVisible, Converter={StaticResource BooleanToVisibilityConverter}}">

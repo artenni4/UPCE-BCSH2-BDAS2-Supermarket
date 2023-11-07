@@ -32,7 +32,7 @@ public class ViewModelResolver : IViewModelResolver
         if (viewModel is IAsyncInitialized asyncInitialized)
         {
             InitializationStarted?.Invoke(this, EventArgs.Empty);
-            Debug.WriteLine($"View model initialization STARTED in thread {Environment.CurrentManagedThreadId}");
+            Debug.WriteLine($"{viewModel} initialization STARTED in thread {Environment.CurrentManagedThreadId}");
 
             try
             {
@@ -41,7 +41,7 @@ public class ViewModelResolver : IViewModelResolver
             finally
             {
                 InitializationFinished?.Invoke(this, EventArgs.Empty);
-                Debug.WriteLine($"View model initialization FINISHED in thread {Environment.CurrentManagedThreadId}");
+                Debug.WriteLine($"{viewModel} initialization FINISHED in thread {Environment.CurrentManagedThreadId}");
             }
         }
 
