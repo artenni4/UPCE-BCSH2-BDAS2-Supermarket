@@ -1,4 +1,4 @@
-﻿namespace Supermarket.Wpf.Common
+﻿namespace Supermarket.Wpf.Navigation
 {
     public enum ApplicationView
     {
