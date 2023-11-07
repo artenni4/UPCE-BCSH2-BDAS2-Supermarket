@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using Supermarket.Wpf.Common;
 using Supermarket.Wpf.ViewModelResolvers;
+using Supermarket.Wpf.GoodsKeeping;
 
 namespace Supermarket.Wpf.Navigation
 {
@@ -33,6 +34,7 @@ namespace Supermarket.Wpf.Navigation
                 {
                     ApplicationView.Login => typeof(LoginViewModel),
                     ApplicationView.CashBox => typeof(CashboxViewModel),
+                    ApplicationView.Storage => typeof(StorageViewModel),
                     _ => throw new NotImplementedException($"Navigation to {applicationView} is not supported yet, implement it by extending this swith")
                 };
 

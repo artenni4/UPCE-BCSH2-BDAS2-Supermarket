@@ -15,7 +15,13 @@
         <Setter Property="Background" Value="{StaticResource TextColor}" />
         <Setter Property="BorderBrush" Value="{StaticResource TextDarkColor}" />
     </Style>
-    
+
+    <Style TargetType="Button" x:Key="RedButtonStyle" BasedOn="{StaticResource {x:Type Button}}">
+        <Setter Property="FontWeight" Value="DemiBold" />
+        <Setter Property="Background" Value="{StaticResource SecondaryColor}" />
+        <Setter Property="BorderBrush" Value="{StaticResource SecondaryDarkColor}" />
+    </Style>
+
     <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
         <Setter Property="FontSize" Value="40" />
         <Setter Property="Background" Value="{StaticResource TextBackgroundColor}" />
