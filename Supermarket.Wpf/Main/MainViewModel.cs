@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Threading.Tasks;
 using Supermarket.Wpf.Common;
 using Supermarket.Wpf.Navigation;
@@ -11,7 +10,7 @@ using Supermarket.Wpf.ViewModelResolvers;
 
 namespace Supermarket.Wpf.Main
 {
-    public class MainViewModel : NotifyPropertyChangedBase, IViewModel
+    public class MainViewModel : NotifyPropertyChangedBase, IViewModel, IAsyncInitialized
     {
         private readonly IDialogService _dialogService;
         private readonly INavigationService _navigationService;
@@ -41,6 +40,11 @@ namespace Supermarket.Wpf.Main
             viewModelResolver.InitializationFinished += (_, _) => IsProgressVisible = false;
         }
 
+        public async Task InitializeAsync()
+        {
+            await _navigationService.NavigateToAsync(ApplicationView.Login);
+        }
+        
         private async void ToggleMenuOrHideDialog(object? obj)
         {
             if (_dialogService.CurrentDialog is not null)
@@ -57,7 +61,7 @@ namespace Supermarket.Wpf.Main
             if (_loggedUserService.LoggedEmployee is not null)
             {
                 var applicationView = await _dialogService.ShowAsync<MenuViewModel, ApplicationView, ILoggedEmployee>(_loggedUserService.LoggedEmployee);
-                _navigationService.NavigateTo(applicationView);
+                await _navigationService.NavigateToAsync(applicationView);
             }
         }
         

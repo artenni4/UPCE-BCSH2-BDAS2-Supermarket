@@ -2,7 +2,7 @@
 
 namespace Supermarket.Wpf.Navigation
 {
-    internal interface IConfirmNavigation : IViewModel
+    internal interface IConfirmNavigation
     {
         /// <summary>
         /// Checks whether navigation out of the screen is permitted in current state

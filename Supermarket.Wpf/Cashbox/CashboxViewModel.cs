@@ -9,12 +9,11 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 using Supermarket.Wpf.ViewModelResolvers;
 
 namespace Supermarket.Wpf.Cashbox
 {
-    public class CashboxViewModel : NotifyPropertyChangedBase, IAsyncInitialized
+    public class CashboxViewModel : NotifyPropertyChangedBase, IViewModel, IAsyncInitialized
     {
         private readonly ICashBoxService _cashBoxService;
         private int currentPage = 1;

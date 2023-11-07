@@ -21,7 +21,7 @@ namespace Supermarket.Wpf.Navigation
         public ApplicationView? CurrentView { get; private set; }
         public event EventHandler<NavigationEventArgs>? NavigationSucceeded;
 
-        public void NavigateTo(ApplicationView applicationView)
+        public async Task NavigateToAsync(ApplicationView applicationView)
         {
             if (_currentViewModel is IConfirmNavigation confirmNavigation && confirmNavigation.CanNavigateFrom() == false)
             {
@@ -35,23 +35,15 @@ namespace Supermarket.Wpf.Navigation
                     ApplicationView.CashBox => typeof(CashboxViewModel),
                     _ => throw new NotImplementedException($"Navigation to {applicationView} is not supported yet, implement it by extending this swith")
                 };
-                
-                _viewModelResolver.Resolve(viewModelType).ContinueWith(task =>
-                {
-                    if (task.IsFaulted)
-                    {
-                        throw task.Exception!;
-                    }
-                    
-                    _currentViewModel = task.Result;
-                    CurrentView = applicationView;
-                    Debug.WriteLine($"Navigated to {CurrentView}");
 
-                    NavigationSucceeded?.Invoke(this, new NavigationEventArgs
-                    {
-                        NewViewModel = _currentViewModel,
-                    });
-                }, TaskScheduler.FromCurrentSynchronizationContext());
+                _currentViewModel = await _viewModelResolver.Resolve(viewModelType);
+                CurrentView = applicationView;
+                Debug.WriteLine($"Navigated to {CurrentView}");
+
+                NavigationSucceeded?.Invoke(this, new NavigationEventArgs
+                {
+                    NewViewModel = _currentViewModel,
+                });
             }
         }
     }

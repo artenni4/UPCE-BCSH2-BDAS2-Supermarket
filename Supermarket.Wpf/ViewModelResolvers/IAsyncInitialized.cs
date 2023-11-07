@@ -3,7 +3,7 @@ using Supermarket.Wpf.Common;
 
 namespace Supermarket.Wpf.ViewModelResolvers;
 
-public interface IAsyncInitialized : IViewModel
+public interface IAsyncInitialized
 {
     Task InitializeAsync();
 }

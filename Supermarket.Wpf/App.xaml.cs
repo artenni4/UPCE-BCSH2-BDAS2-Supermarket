@@ -8,6 +8,7 @@ using Supermarket.Core;
 using Supermarket.Domain;
 using Supermarket.Infrastructure;
 using Supermarket.Wpf.Common;
+using Supermarket.Wpf.ViewModelResolvers;
 
 namespace Supermarket.Wpf
 {
@@ -33,13 +34,11 @@ namespace Supermarket.Wpf
 
         protected override void OnStartup(StartupEventArgs e)
         {
+            var resolver = _serviceProvider.GetRequiredService<IViewModelResolver>();
             var mainWindow = new MainWindow()
             {
-                DataContext = _serviceProvider.GetRequiredService<MainViewModel>(),
+                DataContext = resolver.Resolve<MainViewModel>().Result,
             };
-
-            var navigationService = _serviceProvider.GetRequiredService<INavigationService>();
-            navigationService.NavigateTo(ApplicationView.Login);
 
             mainWindow.Show();
             base.OnStartup(e);

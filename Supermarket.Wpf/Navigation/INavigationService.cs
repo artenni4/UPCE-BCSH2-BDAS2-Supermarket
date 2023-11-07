@@ -11,6 +11,6 @@ namespace Supermarket.Wpf.Navigation
     {
         ApplicationView? CurrentView { get; }
         event EventHandler<NavigationEventArgs> NavigationSucceeded;
-        void NavigateTo(ApplicationView applicationView);
+        Task NavigateToAsync(ApplicationView applicationView);
     }
 }
