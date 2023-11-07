@@ -1,10 +1,15 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Supermarket.Wpf.Common;
 
 namespace Supermarket.Wpf.ViewModelResolvers;
 
 public static class ViewModelResolverExtensions
 {
-    public static async Task<object> Resolve<TViewModel>(this IViewModelResolver viewModelResolver)
-        where TViewModel : class => await viewModelResolver.Resolve(typeof(TViewModel));
+    public static async Task<TViewModel> Resolve<TViewModel>(this IViewModelResolver viewModelResolver)
+        where TViewModel : class, IViewModel
+    {
+        return await viewModelResolver.Resolve(typeof(TViewModel)) as TViewModel ??
+               throw new InvalidOperationException();
+    }
 }

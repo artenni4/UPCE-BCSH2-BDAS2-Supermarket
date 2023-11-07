@@ -21,9 +21,13 @@ public class ViewModelResolver : IViewModelResolver
     public event EventHandler? InitializationStarted;
     public event EventHandler? InitializationFinished;
 
-    public async Task<object> Resolve(Type viewModelType)
+    public async Task<IViewModel> Resolve(Type viewModelType)
     {
-        var viewModel = _serviceProvider.GetRequiredService(viewModelType);
+        var viewModel = _serviceProvider.GetRequiredService(viewModelType) as IViewModel;
+        if (viewModel is null)
+        {
+            throw new ArgumentException($"{nameof(viewModelType.Name)} is not market with {nameof(IViewModel)} interface");
+        }
 
         if (viewModel is IAsyncInitialized asyncInitialized)
         {

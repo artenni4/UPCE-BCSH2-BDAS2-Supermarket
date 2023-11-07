@@ -8,7 +8,7 @@ using Supermarket.Wpf.ViewModelResolvers;
 
 namespace Supermarket.Wpf.Main
 {
-    public class MainViewModel : NotifyPropertyChangedBase
+    public class MainViewModel : NotifyPropertyChangedBase, IViewModel
     {
         public MainViewModel(INavigationService navigationService, IViewModelResolver viewModelResolver, MenuViewModel menuViewModel)
         {

@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Supermarket.Wpf.Common;
 
 namespace Supermarket.Wpf.Navigation
 {
-    internal interface IConfirmNavigation
+    internal interface IConfirmNavigation : IViewModel
     {
         /// <summary>
         /// Checks whether navigation out of the screen is permitted in current state

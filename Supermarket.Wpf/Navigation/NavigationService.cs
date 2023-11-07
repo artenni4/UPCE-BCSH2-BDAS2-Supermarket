@@ -3,6 +3,7 @@ using Supermarket.Wpf.Login;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Supermarket.Wpf.Common;
 using Supermarket.Wpf.ViewModelResolvers;
 
 namespace Supermarket.Wpf.Navigation
@@ -10,7 +11,7 @@ namespace Supermarket.Wpf.Navigation
     internal class NavigationService : INavigationService
     {
         private readonly IViewModelResolver _viewModelResolver;
-        private object? _currentViewModel;
+        private IViewModel? _currentViewModel;
 
         public NavigationService(IViewModelResolver viewModelResolver)
         {

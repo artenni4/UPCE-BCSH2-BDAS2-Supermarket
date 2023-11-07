@@ -1,7 +1,9 @@
-﻿namespace Supermarket.Wpf.Navigation
+﻿using Supermarket.Wpf.Common;
+
+namespace Supermarket.Wpf.Navigation
 {
     public class NavigationEventArgs
     {
-        public required object NewViewModel { get; init; }
+        public required IViewModel NewViewModel { get; init; }
     }
 }
