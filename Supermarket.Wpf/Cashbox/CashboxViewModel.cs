@@ -50,7 +50,8 @@ namespace Supermarket.Wpf.Cashbox
         
         public async Task InitializeAsync()
         {
-            LoadingStarted?.Invoke(this, EventArgs.Empty);
+            using var _ = new DelegateLoading(this);
+            
             categories = await _cashBoxService.GetCategoriesAsync(1, new RecordsRange { PageSize = 10, PageNumber = 1 });
             categoryId = categories.Items.FirstOrDefault()?.CategoryId;
             for (int i = 0; i < categories.Items.Count; i++)
@@ -59,17 +60,20 @@ namespace Supermarket.Wpf.Cashbox
             }
             
             await UpdateDisplayedItems();
-            LoadingFinished?.Invoke(this, EventArgs.Empty);
         }
 
         public async void NextPage(object? obj)
         {
+            using var _ = new DelegateLoading(this);
+            
             currentPage++;
             await UpdateDisplayedItems();
         }
 
         public async void PreviousPage(object? obj)
         {
+            using var _ = new DelegateLoading(this);
+            
             currentPage--;
             await UpdateDisplayedItems();
         }
@@ -90,8 +94,10 @@ namespace Supermarket.Wpf.Cashbox
             }
         }
 
-        public async void CategoryButtonClick(object? obj)
+        private async void CategoryButtonClick(object? obj)
         {
+            using var _ = new DelegateLoading(this);
+            
             if (obj is CashBoxProductCategory selectedCategory)
             {
                 categoryId = selectedCategory.CategoryId;
