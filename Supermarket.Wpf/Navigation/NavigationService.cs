@@ -1,11 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Supermarket.Wpf.Cashbox;
+﻿using Supermarket.Wpf.Cashbox;
 using Supermarket.Wpf.Login;
-using Supermarket.Wpf.Main;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using Supermarket.Wpf.Common;
 using Supermarket.Wpf.ViewModelResolvers;
 
 namespace Supermarket.Wpf.Navigation
@@ -31,7 +28,14 @@ namespace Supermarket.Wpf.Navigation
             }
             else
             {
-                _viewModelResolver.Resolve(applicationView).ContinueWith(task =>
+                var viewModelType = applicationView switch
+                {
+                    ApplicationView.Login => typeof(LoginViewModel),
+                    ApplicationView.CashBox => typeof(CashboxViewModel),
+                    _ => throw new NotImplementedException($"Navigation to {applicationView} is not supported yet, implement it by extending this swith")
+                };
+                
+                _viewModelResolver.Resolve(viewModelType).ContinueWith(task =>
                 {
                     if (task.IsFaulted)
                     {

@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Supermarket.Wpf.Cashbox;
 using Supermarket.Wpf.Common;
 using Supermarket.Wpf.Login;
+using Supermarket.Wpf.Navigation;
 
 namespace Supermarket.Wpf.ViewModelResolvers;
 
@@ -20,14 +21,9 @@ public class ViewModelResolver : IViewModelResolver
     public event EventHandler? InitializationStarted;
     public event EventHandler? InitializationFinished;
 
-    public async Task<object> Resolve(ApplicationView applicationView)
+    public async Task<object> Resolve(Type viewModelType)
     {
-        object viewModel = applicationView switch
-        {
-            ApplicationView.Login => _serviceProvider.GetRequiredService<LoginViewModel>(),
-            ApplicationView.CashBox => _serviceProvider.GetRequiredService<CashboxViewModel>(),
-            _ => throw new NotImplementedException($"Navigation to {applicationView} is not supported yet, implement it by extending this swith")
-        };
+        var viewModel = _serviceProvider.GetRequiredService(viewModelType);
 
         if (viewModel is IAsyncInitialized asyncInitialized)
         {
