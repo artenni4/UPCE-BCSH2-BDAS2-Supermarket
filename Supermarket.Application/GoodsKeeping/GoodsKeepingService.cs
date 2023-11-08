@@ -1,6 +1,7 @@
 ﻿using Supermarket.Core.CashBoxes;
 using Supermarket.Domain.SellingProducts;
 using Supermarket.Domain.StoragePlaces;
+using Supermarket.Domain.Supermarkets;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,11 +14,13 @@ namespace Supermarket.Core.GoodsKeeping
     {
         private readonly IStoragePlaceRepository _storagePlaceRepository;
         private readonly ISellingProductRepository _sellingProductRepository;
+        private readonly ISupermarketRepository _supermarketRepository;
 
-        public GoodsKeepingService(IStoragePlaceRepository storagePlaceRepository, ISellingProductRepository sellingProductRepository)
+        public GoodsKeepingService(IStoragePlaceRepository storagePlaceRepository, ISellingProductRepository sellingProductRepository, ISupermarketRepository supermarketRepository)
         {
             _storagePlaceRepository = storagePlaceRepository;
             _sellingProductRepository = sellingProductRepository;
+            _supermarketRepository = supermarketRepository;
         }
 
         public Task DeleteProductStorageAsync(int storagePlaceId, int productId)
@@ -51,9 +54,11 @@ namespace Supermarket.Core.GoodsKeeping
             throw new NotImplementedException();
         }
 
-        public Task<PagedResult<SupplyWarehouse>> GetWarehousesAsync(int supermarketId, RecordsRange recordsRange)
+        public async Task<PagedResult<SupplyWarehouse>> GetWarehousesAsync(int supermarketId, RecordsRange recordsRange)
         {
-            throw new NotImplementedException();
+            var result = await _supermarketRepository.GetSupermarketWarehouses(supermarketId, recordsRange);
+
+            return result.Select(SupplyWarehouse.FromStoragePlace);
         }
 
         public Task MoveProductAsync(int storagePlaceId, MovingProduct movingProduct)

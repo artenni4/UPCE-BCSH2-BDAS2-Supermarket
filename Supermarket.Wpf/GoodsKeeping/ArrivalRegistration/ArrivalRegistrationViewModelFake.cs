@@ -9,19 +9,19 @@ public class ArrivalRegistrationViewModelFake : ArrivalRegistrationViewModel
 {
     public ArrivalRegistrationViewModelFake() : base(new GoodsKeepingServiceFake(), new DialogServiceFake())
     {
-        DisplayedProducts = new ObservableCollection<GoodsKeepingProduct>(new GoodsKeepingProduct[]
-        {
-            new() { ProductId = 1, Name = "AAA", IsByWeight = true },
-            new() { ProductId = 2, Name = "BBB", IsByWeight = true },
-            new() { ProductId = 3, Name = "CCCCCCCC CCCC", IsByWeight = true },
-            new() { ProductId = 1, Name = "AAA", IsByWeight = true },
-            new() { ProductId = 2, Name = "BBB", IsByWeight = true },
-            new() { ProductId = 3, Name = "CCCCCCCC CCCC", IsByWeight = true },
-            new() { ProductId = 1, Name = "AAA", IsByWeight = true },
-            new() { ProductId = 2, Name = "BBB", IsByWeight = true },
-            new() { ProductId = 3, Name = "CCCCCCCC CCCC", IsByWeight = true },
-            new() { ProductId = 3, Name = "CCCCCCCC CCCC", IsByWeight = true },
-        });
+        //DisplayedProducts = new ObservableCollection<GoodsKeepingProduct>(new GoodsKeepingProduct[]
+        //{
+        //    new() { ProductId = 1, Name = "AAA", IsByWeight = true },
+        //    new() { ProductId = 2, Name = "BBB", IsByWeight = true },
+        //    new() { ProductId = 3, Name = "CCCCCCCC CCCC", IsByWeight = true },
+        //    new() { ProductId = 1, Name = "AAA", IsByWeight = true },
+        //    new() { ProductId = 2, Name = "BBB", IsByWeight = true },
+        //    new() { ProductId = 3, Name = "CCCCCCCC CCCC", IsByWeight = true },
+        //    new() { ProductId = 1, Name = "AAA", IsByWeight = true },
+        //    new() { ProductId = 2, Name = "BBB", IsByWeight = true },
+        //    new() { ProductId = 3, Name = "CCCCCCCC CCCC", IsByWeight = true },
+        //    new() { ProductId = 3, Name = "CCCCCCCC CCCC", IsByWeight = true },
+        //});
 
         Categories = new ObservableCollection<GoodsKeepingProductCategory>(new GoodsKeepingProductCategory[]
         {

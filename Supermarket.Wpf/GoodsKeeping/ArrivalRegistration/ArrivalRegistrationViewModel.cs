@@ -28,12 +28,12 @@ namespace Supermarket.Wpf.GoodsKeeping.ArrivalRegistration
 
         private PagedResult<GoodsKeepingProduct>? products;
         private PagedResult<GoodsKeepingProductCategory>? categories;
-        private PagedResult<GoodsKeepingStoragePlace>? storagePlaces;
+        private PagedResult<SupplyWarehouse>? storagePlaces;
 
         public ObservableCollection<GoodsKeepingProduct> DisplayedProducts { get; set; }
         public ObservableCollection<GoodsKeepingProductCategory> Categories { get; set; }
         public ObservableCollection<ArrivalAddedProduct> SelectedProducts { get; set; }
-        public ObservableCollection<GoodsKeepingStoragePlace> StoragePlaces { get; set; }
+        public ObservableCollection<SupplyWarehouse> StoragePlaces { get; set; }
 
         public ICommand NextPageCommand { get; }
         public ICommand PreviousPageCommand { get; }
@@ -79,7 +79,7 @@ namespace Supermarket.Wpf.GoodsKeeping.ArrivalRegistration
 
             categories = await _goodsKeepingService.GetCategoriesAsync(1, new RecordsRange { PageSize = 10, PageNumber = 1 });
             categoryId = categories.Items.FirstOrDefault()?.CategoryId;
-            storagePlaces = await _goodsKeepingService.GetStoragePlacesAsync(1, new RecordsRange { PageSize = 30, PageNumber = 1 });
+            storagePlaces = await _goodsKeepingService.GetWarehousesAsync(1, new RecordsRange { PageSize = 30, PageNumber = 1 });
             for (int i = 0; i < categories.Items.Count; i++)
             {
                 Categories.Add(categories.Items[i]);

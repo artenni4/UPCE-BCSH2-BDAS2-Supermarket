@@ -10,4 +10,6 @@ internal class StoredProductRepository : CrudRepositoryBase<StoredProduct, Store
     public StoredProductRepository(OracleConnection oracleConnection) : base(oracleConnection)
     {
     }
+
+
 }
