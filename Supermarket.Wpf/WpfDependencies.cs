@@ -30,6 +30,7 @@ public static class WpfDependencies
         serviceCollection.AddTransient<GoodsManagementViewModel>();
 
         serviceCollection.AddTransient<ProductCountInputViewModel>();
+        serviceCollection.AddTransient<LoginAssistantViewModel>();
 
         return serviceCollection;
     }

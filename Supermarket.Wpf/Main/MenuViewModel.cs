@@ -7,19 +7,22 @@ using Supermarket.Wpf.Navigation;
 
 namespace Supermarket.Wpf.Main
 {
-    public class MenuViewModel : NotifyPropertyChangedBase, IDialogViewModel<ApplicationView, ILoggedEmployee>
+    public class MenuViewModel : NotifyPropertyChangedBase, IDialogViewModel<MenuResult, ILoggedEmployee>
     {
+        public ICommand LogOutCommand { get; }
         public ICommand NavigateToCashboxCommand { get; }
         public ICommand NavigateToGoodsKeepingCommand { get; }
 
         public MenuViewModel(INavigationService navigationService)
         {
+            LogOutCommand = new RelayCommand(_ => ResultReceived?.Invoke(this, MenuResult.LogOut()));
+            
             NavigateToCashboxCommand = new RelayCommand(
-                _ => ResultReceived?.Invoke(this, ApplicationView.CashBox),
+                _ => ResultReceived?.Invoke(this, MenuResult.Navigate(ApplicationView.CashBox)),
                 _ => navigationService.CurrentView != ApplicationView.CashBox);
 
             NavigateToGoodsKeepingCommand = new RelayCommand(
-                _ => ResultReceived?.Invoke(this, ApplicationView.Storage),
+                _ => ResultReceived?.Invoke(this, MenuResult.Navigate(ApplicationView.Storage)),
                 _ => navigationService.CurrentView != ApplicationView.Storage);
         }
 
@@ -35,6 +38,6 @@ namespace Supermarket.Wpf.Main
             LoggedEmployee = parameters;
         }
 
-        public event EventHandler<ApplicationView>? ResultReceived;
+        public event EventHandler<MenuResult>? ResultReceived;
     }
 }

@@ -1,15 +1,13 @@
 ﻿using System;
 using Supermarket.Core.CashBoxes;
 using Supermarket.Domain.Common.Paging;
-using Supermarket.Domain.ProductCategories;
 using Supermarket.Wpf.Common;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using Supermarket.Wpf.Dialog;
+using Supermarket.Wpf.LoggedUser;
 using Supermarket.Wpf.ViewModelResolvers;
 
 namespace Supermarket.Wpf.Cashbox
@@ -32,25 +30,54 @@ namespace Supermarket.Wpf.Cashbox
         public ObservableCollection<CashBoxProductCategory> Categories { get; set; }
         public ObservableCollection<CashBoxProduct> SelectedProducts { get; set; }
 
+        private bool _isAssistantLoggedIn;
+        public bool IsAssistantLoggedIn
+        {
+            get => _isAssistantLoggedIn;
+            set => SetProperty(ref _isAssistantLoggedIn, value);
+        }
+        
+        public bool IsCustomerCashBox { get; set; }
+
         public ICommand NextPageCommand { get; }
         public ICommand PreviousPageCommand { get; }
         public ICommand CategoryButtonClickCommand { get; }
         public ICommand ProductClickCommand { get; }
+        public ICommand InviteAssistantCommand { get; }
+        public ICommand AssistantExitCommand { get; }
 
-        public CashboxViewModel(ICashBoxService cashBoxService, IDialogService dialogService)
+        public CashboxViewModel(ICashBoxService cashBoxService, IDialogService dialogService, ILoggedUserService loggedUserService)
         {
             _cashBoxService = cashBoxService;
             _dialogService = dialogService;
-            DisplayedProducts = new();
-            Categories = new();
-            SelectedProducts = new();
+            DisplayedProducts = new ObservableCollection<CashBoxProduct>();
+            Categories = new ObservableCollection<CashBoxProductCategory>();
+            SelectedProducts = new ObservableCollection<CashBoxProduct>();
+
+            IsCustomerCashBox = loggedUserService.IsLoggedCustomer();
 
             NextPageCommand = new RelayCommand(NextPage, _ => products?.HasNext == true);
             PreviousPageCommand = new RelayCommand(PreviousPage, _ => products?.HasPrevious == true);
             CategoryButtonClickCommand = new RelayCommand(CategoryButtonClick);
             ProductClickCommand = new RelayCommand(ProductClick);
+            InviteAssistantCommand = new RelayCommand(InviteAssistant);
+            AssistantExitCommand = new RelayCommand(AssistantExit);
         }
-        
+
+        private void AssistantExit(object? obj)
+        {
+            IsAssistantLoggedIn = false;
+        }
+
+        private async void InviteAssistant(object? obj)
+        {
+            var result = await _dialogService.ShowForResultAsync<LoginAssistantViewModel, DialogResult, EmptyParameters>(EmptyParameters.Value);
+            if (result.IsOk())
+            {
+                IsAssistantLoggedIn = true;
+            }
+        }
+
         public async Task InitializeAsync()
         {
             using var _ = new DelegateLoading(this);

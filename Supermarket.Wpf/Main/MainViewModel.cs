@@ -34,6 +34,7 @@ namespace Supermarket.Wpf.Main
             dialogService.DialogHidden += (_, _) => DialogViewModel = null;
             
             loggedUserService.EmployeeLoggedIn += async (_, _) => await TryShowMenu();
+            loggedUserService.EmployeeLoggedOut += async (_, _) => await _navigationService.NavigateToAsync(ApplicationView.Login);
 
             viewModelResolver.ViewModelResolved += (_, args) =>
             {
@@ -65,8 +66,15 @@ namespace Supermarket.Wpf.Main
         {
             if (_loggedUserService.LoggedEmployee is not null)
             {
-                var applicationView = await _dialogService.ShowAsync<MenuViewModel, ApplicationView, ILoggedEmployee>(_loggedUserService.LoggedEmployee);
-                await _navigationService.NavigateToAsync(applicationView);
+                var menuResult = await _dialogService.ShowAsync<MenuViewModel, MenuResult, ILoggedEmployee>(_loggedUserService.LoggedEmployee);
+                if (menuResult.IsNavigate(out var applicationView))
+                {
+                    await _navigationService.NavigateToAsync(applicationView);
+                }
+                else
+                {
+                    _loggedUserService.ResetLoggedEmployee();
+                }
             }
         }
         

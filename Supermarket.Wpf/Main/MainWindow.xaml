@@ -38,9 +38,12 @@
         <DataTemplate DataType="{x:Type cashbox:ProductCountInputViewModel}">
             <cashbox:ProductCountInput />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type cashbox:LoginAssistantViewModel}">
+            <cashbox:LoginAssistant />
+        </DataTemplate>
         
         <converter:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
-        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </Window.Resources>
     <Window.InputBindings>
         <KeyBinding Key="Esc" Command="{Binding ToggleMenuOrCloseDialogCommand}" />

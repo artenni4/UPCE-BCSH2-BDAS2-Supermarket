@@ -5,39 +5,37 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:cashbox="clr-namespace:Supermarket.Wpf.Cashbox"
              d:DataContext="{d:DesignInstance Type=cashbox:ProductCountInputViewModel, IsDesignTimeCreatable=True}"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="1080" d:DesignWidth="1920">
-    <Grid>
-        <Border BorderBrush="Transparent" Background="White" Width="350" Height="350">
-            <Border.Effect>
-                <DropShadowEffect BlurRadius="20" ShadowDepth="2" Color="Gray"/>
-            </Border.Effect>
-            <Grid Margin="20">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
+    <Border BorderBrush="Transparent" Background="White" Width="350" Height="350">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="20" ShadowDepth="2" Color="Gray"/>
+        </Border.Effect>
+        <Grid Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            
+            <StackPanel Grid.Row="0" Orientation="Vertical">
+                <TextBlock Text="POČET" HorizontalAlignment="Center" />
                 
-                <StackPanel Grid.Row="0" Orientation="Vertical">
-                    <TextBlock Text="POČET" HorizontalAlignment="Center" />
+                <Grid HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0,10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
                     
-                    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0,10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        
-                        <TextBox Grid.Column="0" Text="{Binding ProductCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                        <TextBlock Grid.Column="1" Text="KG" Margin="10,0" VerticalAlignment="Center" />
-                    </Grid>
-                </StackPanel>
+                    <TextBox Grid.Column="0" Text="{Binding ProductCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBlock Grid.Column="1" Text="KG" Margin="10,0" VerticalAlignment="Center" />
+                </Grid>
+            </StackPanel>
 
-                <StackPanel Grid.Row="2" Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Center">
-                    <Button Command="{Binding Confirm}" Content="OK" />
-                    <Button Command="{Binding Cancel}" Content="Cancel" Margin="0,10,0,0" />
-                </StackPanel>
-            </Grid>
-        </Border>
-    </Grid>
+            <StackPanel Grid.Row="2" Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                <Button Command="{Binding Confirm}" Content="OK" />
+                <Button Command="{Binding Cancel}" Content="Cancel" Margin="0,10,0,0" />
+            </StackPanel>
+        </Grid>
+    </Border>
 </UserControl>
