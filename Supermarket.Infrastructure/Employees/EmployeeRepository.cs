@@ -15,9 +15,9 @@ namespace Supermarket.Infrastructure.Employees
 
         public Task<Employee?> GetByLoginAsync(string login)
         {
-            if (login != "BIBA") return Task.FromResult((Employee?)null);
+            if (login != "a") return Task.FromResult((Employee?)null);
 
-            var passwordBytes = Encoding.UTF8.GetBytes("ILOVE");
+            var passwordBytes = Encoding.UTF8.GetBytes("a");
             var salt = new byte[16] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
 
             byte[] combinedBytes = new byte[passwordBytes.Length + salt.Length];
@@ -29,7 +29,7 @@ namespace Supermarket.Infrastructure.Employees
             return Task.FromResult((Employee?)new Employee
             {
                 Id = 1,
-                Login = "BIBA",
+                Login = "a",
                 Name = "David",
                 Surname = "Biba",
                 StartedWorking = new DateTimeOffset(2020, 10, 1, 0, 0, 0, TimeSpan.Zero),

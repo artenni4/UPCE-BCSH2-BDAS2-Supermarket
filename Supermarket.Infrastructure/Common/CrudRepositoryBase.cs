@@ -6,7 +6,7 @@ using Supermarket.Domain.Common.Paging;
 namespace Supermarket.Infrastructure.Common
 {
     internal abstract class CrudRepositoryBase<TEntity, TId, TDbEntity>
-        where TEntity : IEntity<TId>
+        where TEntity : class, IEntity<TId>
         where TDbEntity : IDbEntity<TEntity, TId, TDbEntity>
     {
         protected readonly OracleConnection _oracleConnection;
@@ -51,29 +51,22 @@ namespace Supermarket.Infrastructure.Common
             var identityCondition = GetIdentityCondition(identity);
             
             var sql = $"SELECT * FROM {TDbEntity.TableName} WHERE {identityCondition}";
-            var dbEntity = await _oracleConnection.QuerySingleAsync<TDbEntity>(sql, identity);
+            var dbEntity = await _oracleConnection.QuerySingleOrDefaultAsync<TDbEntity>(sql, identity);
 
-            return dbEntity.ToDomainEntity();
+            return dbEntity?.ToDomainEntity();
         }
         
-        public virtual async Task<TId> AddAsync(TEntity entity)
+        public virtual async Task AddAsync(TEntity entity)
         {
             var dbEntity = TDbEntity.MapToDbEntity(entity);
-            var identity = TDbEntity.GetOutputIdentityParameters();
             var insertingValues = dbEntity.GetInsertingValues();
-
-            var returningIdentity = string.Join(", ", TDbEntity.IdentityColumns.Select(ic => $"{TDbEntity.TableName}.{ic}"));
-            var returningInto = string.Join(", ", identity.ParameterNames.Select(p => $":{p}"));
             
             var selector = string.Join(", ", insertingValues.ParameterNames);
             var parameters = string.Join(", ", insertingValues.ParameterNames.Select(v => ":" + v));
             
-            var sql = $"INSERT INTO {TDbEntity.TableName} ({selector}) VALUES {parameters} RETURNING {returningIdentity} INTO {returningInto}";
+            var sql = $"INSERT INTO {TDbEntity.TableName} ({selector}) VALUES ({parameters})";
 
-            insertingValues.AddDynamicParams(identity);
             await _oracleConnection.ExecuteAsync(sql, insertingValues);
-
-            return TDbEntity.ExtractIdentity(insertingValues);
         }
 
         public virtual async Task UpdateAsync(TEntity entity)
@@ -115,7 +108,7 @@ namespace Supermarket.Infrastructure.Common
         protected string GetIdentityCondition(DynamicParameters identity)
         {
             return string.Join(" AND ", TDbEntity.IdentityColumns
-                .Select(ic => $"{TDbEntity.TableName}.{ic} = :{identity.Get<object>(ic)}"));
+                .Select(ic => $"{TDbEntity.TableName}.{ic} = :{ic}"));
         }
     }
 }

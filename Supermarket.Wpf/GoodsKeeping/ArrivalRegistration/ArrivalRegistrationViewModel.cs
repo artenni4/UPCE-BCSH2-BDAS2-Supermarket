@@ -9,8 +9,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace Supermarket.Wpf.GoodsKeeping.ArrivalRegistration
@@ -32,7 +32,7 @@ namespace Supermarket.Wpf.GoodsKeeping.ArrivalRegistration
 
         public ObservableCollection<GoodsKeepingProduct> DisplayedProducts { get; set; }
         public ObservableCollection<GoodsKeepingProductCategory> Categories { get; set; }
-        public ObservableCollection<ArrivalAddedProduct> SelectedProducts { get; set; }
+        public ObservableCollection<GoodsKeepingProduct> SelectedProducts { get; set; }
         public ObservableCollection<SupplyWarehouse> StoragePlaces { get; set; }
 
         public ICommand NextPageCommand { get; }
@@ -43,8 +43,8 @@ namespace Supermarket.Wpf.GoodsKeeping.ArrivalRegistration
         public ICommand CancelCommand { get; }
         public ICommand RemoveProductCommand { get; }
 
-        private GoodsKeepingStoragePlace? _selectedPlace;
-        public GoodsKeepingStoragePlace? SelectedPlace
+        private SupplyWarehouse? _selectedPlace;
+        public SupplyWarehouse? SelectedPlace
         {
             get => _selectedPlace;
             set
@@ -63,6 +63,7 @@ namespace Supermarket.Wpf.GoodsKeeping.ArrivalRegistration
             Categories = new();
             SelectedProducts = new();
             StoragePlaces = new();
+
 
             NextPageCommand = new RelayCommand(NextPage, _ => products?.HasNext == true);
             PreviousPageCommand = new RelayCommand(PreviousPage, _ => products?.HasPrevious == true);
@@ -145,13 +146,14 @@ namespace Supermarket.Wpf.GoodsKeeping.ArrivalRegistration
 
                 if (dialogResult.IsOk(out var productCount))
                 {
-                    SelectedProducts.Add(new ArrivalAddedProduct
+                    SelectedProducts.Add(new GoodsKeepingProduct
                     {
                         ProductId = selectedProduct.ProductId,
                         Name = selectedProduct.Name,
                         Weight = productCount,
                         MeasureUnit = selectedProduct.MeasureUnit,
-                        Price = Math.Round(selectedProduct.Price * productCount, 2)
+                        IsByWeight = selectedProduct.IsByWeight,
+                        Price = selectedProduct.Price
                     });
                 }
             }
@@ -159,7 +161,20 @@ namespace Supermarket.Wpf.GoodsKeeping.ArrivalRegistration
 
         public void AcceptClick(object? obj)
         {
+            if (SelectedPlace == null)
+            {
+                MessageBox.Show("Vyberte místo uložení", "Chyba", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            List<SuppliedProduct> products = new List<SuppliedProduct>();
+            foreach(var product in SelectedProducts)
+            {
+                products.Add(new SuppliedProduct { ProductId = product.ProductId, Count = product.Weight });
+            }
 
+            if (SelectedPlace != null)
+                _goodsKeepingService.SupplyProductsToWarehouseAsync(SelectedPlace.Id, products);
+            SelectedProducts.Clear();
         }
 
         public void CancelClick(object? obj)
@@ -169,7 +184,7 @@ namespace Supermarket.Wpf.GoodsKeeping.ArrivalRegistration
 
         private void RemoveProduct(object? parameter)
         {
-            if (parameter is ArrivalAddedProduct item)
+            if (parameter is GoodsKeepingProduct item)
             {
                 SelectedProducts.Remove(item);
             }

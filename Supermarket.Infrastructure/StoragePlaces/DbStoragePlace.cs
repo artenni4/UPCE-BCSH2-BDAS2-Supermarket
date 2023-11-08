@@ -37,7 +37,10 @@ internal class DbStoragePlace : IDbEntity<StoragePlace, int, DbStoragePlace>
 
     public static DynamicParameters GetEntityIdParameters(int id)
     {
-        throw new NotImplementedException();
+        var parameters = new DynamicParameters();
+        parameters.Add("@misto_ulozeni_id", id);
+
+        return parameters;
     }
 
     public static DynamicParameters GetOutputIdentityParameters()
