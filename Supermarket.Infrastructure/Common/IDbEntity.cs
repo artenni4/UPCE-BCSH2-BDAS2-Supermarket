@@ -39,16 +39,6 @@ public interface IDbEntity<TEntity, TId, TSelf>
     /// </summary>
     /// <param name="id">id of entity</param>
     static abstract DynamicParameters GetEntityIdParameters(TId id);
-
-    /// <summary>
-    /// Gets identity parameters for returning inserted id into it
-    /// </summary>
-    static abstract DynamicParameters GetOutputIdentityParameters();
-    
-    /// <summary>
-    /// Extract <see cref="TId"/> from <see cref="DynamicParameters"/>
-    /// </summary>
-    static abstract TId ExtractIdentity(DynamicParameters dynamicParameters);
     
     /// <summary>
     /// Gets insert values selector and parameters

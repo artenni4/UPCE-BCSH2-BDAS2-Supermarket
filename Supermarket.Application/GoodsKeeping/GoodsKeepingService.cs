@@ -1,6 +1,7 @@
 ﻿using Supermarket.Core.CashBoxes;
 using Supermarket.Domain.SellingProducts;
 using Supermarket.Domain.StoragePlaces;
+using Supermarket.Domain.StoredProducts;
 using Supermarket.Domain.Supermarkets;
 using System;
 using System.Collections.Generic;
@@ -15,12 +16,14 @@ namespace Supermarket.Core.GoodsKeeping
         private readonly IStoragePlaceRepository _storagePlaceRepository;
         private readonly ISellingProductRepository _sellingProductRepository;
         private readonly ISupermarketRepository _supermarketRepository;
+        private readonly IStoredProductRepository _storedProductRepository;
 
-        public GoodsKeepingService(IStoragePlaceRepository storagePlaceRepository, ISellingProductRepository sellingProductRepository, ISupermarketRepository supermarketRepository)
+        public GoodsKeepingService(IStoragePlaceRepository storagePlaceRepository, ISellingProductRepository sellingProductRepository, ISupermarketRepository supermarketRepository, IStoredProductRepository storedProductRepository)
         {
             _storagePlaceRepository = storagePlaceRepository;
             _sellingProductRepository = sellingProductRepository;
             _supermarketRepository = supermarketRepository;
+            _storedProductRepository = storedProductRepository;
         }
 
         public Task DeleteProductStorageAsync(int storagePlaceId, int productId)
@@ -66,9 +69,21 @@ namespace Supermarket.Core.GoodsKeeping
             throw new NotImplementedException();
         }
 
-        public Task SupplyProductsToWarehouseAsync(int warehouseId, IReadOnlyList<SuppliedProduct> suppliedProducts)
+        public async Task SupplyProductsToWarehouseAsync(int warehouseId, IReadOnlyList<SuppliedProduct> suppliedProducts)
         {
-            throw new NotImplementedException();
+            var warehouse = await _storagePlaceRepository.GetByIdAsync(warehouseId) ?? throw new Exception();
+            foreach(var product in suppliedProducts)
+            {
+                var id = new StoredProductId(warehouseId, warehouse.SupermarketId, product.ProductId);
+                var storedProduct = await _storedProductRepository.GetByIdAsync(id);
+                if (storedProduct != null)
+                {
+                    var newStoredProduct = new Domain.StoredProducts.StoredProduct { Id = id, Count = storedProduct.Count + product.Count };
+                    await _storedProductRepository.UpdateAsync(newStoredProduct);
+                }
+                else
+                    await _storedProductRepository.AddAsync(new Domain.StoredProducts.StoredProduct { Id = id, Count = product.Count });
+            }
         }
     }
 }

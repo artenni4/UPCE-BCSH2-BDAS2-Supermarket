@@ -43,8 +43,8 @@ namespace Supermarket.Wpf.GoodsKeeping.ArrivalRegistration
         public ICommand CancelCommand { get; }
         public ICommand RemoveProductCommand { get; }
 
-        private GoodsKeepingStoragePlace? _selectedPlace;
-        public GoodsKeepingStoragePlace? SelectedPlace
+        private SupplyWarehouse? _selectedPlace;
+        public SupplyWarehouse? SelectedPlace
         {
             get => _selectedPlace;
             set
@@ -63,6 +63,7 @@ namespace Supermarket.Wpf.GoodsKeeping.ArrivalRegistration
             Categories = new();
             SelectedProducts = new();
             StoragePlaces = new();
+
 
             NextPageCommand = new RelayCommand(NextPage, _ => products?.HasNext == true);
             PreviousPageCommand = new RelayCommand(PreviousPage, _ => products?.HasPrevious == true);
@@ -160,6 +161,15 @@ namespace Supermarket.Wpf.GoodsKeeping.ArrivalRegistration
         public void AcceptClick(object? obj)
         {
 
+            List<SuppliedProduct> products = new List<SuppliedProduct>();
+            foreach(var product in SelectedProducts)
+            {
+                products.Add(new SuppliedProduct { ProductId = product.ProductId, Count = product.Weight });
+            }
+
+            if (SelectedPlace != null)
+                _goodsKeepingService.SupplyProductsToWarehouseAsync(SelectedPlace.Id, products);
+            SelectedProducts.Clear();
         }
 
         public void CancelClick(object? obj)

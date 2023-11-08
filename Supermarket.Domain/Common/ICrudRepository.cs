@@ -10,7 +10,7 @@ namespace Supermarket.Domain.Common
     {
         Task<PagedResult<TEntity>> GetPagedAsync(RecordsRange recordsRange);
         Task<TEntity?> GetByIdAsync(TId id);
-        Task<TId> AddAsync(TEntity entity);
+        Task AddAsync(TEntity entity);
         Task UpdateAsync(TEntity entity);
         Task DeleteAsync(TId id);
     }
