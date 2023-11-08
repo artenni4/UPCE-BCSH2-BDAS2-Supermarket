@@ -78,7 +78,7 @@ namespace Supermarket.Wpf.GoodsKeeping.ArrivalRegistration
             using var _ = new DelegateLoading(this);
 
             categories = await _goodsKeepingService.GetCategoriesAsync(1, new RecordsRange { PageSize = 10, PageNumber = 1 });
-            categoryId = categories.Items.FirstOrDefault()?.Id;
+            categoryId = categories.Items.FirstOrDefault()?.CategoryId;
             storagePlaces = await _goodsKeepingService.GetStoragePlacesAsync(1, new RecordsRange { PageSize = 30, PageNumber = 1 });
             for (int i = 0; i < categories.Items.Count; i++)
             {
@@ -131,7 +131,7 @@ namespace Supermarket.Wpf.GoodsKeeping.ArrivalRegistration
 
             if (obj is GoodsKeepingProductCategory selectedCategory)
             {
-                categoryId = selectedCategory.Id;
+                categoryId = selectedCategory.CategoryId;
                 await UpdateDisplayedItems();
             }
         }
