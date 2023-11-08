@@ -9,8 +9,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace Supermarket.Wpf.GoodsKeeping.ArrivalRegistration
@@ -32,7 +32,7 @@ namespace Supermarket.Wpf.GoodsKeeping.ArrivalRegistration
 
         public ObservableCollection<GoodsKeepingProduct> DisplayedProducts { get; set; }
         public ObservableCollection<GoodsKeepingProductCategory> Categories { get; set; }
-        public ObservableCollection<ArrivalAddedProduct> SelectedProducts { get; set; }
+        public ObservableCollection<GoodsKeepingProduct> SelectedProducts { get; set; }
         public ObservableCollection<SupplyWarehouse> StoragePlaces { get; set; }
 
         public ICommand NextPageCommand { get; }
@@ -147,20 +147,25 @@ namespace Supermarket.Wpf.GoodsKeeping.ArrivalRegistration
                 if (result.Type == ResultType.Cancelled)
                     return;
                 
-                SelectedProducts.Add(new ArrivalAddedProduct
+                SelectedProducts.Add(new GoodsKeepingProduct
                 {
                     ProductId = selectedProduct.ProductId,
                     Name = selectedProduct.Name,
                     Weight = result.Result,
                     MeasureUnit = selectedProduct.MeasureUnit,
-                    Price = Math.Round(selectedProduct.Price * result.Result, 2)
+                    IsByWeight = selectedProduct.IsByWeight,
+                    Price = selectedProduct.Price
                 });
             }
         }
 
         public void AcceptClick(object? obj)
         {
-
+            if (SelectedPlace == null)
+            {
+                MessageBox.Show("Vyberte místo uložení", "Chyba", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
             List<SuppliedProduct> products = new List<SuppliedProduct>();
             foreach(var product in SelectedProducts)
             {
@@ -179,7 +184,7 @@ namespace Supermarket.Wpf.GoodsKeeping.ArrivalRegistration
 
         private void RemoveProduct(object? parameter)
         {
-            if (parameter is ArrivalAddedProduct item)
+            if (parameter is GoodsKeepingProduct item)
             {
                 SelectedProducts.Remove(item);
             }
