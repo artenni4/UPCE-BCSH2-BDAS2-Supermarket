@@ -21,7 +21,7 @@
                         Content="Pokladna" Command="{Binding NavigateToCashboxCommand}" />
                 
                 <Button Visibility="{Binding LoggedEmployee, Converter={StaticResource RoleToVisibilityConverter}, ConverterParameter='GoodsKeeper,Manager,Admin'}"
-                        Content="Sklad" Margin="0,5,0,0"/>
+                        Content="Sklad" Command="{Binding NavigateToGoodsKeepingCommand}" Margin="0,5,0,0"/>
                 
                 <Button Visibility="{Binding LoggedEmployee, Converter={StaticResource RoleToVisibilityConverter}, ConverterParameter='Manager,Admin'}"
                         Content="Manažer" Margin="0,5,0,0" />

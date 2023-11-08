@@ -3,7 +3,7 @@
     public enum StoragePlaceType
     {
         Sklad = 0,
-        PULT = 1,
+        Pult = 1,
         Other = 2
     }
 }

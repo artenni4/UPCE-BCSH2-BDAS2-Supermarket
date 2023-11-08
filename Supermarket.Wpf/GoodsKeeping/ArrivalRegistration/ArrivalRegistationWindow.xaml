@@ -29,20 +29,29 @@
                         <TextBlock Text="PŘÍJEM " HorizontalAlignment="Center" Foreground="#1B2060" FontSize="35" FontWeight="DemiBold" VerticalAlignment="Center"/>
                         <ComboBox ItemsSource="{Binding StoragePlaces}" DisplayMemberPath="Code" SelectedItem="{Binding SelectedPlace}" Width="350px"/>
 
-                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <ScrollViewer VerticalScrollBarVisibility="Visible">
                             <ListBox Background="Transparent" BorderThickness="0" ItemsSource="{Binding SelectedProducts}">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="*" />
                                                 <ColumnDefinition Width="Auto" />
                                             </Grid.ColumnDefinitions>
 
-                                            <TextBlock Grid.Column="0" Text="{Binding Name}" Foreground="#1B2060" FontSize="25"/>
+                                            <TextBlock Grid.Column="0" Text="{Binding Name}" Foreground="#1B2060" FontSize="25" Margin="0 0 10 0" VerticalAlignment="Center" />
+                                            <TextBlock Grid.Column="1" Text="{Binding Weight}" Foreground="#1B2060" FontSize="25" VerticalAlignment="Center" />
+                                            <TextBlock Grid.Column="2" Text="{Binding MeasureUnit}" Foreground="#1B2060" FontSize="25" Margin="0 0 10 0" VerticalAlignment="Center" />
+                                            <TextBlock Grid.Column="3" Text="{Binding Price}" Foreground="#1B2060" FontSize="25" HorizontalAlignment="Right" VerticalAlignment="Center" />
+                                            <TextBlock Grid.Column="4" Text="Kč" Foreground="#1B2060" FontSize="25" Margin="0 0 10 0" HorizontalAlignment="Right" VerticalAlignment="Center" />
 
-                                            <Button Grid.Column="1" Content="X" Command="{Binding DataContext.RemoveProductCommand, RelativeSource={RelativeSource AncestorType=ListBox}}" CommandParameter="{Binding}" Background="Transparent" BorderBrush="Transparent"/>
+                                            <Button Grid.Column="5" Content="X" Command="{Binding DataContext.RemoveProductCommand, RelativeSource={RelativeSource AncestorType=ListBox}}" CommandParameter="{Binding}" Background="Transparent" BorderBrush="Transparent" HorizontalAlignment="Right" Foreground="Red"/>
                                         </Grid>
+
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
                             </ListBox>

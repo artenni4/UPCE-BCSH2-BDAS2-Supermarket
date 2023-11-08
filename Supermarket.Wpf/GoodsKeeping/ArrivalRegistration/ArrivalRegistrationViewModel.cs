@@ -32,7 +32,7 @@ namespace Supermarket.Wpf.GoodsKeeping.ArrivalRegistration
 
         public ObservableCollection<GoodsKeepingProduct> DisplayedProducts { get; set; }
         public ObservableCollection<GoodsKeepingProductCategory> Categories { get; set; }
-        public ObservableCollection<GoodsKeepingProduct> SelectedProducts { get; set; }
+        public ObservableCollection<ArrivalAddedProduct> SelectedProducts { get; set; }
         public ObservableCollection<GoodsKeepingStoragePlace> StoragePlaces { get; set; }
 
         public ICommand NextPageCommand { get; }
@@ -140,13 +140,20 @@ namespace Supermarket.Wpf.GoodsKeeping.ArrivalRegistration
         {
             if (obj is GoodsKeepingProduct selectedProduct)
             {
-                if (selectedProduct.IsByWeight)
-                {
-                    var result = await _dialogService
-                    .ShowForResultAsync<ProductCountInputViewModel, DialogResult<decimal>, EmptyParameters>(EmptyParameters.Value);
-                }
+                var result = await _dialogService
+                .ShowForResultAsync<ProductCountInputViewModel, DialogResult<decimal>, EmptyParameters>(EmptyParameters.Value);
+
+                if (result.Type == ResultType.Cancelled)
+                    return;
                 
-                SelectedProducts.Add(selectedProduct);
+                SelectedProducts.Add(new ArrivalAddedProduct
+                {
+                    ProductId = selectedProduct.ProductId,
+                    Name = selectedProduct.Name,
+                    Weight = result.Result,
+                    MeasureUnit = selectedProduct.MeasureUnit,
+                    Price = Math.Round(selectedProduct.Price * result.Result, 2)
+                });
             }
         }
 
@@ -162,7 +169,7 @@ namespace Supermarket.Wpf.GoodsKeeping.ArrivalRegistration
 
         private void RemoveProduct(object? parameter)
         {
-            if (parameter is GoodsKeepingProduct item)
+            if (parameter is ArrivalAddedProduct item)
             {
                 SelectedProducts.Remove(item);
             }

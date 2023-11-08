@@ -10,12 +10,17 @@ namespace Supermarket.Wpf.Main
     public class MenuViewModel : NotifyPropertyChangedBase, IDialogViewModel<ApplicationView, ILoggedEmployee>
     {
         public ICommand NavigateToCashboxCommand { get; }
+        public ICommand NavigateToGoodsKeepingCommand { get; }
 
         public MenuViewModel(INavigationService navigationService)
         {
             NavigateToCashboxCommand = new RelayCommand(
                 _ => ResultReceived?.Invoke(this, ApplicationView.CashBox),
                 _ => navigationService.CurrentView != ApplicationView.CashBox);
+
+            NavigateToGoodsKeepingCommand = new RelayCommand(
+                _ => ResultReceived?.Invoke(this, ApplicationView.Storage),
+                _ => navigationService.CurrentView != ApplicationView.Storage);
         }
 
         private ILoggedEmployee? _loggedEmployee;

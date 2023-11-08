@@ -3,6 +3,7 @@ using System.Security.Cryptography;
 using System.Text;
 using Dapper;
 using Supermarket.Domain.Employees;
+using Supermarket.Domain.Employees.Roles;
 
 namespace Supermarket.Infrastructure.Employees
 {
@@ -34,7 +35,7 @@ namespace Supermarket.Infrastructure.Employees
                 StartedWorking = new DateTimeOffset(2020, 10, 1, 0, 0, 0, TimeSpan.Zero),
                 PasswordHash = hashBytes,
                 PasswordHashSalt = salt,
-                Roles = new[] { "CASHIER" },
+                Roles = new[] { DbRoleNames.Cashier, DbRoleNames.GoodsKeeper },
                 SupermarketId = 1,
             });
         }
