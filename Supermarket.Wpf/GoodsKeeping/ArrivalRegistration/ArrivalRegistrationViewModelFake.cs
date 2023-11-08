@@ -1,14 +1,15 @@
 ﻿using System.Collections.ObjectModel;
 using Supermarket.Core.CashBoxes;
+using Supermarket.Core.GoodsKeeping;
 using Supermarket.Wpf.Dialog;
 
-namespace Supermarket.Wpf.Cashbox;
+namespace Supermarket.Wpf.GoodsKeeping.ArrivalRegistration;
 
-public class CashBoxViewModelFake : CashboxViewModel
+public class ArrivalRegistrationViewModelFake : ArrivalRegistrationViewModel
 {
-    public CashBoxViewModelFake() : base(new CashBoxServiceFake(), new DialogServiceFake())
+    public ArrivalRegistrationViewModelFake() : base(new GoodsKeepingServiceFake(), new DialogServiceFake())
     {
-        DisplayedProducts = new ObservableCollection<CashBoxProduct>(new CashBoxProduct[]
+        DisplayedProducts = new ObservableCollection<GoodsKeepingProduct>(new GoodsKeepingProduct[]
         {
             new() { ProductId = 1, Name = "AAA", IsByWeight = true },
             new() { ProductId = 2, Name = "BBB", IsByWeight = true },
@@ -22,7 +23,7 @@ public class CashBoxViewModelFake : CashboxViewModel
             new() { ProductId = 3, Name = "CCCCCCCC CCCC", IsByWeight = true },
         });
 
-        Categories = new ObservableCollection<CashBoxProductCategory>(new CashBoxProductCategory[]
+        Categories = new ObservableCollection<GoodsKeepingProductCategory>(new GoodsKeepingProductCategory[]
         {
             new() { CategoryId = 1, Name = "AAA" },
             new() { CategoryId = 2, Name = "BBB" },

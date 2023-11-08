@@ -49,27 +49,34 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
-
-                    <ItemsControl Grid.Row="0" ItemsSource="{Binding DisplayedProducts}">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <UniformGrid Columns="5" />
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Border BorderBrush="Black" BorderThickness="1" Width="200" Height="200" Margin="5">
-                                    <Button Command="{Binding DataContext.ProductClickCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}" Background="Transparent" BorderBrush="Transparent">
-                                        <StackPanel VerticalAlignment="Center">
-                                            <TextBlock TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center"
-                                                       Text="{Binding Name}" Foreground="#1B2060" 
-                                                       FontWeight="DemiBold" />
-                                        </StackPanel>
-                                    </Button>
-                                </Border>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
+                    
+                    <StackPanel Grid.Row="0" VerticalAlignment="Center" >
+                        <ItemsControl ItemsSource="{Binding DisplayedProducts}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <UniformGrid Columns="5" Rows="2" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemContainerStyle>
+                                <Style TargetType="ContentPresenter">
+                                    <Setter Property="Height" Value="{Binding RelativeSource={RelativeSource Self}, Path=ActualWidth}" />
+                                </Style>
+                            </ItemsControl.ItemContainerStyle>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border BorderBrush="Black" BorderThickness="1" Margin="10">
+                                        <Button Command="{Binding DataContext.ProductClickCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}" Background="Transparent" BorderBrush="Transparent">
+                                            <StackPanel VerticalAlignment="Center">
+                                                <TextBlock TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center"
+                                                           Text="{Binding Name}" Foreground="{StaticResource TextColor}" 
+                                                           FontWeight="DemiBold" />
+                                            </StackPanel>
+                                        </Button>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
                     
                     <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
                         <Button Command="{Binding PreviousPageCommand}">
@@ -90,12 +97,12 @@
                 <ItemsControl ItemsSource="{Binding Categories}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" />
+                            <UniformGrid Rows="1" />
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Button Margin="5" MinHeight="85" Width="170"
+                            <Button Margin="5" MinHeight="85" MaxWidth="150"
                                 Command="{Binding DataContext.CategoryButtonClickCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
                                 CommandParameter="{Binding}">
                                 <TextBlock TextWrapping="Wrap" TextAlignment="Center" FontWeight="DemiBold"

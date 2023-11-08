@@ -10,7 +10,7 @@
              xmlns:goodsManagement="clr-namespace:Supermarket.Wpf.GoodsKeeping.GoodsManagement"
              xmlns:goodsKeeping="clr-namespace:Supermarket.Wpf.GoodsKeeping"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="1080" d:DesignWidth="1920">
     <Grid>
         <TabControl>
             <TabItem Header="Arrival registration">
