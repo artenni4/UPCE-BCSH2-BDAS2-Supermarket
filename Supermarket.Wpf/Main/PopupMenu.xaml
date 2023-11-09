@@ -38,7 +38,8 @@
                 <Button Grid.Row="3" Visibility="{Binding LoggedEmployee, Converter={StaticResource RoleToVisibilityConverter}, ConverterParameter='Admin'}"
                         Content="Admin" Margin="0,5,0,0" />
                 
-                <Button Grid.Row="5" Content="Odhlásit se" Margin="0,5,0,0" Style="{StaticResource RedButtonStyle}" />
+                <Button Grid.Row="5" Content="Odhlásit se" Margin="0,5,0,0" 
+                        Command="{Binding LogOutCommand}" Style="{StaticResource RedButtonStyle}" />
             </Grid>
         </Grid>
     </Border>

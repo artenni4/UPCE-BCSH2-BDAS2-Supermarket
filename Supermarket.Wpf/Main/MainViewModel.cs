@@ -1,10 +1,13 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Supermarket.Wpf.Common;
 using Supermarket.Wpf.Navigation;
 using System.Windows.Input;
 using Supermarket.Domain.Auth.LoggedEmployees;
+using Supermarket.Wpf.Cashbox;
 using Supermarket.Wpf.Dialog;
 using Supermarket.Wpf.LoggedUser;
+using Supermarket.Wpf.Login;
 using Supermarket.Wpf.ViewModelResolvers;
 
 namespace Supermarket.Wpf.Main
@@ -32,18 +35,31 @@ namespace Supermarket.Wpf.Main
             
             dialogService.DialogShown += (_, args) => DialogViewModel = args.ViewModel;
             dialogService.DialogHidden += (_, _) => DialogViewModel = null;
-            
-            loggedUserService.EmployeeLoggedIn += async (_, _) => await TryShowMenu();
-            loggedUserService.EmployeeLoggedOut += async (_, _) => await _navigationService.NavigateToAsync(ApplicationView.Login);
 
-            viewModelResolver.ViewModelResolved += (_, args) =>
+            loggedUserService.EmployeeLoggedIn += EmployeeLoggedIn;
+
+            viewModelResolver.ViewModelResolved += ViewModelResolved;
+        }
+
+        private async void EmployeeLoggedIn(object? sender, LoggedEmployeeArgs e)
+        {
+            if (ContentViewModel is not LoginViewModel)
             {
-                if (args.ViewModel is IAsyncViewModel asyncViewModel)
-                {
-                    asyncViewModel.LoadingStarted += (_, _) => IsProgressVisible = true;
-                    asyncViewModel.LoadingFinished += (_, _) => IsProgressVisible = false;
-                }
-            };
+                return;
+            }
+                
+            await TryShowMenu();
+        }
+
+        private void ViewModelResolved(object? sender, ResolvedViewModelEventArgs e)
+        {
+            if (e.ViewModel is not IAsyncViewModel asyncViewModel)
+            {
+                return;
+            }
+            
+            asyncViewModel.LoadingStarted += (_, _) => IsProgressVisible = true;
+            asyncViewModel.LoadingFinished += (_, _) => IsProgressVisible = false;
         }
 
         public async Task InitializeAsync()
@@ -71,8 +87,10 @@ namespace Supermarket.Wpf.Main
                 {
                     await _navigationService.NavigateToAsync(applicationView);
                 }
-                else
+                else if (menuResult.IsLogOut())
                 {
+                    _dialogService.Hide();
+                    await _navigationService.NavigateToAsync(ApplicationView.Login);
                     _loggedUserService.ResetLoggedEmployee();
                 }
             }
@@ -81,6 +99,7 @@ namespace Supermarket.Wpf.Main
         private void NavigationSucceeded(object? sender, NavigationEventArgs e)
         {
             _dialogService.Hide();
+            
             ContentViewModel = e.NewViewModel;
         }
         
@@ -95,14 +114,14 @@ namespace Supermarket.Wpf.Main
         public IViewModel? ContentViewModel
         {
             get => _contentViewModel;
-            set => SetProperty(ref _contentViewModel, value);
+            private set => SetProperty(ref _contentViewModel, value);
         }
 
         private IViewModel? _dialogViewModel;
         public IViewModel? DialogViewModel
         {
             get => _dialogViewModel;
-            set => SetProperty(ref _dialogViewModel, value);
+            private set => SetProperty(ref _dialogViewModel, value);
         }
     }
 }

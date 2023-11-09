@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Supermarket.Domain.Auth.LoggedEmployees;
 using Supermarket.Wpf.Dialog;
 using Supermarket.Wpf.LoggedUser;
 using Supermarket.Wpf.ViewModelResolvers;
@@ -14,6 +15,7 @@ namespace Supermarket.Wpf.Cashbox
 {
     public class CashboxViewModel : NotifyPropertyChangedBase, IAsyncViewModel, IAsyncInitialized
     {
+        private readonly ILoggedUserService _loggedUserService;
         private readonly ICashBoxService _cashBoxService;
         private readonly IDialogService _dialogService;
         
@@ -37,7 +39,7 @@ namespace Supermarket.Wpf.Cashbox
             set => SetProperty(ref _isAssistantLoggedIn, value);
         }
         
-        public bool IsCustomerCashBox { get; set; }
+        public bool IsCustomerCashBox { get; private set; }
 
         public ICommand NextPageCommand { get; }
         public ICommand PreviousPageCommand { get; }
@@ -50,6 +52,8 @@ namespace Supermarket.Wpf.Cashbox
         {
             _cashBoxService = cashBoxService;
             _dialogService = dialogService;
+            _loggedUserService = loggedUserService;
+            
             DisplayedProducts = new ObservableCollection<CashBoxProduct>();
             Categories = new ObservableCollection<CashBoxProductCategory>();
             SelectedProducts = new ObservableCollection<CashBoxProduct>();
@@ -66,14 +70,16 @@ namespace Supermarket.Wpf.Cashbox
 
         private void AssistantExit(object? obj)
         {
+            _loggedUserService.ResetLoggedEmployee();
             IsAssistantLoggedIn = false;
         }
 
         private async void InviteAssistant(object? obj)
         {
-            var result = await _dialogService.ShowForResultAsync<LoginAssistantViewModel, DialogResult, EmptyParameters>(EmptyParameters.Value);
-            if (result.IsOk())
+            var result = await _dialogService.ShowForResultAsync<LoginAssistantViewModel, DialogResult<ILoggedEmployee>, EmptyParameters>(EmptyParameters.Value);
+            if (result.IsOk(out var loggedEmployee))
             {
+                _loggedUserService.SetLoggedEmployee(loggedEmployee);
                 IsAssistantLoggedIn = true;
             }
         }

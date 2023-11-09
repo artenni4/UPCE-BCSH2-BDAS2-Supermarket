@@ -4,7 +4,7 @@ namespace Supermarket.Wpf.Main;
 
 public class MenuResult
 {
-    private ApplicationView? _applicationView;
+    private readonly ApplicationView? _applicationView;
 
     private MenuResult(ApplicationView? applicationView)
     {
@@ -25,4 +25,6 @@ public class MenuResult
         applicationView = default;
         return false;
     }
+
+    public bool IsLogOut() => _applicationView.HasValue == false;
 }

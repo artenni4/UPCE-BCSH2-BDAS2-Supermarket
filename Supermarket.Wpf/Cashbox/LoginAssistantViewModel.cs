@@ -3,12 +3,13 @@ using System.Windows;
 using System.Windows.Input;
 using Supermarket.Core.CashBoxes;
 using Supermarket.Domain.Auth;
+using Supermarket.Domain.Auth.LoggedEmployees;
 using Supermarket.Wpf.Common;
 using Supermarket.Wpf.Dialog;
 
 namespace Supermarket.Wpf.Cashbox;
 
-public class LoginAssistantViewModel : NotifyPropertyChangedBase, IDialogViewModel<DialogResult>, IAsyncViewModel
+public class LoginAssistantViewModel : NotifyPropertyChangedBase, IDialogViewModel<DialogResult<ILoggedEmployee>>, IAsyncViewModel
 {
     private readonly ICashBoxService _cashBoxService;
 
@@ -23,7 +24,7 @@ public class LoginAssistantViewModel : NotifyPropertyChangedBase, IDialogViewMod
         CancelCommand = new RelayCommand(Cancel);
     }
 
-    private void Cancel(object? obj) => ResultReceived?.Invoke(this, DialogResult.Cancel());
+    private void Cancel(object? obj) => ResultReceived?.Invoke(this, DialogResult<ILoggedEmployee>.Cancel());
 
     private async void AssistantLogin(object? obj)
     {
@@ -35,8 +36,8 @@ public class LoginAssistantViewModel : NotifyPropertyChangedBase, IDialogViewMod
         try
         {
             using var _ = new DelegateLoading(this);
-            await _cashBoxService.AssistantLoginAsync(new LoginData { Login = Login, Password = Password }, 1);
-            ResultReceived?.Invoke(this, DialogResult.Ok());
+            var loggedEmployee = await _cashBoxService.AssistantLoginAsync(new LoginData { Login = Login, Password = Password }, 1);
+            ResultReceived?.Invoke(this, DialogResult<ILoggedEmployee>.Ok(loggedEmployee.Employee));
         }
         catch (InvalidCredentialsException)
         {
@@ -66,5 +67,5 @@ public class LoginAssistantViewModel : NotifyPropertyChangedBase, IDialogViewMod
     public event EventHandler? LoadingFinished;
     public void SetParameters(EmptyParameters parameters) { }
 
-    public event EventHandler<DialogResult>? ResultReceived;
+    public event EventHandler<DialogResult<ILoggedEmployee>>? ResultReceived;
 }
