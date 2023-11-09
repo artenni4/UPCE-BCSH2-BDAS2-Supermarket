@@ -17,7 +17,7 @@
                 <arrival:ArrivalRegistationWindow DataContext="{Binding ArrivalViewModel}" />
             </TabItem>
             <TabItem Header="Goods management">
-                <management:GoodsManagementWindow />
+                <management:GoodsManagementWindow DataContext="{Binding GoodsManagementViewModel}" />
             </TabItem>
         </TabControl>
     </Grid>

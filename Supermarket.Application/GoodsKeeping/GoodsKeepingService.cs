@@ -52,9 +52,11 @@ namespace Supermarket.Core.GoodsKeeping
             return result.Select(GoodsKeepingStoragePlace.FromStoragePlace);
         }
 
-        public Task<PagedResult<StoredProduct>> GetStoredProducts(int supermarketId, RecordsRange recordsRange)
+        public async Task<PagedResult<GoodsKeepingStoredProduct>> GetStoredProducts(int supermarketId, RecordsRange recordsRange)
         {
-            throw new NotImplementedException();
+            var result = await _storedProductRepository.GetSupermarketStoredProducts(supermarketId, recordsRange);
+
+            return result;
         }
 
         public async Task<PagedResult<SupplyWarehouse>> GetWarehousesAsync(int supermarketId, RecordsRange recordsRange)
@@ -78,11 +80,11 @@ namespace Supermarket.Core.GoodsKeeping
                 var storedProduct = await _storedProductRepository.GetByIdAsync(id);
                 if (storedProduct != null)
                 {
-                    var newStoredProduct = new Domain.StoredProducts.StoredProduct { Id = id, Count = storedProduct.Count + product.Count };
+                    var newStoredProduct = new StoredProduct { Id = id, Count = storedProduct.Count + product.Count };
                     await _storedProductRepository.UpdateAsync(newStoredProduct);
                 }
                 else
-                    await _storedProductRepository.AddAsync(new Domain.StoredProducts.StoredProduct { Id = id, Count = product.Count });
+                    await _storedProductRepository.AddAsync(new StoredProduct { Id = id, Count = product.Count });
             }
         }
     }

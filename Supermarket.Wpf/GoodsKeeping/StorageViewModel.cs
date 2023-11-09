@@ -1,5 +1,6 @@
 ﻿using Supermarket.Wpf.Common;
 using Supermarket.Wpf.GoodsKeeping.ArrivalRegistration;
+using Supermarket.Wpf.GoodsKeeping.GoodsManagement;
 using Supermarket.Wpf.ViewModelResolvers;
 using System.Threading.Tasks;
 
@@ -21,14 +22,26 @@ namespace Supermarket.Wpf.GoodsKeeping
             }
         }
 
-        public StorageViewModel(ArrivalRegistrationViewModel arrivalViewModel)
+        private GoodsManagementViewModel _goodsManagementViewModel;
+        public GoodsManagementViewModel GoodsManagementViewModel
+        {
+            get => _goodsManagementViewModel;
+            set
+            {
+                SetProperty(ref _goodsManagementViewModel, value);
+            }
+        }
+
+        public StorageViewModel(ArrivalRegistrationViewModel arrivalViewModel, GoodsManagementViewModel goodsManagementViewModel)
         {
             _arrivalViewModel = arrivalViewModel;
+            _goodsManagementViewModel = goodsManagementViewModel;
         }
 
         public async Task InitializeAsync()
         {
             await ArrivalViewModel.InitializeAsync();
+            await GoodsManagementViewModel.InitializeAsync();
         }
     }
 }
