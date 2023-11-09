@@ -10,23 +10,32 @@
              mc:Ignorable="d" 
              d:DesignHeight="1080" d:DesignWidth="1920">
     <UserControl.Resources>
-        <converters:MultiBooleanToVisibilityConverter x:Key="AssistantExitVisibilityConverter">
-            <converters:MultiBooleanToVisibilityConverter.TrueCondition>
+        <converters:MultiOrBooleanToVisibilityConverter x:Key="RemoveProductVisibilityConverter">
+            <converters:MultiOrBooleanToVisibilityConverter.TrueCondition>
+                <x:Array Type="system:Boolean">
+                    <system:Boolean>True</system:Boolean>
+                    <system:Boolean>False</system:Boolean>
+                </x:Array>
+            </converters:MultiOrBooleanToVisibilityConverter.TrueCondition>
+        </converters:MultiOrBooleanToVisibilityConverter>
+        
+        <converters:MultiAndBooleanToVisibilityConverter x:Key="AssistantExitVisibilityConverter">
+            <converters:MultiAndBooleanToVisibilityConverter.TrueCondition>
                 <x:Array Type="system:Boolean">
                     <system:Boolean>True</system:Boolean>
                     <system:Boolean>True</system:Boolean>
                 </x:Array>
-            </converters:MultiBooleanToVisibilityConverter.TrueCondition>
-        </converters:MultiBooleanToVisibilityConverter>
+            </converters:MultiAndBooleanToVisibilityConverter.TrueCondition>
+        </converters:MultiAndBooleanToVisibilityConverter>
         
-        <converters:MultiBooleanToVisibilityConverter x:Key="InviteAssistantVisibilityConverter">
-            <converters:MultiBooleanToVisibilityConverter.TrueCondition>
+        <converters:MultiAndBooleanToVisibilityConverter x:Key="InviteAssistantVisibilityConverter">
+            <converters:MultiAndBooleanToVisibilityConverter.TrueCondition>
                 <x:Array Type="system:Boolean">
                     <system:Boolean>False</system:Boolean>
                     <system:Boolean>True</system:Boolean>
                 </x:Array>
-            </converters:MultiBooleanToVisibilityConverter.TrueCondition>
-        </converters:MultiBooleanToVisibilityConverter>
+            </converters:MultiAndBooleanToVisibilityConverter.TrueCondition>
+        </converters:MultiAndBooleanToVisibilityConverter>
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -53,7 +62,34 @@
                             <ListBox Background="Transparent" BorderThickness="0" ItemsSource="{Binding SelectedProducts}">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Name}" Foreground="#1B2060" FontSize="25"/>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        
+                                        <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding CashBoxProduct.Name}" Foreground="#1B2060" />
+                                            
+                                            <StackPanel Orientation="Horizontal" Margin="10,0">
+                                                <TextBlock Text="{Binding Count}" Foreground="#1B2060" />
+                                                <TextBlock Text="{Binding CashBoxProduct.MeasureUnit}" Foreground="#1B2060"  />
+                                            </StackPanel>
+                                            
+                                            <TextBlock Text="{Binding OverallPrice}" Foreground="#1B2060" />
+                                        </StackPanel>
+                                        
+                                        <Button Grid.Column="1" Margin="10,0" Foreground="Red" Style="{StaticResource TransparentButton}"
+                                                Command="{Binding DataContext.RemoveProductCommand, RelativeSource={RelativeSource AncestorType=ListBox}}" CommandParameter="{Binding}">
+                                            <Button.Visibility>
+                                                <MultiBinding Converter="{StaticResource RemoveProductVisibilityConverter}">
+                                                    <Binding Path="DataContext.IsAssistantLoggedIn" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}" />
+                                                    <Binding Path="DataContext.IsCustomerCashBox" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}" />
+                                                </MultiBinding>
+                                            </Button.Visibility>
+                                            <TextBlock>X</TextBlock>
+                                        </Button>
+                                    </Grid>
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
                             </ListBox>

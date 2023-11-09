@@ -5,7 +5,7 @@ using System.Windows.Data;
 
 namespace Supermarket.Wpf.Common.Converters;
 
-public class MultiBooleanToVisibilityConverter : IMultiValueConverter
+public class MultiAndBooleanToVisibilityConverter : IMultiValueConverter
 {
     public bool[] TrueCondition { get; set; } = Array.Empty<bool>();
     
@@ -13,7 +13,7 @@ public class MultiBooleanToVisibilityConverter : IMultiValueConverter
     {
         if (TrueCondition.Length != values.Length)
         {
-            return Visibility.Collapsed;
+            throw new ArgumentException($"Bad amount of parameters to {nameof(MultiAndBooleanToVisibilityConverter)}. Expected {TrueCondition.Length} got {values.Length}");
         }
         
         for (int i = 0; i < TrueCondition.Length; i++)
