@@ -45,6 +45,9 @@
         <DataTemplate DataType="{x:Type goodsManagementDialogs:DeleteStoredProductViewModel}" >
             <goodsManagementDialogs:DeleteStoredProductWindow />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type goodsManagementDialogs:MoveStoredProductViewModel}" >
+            <goodsManagementDialogs:MoveStoredProductWindow />
+        </DataTemplate>
         
         <converter:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
         <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />

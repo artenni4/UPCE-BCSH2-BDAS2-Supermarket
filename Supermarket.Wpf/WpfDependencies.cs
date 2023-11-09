@@ -34,6 +34,7 @@ public static class WpfDependencies
         serviceCollection.AddTransient<LoginAssistantViewModel>();
 
         serviceCollection.AddTransient<DeleteStoredProductViewModel>();
+        serviceCollection.AddTransient<MoveStoredProductViewModel>();
 
         return serviceCollection;
     }

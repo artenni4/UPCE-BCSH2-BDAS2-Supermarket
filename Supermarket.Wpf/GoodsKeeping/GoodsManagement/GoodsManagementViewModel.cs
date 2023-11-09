@@ -6,10 +6,7 @@ using Supermarket.Wpf.Dialog;
 using Supermarket.Wpf.GoodsKeeping.GoodsManagement.Dialogs;
 using Supermarket.Wpf.ViewModelResolvers;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -65,10 +62,14 @@ namespace Supermarket.Wpf.GoodsKeeping.GoodsManagement
             }
         }
 
-        public void MoveProduct(object? obj)
+        public async void MoveProduct(object? obj)
         {
-            //await _goodsKeepingService.MoveProductAsync(SelectedStoredProduct);
-            throw new NotImplementedException();
+            if (SelectedStoredProduct != null)
+            {
+                var result = await _dialogService.ShowForResultAsync<MoveStoredProductViewModel, DialogResult<MoveProduct>, EmptyParameters>(EmptyParameters.Value);
+                if (result.IsOk(out var moveResult))
+                    await _goodsKeepingService.MoveProductAsync(SelectedStoredProduct.StoragePlaceId, new MovingProduct { Count = moveResult.Count, NewStoragePlaceId = moveResult.StorageId, ProductId = SelectedStoredProduct.ProductId });
+            }
         }
 
         public async void DeleteProduct(object? obj)
@@ -79,7 +80,6 @@ namespace Supermarket.Wpf.GoodsKeeping.GoodsManagement
                 if (result.IsOk(out var count))
                     await _goodsKeepingService.DeleteProductStorageAsync(SelectedStoredProduct.StoragePlaceId, SelectedStoredProduct.ProductId, count);
             }
-            //await _goodsKeepingService.DeleteProductStorageAsync(SelectedStoredProduct.StoragePlaceId, SelectedStoredProduct.ProductId, Count);
         }
 
 
