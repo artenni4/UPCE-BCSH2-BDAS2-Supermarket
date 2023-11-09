@@ -8,6 +8,7 @@
         xmlns:login="clr-namespace:Supermarket.Wpf.Login"
         xmlns:local="clr-namespace:Supermarket.Wpf.Main"
         xmlns:goodsKeeping="clr-namespace:Supermarket.Wpf.GoodsKeeping"
+        xmlns:goodsManagementDialogs="clr-namespace:Supermarket.Wpf.GoodsKeeping.GoodsManagement.Dialogs"
         xmlns:arrivalRegistration="clr-namespace:Supermarket.Wpf.GoodsKeeping.ArrivalRegistration"
         xmlns:goodsManagement="clr-namespace:Supermarket.Wpf.GoodsKeeping.GoodsManagement"
         xmlns:dialogs="clr-namespace:Supermarket.Wpf.Common.Dialogs"
@@ -44,6 +45,9 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type cashbox:LoginAssistantViewModel}">
             <cashbox:LoginAssistant />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type goodsManagementDialogs:DeleteStoredProductViewModel}" >
+            <goodsManagementDialogs:DeleteStoredProductWindow />
         </DataTemplate>
         
         <converter:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />

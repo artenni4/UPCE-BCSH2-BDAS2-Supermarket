@@ -42,5 +42,5 @@ public interface IGoodsKeepingService
     /// <summary>
     /// Deletes product from storage place
     /// </summary>
-    Task DeleteProductStorageAsync(int storagePlaceId, int productId);
+    Task DeleteProductStorageAsync(int storagePlaceId, int productId, decimal count);
 }

@@ -43,7 +43,7 @@ public class GoodsKeepingServiceFake : IGoodsKeepingService
         throw new System.NotImplementedException();
     }
 
-    public Task DeleteProductStorageAsync(int storagePlaceId, int productId)
+    public Task DeleteProductStorageAsync(int storagePlaceId, int productId, decimal count)
     {
         throw new System.NotImplementedException();
     }

@@ -2,6 +2,7 @@
 using Oracle.ManagedDataAccess.Client;
 using Supermarket.Domain.Common.Paging;
 using Supermarket.Domain.StoredProducts;
+using Supermarket.Domain.Supermarkets;
 
 namespace Supermarket.Infrastructure.StoredProducts;
 
@@ -28,6 +29,22 @@ internal class StoredProductRepository : CrudRepositoryBase<StoredProduct, Store
         var result = await GetPagedResult<DbGoodsKeepingStoredProduct>(recordsRange, sql, orderByColumns, parameters);
 
         return result.Select(dbProduct => dbProduct.ToDomainEntity());
+    }
+
+    public async Task DeleteProductFormStorage(int storagePlaceId, int productId, decimal count)
+    {
+        var parameters = new DynamicParameters()
+            .AddParameter("misto_ulozeni_id", storagePlaceId).AddParameter("zbozi_id", productId).AddParameter("kusy", count);
+
+        const string sqlUpdate = @"UPDATE ULOZENI_ZBOZI
+                            SET kusy = kusy - :kusy
+                            WHERE misto_ulozeni_id = :misto_ulozeni_id AND zbozi_id = :zbozi_id";
+
+        const string sqlDelete = @"DELETE FROM ULOZENI_ZBOZI
+                            WHERE misto_ulozeni_id = :misto_ulozeni_id AND zbozi_id = :zbozi_id AND kusy <= 0";
+
+        await _oracleConnection.ExecuteAsync(sqlUpdate, parameters);
+        await _oracleConnection.ExecuteAsync(sqlDelete, parameters);
     }
 
     private class DbGoodsKeepingStoredProduct

@@ -26,9 +26,9 @@ namespace Supermarket.Core.GoodsKeeping
             _storedProductRepository = storedProductRepository;
         }
 
-        public Task DeleteProductStorageAsync(int storagePlaceId, int productId)
+        public async Task DeleteProductStorageAsync(int storagePlaceId, int productId, decimal count)
         {
-            throw new NotImplementedException();
+            await _storedProductRepository.DeleteProductFormStorage(storagePlaceId, productId, count);
         }
 
         public async Task<PagedResult<GoodsKeepingProductCategory>> GetCategoriesAsync(int supermarketId, RecordsRange recordsRange)
