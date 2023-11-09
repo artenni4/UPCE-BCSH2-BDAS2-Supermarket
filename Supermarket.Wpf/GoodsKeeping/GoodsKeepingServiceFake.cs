@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Supermarket.Core.GoodsKeeping;
 using Supermarket.Domain.Common.Paging;
+using Supermarket.Domain.StoredProducts;
 
 namespace Supermarket.Wpf.GoodsKeeping;
 
@@ -22,7 +23,7 @@ public class GoodsKeepingServiceFake : IGoodsKeepingService
         throw new System.NotImplementedException();
     }
 
-    public Task<PagedResult<StoredProduct>> GetStoredProducts(int supermarketId, RecordsRange recordsRange)
+    public Task<PagedResult<GoodsKeepingStoredProduct>> GetStoredProducts(int supermarketId, RecordsRange recordsRange)
     {
         throw new System.NotImplementedException();
     }

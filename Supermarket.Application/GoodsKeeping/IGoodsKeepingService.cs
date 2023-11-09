@@ -1,4 +1,6 @@
-﻿namespace Supermarket.Core.GoodsKeeping;
+﻿using Supermarket.Domain.StoredProducts;
+
+namespace Supermarket.Core.GoodsKeeping;
 
 public interface IGoodsKeepingService
 {
@@ -20,7 +22,7 @@ public interface IGoodsKeepingService
     /// <summary>
     /// Gets list of products that is stored in one of the storage place in the given supermarket
     /// </summary>
-    Task<PagedResult<StoredProduct>> GetStoredProducts(int supermarketId, RecordsRange recordsRange);
+    Task<PagedResult<GoodsKeepingStoredProduct>> GetStoredProducts(int supermarketId, RecordsRange recordsRange);
     
     /// <summary>
     /// Adds products to specified warehouse in supermarket

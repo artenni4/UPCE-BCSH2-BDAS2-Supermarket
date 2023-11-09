@@ -159,7 +159,7 @@ namespace Supermarket.Wpf.GoodsKeeping.ArrivalRegistration
             }
         }
 
-        public void AcceptClick(object? obj)
+        public async void AcceptClick(object? obj)
         {
             if (SelectedPlace == null)
             {
@@ -173,7 +173,7 @@ namespace Supermarket.Wpf.GoodsKeeping.ArrivalRegistration
             }
 
             if (SelectedPlace != null)
-                _goodsKeepingService.SupplyProductsToWarehouseAsync(SelectedPlace.Id, products);
+                await _goodsKeepingService.SupplyProductsToWarehouseAsync(SelectedPlace.Id, products);
             SelectedProducts.Clear();
         }
 
