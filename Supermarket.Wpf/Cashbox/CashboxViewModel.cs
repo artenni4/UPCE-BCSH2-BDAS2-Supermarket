@@ -30,7 +30,7 @@ namespace Supermarket.Wpf.Cashbox
 
         public ObservableCollection<CashBoxProduct> DisplayedProducts { get; set; }
         public ObservableCollection<CashBoxProductCategory> Categories { get; set; }
-        public ObservableCollection<CashBoxProduct> SelectedProducts { get; set; }
+        public ObservableCollection<SelectedProductModel> SelectedProducts { get; set; }
 
         private bool _isAssistantLoggedIn;
         public bool IsAssistantLoggedIn
@@ -45,6 +45,7 @@ namespace Supermarket.Wpf.Cashbox
         public ICommand PreviousPageCommand { get; }
         public ICommand CategoryButtonClickCommand { get; }
         public ICommand ProductClickCommand { get; }
+        public ICommand RemoveProductCommand { get; }
         public ICommand InviteAssistantCommand { get; }
         public ICommand AssistantExitCommand { get; }
 
@@ -56,7 +57,7 @@ namespace Supermarket.Wpf.Cashbox
             
             DisplayedProducts = new ObservableCollection<CashBoxProduct>();
             Categories = new ObservableCollection<CashBoxProductCategory>();
-            SelectedProducts = new ObservableCollection<CashBoxProduct>();
+            SelectedProducts = new ObservableCollection<SelectedProductModel>();
 
             IsCustomerCashBox = loggedUserService.IsLoggedCustomer();
 
@@ -66,6 +67,17 @@ namespace Supermarket.Wpf.Cashbox
             ProductClickCommand = new RelayCommand(ProductClick);
             InviteAssistantCommand = new RelayCommand(InviteAssistant);
             AssistantExitCommand = new RelayCommand(AssistantExit);
+            RemoveProductCommand = new RelayCommand(RemoveProduct);
+        }
+
+        private void RemoveProduct(object? obj)
+        {
+            if (obj is not SelectedProductModel item)
+            {
+                return;
+            }
+            
+            SelectedProducts.Remove(item);
         }
 
         private void AssistantExit(object? obj)
@@ -142,18 +154,26 @@ namespace Supermarket.Wpf.Cashbox
             }
         }
 
-        public async void ProductClick(object? obj)
+        private async void ProductClick(object? obj)
         {
-            if (obj is CashBoxProduct selectedProduct)
+            if (obj is not CashBoxProduct selectedProduct)
             {
-                if (selectedProduct.IsByWeight)
-                {
-                    var result = await _dialogService
-                        .ShowForResultAsync<ProductCountInputViewModel, DialogResult<decimal>, EmptyParameters>(EmptyParameters.Value);
-                }
-                
-                SelectedProducts.Add(selectedProduct);
+                return;
             }
+            
+            decimal count = 1;
+            if (selectedProduct.IsByWeight)
+            {
+                var result = await _dialogService
+                    .ShowForResultAsync<ProductCountInputViewModel, DialogResult<decimal>, EmptyParameters>(EmptyParameters.Value);
+
+                if (! result.IsOk(out count))
+                {
+                    return;
+                }
+            }
+            
+            SelectedProducts.Add(new SelectedProductModel { CashBoxProduct = selectedProduct, Count = count });
         }
     }
 }
