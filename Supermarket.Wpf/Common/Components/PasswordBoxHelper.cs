@@ -35,6 +35,13 @@ namespace Supermarket.Wpf.Common.Components
             if (d is PasswordBox passwordBox)
             {
                 passwordBox.PasswordChanged -= PasswordBox_PasswordChanged;
+                
+                var newValue = (string)e.NewValue;
+                if (passwordBox.Password != newValue)
+                {
+                    passwordBox.Password = newValue;
+                }
+                
                 passwordBox.PasswordChanged += PasswordBox_PasswordChanged;
             }
         }

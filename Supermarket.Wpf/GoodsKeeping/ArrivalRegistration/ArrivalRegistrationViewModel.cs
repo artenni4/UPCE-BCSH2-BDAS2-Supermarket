@@ -141,21 +141,21 @@ namespace Supermarket.Wpf.GoodsKeeping.ArrivalRegistration
         {
             if (obj is GoodsKeepingProduct selectedProduct)
             {
-                var result = await _dialogService
-                .ShowForResultAsync<ProductCountInputViewModel, DialogResult<decimal>, EmptyParameters>(EmptyParameters.Value);
+                var dialogResult = await _dialogService
+                    .ShowForResultAsync<ProductCountInputViewModel, DialogResult<decimal>, EmptyParameters>(EmptyParameters.Value);
 
-                if (result.Type == ResultType.Cancelled)
-                    return;
-                
-                SelectedProducts.Add(new GoodsKeepingProduct
+                if (dialogResult.IsOk(out var productCount))
                 {
-                    ProductId = selectedProduct.ProductId,
-                    Name = selectedProduct.Name,
-                    Weight = result.Result,
-                    MeasureUnit = selectedProduct.MeasureUnit,
-                    IsByWeight = selectedProduct.IsByWeight,
-                    Price = selectedProduct.Price
-                });
+                    SelectedProducts.Add(new GoodsKeepingProduct
+                    {
+                        ProductId = selectedProduct.ProductId,
+                        Name = selectedProduct.Name,
+                        Weight = productCount,
+                        MeasureUnit = selectedProduct.MeasureUnit,
+                        IsByWeight = selectedProduct.IsByWeight,
+                        Price = selectedProduct.Price
+                    });
+                }
             }
         }
 

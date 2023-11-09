@@ -1,13 +1,15 @@
 ﻿using System.Collections.ObjectModel;
 using Supermarket.Core.CashBoxes;
 using Supermarket.Wpf.Dialog;
+using Supermarket.Wpf.LoggedUser;
 
 namespace Supermarket.Wpf.Cashbox;
 
 public class CashBoxViewModelFake : CashboxViewModel
 {
-    public CashBoxViewModelFake() : base(new CashBoxServiceFake(), new DialogServiceFake())
+    public CashBoxViewModelFake() : base(new CashBoxServiceFake(), new DialogServiceFake(), new LoggedUserServiceFake())
     {
+        
         DisplayedProducts = new ObservableCollection<CashBoxProduct>(new CashBoxProduct[]
         {
             new() { ProductId = 1, Name = "AAA", IsByWeight = true },

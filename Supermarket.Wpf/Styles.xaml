@@ -7,6 +7,7 @@
     
     <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}" >
         <Setter Property="MinHeight" Value="50" />
+        <Setter Property="Padding" Value="10,0" />
         <Setter Property="BorderThickness" Value="3" />
         <Setter Property="Foreground" Value="White" />
         <Setter Property="Background" Value="{StaticResource PrimaryColor}" />
