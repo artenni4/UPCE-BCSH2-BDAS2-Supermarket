@@ -32,11 +32,15 @@ namespace Supermarket.Wpf.GoodsKeeping.GoodsManagement.Dialogs
             set => SetProperty(ref _productCount, value);
         }
 
-        private int _storageId;
-        public int StorageId
+        private SupplyWarehouse? _selectedPlace;
+        public SupplyWarehouse? SelectedPlace
         {
-            get => _storageId;
-            set => SetProperty(ref _storageId, value);
+            get => _selectedPlace;
+            set
+            {
+                _selectedPlace = value;
+                OnPropertyChanged();
+            }
         }
 
         public MoveStoredProductViewModel(IGoodsKeepingService goodsKeepingService)
@@ -58,8 +62,11 @@ namespace Supermarket.Wpf.GoodsKeeping.GoodsManagement.Dialogs
         {
             if (ProductCount is null)
                 return;
-            
-            var result = new MoveProduct { Count = decimal.Parse(ProductCount), StorageId = StorageId } ;
+
+            if (SelectedPlace is null)
+                return;
+
+            var result = new MoveProduct { Count = decimal.Parse(ProductCount), StorageId = SelectedPlace.Id } ;
             ResultReceived?.Invoke(this, DialogResult<MoveProduct>.Ok(result));
             
         }

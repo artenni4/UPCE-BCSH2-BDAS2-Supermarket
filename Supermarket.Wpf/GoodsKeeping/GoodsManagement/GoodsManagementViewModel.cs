@@ -55,6 +55,8 @@ namespace Supermarket.Wpf.GoodsKeeping.GoodsManagement
         {
             using var _ = new DelegateLoading(this);
 
+            StoredProducts.Clear();
+
             storedProducts = await _goodsKeepingService.GetStoredProducts(1, new RecordsRange { PageSize = 25, PageNumber = 1 });
             foreach(var item in storedProducts.Items)
             {
@@ -68,7 +70,10 @@ namespace Supermarket.Wpf.GoodsKeeping.GoodsManagement
             {
                 var result = await _dialogService.ShowForResultAsync<MoveStoredProductViewModel, DialogResult<MoveProduct>, EmptyParameters>(EmptyParameters.Value);
                 if (result.IsOk(out var moveResult))
-                    await _goodsKeepingService.MoveProductAsync(SelectedStoredProduct.StoragePlaceId, new MovingProduct { Count = moveResult.Count, NewStoragePlaceId = moveResult.StorageId, ProductId = SelectedStoredProduct.ProductId });
+                {
+                    await _goodsKeepingService.MoveProductAsync(SelectedStoredProduct.StoragePlaceId, new MovingProduct { Count = moveResult.Count, NewStoragePlaceId = moveResult.StorageId, ProductId = SelectedStoredProduct.ProductId, SupermarketId = 1 });
+                    await InitializeAsync();
+                }
             }
         }
 
@@ -78,7 +83,10 @@ namespace Supermarket.Wpf.GoodsKeeping.GoodsManagement
             {
                 var result = await _dialogService.ShowForResultAsync<DeleteStoredProductViewModel, DialogResult<decimal>, EmptyParameters>(EmptyParameters.Value);
                 if (result.IsOk(out var count))
+                {
                     await _goodsKeepingService.DeleteProductStorageAsync(SelectedStoredProduct.StoragePlaceId, SelectedStoredProduct.ProductId, count);
+                    await InitializeAsync();
+                }
             }
         }
 

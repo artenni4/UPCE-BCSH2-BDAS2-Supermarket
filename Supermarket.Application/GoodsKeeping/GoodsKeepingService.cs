@@ -66,9 +66,38 @@ namespace Supermarket.Core.GoodsKeeping
             return result.Select(SupplyWarehouse.FromStoragePlace);
         }
 
-        public Task MoveProductAsync(int storagePlaceId, MovingProduct movingProduct)
+        public async Task MoveProductAsync(int storagePlaceId, MovingProduct movingProduct)
         {
-            throw new NotImplementedException();
+            var id = new StoredProductId { StoragePlaceId = storagePlaceId, SupermarketId = movingProduct.SupermarketId, ProductId = movingProduct.ProductId };
+            var newId = new StoredProductId { StoragePlaceId = movingProduct.NewStoragePlaceId, SupermarketId = movingProduct.SupermarketId, ProductId = movingProduct.ProductId };
+
+            var storedProduct = await _storedProductRepository.GetByIdAsync(id);
+            var storedFoundProduct = await _storedProductRepository.GetByIdAsync(newId);
+
+            if (storedFoundProduct != null) // this product is already stored in NewStoragePlace
+            {
+                var newStoredProduct = new StoredProduct { Id = newId, Count = storedFoundProduct.Count + movingProduct.Count };
+                await _storedProductRepository.UpdateAsync(newStoredProduct);
+            }
+            else
+            {
+                var newStoredProduct = new StoredProduct { Id = newId, Count = movingProduct.Count };
+                await _storedProductRepository.AddAsync(newStoredProduct);
+            }
+
+            if (storedProduct != null) // change chosen product's Count
+            {
+                if (storedProduct.Count > movingProduct.Count)
+                {
+                    var oldProduct = new StoredProduct { Id = storedProduct.Id, Count = storedProduct.Count - movingProduct.Count };
+                    await _storedProductRepository.UpdateAsync(oldProduct);
+                }
+                else
+                {
+                    await _storedProductRepository.DeleteAsync(storedProduct.Id);
+                }
+            }
+
         }
 
         public async Task SupplyProductsToWarehouseAsync(int warehouseId, IReadOnlyList<SuppliedProduct> suppliedProducts)
