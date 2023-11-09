@@ -7,28 +7,23 @@ namespace Supermarket.Wpf.GoodsKeeping
 {
     public class StorageViewModel : NotifyPropertyChangedBase, IViewModel, IAsyncInitialized
     {
-        private ArrivalRegistrationViewModel _arrivalViewModel;
-        public ArrivalRegistrationViewModel ArrivalViewModel
+        private readonly IViewModelResolver _viewModelResolver;
+        
+        private ArrivalRegistrationViewModel? _arrivalViewModel;
+        public ArrivalRegistrationViewModel? ArrivalViewModel
         {
-            get
-            {
-                return _arrivalViewModel;
-            }
-
-            set
-            {
-                SetProperty(ref _arrivalViewModel, value);
-            }
+            get => _arrivalViewModel;
+            set => SetProperty(ref _arrivalViewModel, value);
         }
 
-        public StorageViewModel(ArrivalRegistrationViewModel arrivalViewModel)
+        public StorageViewModel(IViewModelResolver viewModelResolver)
         {
-            _arrivalViewModel = arrivalViewModel;
+            _viewModelResolver = viewModelResolver;
         }
 
         public async Task InitializeAsync()
         {
-            await ArrivalViewModel.InitializeAsync();
+            ArrivalViewModel = await _viewModelResolver.Resolve<ArrivalRegistrationViewModel>();
         }
     }
 }
