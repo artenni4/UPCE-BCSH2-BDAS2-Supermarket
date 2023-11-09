@@ -6,5 +6,6 @@ namespace Supermarket.Domain.StoredProducts
     public interface IStoredProductRepository : ICrudRepository<StoredProduct, StoredProductId>
     {
         Task<PagedResult<GoodsKeepingStoredProduct>> GetSupermarketStoredProducts(int supermarketId, RecordsRange recordsRange);
+        Task DeleteProductFormStorage(int storagePlaceId, int productId, decimal count);
     }
 }

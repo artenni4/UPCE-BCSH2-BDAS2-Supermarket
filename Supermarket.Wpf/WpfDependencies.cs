@@ -4,6 +4,7 @@ using Supermarket.Wpf.Dialog;
 using Supermarket.Wpf.GoodsKeeping;
 using Supermarket.Wpf.GoodsKeeping.ArrivalRegistration;
 using Supermarket.Wpf.GoodsKeeping.GoodsManagement;
+using Supermarket.Wpf.GoodsKeeping.GoodsManagement.Dialogs;
 using Supermarket.Wpf.LoggedUser;
 using Supermarket.Wpf.Login;
 using Supermarket.Wpf.Main;
@@ -31,6 +32,8 @@ public static class WpfDependencies
 
         serviceCollection.AddTransient<ProductCountInputViewModel>();
         serviceCollection.AddTransient<LoginAssistantViewModel>();
+
+        serviceCollection.AddTransient<DeleteStoredProductViewModel>();
 
         return serviceCollection;
     }
