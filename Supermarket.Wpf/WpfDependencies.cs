@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Supermarket.Wpf.Cashbox;
+using Supermarket.Wpf.Common.Dialogs;
 using Supermarket.Wpf.Dialog;
 using Supermarket.Wpf.GoodsKeeping;
 using Supermarket.Wpf.GoodsKeeping.ArrivalRegistration;
@@ -30,6 +31,7 @@ public static class WpfDependencies
         serviceCollection.AddTransient<ArrivalRegistrationViewModel>();
         serviceCollection.AddTransient<GoodsManagementViewModel>();
 
+        serviceCollection.AddTransient<ConfirmationDialogViewModel>();
         serviceCollection.AddTransient<ProductCountInputViewModel>();
         serviceCollection.AddTransient<LoginAssistantViewModel>();
 

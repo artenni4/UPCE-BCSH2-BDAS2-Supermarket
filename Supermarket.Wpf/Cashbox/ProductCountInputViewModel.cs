@@ -7,13 +7,13 @@ namespace Supermarket.Wpf.Cashbox;
 
 public class ProductCountInputViewModel : NotifyPropertyChangedBase, IDialogViewModel<DialogResult<decimal>>
 {
-    public ICommand Confirm { get; }
-    public ICommand Cancel { get; }
+    public ICommand ConfirmCommand { get; }
+    public ICommand CancelCommand { get; }
 
     public ProductCountInputViewModel()
     {
-        Confirm = new RelayCommand(ConfirmCount, CanConfirmCount);
-        Cancel = new RelayCommand(CancelDialog);
+        ConfirmCommand = new RelayCommand(ConfirmCount, CanConfirmCount);
+        CancelCommand = new RelayCommand(CancelDialog);
     }
 
     private void CancelDialog(object? obj)
