@@ -9,6 +9,8 @@ using Supermarket.Wpf.GoodsKeeping.GoodsManagement.Dialogs;
 using Supermarket.Wpf.LoggedUser;
 using Supermarket.Wpf.Login;
 using Supermarket.Wpf.Main;
+using Supermarket.Wpf.Manager;
+using Supermarket.Wpf.Manager.SupermarketProducts;
 using Supermarket.Wpf.Navigation;
 using Supermarket.Wpf.ViewModelResolvers;
 
@@ -27,16 +29,20 @@ public static class WpfDependencies
         serviceCollection.AddTransient<MenuViewModel>();
         serviceCollection.AddTransient<LoginViewModel>();
         serviceCollection.AddTransient<CashboxViewModel>();
-        serviceCollection.AddTransient<StorageViewModel>();
-        serviceCollection.AddTransient<ArrivalRegistrationViewModel>();
-        serviceCollection.AddTransient<GoodsManagementViewModel>();
 
         serviceCollection.AddTransient<ConfirmationDialogViewModel>();
         serviceCollection.AddTransient<ProductCountInputViewModel>();
         serviceCollection.AddTransient<LoginAssistantViewModel>();
 
+        serviceCollection.AddTransient<StorageViewModel>();
+        serviceCollection.AddTransient<ArrivalRegistrationViewModel>();
+        serviceCollection.AddTransient<GoodsManagementViewModel>();
         serviceCollection.AddTransient<DeleteStoredProductViewModel>();
         serviceCollection.AddTransient<MoveStoredProductViewModel>();
+
+        serviceCollection.AddTransient<ManagerMenuViewModel>();
+        serviceCollection.AddTransient<SupermarketProductsViewModel>();
+        // ...
 
         return serviceCollection;
     }

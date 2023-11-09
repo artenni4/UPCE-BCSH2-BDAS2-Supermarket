@@ -4,6 +4,7 @@
     {
         Login,
         CashBox,
-        Storage
+        Storage,
+        Manager
     }
 }

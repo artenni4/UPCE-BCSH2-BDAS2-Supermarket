@@ -33,7 +33,7 @@
                         Content="Sklad" Command="{Binding NavigateToGoodsKeepingCommand}" Margin="0,5,0,0"/>
                 
                 <Button Grid.Row="2" Visibility="{Binding LoggedEmployee, Converter={StaticResource RoleToVisibilityConverter}, ConverterParameter='Manager,Admin'}"
-                        Content="Manažer" Margin="0,5,0,0" />
+                        Content="Manažer" Command="{Binding NavigateToManagerCommand}" Margin="0,5,0,0" />
                 
                 <Button Grid.Row="3" Visibility="{Binding LoggedEmployee, Converter={StaticResource RoleToVisibilityConverter}, ConverterParameter='Admin'}"
                         Content="Admin" Margin="0,5,0,0" />

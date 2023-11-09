@@ -35,7 +35,7 @@ namespace Supermarket.Infrastructure.Employees
                 StartedWorking = new DateTimeOffset(2020, 10, 1, 0, 0, 0, TimeSpan.Zero),
                 PasswordHash = hashBytes,
                 PasswordHashSalt = salt,
-                Roles = new[] { DbRoleNames.Cashier, DbRoleNames.GoodsKeeper },
+                Roles = new[] { DbRoleNames.Cashier, DbRoleNames.GoodsKeeper, DbRoleNames.Manager },
                 SupermarketId = 1,
             });
         }

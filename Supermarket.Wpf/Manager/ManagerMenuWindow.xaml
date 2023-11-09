@@ -1,20 +1,18 @@
-﻿<UserControl x:Class="Supermarket.Wpf.GoodsKeeping.StorageWindow"
+﻿<UserControl x:Class="Supermarket.Wpf.Manager.ManagerMenuWindow"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Supermarket.Wpf.GoodsKeeping"
-             xmlns:arrival="clr-namespace:Supermarket.Wpf.GoodsKeeping.ArrivalRegistration"
-             xmlns:management="clr-namespace:Supermarket.Wpf.GoodsKeeping.GoodsManagement"
+             xmlns:local="clr-namespace:Supermarket.Wpf.Manager"
+             xmlns:supermarketProducts="clr-namespace:Supermarket.Wpf.Manager.SupermarketProducts"
              mc:Ignorable="d" 
              d:DesignHeight="1080" d:DesignWidth="1920">
     <Grid>
         <TabControl>
-            <TabItem Header="Arrival registration">
-                <arrival:ArrivalRegistationWindow DataContext="{Binding ArrivalViewModel}" />
+            <TabItem Header="Naše produkty ">
+                <supermarketProducts:SupermarketProductsWindow DataContext="{Binding SupermarketProductsViewModel}" />
             </TabItem>
             <TabItem Header="Goods management">
-                <management:GoodsManagementWindow DataContext="{Binding GoodsManagementViewModel}" />
             </TabItem>
         </TabControl>
     </Grid>
