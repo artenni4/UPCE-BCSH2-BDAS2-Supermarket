@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Supermarket.Domain.Auth.LoggedEmployees;
+using Supermarket.Wpf.Common.Dialogs;
 using Supermarket.Wpf.Dialog;
 using Supermarket.Wpf.LoggedUser;
 using Supermarket.Wpf.ViewModelResolvers;
@@ -48,6 +49,7 @@ namespace Supermarket.Wpf.Cashbox
         public ICommand RemoveProductCommand { get; }
         public ICommand InviteAssistantCommand { get; }
         public ICommand AssistantExitCommand { get; }
+        public ICommand ClearSelectedProductsCommand { get; }
 
         public CashboxViewModel(ICashBoxService cashBoxService, IDialogService dialogService, ILoggedUserService loggedUserService)
         {
@@ -68,6 +70,19 @@ namespace Supermarket.Wpf.Cashbox
             InviteAssistantCommand = new RelayCommand(InviteAssistant);
             AssistantExitCommand = new RelayCommand(AssistantExit);
             RemoveProductCommand = new RelayCommand(RemoveProduct);
+            ClearSelectedProductsCommand = new RelayCommand(ClearSelectedProducts);
+        }
+
+        private async void ClearSelectedProducts(object? obj)
+        {
+            var result = await _dialogService
+                .ShowForResultAsync<ConfirmationDialogViewModel, DialogResult, ConfirmationDialogParameters>(
+                    new ConfirmationDialogParameters("Opravdu chcete zrušit prodej?", ConfirmationButtons.OkCancel));
+
+            if (result.IsOk())
+            {
+                SelectedProducts.Clear();
+            }
         }
 
         private void RemoveProduct(object? obj)
