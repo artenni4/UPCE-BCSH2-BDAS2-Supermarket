@@ -64,4 +64,6 @@ internal class StoredProductRepository : CrudRepositoryBase<StoredProduct, Store
             StoragePlaceId = misto_ulozeni_id
         };
     }
+
+    
 }

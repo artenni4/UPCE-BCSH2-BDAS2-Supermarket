@@ -5,24 +5,27 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Supermarket.Wpf.Manager"
              xmlns:supermarketProducts="clr-namespace:Supermarket.Wpf.Manager.SupermarketProducts"
+             xmlns:addProducts="clr-namespace:Supermarket.Wpf.Manager.AddProducts"
+             
              mc:Ignorable="d" 
              d:DesignHeight="1080" d:DesignWidth="1920">
     <Grid>
         <TabControl>
-            <TabItem Header="Naše produkty ">
+            <TabItem Header="Naše produkty" Width="200">
                 <supermarketProducts:SupermarketProductsWindow DataContext="{Binding SupermarketProductsViewModel}" />
             </TabItem>
-            <TabItem Header="Přidat zboží">
+            <TabItem Header="Přidat zboží" Width="200">
+                <addProducts:AddProductsWindow DataContext="{Binding AddProductsViewModel}" />
             </TabItem>
-            <TabItem Header="Zaměstnanci">
+            <TabItem Header="Zaměstnanci" Width="200">
             </TabItem>
-            <TabItem Header="Místa uložení">
+            <TabItem Header="Místa uložení" Width="200">
             </TabItem>
-            <TabItem Header="Log">
+            <TabItem Header="Log" Width="200">
             </TabItem>
-            <TabItem Header="Prodeje">
+            <TabItem Header="Prodeje" Width="200">
             </TabItem>
-            <TabItem Header="Pokladny">
+            <TabItem Header="Pokladny" Width="200">
             </TabItem>
         </TabControl>
     </Grid>

@@ -11,6 +11,7 @@ using Supermarket.Wpf.LoggedUser;
 using Supermarket.Wpf.Login;
 using Supermarket.Wpf.Main;
 using Supermarket.Wpf.Manager;
+using Supermarket.Wpf.Manager.AddProducts;
 using Supermarket.Wpf.Manager.SupermarketProducts;
 using Supermarket.Wpf.Navigation;
 using Supermarket.Wpf.ViewModelResolvers;
@@ -44,6 +45,7 @@ public static class WpfDependencies
 
         serviceCollection.AddTransient<ManagerMenuViewModel>();
         serviceCollection.AddTransient<SupermarketProductsViewModel>();
+        serviceCollection.AddTransient<AddProductsViewModel>();
         // ...
 
         return serviceCollection;

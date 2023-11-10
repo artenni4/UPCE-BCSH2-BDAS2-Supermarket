@@ -1,4 +1,5 @@
 ﻿using Supermarket.Wpf.Common;
+using Supermarket.Wpf.Manager.AddProducts;
 using Supermarket.Wpf.Manager.SupermarketProducts;
 using Supermarket.Wpf.ViewModelResolvers;
 using System;
@@ -20,6 +21,13 @@ namespace Supermarket.Wpf.Manager
             set => SetProperty(ref _supermarketProductsViewModel, value);
         }
 
+        private AddProductsViewModel? _addProductsViewModel;
+        public AddProductsViewModel? AddProductsViewModel
+        {
+            get => _addProductsViewModel;
+            set => SetProperty(ref _addProductsViewModel, value);
+        }
+
         public ManagerMenuViewModel(IViewModelResolver viewModelResolver)
         {
             _viewModelResolver = viewModelResolver;
@@ -28,6 +36,7 @@ namespace Supermarket.Wpf.Manager
         public async Task InitializeAsync()
         {
             SupermarketProductsViewModel = await _viewModelResolver.Resolve<SupermarketProductsViewModel>();
+            AddProductsViewModel = await _viewModelResolver.Resolve<AddProductsViewModel>();
         }
     }
 }

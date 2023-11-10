@@ -10,5 +10,6 @@ namespace Supermarket.Core.UseCases.ManagerMenu
     public interface IManagerMenuService
     {
         Task<PagedResult<ManagerMenuProduct>> GetSupermarketProducts(int supermarketId, RecordsRange recordsRange);
+        Task<PagedResult<ManagerMenuAddProduct>> GetManagerProductsToAdd(int supermarketId, RecordsRange recordsRange);
     }
 }
