@@ -1,4 +1,4 @@
-﻿using Supermarket.Core.CashBoxes;
+﻿using Supermarket.Core.UseCases.CashBoxes;
 
 namespace Supermarket.Wpf.Cashbox;
 

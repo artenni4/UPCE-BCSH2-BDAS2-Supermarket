@@ -1,6 +1,5 @@
-﻿using Supermarket.Core.GoodsKeeping;
-using Supermarket.Domain.Common.Paging;
-using Supermarket.Domain.StoragePlaces;
+﻿using Supermarket.Core.Domain.Common.Paging;
+using Supermarket.Core.UseCases.GoodsKeeping;
 using Supermarket.Wpf.Common;
 using Supermarket.Wpf.Dialog;
 using Supermarket.Wpf.ViewModelResolvers;

@@ -1,4 +1,4 @@
-﻿using Supermarket.Domain.Auth.LoggedEmployees;
+﻿using Supermarket.Core.Domain.Auth.LoggedEmployees;
 using System;
 
 namespace Supermarket.Wpf.LoggedUser

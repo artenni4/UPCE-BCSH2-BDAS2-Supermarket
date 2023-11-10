@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Supermarket.Application\Supermarket.Application.csproj" />
+    <ProjectReference Include="..\Supermarket.Core\Supermarket.Core.csproj" />
     <ProjectReference Include="..\Supermarket.Infrastructure\Supermarket.Infrastructure.csproj" />
   </ItemGroup>
 

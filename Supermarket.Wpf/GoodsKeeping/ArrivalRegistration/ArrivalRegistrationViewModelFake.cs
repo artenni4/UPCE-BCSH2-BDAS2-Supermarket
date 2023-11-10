@@ -1,6 +1,5 @@
 ﻿using System.Collections.ObjectModel;
-using Supermarket.Core.CashBoxes;
-using Supermarket.Core.GoodsKeeping;
+using Supermarket.Core.UseCases.GoodsKeeping;
 using Supermarket.Wpf.Dialog;
 
 namespace Supermarket.Wpf.GoodsKeeping.ArrivalRegistration;

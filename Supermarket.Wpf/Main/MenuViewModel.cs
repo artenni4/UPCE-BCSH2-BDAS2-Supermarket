@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows.Input;
-using Supermarket.Domain.Auth.LoggedEmployees;
+using Supermarket.Core.Domain.Auth.LoggedEmployees;
 using Supermarket.Wpf.Common;
 using Supermarket.Wpf.Dialog;
 using Supermarket.Wpf.Navigation;

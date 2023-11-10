@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Supermarket.Core.CashBoxes;
-using Supermarket.Domain.Auth;
-using Supermarket.Domain.Common.Paging;
+using Supermarket.Core.Domain.Auth;
+using Supermarket.Core.Domain.Common.Paging;
+using Supermarket.Core.UseCases.CashBoxes;
 
 namespace Supermarket.Wpf.Cashbox;
 

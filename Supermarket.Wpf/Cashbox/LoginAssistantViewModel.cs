@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Input;
-using Supermarket.Core.CashBoxes;
-using Supermarket.Domain.Auth;
-using Supermarket.Domain.Auth.LoggedEmployees;
+using Supermarket.Core.Domain.Auth;
+using Supermarket.Core.Domain.Auth.LoggedEmployees;
+using Supermarket.Core.UseCases.CashBoxes;
 using Supermarket.Wpf.Common;
 using Supermarket.Wpf.Dialog;
 

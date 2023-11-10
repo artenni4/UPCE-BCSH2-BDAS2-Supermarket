@@ -1,6 +1,5 @@
-﻿using Supermarket.Core.CashBoxes;
-using Supermarket.Core.GoodsKeeping;
-using Supermarket.Domain.Common.Paging;
+﻿using Supermarket.Core.Domain.Common.Paging;
+using Supermarket.Core.UseCases.GoodsKeeping;
 using Supermarket.Wpf.Cashbox;
 using Supermarket.Wpf.Common;
 using Supermarket.Wpf.Dialog;

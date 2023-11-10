@@ -1,5 +1,5 @@
 ﻿using System;
-using Supermarket.Domain.Auth.LoggedEmployees;
+using Supermarket.Core.Domain.Auth.LoggedEmployees;
 
 namespace Supermarket.Wpf.LoggedUser;
 

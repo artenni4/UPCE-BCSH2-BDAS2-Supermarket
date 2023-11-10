@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
-using Supermarket.Core.CashBoxes;
+using Supermarket.Core.UseCases.CashBoxes;
 using Supermarket.Wpf.Dialog;
 using Supermarket.Wpf.LoggedUser;
 

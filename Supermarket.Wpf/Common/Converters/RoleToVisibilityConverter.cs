@@ -1,5 +1,5 @@
-﻿using Supermarket.Domain.Auth.LoggedEmployees;
-using Supermarket.Domain.Employees.Roles;
+﻿using Supermarket.Core.Domain.Auth.LoggedEmployees;
+using Supermarket.Core.Domain.Employees.Roles;
 using Supermarket.Wpf.LoggedUser;
 using System;
 using System.Collections.Generic;

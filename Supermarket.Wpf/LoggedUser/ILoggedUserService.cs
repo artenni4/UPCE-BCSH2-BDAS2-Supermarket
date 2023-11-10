@@ -1,4 +1,4 @@
-﻿using Supermarket.Domain.Auth.LoggedEmployees;
+﻿using Supermarket.Core.Domain.Auth.LoggedEmployees;
 using System;
 using System.Collections.Generic;
 using System.Linq;

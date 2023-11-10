@@ -1,14 +1,12 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Supermarket.Wpf.Common;
 using Supermarket.Wpf.Navigation;
 using System.Windows.Input;
-using Supermarket.Domain.Auth.LoggedEmployees;
-using Supermarket.Wpf.Cashbox;
 using Supermarket.Wpf.Dialog;
 using Supermarket.Wpf.LoggedUser;
 using Supermarket.Wpf.Login;
 using Supermarket.Wpf.ViewModelResolvers;
+using Supermarket.Core.Domain.Auth.LoggedEmployees;
 
 namespace Supermarket.Wpf.Main
 {

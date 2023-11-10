@@ -5,7 +5,6 @@ using System;
 using System.Diagnostics;
 using System.Windows;
 using Supermarket.Core;
-using Supermarket.Domain;
 using Supermarket.Infrastructure;
 using Supermarket.Wpf.Common;
 using Supermarket.Wpf.ViewModelResolvers;
@@ -24,8 +23,7 @@ namespace Supermarket.Wpf
             Trace.Listeners.Add(new ConsoleTraceListener());
             
             var serviceCollection = new ServiceCollection()
-                .AddDomain()
-                .AddApplication()
+                .AddCore()
                 .AddInfrastructure()
                 .AddWpf();
             

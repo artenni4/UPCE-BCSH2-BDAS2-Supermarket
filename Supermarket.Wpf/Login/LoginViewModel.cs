@@ -1,10 +1,10 @@
-﻿using Supermarket.Core.Login;
-using Supermarket.Wpf.Common;
+﻿using Supermarket.Wpf.Common;
 using Supermarket.Wpf.Navigation;
 using System.Windows.Input;
-using Supermarket.Domain.Auth;
 using System.Windows;
 using Supermarket.Wpf.LoggedUser;
+using Supermarket.Core.UseCases.Login;
+using Supermarket.Core.Domain.Auth;
 
 namespace Supermarket.Wpf.Login
 {

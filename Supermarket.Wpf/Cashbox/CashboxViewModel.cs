@@ -1,16 +1,16 @@
 ﻿using System;
-using Supermarket.Core.CashBoxes;
-using Supermarket.Domain.Common.Paging;
 using Supermarket.Wpf.Common;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Supermarket.Domain.Auth.LoggedEmployees;
 using Supermarket.Wpf.Common.Dialogs;
 using Supermarket.Wpf.Dialog;
 using Supermarket.Wpf.LoggedUser;
 using Supermarket.Wpf.ViewModelResolvers;
+using Supermarket.Core.UseCases.CashBoxes;
+using Supermarket.Core.Domain.Common.Paging;
+using Supermarket.Core.Domain.Auth.LoggedEmployees;
 
 namespace Supermarket.Wpf.Cashbox
 {

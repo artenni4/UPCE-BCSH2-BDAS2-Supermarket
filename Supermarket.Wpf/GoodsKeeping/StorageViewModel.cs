@@ -1,5 +1,4 @@
-﻿using Supermarket.Core.GoodsKeeping;
-using Supermarket.Wpf.Common;
+﻿using Supermarket.Wpf.Common;
 using Supermarket.Wpf.GoodsKeeping.ArrivalRegistration;
 using Supermarket.Wpf.GoodsKeeping.GoodsManagement;
 using Supermarket.Wpf.ViewModelResolvers;
