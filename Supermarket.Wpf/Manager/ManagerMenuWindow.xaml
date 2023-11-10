@@ -12,7 +12,17 @@
             <TabItem Header="Naše produkty ">
                 <supermarketProducts:SupermarketProductsWindow DataContext="{Binding SupermarketProductsViewModel}" />
             </TabItem>
-            <TabItem Header="Goods management">
+            <TabItem Header="Přidat zboží">
+            </TabItem>
+            <TabItem Header="Zaměstnanci">
+            </TabItem>
+            <TabItem Header="Místa uložení">
+            </TabItem>
+            <TabItem Header="Log">
+            </TabItem>
+            <TabItem Header="Prodeje">
+            </TabItem>
+            <TabItem Header="Pokladny">
             </TabItem>
         </TabControl>
     </Grid>

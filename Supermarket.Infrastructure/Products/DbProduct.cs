@@ -1,7 +1,6 @@
 ﻿using Dapper;
 using Supermarket.Core.Domain.Common;
 using Supermarket.Core.Domain.Products;
-using Supermarket.Infrastructure.Common;
 
 namespace Supermarket.Infrastructure.Products;
 
@@ -16,6 +15,7 @@ internal class DbProduct : IDbEntity<Product, int, DbProduct>
     public required decimal hmotnost { get; init; }
     public required string? carovyKod { get; init; }
     public required string? popis { get; init; }
+    public required int dodavatel_id { get; init; }
 
     public static string TableName => "ZBOZI";
 
@@ -43,7 +43,8 @@ internal class DbProduct : IDbEntity<Product, int, DbProduct>
         Price = cena,
         Weight = hmotnost,
         Barcode = carovyKod,
-        Description = popis
+        Description = popis,
+        SupplierId = dodavatel_id
     };
 
     public static DbProduct ToDbEntity(Product entity) => new()
@@ -56,7 +57,8 @@ internal class DbProduct : IDbEntity<Product, int, DbProduct>
         hmotnost = entity.Weight,
         naVahu = entity.ByWeight ? 1 : 0,
         nazev = entity.Name,
-        popis = entity.Description
+        popis = entity.Description,
+        dodavatel_id = entity.SupplierId
     };
 
     public static DynamicParameters GetEntityIdParameters(int id) =>

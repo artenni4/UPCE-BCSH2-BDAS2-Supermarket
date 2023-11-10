@@ -1,4 +1,5 @@
-﻿using Supermarket.Wpf.Common;
+﻿using Supermarket.Core.Domain.Suppliers;
+using Supermarket.Wpf.Common;
 using Supermarket.Wpf.ViewModelResolvers;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,8 @@ namespace Supermarket.Wpf.Manager.SupermarketProducts
     {
         public event EventHandler? LoadingStarted;
         public event EventHandler? LoadingFinished;
+
+        
 
         public Task InitializeAsync()
         {

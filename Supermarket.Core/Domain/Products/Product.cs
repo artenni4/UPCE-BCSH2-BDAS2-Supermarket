@@ -13,5 +13,6 @@ namespace Supermarket.Core.Domain.Products
         public required decimal Weight { get; init; }
         public required string? Barcode {  get; init; }
         public required string? Description { get; init;}
+        public required int SupplierId { get; set; }
     }
 }
