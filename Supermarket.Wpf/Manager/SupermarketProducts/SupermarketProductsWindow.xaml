@@ -8,12 +8,12 @@
          d:DesignHeight="1080" d:DesignWidth="1920">
     <Border Grid.Column="0" Margin="10,10,10,0" Style="{StaticResource PanelBorderStyle}">
         <Grid>
-            <DataGrid ItemsSource="{Binding StoredProducts}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False" Width="1300" ColumnWidth="*" HorizontalAlignment="Left" Height="Auto" SelectedItem="{Binding SelectedStoredProduct, Mode=TwoWay}">
+            <DataGrid ItemsSource="{Binding Products}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False" Width="Auto" ColumnWidth="*" HorizontalAlignment="Left" Height="Auto" >
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Název" Binding="{Binding ProductName}" Width="500" IsReadOnly="True" FontSize="25" />
                     <DataGridTextColumn Header="Počet" Binding="{Binding Count}" Width="200" IsReadOnly="True" FontSize="25" />
-                    <DataGridTextColumn Header="Výrobce" Binding="{Binding StoragePlaceCode}" Width="350" IsReadOnly="True" FontSize="25" />
-                    <DataGridTextColumn Header="Cena za ks" Binding="{Binding StoragePlaceCode}" Width="*" IsReadOnly="True" FontSize="25" />
+                    <DataGridTextColumn Header="Výrobce" Binding="{Binding SupplierName}" Width="350" IsReadOnly="True" FontSize="25" />
+                    <DataGridTextColumn Header="Cena za ks" Binding="{Binding Price}" Width="*" IsReadOnly="True" FontSize="25" />
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>

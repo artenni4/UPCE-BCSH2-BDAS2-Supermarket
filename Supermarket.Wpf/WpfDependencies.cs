@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Supermarket.Core.UseCases.ManagerMenu;
 using Supermarket.Wpf.Cashbox;
 using Supermarket.Wpf.Common.Dialogs;
 using Supermarket.Wpf.Dialog;
@@ -24,6 +25,7 @@ public static class WpfDependencies
         serviceCollection.AddSingleton<IDialogService, DialogService>();
         serviceCollection.AddSingleton<IViewModelResolver, ViewModelResolver>();
         serviceCollection.AddSingleton<ILoggedUserService, LoggedUserService>();
+        serviceCollection.AddSingleton<IManagerMenuService, ManagerMenuService>();
         serviceCollection.AddSingleton<MainViewModel>();
 
         serviceCollection.AddTransient<MenuViewModel>();

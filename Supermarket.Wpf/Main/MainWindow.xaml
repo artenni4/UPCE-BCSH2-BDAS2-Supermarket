@@ -12,6 +12,8 @@
         xmlns:arrivalRegistration="clr-namespace:Supermarket.Wpf.GoodsKeeping.ArrivalRegistration"
         xmlns:goodsManagement="clr-namespace:Supermarket.Wpf.GoodsKeeping.GoodsManagement"
         xmlns:dialogs="clr-namespace:Supermarket.Wpf.Common.Dialogs"
+        xmlns:managerMenu="clr-namespace:Supermarket.Wpf.Manager"
+        xmlns:managerMenuProducts="clr-namespace:Supermarket.Wpf.Manager.SupermarketProducts"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type=local:MainViewModelFake, IsDesignTimeCreatable=True}"
         MinHeight="600" MinWidth="800"
@@ -32,6 +34,12 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type goodsManagement:GoodsManagementViewModel}">
             <goodsManagement:GoodsManagementWindow />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type managerMenu:ManagerMenuViewModel}">
+            <managerMenu:ManagerMenuWindow />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type managerMenuProducts:SupermarketProductsViewModel}">
+            <managerMenuProducts:SupermarketProductsWindow />
         </DataTemplate>
         <!-- DataTemplates for dialogs -->
         <DataTemplate DataType="{x:Type local:MenuViewModel}">
