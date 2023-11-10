@@ -2,7 +2,7 @@
 
 namespace Supermarket.Infrastructure.Supermarkets;
 
-internal class DbSupermarket : IDbEntity<Domain.Supermarkets.Supermarket, int, DbSupermarket>
+internal class DbSupermarket : IDbEntity<Core.Domain.Supermarkets.Supermarket, int, DbSupermarket>
 {
     public required int supermarket_id { get; init; }
     
@@ -12,12 +12,12 @@ internal class DbSupermarket : IDbEntity<Domain.Supermarkets.Supermarket, int, D
         nameof(supermarket_id)
     };
 
-    public Domain.Supermarkets.Supermarket ToDomainEntity()
+    public Core.Domain.Supermarkets.Supermarket ToDomainEntity()
     {
         throw new NotImplementedException();
     }
 
-    public static DbSupermarket MapToDbEntity(Domain.Supermarkets.Supermarket entity)
+    public static DbSupermarket ToDbEntity(Core.Domain.Supermarkets.Supermarket entity)
     {
         throw new NotImplementedException();
     }

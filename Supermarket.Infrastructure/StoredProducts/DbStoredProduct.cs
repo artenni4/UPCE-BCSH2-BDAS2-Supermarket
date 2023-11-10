@@ -1,5 +1,5 @@
 ﻿using Dapper;
-using Supermarket.Domain.StoredProducts;
+using Supermarket.Core.Domain.StoredProducts;
 using Supermarket.Infrastructure.Common;
 
 namespace Supermarket.Infrastructure.StoredProducts;
@@ -29,7 +29,7 @@ internal class DbStoredProduct : IDbEntity<StoredProduct, StoredProductId, DbSto
         };
     }
 
-    public static DbStoredProduct MapToDbEntity(StoredProduct entity) => new()
+    public static DbStoredProduct ToDbEntity(StoredProduct entity) => new()
     {
         zbozi_id = entity.Id.ProductId,
         supermarket_id = entity.Id.SupermarketId,

@@ -1,7 +1,7 @@
 ﻿using Dapper;
 using Oracle.ManagedDataAccess.Client;
-using Supermarket.Domain.Common;
-using Supermarket.Domain.Common.Paging;
+using Supermarket.Core.Domain.Common;
+using Supermarket.Core.Domain.Common.Paging;
 
 namespace Supermarket.Infrastructure.Common
 {
@@ -58,7 +58,7 @@ namespace Supermarket.Infrastructure.Common
         
         public virtual async Task AddAsync(TEntity entity)
         {
-            var dbEntity = TDbEntity.MapToDbEntity(entity);
+            var dbEntity = TDbEntity.ToDbEntity(entity);
             var insertingValues = dbEntity.GetInsertingValues();
             
             var selector = string.Join(", ", insertingValues.ParameterNames);
@@ -71,7 +71,7 @@ namespace Supermarket.Infrastructure.Common
 
         public virtual async Task UpdateAsync(TEntity entity)
         {
-            var dbEntity = TDbEntity.MapToDbEntity(entity);
+            var dbEntity = TDbEntity.ToDbEntity(entity);
             var identity = TDbEntity.GetEntityIdParameters(entity.Id);
             var insertingValues = dbEntity.GetInsertingValues();
 

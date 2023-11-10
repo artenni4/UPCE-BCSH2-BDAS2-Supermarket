@@ -1,5 +1,5 @@
 ﻿using Oracle.ManagedDataAccess.Client;
-using Supermarket.Domain.SoldProducts;
+using Supermarket.Core.Domain.SoldProducts;
 
 namespace Supermarket.Infrastructure.SoldProducts;
 

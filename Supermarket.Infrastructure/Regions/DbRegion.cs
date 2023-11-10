@@ -1,5 +1,5 @@
 ﻿using Dapper;
-using Supermarket.Domain.Regions;
+using Supermarket.Core.Domain.Regions;
 
 namespace Supermarket.Infrastructure.Regions;
 
@@ -21,7 +21,7 @@ internal class DbRegion : IDbEntity<Region, int, DbRegion>
         Id = region_id,
         Name = nazev
     };
-    public static DbRegion MapToDbEntity(Region entity) => new()
+    public static DbRegion ToDbEntity(Region entity) => new()
     {
         region_id = entity.Id,
         nazev = entity.Name

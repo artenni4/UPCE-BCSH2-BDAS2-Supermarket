@@ -1,5 +1,5 @@
 ﻿using Dapper;
-using Supermarket.Domain.StoragePlaces;
+using Supermarket.Core.Domain.StoragePlaces;
 
 namespace Supermarket.Infrastructure.StoragePlaces;
 
@@ -30,7 +30,7 @@ internal class DbStoragePlace : IDbEntity<StoragePlace, int, DbStoragePlace>
         };
     }
 
-    public static DbStoragePlace MapToDbEntity(StoragePlace entity)
+    public static DbStoragePlace ToDbEntity(StoragePlace entity)
     {
         throw new NotImplementedException();
     }

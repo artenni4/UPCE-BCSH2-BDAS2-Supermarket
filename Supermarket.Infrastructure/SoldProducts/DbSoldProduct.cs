@@ -1,5 +1,5 @@
 ﻿using Dapper;
-using Supermarket.Domain.SoldProducts;
+using Supermarket.Core.Domain.SoldProducts;
 
 namespace Supermarket.Infrastructure.SoldProducts;
 
@@ -23,7 +23,7 @@ internal class DbSoldProduct : IDbEntity<SoldProduct, SoldProductId, DbSoldProdu
         throw new NotImplementedException();
     }
 
-    public static DbSoldProduct MapToDbEntity(SoldProduct entity)
+    public static DbSoldProduct ToDbEntity(SoldProduct entity)
     {
         throw new NotImplementedException();
     }

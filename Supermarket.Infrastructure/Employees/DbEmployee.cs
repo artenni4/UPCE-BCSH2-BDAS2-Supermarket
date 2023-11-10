@@ -1,11 +1,12 @@
 ﻿using Dapper;
-using Supermarket.Domain.Employees;
+using Supermarket.Core.Domain.Employees;
 
 namespace Supermarket.Infrastructure.Employees;
 
 internal class DbEmployee : IDbEntity<Employee, int, DbEmployee>
 {
     public required int zamestnanec_id { get; init; }
+    public required int? supermarket_id { get; init; }
     
     public static string TableName => "ZAMESTNANCI";
     public static IReadOnlyList<string> IdentityColumns { get; } = new[]
@@ -18,7 +19,7 @@ internal class DbEmployee : IDbEntity<Employee, int, DbEmployee>
         throw new NotImplementedException();
     }
 
-    public static DbEmployee MapToDbEntity(Employee entity)
+    public static DbEmployee ToDbEntity(Employee entity)
     {
         throw new NotImplementedException();
     }

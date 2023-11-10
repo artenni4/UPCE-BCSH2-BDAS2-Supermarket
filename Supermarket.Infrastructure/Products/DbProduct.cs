@@ -1,6 +1,6 @@
 ﻿using Dapper;
-using Supermarket.Domain.Common;
-using Supermarket.Domain.Products;
+using Supermarket.Core.Domain.Common;
+using Supermarket.Core.Domain.Products;
 using Supermarket.Infrastructure.Common;
 
 namespace Supermarket.Infrastructure.Products;
@@ -46,7 +46,7 @@ internal class DbProduct : IDbEntity<Product, int, DbProduct>
         Description = popis
     };
 
-    public static DbProduct MapToDbEntity(Product entity) => new()
+    public static DbProduct ToDbEntity(Product entity) => new()
     {
         zbozi_id = entity.Id,
         druh_zbozi_id = entity.ProductCategoryId,

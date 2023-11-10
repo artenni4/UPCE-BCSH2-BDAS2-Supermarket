@@ -1,5 +1,5 @@
 ﻿using Dapper;
-using Supermarket.Domain.SellingProducts;
+using Supermarket.Core.Domain.SellingProducts;
 
 namespace Supermarket.Infrastructure.SellingProducts;
 
@@ -22,7 +22,7 @@ internal class DbSellingProduct : IDbEntity<SellingProduct, SellingProductId, Db
         Id = new SellingProductId(zbozi_id, supermarket_id)
     };
 
-    public static DbSellingProduct MapToDbEntity(SellingProduct entity) => new()
+    public static DbSellingProduct ToDbEntity(SellingProduct entity) => new()
     {
         supermarket_id = entity.Id.SupermarketId,
         zbozi_id = entity.Id.ProductId

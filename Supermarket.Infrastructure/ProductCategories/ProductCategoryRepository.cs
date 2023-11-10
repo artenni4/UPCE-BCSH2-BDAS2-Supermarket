@@ -1,6 +1,6 @@
 ﻿using Dapper;
 using Oracle.ManagedDataAccess.Client;
-using Supermarket.Domain.ProductCategories;
+using Supermarket.Core.Domain.ProductCategories;
 using Supermarket.Infrastructure.Common;
 
 namespace Supermarket.Infrastructure.ProductCategories;

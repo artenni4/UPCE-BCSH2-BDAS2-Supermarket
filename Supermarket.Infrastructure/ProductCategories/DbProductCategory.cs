@@ -1,5 +1,5 @@
 ﻿using Dapper;
-using Supermarket.Domain.ProductCategories;
+using Supermarket.Core.Domain.ProductCategories;
 
 namespace Supermarket.Infrastructure.ProductCategories;
 
@@ -26,7 +26,7 @@ internal class DbProductCategory : IDbEntity<ProductCategory, int, DbProductCate
         };
     }
 
-    public static DbProductCategory MapToDbEntity(ProductCategory entity)
+    public static DbProductCategory ToDbEntity(ProductCategory entity)
     {
         throw new NotImplementedException();
     }

@@ -2,8 +2,9 @@
 using System.Security.Cryptography;
 using System.Text;
 using Dapper;
-using Supermarket.Domain.Employees;
-using Supermarket.Domain.Employees.Roles;
+using Supermarket.Core.Domain.Common;
+using Supermarket.Core.Domain.Employees;
+using Supermarket.Core.Domain.Employees.Roles;
 
 namespace Supermarket.Infrastructure.Employees
 {
@@ -35,9 +36,25 @@ namespace Supermarket.Infrastructure.Employees
                 StartedWorking = new DateTimeOffset(2020, 10, 1, 0, 0, 0, TimeSpan.Zero),
                 PasswordHash = hashBytes,
                 PasswordHashSalt = salt,
-                Roles = new[] { DbRoleNames.Cashier, DbRoleNames.GoodsKeeper, DbRoleNames.Manager },
-                SupermarketId = 1,
+                Roles = new IEmployeeRole[]
+                {
+                    new CashierRole(SupermarketId: 1),
+                    new GoodsKeeperRole(SupermarketId: 1),
+                    new ManagerRole(SupermarketId: 1)
+                }
             });
+        }
+
+        private static IEmployeeRole[] FromDbRoles(int supermarketId, IEnumerable<string> roles)
+        {
+            return roles.Select<string, IEmployeeRole>(role => role switch
+            {
+                DbRoleNames.Manager => new ManagerRole(supermarketId),
+                DbRoleNames.GoodsKeeper => new GoodsKeeperRole(supermarketId),
+                DbRoleNames.Cashier => new CashierRole(supermarketId),
+                DbRoleNames.SuperAdmin => new AdminRole(),
+                _ => throw new DatabaseException($"Role [{role}] does not exist")
+            }).ToArray();
         }
     }
 }

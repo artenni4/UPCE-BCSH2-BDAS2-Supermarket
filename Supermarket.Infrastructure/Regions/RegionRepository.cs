@@ -1,6 +1,6 @@
 ﻿using Dapper;
 using Oracle.ManagedDataAccess.Client;
-using Supermarket.Domain.Regions;
+using Supermarket.Core.Domain.Regions;
 using Supermarket.Infrastructure.Common;
 
 namespace Supermarket.Infrastructure.Regions;

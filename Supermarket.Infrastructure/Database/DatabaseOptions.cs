@@ -1,4 +1,4 @@
-﻿using Supermarket.Core.Common;
+﻿using Supermarket.Core.UseCases.Common;
 
 namespace Supermarket.Infrastructure.Database
 {

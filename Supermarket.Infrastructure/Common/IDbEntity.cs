@@ -1,5 +1,5 @@
 ﻿using Dapper;
-using Supermarket.Domain.Common;
+using Supermarket.Core.Domain.Common;
 
 namespace Supermarket.Infrastructure.Common;
 
@@ -32,7 +32,7 @@ public interface IDbEntity<TEntity, TId, TSelf>
     /// <summary>
     /// Maps domain entity to db entity
     /// </summary>
-    static abstract TSelf MapToDbEntity(TEntity entity);
+    static abstract TSelf ToDbEntity(TEntity entity);
 
     /// <summary>
     /// Gets parameter list of identity values

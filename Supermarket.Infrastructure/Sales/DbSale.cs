@@ -1,7 +1,7 @@
 ﻿using Dapper;
-using Supermarket.Domain.Common;
-using Supermarket.Domain.PaymentTypes;
-using Supermarket.Domain.Sales;
+using Supermarket.Core.Domain.Common;
+using Supermarket.Core.Domain.PaymentTypes;
+using Supermarket.Core.Domain.Sales;
 
 namespace Supermarket.Infrastructure.Sales;
 
@@ -43,7 +43,7 @@ internal class DbSale : IDbEntity<Sale, int, DbSale>
     public static int ExtractIdentity(DynamicParameters dynamicParameters) =>
         dynamicParameters.Get<int>(nameof(prodej_id));
 
-    public static DbSale MapToDbEntity(Sale entity) => new()
+    public static DbSale ToDbEntity(Sale entity) => new()
     {
         prodej_id = entity.Id,
         datum = entity.Date,

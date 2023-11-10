@@ -1,8 +1,8 @@
 ﻿using Dapper;
 using Oracle.ManagedDataAccess.Client;
-using Supermarket.Domain.Common.Paging;
-using Supermarket.Domain.StoredProducts;
-using Supermarket.Domain.Supermarkets;
+using Supermarket.Core.Domain.Common.Paging;
+using Supermarket.Core.Domain.StoredProducts;
+using Supermarket.Core.UseCases.GoodsKeeping;
 
 namespace Supermarket.Infrastructure.StoredProducts;
 
