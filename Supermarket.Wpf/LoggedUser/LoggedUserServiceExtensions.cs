@@ -1,47 +1,27 @@
 ﻿using Supermarket.Core.Domain.Auth.LoggedEmployees;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 namespace Supermarket.Wpf.LoggedUser
 {
     internal static class LoggedUserServiceExtensions
     {
-        public static bool IsLoggedEmployee(this ILoggedUserService service, [NotNullWhen(true)] out ILoggedEmployee? loggedEmployee)
+        public static bool IsCashier(this ILoggedUserService service)
         {
-            if (service.LoggedEmployee is null)
-            {
-                loggedEmployee = null;
-                return false;
-            }
-
-            loggedEmployee = service.LoggedEmployee;
-            return true;
+            return service.IsSupermarketEmployee(out _, out var roles) &&
+                   roles.Contains(SupermarketEmployeeRole.Cashier);
         }
-
-        public static bool IsLoggedCustomer(this ILoggedUserService service)
+        
+        public static bool IsGoodsKeeper(this ILoggedUserService service)
         {
-            return service.LoggedEmployee is null;
+            return service.IsSupermarketEmployee(out _, out var roles) &&
+                   roles.Contains(SupermarketEmployeeRole.GoodsKeeper);
         }
-
-        public static bool IsAdmin(this ILoggedEmployee loggedEmployee, [NotNullWhen(true)] out LoggedAdmin? loggedAdmin)
+        
+        public static bool IsManager(this ILoggedUserService service)
         {
-            loggedAdmin = loggedEmployee as LoggedAdmin;
-            if (loggedAdmin is null)
-            {
-                return false;
-            }
-
-            return true;
-        }
-
-        public static bool IsSupermarketEmployee(this ILoggedEmployee loggedEmployee, [NotNullWhen(true)] out LoggedSupermarketEmployee? loggedSupermarketEmployee)
-        {
-            loggedSupermarketEmployee = loggedEmployee as LoggedSupermarketEmployee;
-            if (loggedSupermarketEmployee is null)
-            {
-                return false;
-            }
-
-            return true;
+            return service.IsSupermarketEmployee(out _, out var roles) &&
+                   roles.Contains(SupermarketEmployeeRole.Manager);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Supermarket.Wpf.Common;
 using Supermarket.Wpf.Navigation;
 using System.Windows.Input;
@@ -6,7 +7,6 @@ using Supermarket.Wpf.Dialog;
 using Supermarket.Wpf.LoggedUser;
 using Supermarket.Wpf.Login;
 using Supermarket.Wpf.ViewModelResolvers;
-using Supermarket.Core.Domain.Auth.LoggedEmployees;
 
 namespace Supermarket.Wpf.Main
 {
@@ -34,12 +34,12 @@ namespace Supermarket.Wpf.Main
             dialogService.DialogShown += (_, args) => DialogViewModel = args.ViewModel;
             dialogService.DialogHidden += (_, _) => DialogViewModel = null;
 
-            loggedUserService.EmployeeLoggedIn += EmployeeLoggedIn;
+            loggedUserService.UserLoggedIn += EmployeeLoggedIn;
 
             viewModelResolver.ViewModelResolved += ViewModelResolved;
         }
 
-        private async void EmployeeLoggedIn(object? sender, LoggedEmployeeArgs e)
+        private async void EmployeeLoggedIn(object? sender, EventArgs e)
         {
             if (ContentViewModel is not LoginViewModel)
             {
@@ -78,9 +78,9 @@ namespace Supermarket.Wpf.Main
 
         private async Task TryShowMenu()
         {
-            if (_loggedUserService.LoggedEmployee is not null)
+            if (_loggedUserService.IsEmployee)
             {
-                var menuResult = await _dialogService.ShowAsync<MenuViewModel, MenuResult, ILoggedEmployee>(_loggedUserService.LoggedEmployee);
+                var menuResult = await _dialogService.ShowAsync<MenuViewModel, MenuResult, EmptyParameters>(EmptyParameters.Value);
                 if (menuResult.IsNavigate(out var applicationView))
                 {
                     await _navigationService.NavigateToAsync(applicationView);
@@ -89,7 +89,7 @@ namespace Supermarket.Wpf.Main
                 {
                     _dialogService.Hide();
                     await _navigationService.NavigateToAsync(ApplicationView.Login);
-                    _loggedUserService.ResetLoggedEmployee();
+                    _loggedUserService.UnsetUser();
                 }
             }
         }

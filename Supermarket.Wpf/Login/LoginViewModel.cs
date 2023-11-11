@@ -5,6 +5,7 @@ using System.Windows;
 using Supermarket.Wpf.LoggedUser;
 using Supermarket.Core.UseCases.Login;
 using Supermarket.Core.Domain.Auth;
+using Supermarket.Core.Domain.Auth.LoggedEmployees;
 
 namespace Supermarket.Wpf.Login
 {
@@ -51,7 +52,14 @@ namespace Supermarket.Wpf.Login
             try
             {
                 var loggedEmployee = await _loginService.LoginEmployeeAsync(loginData);
-                _sessionService.SetLoggedEmployee(loggedEmployee);
+                if (loggedEmployee is LoggedSupermarketEmployee loggedSupermarketEmployee)
+                {
+                    _sessionService.SetSupermarketEmployee(loggedSupermarketEmployee);
+                }
+                else if (loggedEmployee is LoggedAdmin loggedAdmin)
+                {
+                    _sessionService.SetAdmin(loggedAdmin, 1);
+                }
             }
             catch (InvalidCredentialsException)
             {

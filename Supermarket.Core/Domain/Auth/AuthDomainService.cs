@@ -1,5 +1,4 @@
 ﻿using Supermarket.Core.Domain.Auth.LoggedEmployees;
-using Supermarket.Core.Domain.Common;
 using Supermarket.Core.Domain.Employees;
 using Supermarket.Core.Domain.Employees.Roles;
 
@@ -43,15 +42,24 @@ namespace Supermarket.Core.Domain.Auth
         {
             if (employee.Roles.Any(role => role is AdminRole))
             {
-                if (employee.Roles.Count > 1)
-                {
-                    throw new InconsistencyException($"Employee [{employee.Id}] with super admin role cannot have other roles");
-                }
-
                 return new LoggedAdmin(employee.Id, employee.Name, employee.Surname);
             }
 
-            return new LoggedSupermarketEmployee(employee.Id, employee.Name, employee.Surname, employee.Roles);
+            var supermarketEmployeeRoles = employee.Roles.Select(r => r switch
+            {
+                CashierRole => SupermarketEmployeeRole.Cashier,
+                GoodsKeeperRole => SupermarketEmployeeRole.GoodsKeeper,
+                ManagerRole => SupermarketEmployeeRole.Manager,
+                _ => throw new NotSupportedException($"{r} is not supported role")
+            }).ToArray();
+
+            var supermarketId = employee.Roles
+                .OfType<ISupermarketEmployeeRole>()
+                .Select(r => r.SupermarketId)
+                .Distinct()
+                .Single();
+            
+            return new LoggedSupermarketEmployee(employee.Id, employee.Name, employee.Surname, supermarketId, supermarketEmployeeRoles);
         }
     }
 }

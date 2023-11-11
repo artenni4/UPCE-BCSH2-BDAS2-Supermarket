@@ -1,6 +1,7 @@
 ﻿using Supermarket.Core.Domain.Auth.LoggedEmployees;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,28 +11,60 @@ namespace Supermarket.Wpf.LoggedUser
     public interface ILoggedUserService
     {
         /// <summary>
-        /// Logged employee instance
+        /// Checks whether current user is employee
         /// </summary>
-        ILoggedEmployee? LoggedEmployee { get; }
+        public bool IsEmployee { get; }
         
         /// <summary>
-        /// Raised when employee is logged in
+        /// Checks whether current user is customer
         /// </summary>
-        event EventHandler<LoggedEmployeeArgs> EmployeeLoggedIn;
+        public bool IsCustomer { get; }
+        
+        /// <summary>
+        /// Current id of supermarket for logged user
+        /// </summary>
+        int SupermarketId { get; }
+        
+        /// <summary>
+        /// Returns admin data if logged in
+        /// </summary>
+        public bool IsAdmin([NotNullWhen(true)] out EmployeeData? loggedAdmin);
+
+        /// <summary>
+        /// Returns supermarket employee data if logged in
+        /// </summary>
+        public bool IsSupermarketEmployee(
+            [NotNullWhen(true)] out EmployeeData? loggedSupermarketEmployee,
+            [NotNullWhen(true)] out IReadOnlyList<SupermarketEmployeeRole>? roles);
+        
+        /// <summary>
+        /// Raised when user is set
+        /// </summary>
+        event EventHandler UserLoggedIn;
 
         /// <summary>
         /// Raised when employee is logged out
         /// </summary>
-        event EventHandler EmployeeLoggedOut;
+        event EventHandler UserLoggedOut;
 
         /// <summary>
-        /// Caches logged employee
+        /// Remembers logged in supermarket employee
         /// </summary>
-        void SetLoggedEmployee(ILoggedEmployee loggedEmployee);
-
+        void SetSupermarketEmployee(LoggedSupermarketEmployee loggedSupermarketEmployee);
+    
         /// <summary>
-        /// Clears logged employee
+        /// Remembers logged in admin
         /// </summary>
-        void ResetLoggedEmployee();
+        void SetAdmin(LoggedAdmin loggedAdmin, int supermarketId);
+        
+        /// <summary>
+        /// Remembers logged in customer
+        /// </summary>
+        void SetCustomer(int supermarketId);
+        
+        /// <summary>
+        /// Clears current user
+        /// </summary>
+        void UnsetUser();
     }
 }

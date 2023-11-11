@@ -1,25 +1,76 @@
 ﻿using Supermarket.Core.Domain.Auth.LoggedEmployees;
 using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Supermarket.Wpf.LoggedUser
 {
     internal class LoggedUserService : ILoggedUserService
     {
-        public ILoggedEmployee? LoggedEmployee { get; private set; }
+        private EmployeeData? _employeeData;
+        private IReadOnlyList<SupermarketEmployeeRole>? _roles;
 
-        public event EventHandler<LoggedEmployeeArgs>? EmployeeLoggedIn;
-        public event EventHandler? EmployeeLoggedOut;
-
-        public void ResetLoggedEmployee()
+        public bool IsEmployee => _employeeData is not null;
+        public bool IsCustomer => _employeeData is null;
+        public int SupermarketId { get; private set; }
+        public event EventHandler? UserLoggedIn;
+        public event EventHandler? UserLoggedOut;
+        
+        public bool IsAdmin([NotNullWhen(true)] out EmployeeData? loggedAdmin)
         {
-            LoggedEmployee = null;
-            EmployeeLoggedOut?.Invoke(this, EventArgs.Empty);
+            if (_employeeData is not null && _roles is null)
+            {
+                loggedAdmin = _employeeData;
+                return true;
+            }
+
+            loggedAdmin = null;
+            return false;
         }
 
-        public void SetLoggedEmployee(ILoggedEmployee loggedEmployee)
+        public bool IsSupermarketEmployee(
+            [NotNullWhen(true)] out EmployeeData? loggedSupermarketEmployee,
+            [NotNullWhen(true)] out IReadOnlyList<SupermarketEmployeeRole>? roles)
         {
-            LoggedEmployee = loggedEmployee;
-            EmployeeLoggedIn?.Invoke(this, new LoggedEmployeeArgs { LoggedEmployee = LoggedEmployee });
+            if (_employeeData is not null && _roles is not null)
+            {
+                loggedSupermarketEmployee = _employeeData;
+                roles = _roles;
+                return true;
+            }
+
+            loggedSupermarketEmployee = null;
+            roles = null;
+            return false;
+        }
+
+        public void SetSupermarketEmployee(LoggedSupermarketEmployee loggedSupermarketEmployee)
+        {
+            _employeeData = EmployeeData.FromLoggedEmployee(loggedSupermarketEmployee);
+            _roles = loggedSupermarketEmployee.Roles;
+            SupermarketId = loggedSupermarketEmployee.SupermarketId;
+            
+            UserLoggedIn?.Invoke(this, EventArgs.Empty);
+        }
+
+        public void SetAdmin(LoggedAdmin loggedAdmin, int supermarketId)
+        {
+            _employeeData = EmployeeData.FromLoggedEmployee(loggedAdmin);
+            SupermarketId = supermarketId;
+            
+            UserLoggedIn?.Invoke(this, EventArgs.Empty);
+        }
+
+        public void SetCustomer(int supermarketId)
+        {
+            SupermarketId = supermarketId;
+            
+            UserLoggedIn?.Invoke(this, EventArgs.Empty);
+        }
+
+        public void UnsetUser()
+        {
+            UserLoggedOut?.Invoke(this, EventArgs.Empty);
         }
     }
 }

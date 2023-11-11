@@ -1,4 +1,5 @@
 ﻿using Supermarket.Core.Domain.Auth;
+using Supermarket.Core.Domain.Auth.LoggedEmployees;
 using Supermarket.Core.Domain.Common.Paging;
 
 namespace Supermarket.Core.UseCases.CashBoxes
@@ -28,7 +29,7 @@ namespace Supermarket.Core.UseCases.CashBoxes
         /// </summary>
         /// <exception cref="InvalidCredentialsException">in case of bad login or password</exception>
         /// <exception cref="PermissionDeniedException">in case when employee does not have appropriate role</exception>
-        Task<AssistantLogin> AssistantLoginAsync(LoginData loginData, int cashBoxId);
+        Task<LoggedSupermarketEmployee> AssistantLoginAsync(LoginData loginData, int cashBoxId);
 
         /// <summary>
         /// Checks whether coupon is valid

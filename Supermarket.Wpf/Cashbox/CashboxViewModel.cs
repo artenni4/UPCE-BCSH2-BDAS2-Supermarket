@@ -61,7 +61,7 @@ namespace Supermarket.Wpf.Cashbox
             Categories = new ObservableCollection<CashBoxProductCategory>();
             SelectedProducts = new ObservableCollection<SelectedProductModel>();
 
-            IsCustomerCashBox = loggedUserService.IsLoggedCustomer();
+            IsCustomerCashBox = loggedUserService.IsCustomer;
 
             NextPageCommand = new RelayCommand(NextPage, _ => products?.HasNext == true);
             PreviousPageCommand = new RelayCommand(PreviousPage, _ => products?.HasPrevious == true);
@@ -97,16 +97,16 @@ namespace Supermarket.Wpf.Cashbox
 
         private void AssistantExit(object? obj)
         {
-            _loggedUserService.ResetLoggedEmployee();
+            _loggedUserService.UnsetUser();
             IsAssistantLoggedIn = false;
         }
 
         private async void InviteAssistant(object? obj)
         {
-            var result = await _dialogService.ShowForResultAsync<LoginAssistantViewModel, DialogResult<ILoggedEmployee>, EmptyParameters>(EmptyParameters.Value);
+            var result = await _dialogService.ShowForResultAsync<LoginAssistantViewModel, DialogResult<LoggedSupermarketEmployee>, EmptyParameters>(EmptyParameters.Value);
             if (result.IsOk(out var loggedEmployee))
             {
-                _loggedUserService.SetLoggedEmployee(loggedEmployee);
+                _loggedUserService.SetSupermarketEmployee(loggedEmployee);
                 IsAssistantLoggedIn = true;
             }
         }

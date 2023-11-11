@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Supermarket.Core.Domain.Auth;
+using Supermarket.Core.Domain.Auth.LoggedEmployees;
 using Supermarket.Core.Domain.Common.Paging;
 using Supermarket.Core.UseCases.CashBoxes;
 
@@ -24,7 +25,7 @@ public class CashBoxServiceFake : ICashBoxService
         throw new NotImplementedException();
     }
 
-    public Task<AssistantLogin> AssistantLoginAsync(LoginData loginData, int cashBoxId)
+    public Task<LoggedSupermarketEmployee> AssistantLoginAsync(LoginData loginData, int cashBoxId)
     {
         throw new NotImplementedException();
     }

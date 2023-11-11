@@ -40,16 +40,13 @@ namespace Supermarket.Core.UseCases.CashBoxes
             throw new NotImplementedException();
         }
 
-        public async Task<AssistantLogin> AssistantLoginAsync(LoginData loginData, int cashBoxId)
+        public async Task<LoggedSupermarketEmployee> AssistantLoginAsync(LoginData loginData, int cashBoxId)
         {
             // TODO check if cash box is in correct supermarket
             var employee = await _authDomainService.AuthEmployeeAsync(loginData);
-            if (employee is LoggedSupermarketEmployee supermarketEmployee && supermarketEmployee.Roles.Any(r => r is CashierRole))
+            if (employee is LoggedSupermarketEmployee supermarketEmployee && supermarketEmployee.Roles.Contains(SupermarketEmployeeRole.Cashier))
             {
-                return new AssistantLogin
-                {
-                    Employee = employee
-                };
+                return supermarketEmployee;
             }
 
             throw new PermissionDeniedException();

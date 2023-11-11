@@ -12,31 +12,21 @@ namespace Supermarket.Wpf.Common.Converters
 {
     internal class RoleToVisibilityConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
-            if (value is ILoggedEmployee loggedEmployee && parameter is string parameterString)
+            if (value is ILoggedUserService loggedUserService && parameter is string parameterString)
             {
                 var parameters = parameterString
                     .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
                     .Select(Enum.Parse<EmployeeRole>)
                     .ToArray();
 
-                if (loggedEmployee.IsAdmin(out _) && parameters.Contains(EmployeeRole.Admin))
+                if (loggedUserService.IsAdmin(out _) && parameters.Contains(EmployeeRole.Admin) ||
+                    loggedUserService.IsCashier() && parameters.Contains(EmployeeRole.Cashier) ||
+                    loggedUserService.IsGoodsKeeper() && parameters.Contains(EmployeeRole.GoodsKeeper) ||
+                    loggedUserService.IsManager() && parameters.Contains(EmployeeRole.Manager))
                 {
                     return Visibility.Visible;
-                }
-
-                if (loggedEmployee.IsSupermarketEmployee(out var supermarketEmployee))
-                {
-                    foreach (var role in supermarketEmployee.Roles)
-                    {
-                        if (role is CashierRole && parameters.Contains(EmployeeRole.Cashier) ||
-                            role is GoodsKeeperRole && parameters.Contains(EmployeeRole.GoodsKeeper) ||
-                            role is ManagerRole && parameters.Contains(EmployeeRole.Manager))
-                        {
-                            return Visibility.Visible;
-                        }
-                    }
                 }
             }
 
