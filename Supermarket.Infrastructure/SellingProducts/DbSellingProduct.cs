@@ -41,4 +41,7 @@ internal class DbSellingProduct : IDbEntity<SellingProduct, SellingProductId, Db
     public static SellingProductId ExtractIdentity(DynamicParameters dynamicParameters) => new(
         ProductId: dynamicParameters.Get<int>(nameof(zbozi_id)),
         SupermarketId: dynamicParameters.Get<int>(nameof(supermarket_id)));
+
+    public DynamicParameters GetInsertingValues() =>
+        new DynamicParameters().AddParameter(nameof(zbozi_id), zbozi_id).AddParameter(nameof(supermarket_id), supermarket_id);
 }

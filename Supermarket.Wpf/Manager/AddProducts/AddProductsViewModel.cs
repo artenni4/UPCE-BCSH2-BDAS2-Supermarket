@@ -1,4 +1,5 @@
 ﻿using Supermarket.Core.Domain.Common.Paging;
+using Supermarket.Core.Domain.Products;
 using Supermarket.Core.UseCases.ManagerMenu;
 using Supermarket.Wpf.Common;
 using Supermarket.Wpf.ViewModelResolvers;
@@ -8,7 +9,11 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
+using System.Windows;
 using System.Windows.Input;
+using Supermarket.Core.Domain.StoredProducts;
+using Supermarket.Core.Domain.SellingProducts;
 
 namespace Supermarket.Wpf.Manager.AddProducts
 {
@@ -48,8 +53,17 @@ namespace Supermarket.Wpf.Manager.AddProducts
         {
             if (obj is ManagerMenuAddProduct product)
             {
-
+                if (product.IsInSupermarket) // remove from supermarket
+                {
+                    _managerMenuService.RemoveProductFromSupermarket(new StoredProductId { ProductId = product.ProductId, StoragePlaceId = product.StoragePlaceId, SupermarketId = 1});
+                }
+                else // add to supermarket
+                {
+                    _managerMenuService.AddProductToSupermarket(new SellingProductId { ProductId = product.ProductId, SupermarketId = 1 });
+                }
             }
         }
+
+
     }
 }
