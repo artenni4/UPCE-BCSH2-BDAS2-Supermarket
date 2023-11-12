@@ -14,11 +14,13 @@ namespace Supermarket.Core.UseCases.ManagerMenu
     {
         private readonly ISellingProductRepository _sellingProductRepository;
         private readonly IProductRepository _productRepository;
+        private readonly IStoredProductRepository _storedProductRepository;
 
         public ManagerMenuService(ISellingProductRepository sellingProductRepository, IStoredProductRepository storedProductRepository, IProductRepository productRepository)
         {
             _sellingProductRepository = sellingProductRepository;
             _productRepository = productRepository;
+            _storedProductRepository = storedProductRepository;
         }
 
         public async Task<PagedResult<ManagerMenuProduct>> GetSupermarketProducts(int supermarketId, RecordsRange recordsRange)
@@ -33,7 +35,17 @@ namespace Supermarket.Core.UseCases.ManagerMenu
             return result;
         }
 
+        public async void RemoveProductFromSupermarket(StoredProductId id)
+        {
+            await _storedProductRepository.DeleteAsync(id);
+            await _sellingProductRepository.DeleteAsync(new SellingProductId { ProductId = id.ProductId, SupermarketId = id.SupermarketId });
+            
+        }
 
+        public async void AddProductToSupermarket(SellingProductId id)
+        {
+            await _sellingProductRepository.AddAsync(new SellingProduct { Id = id});
+        }
 
     }
 }
