@@ -2,23 +2,26 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Supermarket.Wpf.LoggedUser
 {
     public interface ILoggedUserService
     {
         /// <summary>
+        /// Checks whether some user was remembered in the service.
+        /// If returns false, getters in the service will throw exception
+        /// </summary>
+        bool IsUserSet { get; }
+        
+        /// <summary>
         /// Checks whether current user is employee
         /// </summary>
-        public bool IsEmployee { get; }
+        bool IsEmployee { get; }
         
         /// <summary>
         /// Checks whether current user is customer
         /// </summary>
-        public bool IsCustomer { get; }
+        bool IsCustomer { get; }
         
         /// <summary>
         /// Current id of supermarket for logged user
@@ -28,12 +31,12 @@ namespace Supermarket.Wpf.LoggedUser
         /// <summary>
         /// Returns admin data if logged in
         /// </summary>
-        public bool IsAdmin([NotNullWhen(true)] out EmployeeData? loggedAdmin);
+        bool IsAdmin([NotNullWhen(true)] out EmployeeData? loggedAdmin);
 
         /// <summary>
         /// Returns supermarket employee data if logged in
         /// </summary>
-        public bool IsSupermarketEmployee(
+        bool IsSupermarketEmployee(
             [NotNullWhen(true)] out EmployeeData? loggedSupermarketEmployee,
             [NotNullWhen(true)] out IReadOnlyList<SupermarketEmployeeRole>? roles);
         

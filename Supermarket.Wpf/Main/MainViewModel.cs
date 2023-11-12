@@ -34,15 +34,21 @@ namespace Supermarket.Wpf.Main
             dialogService.DialogShown += (_, args) => DialogViewModel = args.ViewModel;
             dialogService.DialogHidden += (_, _) => DialogViewModel = null;
 
-            loggedUserService.UserLoggedIn += EmployeeLoggedIn;
+            loggedUserService.UserLoggedIn += UserLoggedIn;
 
             viewModelResolver.ViewModelResolved += ViewModelResolved;
         }
 
-        private async void EmployeeLoggedIn(object? sender, EventArgs e)
+        private async void UserLoggedIn(object? sender, EventArgs e)
         {
             if (ContentViewModel is not LoginViewModel)
             {
+                return;
+            }
+
+            if (_loggedUserService.IsCustomer)
+            {
+                await _navigationService.NavigateToAsync(ApplicationView.CashBox);
                 return;
             }
                 
@@ -78,9 +84,14 @@ namespace Supermarket.Wpf.Main
 
         private async Task TryShowMenu()
         {
-            if (_loggedUserService.IsEmployee)
+            if (!_loggedUserService.IsUserSet || _loggedUserService.IsCustomer)
             {
-                var menuResult = await _dialogService.ShowAsync<MenuViewModel, MenuResult, EmptyParameters>(EmptyParameters.Value);
+                return;
+            }
+            
+            var result = await _dialogService.ShowAsync<MenuViewModel, MenuResult>();
+            if (result.IsOk(out var menuResult))
+            {
                 if (menuResult.IsNavigate(out var applicationView))
                 {
                     await _navigationService.NavigateToAsync(applicationView);

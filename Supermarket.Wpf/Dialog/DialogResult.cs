@@ -26,14 +26,19 @@ public class DialogResult<TResult>
         result = default;
         return false;
     }
+    
+    public bool IsCancelled()
+    {
+        return _type == ResultType.Cancelled;
+    }
 }
 
 public class DialogResult
 {
-    protected readonly ResultType Type;
+    private readonly ResultType _type;
     private DialogResult(ResultType type)
     {
-        Type = type;
+        _type = type;
     }
 
     public static DialogResult Ok() => new(ResultType.Ok);
@@ -41,11 +46,11 @@ public class DialogResult
 
     public bool IsOk()
     {
-        return Type == ResultType.Ok;
+        return _type == ResultType.Ok;
     }
     
     public bool IsCancelled()
     {
-        return Type == ResultType.Cancelled;
+        return _type == ResultType.Cancelled;
     }
 }

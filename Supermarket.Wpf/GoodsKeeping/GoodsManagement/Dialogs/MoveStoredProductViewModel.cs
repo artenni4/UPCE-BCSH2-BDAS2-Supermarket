@@ -10,7 +10,7 @@ using System.Windows.Input;
 
 namespace Supermarket.Wpf.GoodsKeeping.GoodsManagement.Dialogs
 {
-    public class MoveStoredProductViewModel : NotifyPropertyChangedBase, IDialogViewModel<DialogResult<MoveProduct>>, IAsyncViewModel, IAsyncInitialized
+    public class MoveStoredProductViewModel : NotifyPropertyChangedBase, IDialogViewModel<MoveProduct>, IAsyncViewModel, IAsyncInitialized
     {
         public ICommand Confirm { get; }
         public ICommand Cancel { get; }
@@ -74,8 +74,6 @@ namespace Supermarket.Wpf.GoodsKeeping.GoodsManagement.Dialogs
         {
             return decimal.TryParse(ProductCount, out _);
         }
-
-        public void SetParameters(EmptyParameters parameters) { }
 
         public async Task InitializeAsync()
         {

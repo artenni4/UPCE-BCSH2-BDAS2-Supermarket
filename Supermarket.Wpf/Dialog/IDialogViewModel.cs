@@ -9,13 +9,25 @@ public interface IDialogViewModel<TResult, TParameters> : IViewModel
     /// Initializes dialog with parameters and checks whether they are valid
     /// </summary>
     void SetParameters(TParameters parameters);
-    event EventHandler<TResult> ResultReceived;
+    
+    /// <summary>
+    /// Raised when result was received in dialog
+    /// </summary>
+    event EventHandler<DialogResult<TResult>> ResultReceived;
 }
 
-public interface IDialogViewModel<TResult> : IDialogViewModel<TResult, EmptyParameters>
+public interface IDialogViewModel<TResult> : IViewModel
 {
+    /// <summary>
+    /// Raised when result was received in dialog
+    /// </summary>
+    event EventHandler<DialogResult<TResult>> ResultReceived;
 }
 
-public interface IDialogViewModel : IDialogViewModel<EmptyResult, EmptyParameters>
+public interface IDialogViewModel : IViewModel
 {
+    /// <summary>
+    /// Raised when result was received in dialog
+    /// </summary>
+    event EventHandler<DialogResult> ResultReceived;
 }

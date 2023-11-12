@@ -4,7 +4,7 @@ using Supermarket.Wpf.Dialog;
 
 namespace Supermarket.Wpf.Common.Dialogs;
 
-public class ConfirmationDialogViewModel : NotifyPropertyChangedBase, IDialogViewModel<DialogResult, ConfirmationDialogParameters>
+public class ConfirmationDialogViewModel : NotifyPropertyChangedBase, IDialogViewModel<EmptyResult, ConfirmationDialogParameters>
 {
     public ICommand ConfirmCommand { get; }
     public ICommand CancelCommand { get; }
@@ -17,12 +17,12 @@ public class ConfirmationDialogViewModel : NotifyPropertyChangedBase, IDialogVie
 
     private void Cancel(object? obj)
     {
-        ResultReceived?.Invoke(this, DialogResult.Cancel());
+        ResultReceived?.Invoke(this, DialogResult<EmptyResult>.Cancel());
     }
 
     private void Confirm(object? obj)
     {
-        ResultReceived?.Invoke(this, DialogResult.Ok());
+        ResultReceived?.Invoke(this, DialogResult<EmptyResult>.Ok(EmptyResult.Value));
     }
 
     private string? _title;
@@ -49,5 +49,5 @@ public class ConfirmationDialogViewModel : NotifyPropertyChangedBase, IDialogVie
         };
     }
 
-    public event EventHandler<DialogResult>? ResultReceived;
+    public event EventHandler<DialogResult<EmptyResult>>? ResultReceived;
 }

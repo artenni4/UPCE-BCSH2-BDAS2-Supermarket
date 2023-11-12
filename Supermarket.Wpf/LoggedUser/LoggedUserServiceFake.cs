@@ -7,6 +7,7 @@ namespace Supermarket.Wpf.LoggedUser;
 
 public class LoggedUserServiceFake : ILoggedUserService
 {
+    public bool IsUserSet { get; }
     public bool IsEmployee { get; }
     public bool IsCustomer { get; }
     public int SupermarketId { get; }

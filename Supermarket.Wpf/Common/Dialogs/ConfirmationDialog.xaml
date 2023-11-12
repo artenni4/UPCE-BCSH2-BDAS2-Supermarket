@@ -21,7 +21,8 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             
-            <TextBlock Grid.Row="0" Text="{Binding Title}" Foreground="{StaticResource TextColor}"/>
+            <TextBlock Grid.Row="0" Text="{Binding Title}" TextWrapping="Wrap"
+                       Foreground="{StaticResource TextColor}"/>
             <StackPanel Grid.Row="2">
                 <Button Command="{Binding ConfirmCommand}" Content="OK" />
                 <Button Command="{Binding CancelCommand}" 
