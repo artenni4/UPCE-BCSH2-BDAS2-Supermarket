@@ -42,24 +42,24 @@ internal class SellingProductRepository : CrudRepositoryBase<SellingProduct, Sel
             .AddParameter("supermarket_id", supermarketId);
 
         const string sql = @"SELECT
-    z.zbozi_id as zbozi_id,
-    z.nazev as nazev,
-    z.cena as cena,
-    d.dodavatel_id as dodavatel_id,
-    d.nazev as dodavatel_nazev,
-    SUM(uz.kusy) as kusy
-FROM
-    PRODAVANE_ZBOZI pz
-JOIN
-    ZBOZI z ON z.zbozi_id = pz.zbozi_id
-JOIN
-    DODAVATELE d ON z.dodavatel_id = d.dodavatel_id
-LEFT JOIN
-    ULOZENI_ZBOZI uz ON z.zbozi_id = uz.zbozi_id and uz.supermarket_id = :supermarket_id
-WHERE
-    pz.supermarket_id = :supermarket_id
-GROUP BY
-    z.zbozi_id, z.nazev, z.cena, d.dodavatel_id, d.nazev";
+                                z.zbozi_id as zbozi_id,
+                                z.nazev as nazev,
+                                z.cena as cena,
+                                d.dodavatel_id as dodavatel_id,
+                                d.nazev as dodavatel_nazev,
+                                SUM(uz.kusy) as kusy
+                            FROM
+                                PRODAVANE_ZBOZI pz
+                            JOIN
+                                ZBOZI z ON z.zbozi_id = pz.zbozi_id
+                            JOIN
+                                DODAVATELE d ON z.dodavatel_id = d.dodavatel_id
+                            LEFT JOIN
+                                ULOZENI_ZBOZI uz ON z.zbozi_id = uz.zbozi_id and uz.supermarket_id = :supermarket_id
+                            WHERE
+                                pz.supermarket_id = :supermarket_id
+                            GROUP BY
+                                z.zbozi_id, z.nazev, z.cena, d.dodavatel_id, d.nazev";
 
         var orderByColumns = DbProduct.IdentityColumns
             .Select(ic => $"z.{ic}");

@@ -19,21 +19,21 @@ internal class ProductRepository : CrudRepositoryBase<Product, int, DbProduct>, 
             .AddParameter("supermarket_id", supermarketId);
 
         const string sql = @"SELECT
-    z.zbozi_id as zbozi_id,
-    z.nazev as nazev,
-    z.cena as cena,
-    COALESCE(MAX(pz.supermarket_id), 0) as misto_ulozeni_id,
-    CASE WHEN MAX(pz.supermarket_id) IS NOT NULL THEN 1 ELSE 0 END AS is_in_supermarket,
-    d.nazev AS dodavatel_nazev,
-    d.dodavatel_id as dodavatel_id
-FROM
-    ZBOZI z
-LEFT JOIN
-    PRODAVANE_ZBOZI pz ON z.zbozi_id = pz.zbozi_id AND pz.supermarket_id = :supermarket_id
-LEFT JOIN
-    DODAVATELE d ON z.dodavatel_id = d.dodavatel_id
-GROUP BY
-    z.zbozi_id, z.nazev, z.cena, d.nazev, d.dodavatel_id";
+                                z.zbozi_id as zbozi_id,
+                                z.nazev as nazev,
+                                z.cena as cena,
+                                COALESCE(MAX(pz.supermarket_id), 0) as misto_ulozeni_id,
+                                CASE WHEN MAX(pz.supermarket_id) IS NOT NULL THEN 1 ELSE 0 END AS is_in_supermarket,
+                                d.nazev AS dodavatel_nazev,
+                                d.dodavatel_id as dodavatel_id
+                            FROM
+                                ZBOZI z
+                            LEFT JOIN
+                                PRODAVANE_ZBOZI pz ON z.zbozi_id = pz.zbozi_id AND pz.supermarket_id = :supermarket_id
+                            LEFT JOIN
+                                DODAVATELE d ON z.dodavatel_id = d.dodavatel_id
+                            GROUP BY
+                                z.zbozi_id, z.nazev, z.cena, d.nazev, d.dodavatel_id";
 
         var orderByColumns = DbProduct.IdentityColumns
             .Select(ic => $"z.{ic}");

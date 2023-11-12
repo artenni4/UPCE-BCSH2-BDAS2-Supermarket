@@ -6,6 +6,11 @@
              xmlns:local="clr-namespace:Supermarket.Wpf.Manager"
              xmlns:supermarketProducts="clr-namespace:Supermarket.Wpf.Manager.SupermarketProducts"
              xmlns:addProducts="clr-namespace:Supermarket.Wpf.Manager.AddProducts"
+             xmlns:employees="clr-namespace:Supermarket.Wpf.Manager.SupermarketEmployees"
+             xmlns:storages="clr-namespace:Supermarket.Wpf.Manager.SupermarketStorages"
+             xmlns:logs="clr-namespace:Supermarket.Wpf.Manager.SupermarketLogs"
+             xmlns:sales="clr-namespace:Supermarket.Wpf.Manager.SupermarketSales"
+             xmlns:cashboxes="clr-namespace:Supermarket.Wpf.Manager.SupermarketCashboxes"
              
              mc:Ignorable="d" 
              d:DesignHeight="1080" d:DesignWidth="1920">
@@ -18,14 +23,19 @@
                 <addProducts:AddProductsWindow DataContext="{Binding AddProductsViewModel}" />
             </TabItem>
             <TabItem Header="Zaměstnanci" Width="200">
+                <employees:SupermarketEmployeesWindow DataContext="{Binding SupermarketEmployeesViewModel}" />
             </TabItem>
             <TabItem Header="Místa uložení" Width="200">
+                <storages:SupermarketStoragesWindow DataContext="{Binding SupermarketStoragesViewModel}" />
             </TabItem>
             <TabItem Header="Log" Width="200">
+                <logs:SupermarketLogsView DataContext="{Binding SupermarketLogsViewModel}" />
             </TabItem>
             <TabItem Header="Prodeje" Width="200">
+                <sales:SupermarketSalesWindow DataContext="{Binding SupermarketSalesViewModel}" />
             </TabItem>
             <TabItem Header="Pokladny" Width="200">
+                <cashboxes:SupermarketCashboxesWindow DataContext="{Binding SupermarketCashboxesViewModel}" />
             </TabItem>
         </TabControl>
     </Grid>

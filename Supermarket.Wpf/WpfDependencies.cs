@@ -12,7 +12,12 @@ using Supermarket.Wpf.Login;
 using Supermarket.Wpf.Main;
 using Supermarket.Wpf.Manager;
 using Supermarket.Wpf.Manager.AddProducts;
+using Supermarket.Wpf.Manager.SupermarketCashboxes;
+using Supermarket.Wpf.Manager.SupermarketEmployees;
+using Supermarket.Wpf.Manager.SupermarketLogs;
 using Supermarket.Wpf.Manager.SupermarketProducts;
+using Supermarket.Wpf.Manager.SupermarketSales;
+using Supermarket.Wpf.Manager.SupermarketStorages;
 using Supermarket.Wpf.Navigation;
 using Supermarket.Wpf.ViewModelResolvers;
 
@@ -46,7 +51,11 @@ public static class WpfDependencies
         serviceCollection.AddTransient<ManagerMenuViewModel>();
         serviceCollection.AddTransient<SupermarketProductsViewModel>();
         serviceCollection.AddTransient<AddProductsViewModel>();
-        // ...
+        serviceCollection.AddTransient<SupermarketEmployeesViewModel>();
+        serviceCollection.AddTransient<SupermarketStoragesViewModel>();
+        serviceCollection.AddTransient<SupermarketLogsViewModel>();
+        serviceCollection.AddTransient<SupermarketSalesViewModel>();
+        serviceCollection.AddTransient<SupermarketCashboxesViewModel>();
 
         return serviceCollection;
     }
