@@ -22,7 +22,7 @@ internal class ProductRepository : CrudRepositoryBase<Product, int, DbProduct>, 
                                 z.zbozi_id as zbozi_id,
                                 z.nazev as nazev,
                                 z.cena as cena,
-                                COALESCE(MAX(pz.supermarket_id), 0) as misto_ulozeni_id,
+                                COALESCE(MAX(uz.misto_ulozeni_id), 0) as misto_ulozeni_id,
                                 CASE WHEN MAX(pz.supermarket_id) IS NOT NULL THEN 1 ELSE 0 END AS is_in_supermarket,
                                 d.nazev AS dodavatel_nazev,
                                 d.dodavatel_id as dodavatel_id
@@ -32,6 +32,8 @@ internal class ProductRepository : CrudRepositoryBase<Product, int, DbProduct>, 
                                 PRODAVANE_ZBOZI pz ON z.zbozi_id = pz.zbozi_id AND pz.supermarket_id = :supermarket_id
                             LEFT JOIN
                                 DODAVATELE d ON z.dodavatel_id = d.dodavatel_id
+                            LEFT JOIN
+                                ULOZENI_ZBOZI uz ON z.zbozi_id = uz.zbozi_id AND uz.supermarket_id = :supermarket_id
                             GROUP BY
                                 z.zbozi_id, z.nazev, z.cena, d.nazev, d.dodavatel_id";
 

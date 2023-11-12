@@ -4,8 +4,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Supermarket.Wpf.Manager.AddProducts"
+             xmlns:converter="clr-namespace:Supermarket.Wpf.Common.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="1080" d:DesignWidth="1920">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <converter:StoragePlaceIdToBooleanConverter x:Key="StoragePlaceIdToBooleanConverter" />
+        </ResourceDictionary>
+    </UserControl.Resources>
     <Border Grid.Column="0" Margin="10,10,10,0" Style="{StaticResource PanelBorderStyle}">
         <Grid>
             <DataGrid ItemsSource="{Binding Products}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False" Width="Auto" ColumnWidth="*" HorizontalAlignment="Left" Height="Auto" >
@@ -13,8 +19,9 @@
                     <DataGridCheckBoxColumn Header="Přídat" Binding="{Binding IsInSupermarket}" Width="150" IsReadOnly="False">
                         <DataGridCheckBoxColumn.ElementStyle>
                             <Style TargetType="CheckBox">
-                                <Setter Property="Command" Value="{Binding DataContext.CheckBoxClickCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"/>
-                                <Setter Property="CommandParameter" Value="{Binding}"/>
+                                <Setter Property="Command" Value="{Binding DataContext.CheckBoxClickCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" />
+                                <Setter Property="CommandParameter" Value="{Binding}" />
+                                <Setter Property="IsEnabled" Value="{Binding StoragePlaceId, Converter={StaticResource StoragePlaceIdToBooleanConverter}}" />
                             </Style>
                         </DataGridCheckBoxColumn.ElementStyle>
                     </DataGridCheckBoxColumn>
