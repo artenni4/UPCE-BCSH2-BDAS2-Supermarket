@@ -5,7 +5,7 @@ using System.Windows.Input;
 
 namespace Supermarket.Wpf.GoodsKeeping.GoodsManagement.Dialogs
 {
-    public class DeleteStoredProductViewModel : NotifyPropertyChangedBase, IDialogViewModel<DialogResult<decimal>>
+    public class DeleteStoredProductViewModel : NotifyPropertyChangedBase, IDialogViewModel<decimal>
     {
         public ICommand Confirm { get; }
         public ICommand Cancel { get; }
@@ -45,7 +45,5 @@ namespace Supermarket.Wpf.GoodsKeeping.GoodsManagement.Dialogs
         {
             return decimal.TryParse(DeleteCount, out _);
         }
-
-        public void SetParameters(EmptyParameters parameters) { }
     }
 }

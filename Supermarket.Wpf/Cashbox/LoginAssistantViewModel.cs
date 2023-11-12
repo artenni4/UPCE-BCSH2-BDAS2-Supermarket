@@ -9,7 +9,7 @@ using Supermarket.Wpf.Dialog;
 
 namespace Supermarket.Wpf.Cashbox;
 
-public class LoginAssistantViewModel : NotifyPropertyChangedBase, IDialogViewModel<DialogResult<LoggedSupermarketEmployee>>, IAsyncViewModel
+public class LoginAssistantViewModel : NotifyPropertyChangedBase, IDialogViewModel<LoggedSupermarketEmployee>, IAsyncViewModel
 {
     private readonly ICashBoxService _cashBoxService;
 
@@ -65,7 +65,6 @@ public class LoginAssistantViewModel : NotifyPropertyChangedBase, IDialogViewMod
 
     public event EventHandler? LoadingStarted;
     public event EventHandler? LoadingFinished;
-    public void SetParameters(EmptyParameters parameters) { }
 
     public event EventHandler<DialogResult<LoggedSupermarketEmployee>>? ResultReceived;
 }

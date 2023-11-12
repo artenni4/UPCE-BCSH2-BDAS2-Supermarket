@@ -76,8 +76,8 @@ namespace Supermarket.Wpf.Cashbox
         private async void ClearSelectedProducts(object? obj)
         {
             var result = await _dialogService
-                .ShowForResultAsync<ConfirmationDialogViewModel, DialogResult, ConfirmationDialogParameters>(
-                    new ConfirmationDialogParameters("Opravdu chcete zrušit prodej?", ConfirmationButtons.OkCancel));
+                .ShowAsync<ConfirmationDialogViewModel, ConfirmationDialogParameters>(
+                    new ConfirmationDialogParameters("Provedením této akce zrušite celý prodej", ConfirmationButtons.OkCancel));
 
             if (result.IsOk())
             {
@@ -103,7 +103,7 @@ namespace Supermarket.Wpf.Cashbox
 
         private async void InviteAssistant(object? obj)
         {
-            var result = await _dialogService.ShowForResultAsync<LoginAssistantViewModel, DialogResult<LoggedSupermarketEmployee>, EmptyParameters>(EmptyParameters.Value);
+            var result = await _dialogService.ShowAsync<LoginAssistantViewModel, LoggedSupermarketEmployee>();
             if (result.IsOk(out var loggedEmployee))
             {
                 _loggedUserService.SetSupermarketEmployee(loggedEmployee);
@@ -179,8 +179,7 @@ namespace Supermarket.Wpf.Cashbox
             decimal count = 1;
             if (selectedProduct.IsByWeight)
             {
-                var result = await _dialogService
-                    .ShowForResultAsync<ProductCountInputViewModel, DialogResult<decimal>, EmptyParameters>(EmptyParameters.Value);
+                var result = await _dialogService.ShowAsync<ProductCountInputViewModel, decimal>();
 
                 if (! result.IsOk(out count))
                 {

@@ -140,8 +140,7 @@ namespace Supermarket.Wpf.GoodsKeeping.ArrivalRegistration
         {
             if (obj is GoodsKeepingProduct selectedProduct)
             {
-                var dialogResult = await _dialogService
-                    .ShowForResultAsync<ProductCountInputViewModel, DialogResult<decimal>, EmptyParameters>(EmptyParameters.Value);
+                var dialogResult = await _dialogService.ShowAsync<ProductCountInputViewModel, decimal>();
 
                 if (dialogResult.IsOk(out var productCount))
                 {

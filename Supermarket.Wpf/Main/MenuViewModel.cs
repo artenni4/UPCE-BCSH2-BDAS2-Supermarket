@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows.Input;
-using Supermarket.Core.Domain.Auth.LoggedEmployees;
 using Supermarket.Wpf.Common;
 using Supermarket.Wpf.Dialog;
 using Supermarket.Wpf.LoggedUser;
@@ -19,18 +18,18 @@ namespace Supermarket.Wpf.Main
         {
             LoggedUserService = loggedUserService;
             
-            LogOutCommand = new RelayCommand(_ => ResultReceived?.Invoke(this, MenuResult.LogOut()));
+            LogOutCommand = new RelayCommand(_ => ResultReceived?.Invoke(this, DialogResult<MenuResult>.Ok(MenuResult.LogOut())));
             
             NavigateToCashboxCommand = new RelayCommand(
-                _ => ResultReceived?.Invoke(this, MenuResult.Navigate(ApplicationView.CashBox)),
+                _ => ResultReceived?.Invoke(this, DialogResult<MenuResult>.Ok(MenuResult.Navigate(ApplicationView.CashBox))),
                 _ => navigationService.CurrentView != ApplicationView.CashBox);
 
             NavigateToGoodsKeepingCommand = new RelayCommand(
-                _ => ResultReceived?.Invoke(this, MenuResult.Navigate(ApplicationView.Storage)),
+                _ => ResultReceived?.Invoke(this, DialogResult<MenuResult>.Ok(MenuResult.Navigate(ApplicationView.Storage))),
                 _ => navigationService.CurrentView != ApplicationView.Storage);
 
             NavigateToManagerCommand = new RelayCommand(
-                _ => ResultReceived?.Invoke(this, MenuResult.Navigate(ApplicationView.Manager)),
+                _ => ResultReceived?.Invoke(this, DialogResult<MenuResult>.Ok(MenuResult.Navigate(ApplicationView.Manager))),
                 _ => navigationService.CurrentView != ApplicationView.Manager);
         }
 
@@ -41,8 +40,6 @@ namespace Supermarket.Wpf.Main
             private set => SetProperty(ref _loggedUserService, value);
         }
 
-        public void SetParameters(EmptyParameters parameters) { }
-
-        public event EventHandler<MenuResult>? ResultReceived;
+        public event EventHandler<DialogResult<MenuResult>>? ResultReceived;
     }
 }

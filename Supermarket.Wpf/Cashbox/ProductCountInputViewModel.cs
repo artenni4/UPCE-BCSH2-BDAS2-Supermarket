@@ -5,7 +5,7 @@ using Supermarket.Wpf.Dialog;
 
 namespace Supermarket.Wpf.Cashbox;
 
-public class ProductCountInputViewModel : NotifyPropertyChangedBase, IDialogViewModel<DialogResult<decimal>>
+public class ProductCountInputViewModel : NotifyPropertyChangedBase, IDialogViewModel<decimal>
 {
     public ICommand ConfirmCommand { get; }
     public ICommand CancelCommand { get; }
@@ -20,8 +20,6 @@ public class ProductCountInputViewModel : NotifyPropertyChangedBase, IDialogView
     {
         ResultReceived?.Invoke(this, DialogResult<decimal>.Cancel());
     }
-
-    public void SetParameters(EmptyParameters parameters) { }
 
     private void ConfirmCount(object? obj)
     {

@@ -12,22 +12,19 @@ namespace Supermarket.Wpf.Login
     internal class LoginViewModel : NotifyPropertyChangedBase, IViewModel
     {
         private readonly ILoginService _loginService;
-        private readonly INavigationService _navigationService;
-        private readonly ILoggedUserService _sessionService;
+        private readonly ILoggedUserService _loggedUserService;
 
         public ICommand EmployeeLoginCommand { get; }
         public ICommand CustomerLoginCommand { get; }
 
-        public LoginViewModel(ILoginService loginService, INavigationService navigationService, ILoggedUserService sessionService)
+        public LoginViewModel(ILoginService loginService, ILoggedUserService loggedUserService)
         {
             _loginService = loginService;
-            _navigationService = navigationService;
-            _sessionService = sessionService;
+            _loggedUserService = loggedUserService;
 
             EmployeeLoginCommand = new RelayCommand(EmployeeLoginAsync, CanEmployeeLogin);
             CustomerLoginCommand = new RelayCommand(CustomerLogin);
         }
-
 
         private LoginModel _employeeLoginData = new();
         public LoginModel EmployeeLoginData
@@ -54,11 +51,11 @@ namespace Supermarket.Wpf.Login
                 var loggedEmployee = await _loginService.LoginEmployeeAsync(loginData);
                 if (loggedEmployee is LoggedSupermarketEmployee loggedSupermarketEmployee)
                 {
-                    _sessionService.SetSupermarketEmployee(loggedSupermarketEmployee);
+                    _loggedUserService.SetSupermarketEmployee(loggedSupermarketEmployee);
                 }
                 else if (loggedEmployee is LoggedAdmin loggedAdmin)
                 {
-                    _sessionService.SetAdmin(loggedAdmin, 1);
+                    _loggedUserService.SetAdmin(loggedAdmin, 1);
                 }
             }
             catch (InvalidCredentialsException)
@@ -67,9 +64,9 @@ namespace Supermarket.Wpf.Login
             }
         }
 
-        private async void CustomerLogin(object? obj)
+        private void CustomerLogin(object? obj)
         {
-            await _navigationService.NavigateToAsync(ApplicationView.CashBox);
+            _loggedUserService.SetCustomer(1);
         }
 
         private bool CanEmployeeLogin(object? arg) => !string.IsNullOrWhiteSpace(EmployeeLoginData.Login) && !string.IsNullOrWhiteSpace(EmployeeLoginData.Password);

@@ -67,7 +67,7 @@ namespace Supermarket.Wpf.GoodsKeeping.GoodsManagement
         {
             if (SelectedStoredProduct != null)
             {
-                var result = await _dialogService.ShowForResultAsync<MoveStoredProductViewModel, DialogResult<MoveProduct>, EmptyParameters>(EmptyParameters.Value);
+                var result = await _dialogService.ShowAsync<MoveStoredProductViewModel, MoveProduct>();
                 if (result.IsOk(out var moveResult))
                 {
                     await _goodsKeepingService.MoveProductAsync(SelectedStoredProduct.StoragePlaceId, new MovingProduct { Count = moveResult.Count, NewStoragePlaceId = moveResult.StorageId, ProductId = SelectedStoredProduct.ProductId, SupermarketId = 1 });
@@ -80,7 +80,7 @@ namespace Supermarket.Wpf.GoodsKeeping.GoodsManagement
         {
             if (SelectedStoredProduct != null)
             {
-                var result = await _dialogService.ShowForResultAsync<DeleteStoredProductViewModel, DialogResult<decimal>, EmptyParameters>(EmptyParameters.Value);
+                var result = await _dialogService.ShowAsync<DeleteStoredProductViewModel, decimal>();
                 if (result.IsOk(out var count))
                 {
                     await _goodsKeepingService.DeleteProductStorageAsync(SelectedStoredProduct.StoragePlaceId, SelectedStoredProduct.ProductId, count);
