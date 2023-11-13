@@ -2,7 +2,7 @@
 using System.Windows.Input;
 using Supermarket.Wpf.Dialog;
 
-namespace Supermarket.Wpf.Common.Dialogs;
+namespace Supermarket.Wpf.Common.Dialogs.Confirmation;
 
 public class ConfirmationDialogViewModel : NotifyPropertyChangedBase, IDialogViewModel<EmptyResult, ConfirmationDialogParameters>
 {

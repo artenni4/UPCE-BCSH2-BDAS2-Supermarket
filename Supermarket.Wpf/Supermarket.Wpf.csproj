@@ -22,7 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Supermarket.Application\Supermarket.Application.csproj" />
     <ProjectReference Include="..\Supermarket.Core\Supermarket.Core.csproj" />
     <ProjectReference Include="..\Supermarket.Infrastructure\Supermarket.Infrastructure.csproj" />
   </ItemGroup>
@@ -48,7 +47,7 @@
       <XamlRuntime>Wpf</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Cashbox\ProductCountInput.xaml">
+    <Page Update="Common\Dialogs\Confirmation\ConfirmationDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <XamlRuntime>Wpf</XamlRuntime>
       <SubType>Designer</SubType>

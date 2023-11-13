@@ -29,7 +29,7 @@
                     <TextBox Grid.Column="0" Text="{Binding ProductCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     <TextBlock Grid.Column="1" Text="KG/KS" Margin="10,0" VerticalAlignment="Center" />
                 </Grid>
-                <ComboBox ItemsSource="{Binding StoragePlaces}" DisplayMemberPath="Code" SelectedItem="{Binding SelectedPlace}" Width="350px"/>
+                <ComboBox ItemsSource="{Binding StoragePlaces}" DisplayMemberPath="Code" SelectedItem="{Binding SelectedPlace}" />
 
             </StackPanel>
 

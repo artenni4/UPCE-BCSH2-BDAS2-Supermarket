@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace Supermarket.Wpf.Common.Dialogs;
+namespace Supermarket.Wpf.Common.Dialogs.Confirmation;
 
 public partial class ConfirmationDialog : UserControl
 {

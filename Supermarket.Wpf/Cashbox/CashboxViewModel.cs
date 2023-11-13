@@ -11,6 +11,8 @@ using Supermarket.Wpf.ViewModelResolvers;
 using Supermarket.Core.UseCases.CashBoxes;
 using Supermarket.Core.Domain.Common.Paging;
 using Supermarket.Core.Domain.Auth.LoggedEmployees;
+using Supermarket.Wpf.Common.Dialogs.Confirmation;
+using Supermarket.Wpf.Common.Dialogs.Input;
 
 namespace Supermarket.Wpf.Cashbox
 {
@@ -70,14 +72,12 @@ namespace Supermarket.Wpf.Cashbox
             InviteAssistantCommand = new RelayCommand(InviteAssistant);
             AssistantExitCommand = new RelayCommand(AssistantExit);
             RemoveProductCommand = new RelayCommand(RemoveProduct);
-            ClearSelectedProductsCommand = new RelayCommand(ClearSelectedProducts);
+            ClearSelectedProductsCommand = new RelayCommand(ClearSelectedProducts, _ => SelectedProducts.Any());
         }
 
         private async void ClearSelectedProducts(object? obj)
         {
-            var result = await _dialogService
-                .ShowAsync<ConfirmationDialogViewModel, ConfirmationDialogParameters>(
-                    new ConfirmationDialogParameters("Provedením této akce zrušite celý prodej", ConfirmationButtons.OkCancel));
+            var result = await _dialogService.ShowConfirmationDialogAsync("Provedením této akce zrušite celý prodej");
 
             if (result.IsOk())
             {
@@ -179,9 +179,9 @@ namespace Supermarket.Wpf.Cashbox
             decimal count = 1;
             if (selectedProduct.IsByWeight)
             {
-                var result = await _dialogService.ShowAsync<ProductCountInputViewModel, decimal>();
+                var dialogResult = await _dialogService.ShowInputDialogAsync<decimal>(title: "POČET", inputLabel: selectedProduct.MeasureUnit);
 
-                if (! result.IsOk(out count))
+                if (! dialogResult.IsOk(out count))
                 {
                     return;
                 }

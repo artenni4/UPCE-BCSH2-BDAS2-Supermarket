@@ -19,6 +19,8 @@
         xmlns:managerLogs="clr-namespace:Supermarket.Wpf.Manager.SupermarketLogs"
         xmlns:managerSales="clr-namespace:Supermarket.Wpf.Manager.SupermarketSales"
         xmlns:managerCashboxes="clr-namespace:Supermarket.Wpf.Manager.SupermarketCashboxes"
+        xmlns:confirmation="clr-namespace:Supermarket.Wpf.Common.Dialogs.Confirmation"
+        xmlns:input="clr-namespace:Supermarket.Wpf.Common.Dialogs.Input"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type=local:MainViewModelFake, IsDesignTimeCreatable=True}"
         MinHeight="600" MinWidth="800"
@@ -50,17 +52,14 @@
         <DataTemplate DataType="{x:Type local:MenuViewModel}">
             <local:PopupMenu />
         </DataTemplate>
-        <DataTemplate DataType="{x:Type dialogs:ConfirmationDialogViewModel}">
-            <dialogs:ConfirmationDialog />
+        <DataTemplate DataType="{x:Type confirmation:ConfirmationDialogViewModel}">
+            <confirmation:ConfirmationDialog />
         </DataTemplate>
-        <DataTemplate DataType="{x:Type cashbox:ProductCountInputViewModel}">
-            <cashbox:ProductCountInput />
+        <DataTemplate DataType="{x:Type input:InputDialogViewModel}">
+            <input:InputDialog />
         </DataTemplate>
         <DataTemplate DataType="{x:Type cashbox:LoginAssistantViewModel}">
             <cashbox:LoginAssistant />
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type goodsManagementDialogs:DeleteStoredProductViewModel}" >
-            <goodsManagementDialogs:DeleteStoredProductWindow />
         </DataTemplate>
         <DataTemplate DataType="{x:Type goodsManagementDialogs:MoveStoredProductViewModel}" >
             <goodsManagementDialogs:MoveStoredProductWindow />
