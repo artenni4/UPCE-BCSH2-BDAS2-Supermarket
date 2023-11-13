@@ -41,6 +41,13 @@
         <Setter Property="BorderBrush" Value="Black"/>
     </Style>
     
+    <Style TargetType="ComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
+        <Setter Property="FontSize" Value="40" />
+        <Setter Property="Background" Value="{StaticResource TextBackgroundColor}" />
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="Black"/>
+    </Style>
+    
     <Style TargetType="PasswordBox" BasedOn="{StaticResource {x:Type PasswordBox}}">
         <Setter Property="FontSize" Value="40" />
         <Setter Property="Background" Value="{StaticResource TextBackgroundColor}" />

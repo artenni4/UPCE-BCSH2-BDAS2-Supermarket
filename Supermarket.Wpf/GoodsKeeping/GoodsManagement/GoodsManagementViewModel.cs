@@ -80,8 +80,8 @@ namespace Supermarket.Wpf.GoodsKeeping.GoodsManagement
         {
             if (SelectedStoredProduct != null)
             {
-                var result = await _dialogService.ShowAsync<DeleteStoredProductViewModel, decimal>();
-                if (result.IsOk(out var count))
+                var dialogResult = await _dialogService.ShowInputDialogAsync<decimal>(title: "POČET", inputLabel: "KG/KS");
+                if (dialogResult.IsOk(out var count))
                 {
                     await _goodsKeepingService.DeleteProductStorageAsync(SelectedStoredProduct.StoragePlaceId, SelectedStoredProduct.ProductId, count);
                     await InitializeAsync();
