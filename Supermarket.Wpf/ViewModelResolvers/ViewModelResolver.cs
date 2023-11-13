@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using Supermarket.Wpf.Cashbox;
+using Supermarket.Wpf.CashBox;
 using Supermarket.Wpf.Common;
 using Supermarket.Wpf.Login;
 using Supermarket.Wpf.Navigation;

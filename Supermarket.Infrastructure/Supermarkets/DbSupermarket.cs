@@ -5,6 +5,8 @@ namespace Supermarket.Infrastructure.Supermarkets;
 internal class DbSupermarket : IDbEntity<Core.Domain.Supermarkets.Supermarket, int, DbSupermarket>
 {
     public required int supermarket_id { get; init; }
+    public required string adresa { get; init; }
+    public required int region_id { get; init; }
     
     public static string TableName => "SUPERMARKETY";
     public static IReadOnlyList<string> IdentityColumns { get; } = new[]
@@ -12,28 +14,20 @@ internal class DbSupermarket : IDbEntity<Core.Domain.Supermarkets.Supermarket, i
         nameof(supermarket_id)
     };
 
-    public Core.Domain.Supermarkets.Supermarket ToDomainEntity()
+    public Core.Domain.Supermarkets.Supermarket ToDomainEntity() => new()
     {
-        throw new NotImplementedException();
-    }
+        Id = supermarket_id,
+        Address = adresa,
+        RegionId = region_id
+    };
 
-    public static DbSupermarket ToDbEntity(Core.Domain.Supermarkets.Supermarket entity)
+    public static DbSupermarket ToDbEntity(Core.Domain.Supermarkets.Supermarket entity) => new()
     {
-        throw new NotImplementedException();
-    }
+        supermarket_id = entity.Id,
+        adresa = entity.Address,
+        region_id = entity.RegionId
+    };
 
-    public static DynamicParameters GetEntityIdParameters(int id)
-    {
-        throw new NotImplementedException();
-    }
-
-    public static DynamicParameters GetOutputIdentityParameters()
-    {
-        throw new NotImplementedException();
-    }
-
-    public static int ExtractIdentity(DynamicParameters dynamicParameters)
-    {
-        throw new NotImplementedException();
-    }
+    public static DynamicParameters GetEntityIdParameters(int id) => 
+        new DynamicParameters().AddParameter(nameof(supermarket_id), id);
 }

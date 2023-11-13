@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Supermarket.Core.Domain.Auth;
-using Supermarket.Core.UseCases.CashBoxes;
+using Supermarket.Core.UseCases.CashBox;
 using Supermarket.Core.UseCases.Common;
 using Supermarket.Core.UseCases.GoodsKeeping;
 using Supermarket.Core.UseCases.Login;

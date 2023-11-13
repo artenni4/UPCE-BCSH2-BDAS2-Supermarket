@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:converter="clr-namespace:Supermarket.Wpf.Common.Converters"
-        xmlns:cashbox="clr-namespace:Supermarket.Wpf.Cashbox"
+        xmlns:cashbox="clr-namespace:Supermarket.Wpf.CashBox"
         xmlns:login="clr-namespace:Supermarket.Wpf.Login"
         xmlns:local="clr-namespace:Supermarket.Wpf.Main"
         xmlns:goodsKeeping="clr-namespace:Supermarket.Wpf.GoodsKeeping"
@@ -21,14 +21,15 @@
         xmlns:managerCashboxes="clr-namespace:Supermarket.Wpf.Manager.SupermarketCashboxes"
         xmlns:confirmation="clr-namespace:Supermarket.Wpf.Common.Dialogs.Confirmation"
         xmlns:input="clr-namespace:Supermarket.Wpf.Common.Dialogs.Input"
+        xmlns:dropdown="clr-namespace:Supermarket.Wpf.Common.Dialogs.DropDown"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type=local:MainViewModelFake, IsDesignTimeCreatable=True}"
         MinHeight="600" MinWidth="800"
         Title="MainWindow" Height="1080" Width="1920" WindowState="Maximized">
     <Window.Resources>
         <!-- DataTemplates for main content -->
-        <DataTemplate DataType="{x:Type cashbox:CashboxViewModel}">
-            <cashbox:CashboxWindow />
+        <DataTemplate DataType="{x:Type cashbox:CashBoxViewModel}">
+            <cashbox:CashBoxWindow />
         </DataTemplate>
         <DataTemplate DataType="{x:Type login:LoginViewModel}">
             <login:LoginWindow />
@@ -57,6 +58,9 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type input:InputDialogViewModel}">
             <input:InputDialog />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type dropdown:DropDownDialogViewModel}">
+            <dropdown:DropDownDialog />
         </DataTemplate>
         <DataTemplate DataType="{x:Type cashbox:LoginAssistantViewModel}">
             <cashbox:LoginAssistant />

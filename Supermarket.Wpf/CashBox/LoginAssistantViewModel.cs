@@ -3,11 +3,10 @@ using System.Windows;
 using System.Windows.Input;
 using Supermarket.Core.Domain.Auth;
 using Supermarket.Core.Domain.Auth.LoggedEmployees;
-using Supermarket.Core.UseCases.CashBoxes;
-using Supermarket.Wpf.Common;
+using Supermarket.Core.UseCases.CashBox;
 using Supermarket.Wpf.Dialog;
 
-namespace Supermarket.Wpf.Cashbox;
+namespace Supermarket.Wpf.CashBox;
 
 public class LoginAssistantViewModel : NotifyPropertyChangedBase, IDialogViewModel<LoggedSupermarketEmployee>, IAsyncViewModel
 {

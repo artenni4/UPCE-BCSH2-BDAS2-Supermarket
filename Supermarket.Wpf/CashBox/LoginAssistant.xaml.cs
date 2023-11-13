@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace Supermarket.Wpf.Cashbox;
+namespace Supermarket.Wpf.CashBox;
 
 public partial class LoginAssistant : UserControl
 {

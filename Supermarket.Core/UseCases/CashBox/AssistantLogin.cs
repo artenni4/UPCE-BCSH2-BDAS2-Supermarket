@@ -1,6 +1,6 @@
 ﻿using Supermarket.Core.Domain.Auth.LoggedEmployees;
 
-namespace Supermarket.Core.UseCases.CashBoxes
+namespace Supermarket.Core.UseCases.CashBox
 {
     public class AssistantLogin
     {

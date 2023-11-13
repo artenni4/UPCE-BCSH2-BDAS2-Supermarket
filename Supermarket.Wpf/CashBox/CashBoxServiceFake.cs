@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 using Supermarket.Core.Domain.Auth;
 using Supermarket.Core.Domain.Auth.LoggedEmployees;
 using Supermarket.Core.Domain.Common.Paging;
-using Supermarket.Core.UseCases.CashBoxes;
+using Supermarket.Core.UseCases.CashBox;
 
-namespace Supermarket.Wpf.Cashbox;
+namespace Supermarket.Wpf.CashBox;
 
 public class CashBoxServiceFake : ICashBoxService
 {
@@ -35,7 +35,7 @@ public class CashBoxServiceFake : ICashBoxService
         throw new NotImplementedException();
     }
 
-    public Task<PagedResult<SupermarketCashBox>> GetCashBoxesAsync(int supermarketId)
+    public Task<PagedResult<SupermarketCashBox>> GetCashBoxesAsync(int supermarketId, RecordsRange recordsRange)
     {
         throw new NotImplementedException();
     }

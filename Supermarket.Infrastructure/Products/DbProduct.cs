@@ -64,12 +64,6 @@ internal class DbProduct : IDbEntity<Product, int, DbProduct>
     public static DynamicParameters GetEntityIdParameters(int id) =>
         new DynamicParameters().AddParameter(nameof(zbozi_id), id);
 
-    public static DynamicParameters GetOutputIdentityParameters() =>
-        new DynamicParameters().AddOutputParameter(nameof(zbozi_id));
-
-    public static int ExtractIdentity(DynamicParameters dynamicParameters) =>
-        dynamicParameters.Get<int>(nameof(zbozi_id));
-
     private static int GetMeasureUnitId(MeasureUnit measureUnit)
     {
         if (measureUnit == MeasureUnit.Kilogram)

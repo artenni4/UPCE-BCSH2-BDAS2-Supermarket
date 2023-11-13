@@ -1,6 +1,6 @@
-﻿using Supermarket.Core.UseCases.CashBoxes;
+﻿using Supermarket.Core.UseCases.CashBox;
 
-namespace Supermarket.Wpf.Cashbox;
+namespace Supermarket.Wpf.CashBox;
 
 public class SelectedProductModel
 {

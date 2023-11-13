@@ -2,7 +2,7 @@
 using Supermarket.Core.Domain.Auth.LoggedEmployees;
 using Supermarket.Core.Domain.Common.Paging;
 
-namespace Supermarket.Core.UseCases.CashBoxes
+namespace Supermarket.Core.UseCases.CashBox
 {
     /// <summary>
     /// Service for cash box screen
@@ -41,6 +41,6 @@ namespace Supermarket.Core.UseCases.CashBoxes
         /// <summary>
         /// Gets list of cash boxes in given supermarket
         /// </summary>
-        Task<PagedResult<SupermarketCashBox>> GetCashBoxesAsync(int supermarketId);
+        Task<PagedResult<SupermarketCashBox>> GetCashBoxesAsync(int supermarketId, RecordsRange recordsRange);
     }
 }

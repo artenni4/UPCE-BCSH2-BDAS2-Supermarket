@@ -1,14 +1,16 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
-using Supermarket.Core.UseCases.CashBoxes;
+using Supermarket.Core.UseCases.CashBox;
 using Supermarket.Wpf.Dialog;
 using Supermarket.Wpf.LoggedUser;
+using Supermarket.Wpf.Navigation;
 
-namespace Supermarket.Wpf.Cashbox;
+namespace Supermarket.Wpf.CashBox;
 
-public class CashBoxViewModelFake : CashboxViewModel
+public class CashBoxViewModelFake : CashBoxViewModel
 {
-    public CashBoxViewModelFake() : base(new CashBoxServiceFake(), new DialogServiceFake(), new LoggedUserServiceFake())
+    public CashBoxViewModelFake() 
+        : base(new CashBoxServiceFake(), new DialogServiceFake(), new LoggedUserServiceFake(), new NavigationServiceFake())
     {
         var cashBoxProducts = new CashBoxProduct[]
         {
@@ -24,9 +26,9 @@ public class CashBoxViewModelFake : CashboxViewModel
             new() { ProductId = 3, Name = "CCCCCCCC CCCC", IsByWeight = true, MeasureUnit = "kg", Price = 100  },
         };
         
-        DisplayedProducts = new ObservableCollection<CashBoxProduct>(cashBoxProducts);
+        DisplayedProducts.Update(cashBoxProducts);
 
-        Categories = new ObservableCollection<CashBoxProductCategory>(new CashBoxProductCategory[]
+        Categories.Update(new CashBoxProductCategory[]
         {
             new() { CategoryId = 1, Name = "AAA" },
             new() { CategoryId = 2, Name = "BBB" },
@@ -42,7 +44,7 @@ public class CashBoxViewModelFake : CashboxViewModel
             new() { CategoryId = 3, Name = "CCCCCCCC CCCC" },
         });
 
-        SelectedProducts = new ObservableCollection<SelectedProductModel>(cashBoxProducts.Select(cashBoxProduct => new SelectedProductModel
+        SelectedProducts.Update(cashBoxProducts.Select(cashBoxProduct => new SelectedProductModel
         {
             CashBoxProduct = cashBoxProduct,
             Count = 10,

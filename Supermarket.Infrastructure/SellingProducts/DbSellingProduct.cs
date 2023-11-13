@@ -33,15 +33,6 @@ internal class DbSellingProduct : IDbEntity<SellingProduct, SellingProductId, Db
             .AddParameter(nameof(supermarket_id), id.SupermarketId)
             .AddParameter(nameof(zbozi_id), id.ProductId);
 
-    public static DynamicParameters GetOutputIdentityParameters() =>
-        new DynamicParameters()
-            .AddOutputParameter(nameof(supermarket_id))
-            .AddOutputParameter(nameof(zbozi_id));
-
-    public static SellingProductId ExtractIdentity(DynamicParameters dynamicParameters) => new(
-        ProductId: dynamicParameters.Get<int>(nameof(zbozi_id)),
-        SupermarketId: dynamicParameters.Get<int>(nameof(supermarket_id)));
-
     public DynamicParameters GetInsertingValues() =>
         new DynamicParameters().AddParameter(nameof(zbozi_id), zbozi_id).AddParameter(nameof(supermarket_id), supermarket_id);
 }
