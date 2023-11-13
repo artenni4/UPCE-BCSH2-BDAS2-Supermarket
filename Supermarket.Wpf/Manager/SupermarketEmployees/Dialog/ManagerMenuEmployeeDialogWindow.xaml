@@ -1,0 +1,47 @@
+﻿<UserControl x:Class="Supermarket.Wpf.Manager.SupermarketEmployees.Dialog.ManagerMenuEmployeeDialogWindow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Supermarket.Wpf.Manager.SupermarketEmployees.Dialog"
+             mc:Ignorable="d" 
+             d:DesignHeight="1080" d:DesignWidth="1920">
+    <Border BorderBrush="Transparent" Background="White" Width="500" Height="600">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="20" ShadowDepth="2" Color="Gray"/>
+        </Border.Effect>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="QWEQWE" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel>
+                    <TextBox  />
+                    <TextBlock Text="Q"/>
+                    <TextBlock Text="Q"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1">
+                    <TextBlock Text="Q"/>
+                    <TextBlock Text="Q"/>
+                    <TextBlock Text="Q"/>
+                </StackPanel>
+            </Grid>
+
+            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Content="A"/>
+                <Button Content="A"/>
+            </StackPanel>
+        </Grid>
+    </Border>
+</UserControl>

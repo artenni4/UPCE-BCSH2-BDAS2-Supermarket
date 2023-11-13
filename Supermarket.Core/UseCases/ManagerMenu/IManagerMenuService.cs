@@ -1,4 +1,5 @@
 ﻿using Supermarket.Core.Domain.Common.Paging;
+using Supermarket.Core.Domain.Employees;
 using Supermarket.Core.Domain.SellingProducts;
 using Supermarket.Core.Domain.StoredProducts;
 
@@ -11,6 +12,6 @@ namespace Supermarket.Core.UseCases.ManagerMenu
         void RemoveProductFromSupermarket(StoredProductId id);
         void AddProductToSupermarket(SellingProductId id);
         Task<PagedResult<ManagerMenuEmployee>> GetManagerEmployees(int supermarketId, RecordsRange recordsRange);
-
+        Task<Employee?> GetEmployeeToEdit(int employeeId);
     }
 }

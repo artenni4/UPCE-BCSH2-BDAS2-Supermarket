@@ -8,15 +8,18 @@
              d:DesignHeight="1080" d:DesignWidth="1920">
     <Border Grid.Column="0" Margin="10,10,10,0" Style="{StaticResource PanelBorderStyle}">
         <Grid>
-            <DataGrid ItemsSource="{Binding Employees}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False" Width="1000" ColumnWidth="*" HorizontalAlignment="Left" Height="Auto" SelectedItem="{Binding SelectedStoredProduct, Mode=TwoWay}">
+            <DataGrid ItemsSource="{Binding Employees}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False" Width="1300" ColumnWidth="*" HorizontalAlignment="Left" Height="Auto" SelectedItem="{Binding SelectedEmployee, Mode=TwoWay}">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Jméno" Binding="{Binding Name}" Width="500" IsReadOnly="True" FontSize="25" />
-                    <DataGridTextColumn Header="Příjmení" Binding="{Binding Surname}" Width="200" IsReadOnly="True" FontSize="25" />
-                    <DataGridTextColumn Header="Datum nastupu" Binding="{Binding HireDate}" Width="*" IsReadOnly="True" FontSize="25" />
+                    <DataGridTextColumn Header="Jméno" Binding="{Binding Name}" Width="300" IsReadOnly="True" FontSize="25" />
+                    <DataGridTextColumn Header="Příjmení" Binding="{Binding Surname}" Width="300" IsReadOnly="True" FontSize="25" />
+                    <DataGridTextColumn Header="Datum nastupu" Binding="{Binding HireDate}" Width="250" IsReadOnly="True" FontSize="25" />
                     <DataGridTextColumn Header="Role" Binding="{Binding Roles}" Width="*" IsReadOnly="True" FontSize="25" />
                 </DataGrid.Columns>
             </DataGrid>
 
+            <Button Content="Přidat" Command="{Binding AddCommand}" Style="{StaticResource DarkButtonStyle}" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,0,0" />
+            <Button Content="Edit" Command="{Binding EditCommand}" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,80,0,0" />
+            <Button Content="Delete" Command="{Binding DeleteCommand}" Style="{StaticResource RedButtonStyle}" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,150,0,0" />
         </Grid>
     </Border>
 </UserControl>
