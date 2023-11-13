@@ -1,8 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Supermarket.Core.UseCases.ManagerMenu;
-using Supermarket.Wpf.Cashbox;
+using Supermarket.Wpf.CashBox;
 using Supermarket.Wpf.Common.Dialogs;
 using Supermarket.Wpf.Common.Dialogs.Confirmation;
+using Supermarket.Wpf.Common.Dialogs.DropDown;
 using Supermarket.Wpf.Common.Dialogs.Input;
 using Supermarket.Wpf.Dialog;
 using Supermarket.Wpf.GoodsKeeping;
@@ -38,10 +39,11 @@ public static class WpfDependencies
 
         serviceCollection.AddTransient<MenuViewModel>();
         serviceCollection.AddTransient<LoginViewModel>();
-        serviceCollection.AddTransient<CashboxViewModel>();
+        serviceCollection.AddTransient<CashBoxViewModel>();
 
         serviceCollection.AddTransient<ConfirmationDialogViewModel>();
         serviceCollection.AddTransient<InputDialogViewModel>();
+        serviceCollection.AddTransient<DropDownDialogViewModel>();
         serviceCollection.AddTransient<LoginAssistantViewModel>();
 
         serviceCollection.AddTransient<StorageViewModel>();

@@ -1,23 +1,22 @@
 ﻿using Supermarket.Core.Domain.Auth;
 using Supermarket.Core.Domain.Auth.LoggedEmployees;
+using Supermarket.Core.Domain.CashBoxes;
 using Supermarket.Core.Domain.Common.Paging;
-using Supermarket.Core.Domain.Employees.Roles;
 using Supermarket.Core.Domain.SellingProducts;
-using Supermarket.Core.UseCases.Common;
 
-namespace Supermarket.Core.UseCases.CashBoxes
+namespace Supermarket.Core.UseCases.CashBox
 {
     internal class CashBoxService : ICashBoxService
     {
         private readonly ISellingProductRepository _sellingProductRepository;
         private readonly IAuthDomainService _authDomainService;
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly ICashBoxRepository _cashBoxRepository;
 
-        public CashBoxService(ISellingProductRepository sellingProductRepository, IAuthDomainService authDomainService, IUnitOfWork unitOfWork)
+        public CashBoxService(ISellingProductRepository sellingProductRepository, IAuthDomainService authDomainService, ICashBoxRepository cashBoxRepository)
         {
             _sellingProductRepository = sellingProductRepository;
             _authDomainService = authDomainService;
-            _unitOfWork = unitOfWork;
+            _cashBoxRepository = cashBoxRepository;
         }
 
         public async Task<PagedResult<CashBoxProductCategory>> GetCategoriesAsync(int supermarketId, RecordsRange recordsRange)
@@ -68,9 +67,14 @@ namespace Supermarket.Core.UseCases.CashBoxes
             throw new InvalidCouponException();
         }
 
-        public Task<PagedResult<SupermarketCashBox>> GetCashBoxesAsync(int supermarketId)
+        public async Task<PagedResult<SupermarketCashBox>> GetCashBoxesAsync(int supermarketId, RecordsRange recordsRange)
         {
-            throw new NotImplementedException();
+            var cashBoxes = await _cashBoxRepository.GetBySupermarketId(supermarketId, recordsRange);
+            return cashBoxes.Select(c => new SupermarketCashBox
+            {
+                Id = c.Id,
+                Code = c.Code
+            });
         }
     }
 }

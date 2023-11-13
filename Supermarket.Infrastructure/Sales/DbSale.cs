@@ -37,12 +37,6 @@ internal class DbSale : IDbEntity<Sale, int, DbSale>
     public static DynamicParameters GetEntityIdParameters(int id) =>
         new DynamicParameters().AddParameter(nameof(prodej_id), id);
 
-    public static DynamicParameters GetOutputIdentityParameters() =>
-        new DynamicParameters().AddOutputParameter(nameof(prodej_id));
-
-    public static int ExtractIdentity(DynamicParameters dynamicParameters) =>
-        dynamicParameters.Get<int>(nameof(prodej_id));
-
     public static DbSale ToDbEntity(Sale entity) => new()
     {
         prodej_id = entity.Id,

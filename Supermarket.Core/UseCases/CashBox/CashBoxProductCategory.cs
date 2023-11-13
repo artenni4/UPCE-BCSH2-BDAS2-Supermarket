@@ -1,6 +1,6 @@
 ﻿using Supermarket.Core.Domain.ProductCategories;
 
-namespace Supermarket.Core.UseCases.CashBoxes;
+namespace Supermarket.Core.UseCases.CashBox;
 
 public class CashBoxProductCategory
 {

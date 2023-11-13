@@ -1,4 +1,4 @@
-﻿using Supermarket.Wpf.Cashbox;
+﻿using Supermarket.Wpf.CashBox;
 using Supermarket.Wpf.Login;
 using System;
 using System.Diagnostics;
@@ -34,7 +34,7 @@ namespace Supermarket.Wpf.Navigation
                 var viewModelType = applicationView switch
                 {
                     ApplicationView.Login => typeof(LoginViewModel),
-                    ApplicationView.CashBox => typeof(CashboxViewModel),
+                    ApplicationView.CashBox => typeof(CashBoxViewModel),
                     ApplicationView.Storage => typeof(StorageViewModel),
                     ApplicationView.Manager => typeof(ManagerMenuViewModel),
                     _ => throw new NotImplementedException($"Navigation to {applicationView} is not supported yet, implement it by extending this swith")

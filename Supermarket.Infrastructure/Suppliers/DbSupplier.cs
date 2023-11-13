@@ -34,11 +34,5 @@ namespace Supermarket.Infrastructure.Suppliers
 
         public static DynamicParameters GetEntityIdParameters(int id) =>
         new DynamicParameters().AddParameter(nameof(dodavatel_id), id);
-
-        public static DynamicParameters GetOutputIdentityParameters() =>
-            new DynamicParameters().AddOutputParameter(nameof(dodavatel_id));
-
-        public static int ExtractIdentity(DynamicParameters dynamicParameters) =>
-            dynamicParameters.Get<int>(nameof(dodavatel_id));
     }
 }

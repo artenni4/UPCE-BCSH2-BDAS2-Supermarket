@@ -1,39 +1,38 @@
 ﻿using System;
-using Supermarket.Wpf.Common;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Supermarket.Wpf.Common.Dialogs;
 using Supermarket.Wpf.Dialog;
 using Supermarket.Wpf.LoggedUser;
 using Supermarket.Wpf.ViewModelResolvers;
-using Supermarket.Core.UseCases.CashBoxes;
 using Supermarket.Core.Domain.Common.Paging;
 using Supermarket.Core.Domain.Auth.LoggedEmployees;
-using Supermarket.Wpf.Common.Dialogs.Confirmation;
-using Supermarket.Wpf.Common.Dialogs.Input;
+using Supermarket.Core.UseCases.CashBox;
+using Supermarket.Wpf.Navigation;
 
-namespace Supermarket.Wpf.Cashbox
+namespace Supermarket.Wpf.CashBox
 {
-    public class CashboxViewModel : NotifyPropertyChangedBase, IAsyncViewModel, IAsyncInitialized
+    public class CashBoxViewModel : NotifyPropertyChangedBase, IAsyncViewModel, IAsyncInitialized
     {
         private readonly ILoggedUserService _loggedUserService;
         private readonly ICashBoxService _cashBoxService;
+        private readonly INavigationService _navigationService;
         private readonly IDialogService _dialogService;
-        
-        private int currentPage = 1;
-        private int? categoryId;
 
-        private PagedResult<CashBoxProduct>? products;
-        private PagedResult<CashBoxProductCategory>? categories;
+        private int _currentPage = 1;
+        private int? _categoryId;
+        private int? _cashBoxId;
+
+        private PagedResult<CashBoxProduct>? _products;
+        private PagedResult<CashBoxProductCategory>? _categories;
 
         public event EventHandler? LoadingStarted;
         public event EventHandler? LoadingFinished;
 
-        public ObservableCollection<CashBoxProduct> DisplayedProducts { get; set; }
-        public ObservableCollection<CashBoxProductCategory> Categories { get; set; }
-        public ObservableCollection<SelectedProductModel> SelectedProducts { get; set; }
+        public ObservableCollection<CashBoxProduct> DisplayedProducts { get; } = new();
+        public ObservableCollection<CashBoxProductCategory> Categories { get; } = new();
+        public ObservableCollection<SelectedProductModel> SelectedProducts { get; } = new();
 
         private bool _isAssistantLoggedIn;
         public bool IsAssistantLoggedIn
@@ -44,38 +43,71 @@ namespace Supermarket.Wpf.Cashbox
         
         public bool IsCustomerCashBox { get; private set; }
 
-        public ICommand NextPageCommand { get; }
+        public ICommand NextPageCommand { get; } 
         public ICommand PreviousPageCommand { get; }
-        public ICommand CategoryButtonClickCommand { get; }
-        public ICommand ProductClickCommand { get; }
+        public ICommand SelectCategoryCommand { get; }
+        public ICommand AddProductCommand { get; }
         public ICommand RemoveProductCommand { get; }
         public ICommand InviteAssistantCommand { get; }
         public ICommand AssistantExitCommand { get; }
-        public ICommand ClearSelectedProductsCommand { get; }
+        public ICommand ClearProductsCommand { get; }
 
-        public CashboxViewModel(ICashBoxService cashBoxService, IDialogService dialogService, ILoggedUserService loggedUserService)
+        public CashBoxViewModel(ICashBoxService cashBoxService, IDialogService dialogService, ILoggedUserService loggedUserService, INavigationService navigationService)
         {
             _cashBoxService = cashBoxService;
             _dialogService = dialogService;
             _loggedUserService = loggedUserService;
-            
-            DisplayedProducts = new ObservableCollection<CashBoxProduct>();
-            Categories = new ObservableCollection<CashBoxProductCategory>();
-            SelectedProducts = new ObservableCollection<SelectedProductModel>();
+            _navigationService = navigationService;
 
             IsCustomerCashBox = loggedUserService.IsCustomer;
 
-            NextPageCommand = new RelayCommand(NextPage, _ => products?.HasNext == true);
-            PreviousPageCommand = new RelayCommand(PreviousPage, _ => products?.HasPrevious == true);
-            CategoryButtonClickCommand = new RelayCommand(CategoryButtonClick);
-            ProductClickCommand = new RelayCommand(ProductClick);
+            NextPageCommand = new RelayCommand(NextPage, _ => _products?.HasNext == true);
+            PreviousPageCommand = new RelayCommand(PreviousPage, _ => _products?.HasPrevious == true);
+            SelectCategoryCommand = new RelayCommand(SelectCategory, CanSelectCategory);
+            AddProductCommand = new RelayCommand(AddProduct);
+            RemoveProductCommand = new RelayCommand(RemoveProduct);
             InviteAssistantCommand = new RelayCommand(InviteAssistant);
             AssistantExitCommand = new RelayCommand(AssistantExit);
-            RemoveProductCommand = new RelayCommand(RemoveProduct);
-            ClearSelectedProductsCommand = new RelayCommand(ClearSelectedProducts, _ => SelectedProducts.Any());
+            ClearProductsCommand = new RelayCommand(ClearProducts, _ => SelectedProducts.Any());
+        }
+        
+        public async Task InitializeAsync()
+        {
+            var cashBoxes = await _cashBoxService
+                .GetCashBoxesAsync(_loggedUserService.SupermarketId, new RecordsRange { PageNumber = 1, PageSize = 100 });
+            var dialogResult = await _dialogService
+                .ShowDropDownDialogAsync("ZVOLTE POKLADNU", nameof(SupermarketCashBox.Code), cashBoxes.Items);
+
+            if (dialogResult.IsOk(out var cashBox))
+            {
+                _cashBoxId = cashBox.Id;
+            }
+            else
+            {
+                await _navigationService.NavigateToAsync(ApplicationView.Login);
+                return;
+            }
+            
+            using var _ = new DelegateLoading(this);
+            
+            _categories = await _cashBoxService.GetCategoriesAsync(_loggedUserService.SupermarketId, new RecordsRange { PageNumber = 1, PageSize = 10 });
+            _categoryId = _categories.Items.FirstOrDefault()?.CategoryId;
+            Categories.AddRange(_categories.Items);
+            
+            await UpdateDisplayedItems();
         }
 
-        private async void ClearSelectedProducts(object? obj)
+        private bool CanSelectCategory(object? arg)
+        {
+            if (arg is not CashBoxProductCategory productCategory)
+            {
+                return false;
+            }
+
+            return productCategory.CategoryId != _categoryId;
+        }
+
+        private async void ClearProducts(object? obj)
         {
             var result = await _dialogService.ShowConfirmationDialogAsync("Provedením této akce zrušite celý prodej");
 
@@ -111,65 +143,46 @@ namespace Supermarket.Wpf.Cashbox
             }
         }
 
-        public async Task InitializeAsync()
+        private async void NextPage(object? obj)
         {
             using var _ = new DelegateLoading(this);
             
-            categories = await _cashBoxService.GetCategoriesAsync(1, new RecordsRange { PageSize = 10, PageNumber = 1 });
-            categoryId = categories.Items.FirstOrDefault()?.CategoryId;
-            for (int i = 0; i < categories.Items.Count; i++)
-            {
-                Categories.Add(categories.Items[i]);
-            }
-            
+            _currentPage++;
             await UpdateDisplayedItems();
         }
 
-        public async void NextPage(object? obj)
+        private async void PreviousPage(object? obj)
         {
             using var _ = new DelegateLoading(this);
             
-            currentPage++;
-            await UpdateDisplayedItems();
-        }
-
-        public async void PreviousPage(object? obj)
-        {
-            using var _ = new DelegateLoading(this);
-            
-            currentPage--;
+            _currentPage--;
             await UpdateDisplayedItems();
         }
 
         private async Task UpdateDisplayedItems()
         {
-            if (categoryId.HasValue == false)
+            if (_categoryId.HasValue == false)
             {
                 return;
             }
             
-            products = await _cashBoxService.GetProductsAsync(1, new RecordsRange { PageSize = 10, PageNumber = currentPage }, categoryId.Value, null);
-            DisplayedProducts.Clear();
-
-            for (int i = 0; i < products.Items.Count; i++)
-            {
-                DisplayedProducts.Add(products.Items[i]);
-            }
+            _products = await _cashBoxService.GetProductsAsync(1, new RecordsRange { PageSize = 10, PageNumber = _currentPage }, _categoryId.Value, null);
+            DisplayedProducts.Update(_products.Items);
         }
 
-        private async void CategoryButtonClick(object? obj)
+        private async void SelectCategory(object? obj)
         {
             using var _ = new DelegateLoading(this);
             
             if (obj is CashBoxProductCategory selectedCategory)
             {
-                currentPage = 1;
-                categoryId = selectedCategory.CategoryId;
+                _currentPage = 1;
+                _categoryId = selectedCategory.CategoryId;
                 await UpdateDisplayedItems();
             }
         }
 
-        private async void ProductClick(object? obj)
+        private async void AddProduct(object? obj)
         {
             if (obj is not CashBoxProduct selectedProduct)
             {
