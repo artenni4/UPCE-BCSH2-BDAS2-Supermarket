@@ -5,6 +5,10 @@ using Dapper;
 using Supermarket.Core.Domain.Common;
 using Supermarket.Core.Domain.Employees;
 using Supermarket.Core.Domain.Employees.Roles;
+using Supermarket.Core.UseCases.ManagerMenu;
+using Supermarket.Core.Domain.Common.Paging;
+using Supermarket.Core.UseCases.GoodsKeeping;
+using Supermarket.Infrastructure.StoredProducts;
 
 namespace Supermarket.Infrastructure.Employees
 {
@@ -43,6 +47,34 @@ namespace Supermarket.Infrastructure.Employees
                     new ManagerRole(SupermarketId: 1)
                 }
             });
+        }
+
+        public async Task<PagedResult<ManagerMenuEmployee>> GetSupermarketEmployees(int supermarketId, RecordsRange recordsRange)
+        {
+            var parameters = new DynamicParameters()
+            .AddParameter("supermarket_id", supermarketId);
+
+            const string sql = @"SELECT
+                                    z.zamestnanec_id,
+                                    z.jmeno,
+                                    z.prijmeni,
+                                    z.datum_nastupu,
+                                    LISTAGG(r.nazev, ',') WITHIN GROUP (ORDER BY r.nazev) AS role
+                                FROM
+                                    ZAMESTNANCI z
+                                LEFT JOIN
+                                    ROLE r ON z.role_id = r.role_id
+                                WHERE
+                                    z.supermarket_id = :supermarket_id
+                                GROUP BY
+                                    z.zamestnanec_id, z.jmeno, z.prijmeni, z.datum_nastupu";
+
+            var orderByColumns = DbEmployee.IdentityColumns
+            .Select(ic => $"z.{ic}");
+
+            var result = await GetPagedResult<DbManagerMenuEmployees>(recordsRange, sql, orderByColumns, parameters);
+
+            return result.Select(dbProduct => dbProduct.ToDomainEntity());
         }
 
         private static IEmployeeRole[] FromDbRoles(int supermarketId, IEnumerable<string> roles)

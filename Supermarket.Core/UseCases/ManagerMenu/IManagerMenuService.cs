@@ -1,11 +1,6 @@
 ﻿using Supermarket.Core.Domain.Common.Paging;
 using Supermarket.Core.Domain.SellingProducts;
 using Supermarket.Core.Domain.StoredProducts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Supermarket.Core.UseCases.ManagerMenu
 {
@@ -15,6 +10,7 @@ namespace Supermarket.Core.UseCases.ManagerMenu
         Task<PagedResult<ManagerMenuAddProduct>> GetManagerProductsToAdd(int supermarketId, RecordsRange recordsRange);
         void RemoveProductFromSupermarket(StoredProductId id);
         void AddProductToSupermarket(SellingProductId id);
-        
+        Task<PagedResult<ManagerMenuEmployee>> GetManagerEmployees(int supermarketId, RecordsRange recordsRange);
+
     }
 }
