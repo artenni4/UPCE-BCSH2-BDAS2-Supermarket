@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using Supermarket.Core.Domain.SellingProducts;
+using System.Collections.Generic;
 
 namespace Supermarket.Infrastructure.SellingProducts;
 
@@ -36,3 +37,5 @@ internal class DbSellingProduct : IDbEntity<SellingProduct, SellingProductId, Db
     public DynamicParameters GetInsertingValues() =>
         new DynamicParameters().AddParameter(nameof(zbozi_id), zbozi_id).AddParameter(nameof(supermarket_id), supermarket_id);
 }
+
+

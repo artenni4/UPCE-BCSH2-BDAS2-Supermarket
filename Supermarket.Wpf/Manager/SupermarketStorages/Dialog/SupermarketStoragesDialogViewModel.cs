@@ -112,10 +112,6 @@ namespace Supermarket.Wpf.Manager.SupermarketStorages.Dialog
                 
             }
 
-            //if (StoragePlace != null && StoragePlaceId == 0)
-            //{
-                
-            //}
         }
 
         private bool CanConfirmEdit(object? arg)
@@ -163,7 +159,6 @@ namespace Supermarket.Wpf.Manager.SupermarketStorages.Dialog
             return HashCode.Combine(Type, Name);
         }
     }
-
 
 
 }
