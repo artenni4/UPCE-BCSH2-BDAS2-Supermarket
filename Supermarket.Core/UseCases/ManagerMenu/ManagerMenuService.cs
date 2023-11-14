@@ -1,4 +1,5 @@
-﻿using Supermarket.Core.Domain.Common.Paging;
+﻿using Supermarket.Core.Domain.Common;
+using Supermarket.Core.Domain.Common.Paging;
 using Supermarket.Core.Domain.Employees;
 using Supermarket.Core.Domain.Products;
 using Supermarket.Core.Domain.SellingProducts;
@@ -57,9 +58,21 @@ namespace Supermarket.Core.UseCases.ManagerMenu
             return await _employeeRepository.GetSupermarketEmployees(supermarketId, recordsRange);
         }
 
-        public async Task<Employee?> GetEmployeeToEdit(int employeeId)
+        public async Task<ManagerMenuEmployeeDetail?> GetEmployeeToEdit(int employeeId)
         {
-            return await _employeeRepository.GetByIdAsync(employeeId);
+            var employee = await _employeeRepository.GetEmployeeDetail(employeeId);
+
+            if (employee== null)
+            {
+                throw new InconsistencyException("Zaměstnanec nebyl nalezn");
+            }
+
+            return employee;
+        }
+
+        public async Task DeleteEmployee(int employeeId)
+        {
+            await _employeeRepository.DeleteAsync(employeeId);
         }
         #endregion
 

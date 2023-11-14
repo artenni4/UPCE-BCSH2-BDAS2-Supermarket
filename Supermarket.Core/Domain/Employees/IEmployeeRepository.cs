@@ -8,5 +8,6 @@ namespace Supermarket.Core.Domain.Employees
     {
         Task<EmployeeRole?> GetByLoginAsync(string login);
         Task<PagedResult<ManagerMenuEmployee>> GetSupermarketEmployees(int supermarketId, RecordsRange recordsRange);
+        Task<ManagerMenuEmployeeDetail?> GetEmployeeDetail(int employeeId);
     }
 }

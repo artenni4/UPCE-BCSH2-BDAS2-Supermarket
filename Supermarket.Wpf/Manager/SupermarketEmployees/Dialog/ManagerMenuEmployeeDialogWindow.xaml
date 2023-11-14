@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:Supermarket.Wpf.Manager.SupermarketEmployees.Dialog"
              mc:Ignorable="d" 
              d:DesignHeight="1080" d:DesignWidth="1920">
-    <Border BorderBrush="Transparent" Background="White" Width="500" Height="600">
+    <Border BorderBrush="Transparent" Background="White" Width="600" Height="600" Padding="10">
         <Border.Effect>
             <DropShadowEffect BlurRadius="20" ShadowDepth="2" Color="Gray"/>
         </Border.Effect>
@@ -25,22 +25,43 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <StackPanel>
-                    <TextBox  />
-                    <TextBlock Text="Q"/>
-                    <TextBlock Text="Q"/>
+                <StackPanel Margin="0 0 10 0">
+                    <StackPanel>
+                        <TextBlock Text="Jméno:"/>
+                        <TextBox  Margin="0 0 0 48" Text="{Binding Employee.Name}"/>
+                    </StackPanel>
+
+                    <StackPanel>
+                        <TextBlock Text="Příjmení:"/>
+                        <TextBox  Margin="0 0 0 8" Text="{Binding Employee.Surname}"/>
+                    </StackPanel>
+
+                    <StackPanel>
+                        <TextBlock Text="Datum nastupu:"/>
+                        <DatePicker Margin="0 0 0 10" SelectedDate="{Binding Employee.HireDate}" FontSize="40" />
+                    </StackPanel>
+
+                    
                 </StackPanel>
 
                 <StackPanel Grid.Column="1">
-                    <TextBlock Text="Q"/>
-                    <TextBlock Text="Q"/>
-                    <TextBlock Text="Q"/>
+                    <CheckBox Margin="0,10,0,10" IsChecked="{Binding Employee.IsCashier}" Content="Pokladnik" />
+                    <CheckBox Margin="0,0,0,10" IsChecked="{Binding Employee.IsGoodsKeeper}" Content="Nakladac" />
+                    <CheckBox Margin="0,0,0,10" IsChecked="{Binding Employee.IsManager}" Content="Manazer" />
+                    <StackPanel>
+                        <TextBlock Text="Login:" Margin="0 0 0 0"/>
+                        <TextBox Text="{Binding Employee.Login}"/>
+                    </StackPanel>
+                    <StackPanel>
+                        <Label Content="Heslo:"/>
+                        <PasswordBox Margin="0 0 0 0" />
+                    </StackPanel>
                 </StackPanel>
             </Grid>
 
-            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Content="A"/>
-                <Button Content="A"/>
+            <StackPanel Grid.Row="2" Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                <Button Command="{Binding Confirm}" Content="OK" />
+                <Button Command="{Binding Cancel}" Content="Cancel" Margin="0,10,0,0" />
             </StackPanel>
         </Grid>
     </Border>

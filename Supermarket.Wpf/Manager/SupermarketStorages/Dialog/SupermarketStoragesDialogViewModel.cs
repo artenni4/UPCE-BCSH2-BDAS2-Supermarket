@@ -123,11 +123,6 @@ namespace Supermarket.Wpf.Manager.SupermarketStorages.Dialog
             else 
                 return false;
         }
-
-        
-
-
-        
     }
 
 

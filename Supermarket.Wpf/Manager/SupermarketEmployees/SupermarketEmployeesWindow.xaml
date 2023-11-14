@@ -12,7 +12,7 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Jméno" Binding="{Binding Name}" Width="300" IsReadOnly="True" FontSize="25" />
                     <DataGridTextColumn Header="Příjmení" Binding="{Binding Surname}" Width="300" IsReadOnly="True" FontSize="25" />
-                    <DataGridTextColumn Header="Datum nastupu" Binding="{Binding HireDate}" Width="250" IsReadOnly="True" FontSize="25" />
+                    <DataGridTextColumn Header="Datum nastupu" Binding="{Binding HireDate, StringFormat={}{0:dd.MM.yyyy}}" Width="250" IsReadOnly="True" FontSize="25" />
                     <DataGridTextColumn Header="Role" Binding="{Binding Roles}" Width="*" IsReadOnly="True" FontSize="25" />
                 </DataGrid.Columns>
             </DataGrid>
