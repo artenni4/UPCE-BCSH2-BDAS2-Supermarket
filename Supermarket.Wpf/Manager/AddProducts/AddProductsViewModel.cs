@@ -35,17 +35,19 @@ namespace Supermarket.Wpf.Manager.AddProducts
             Products.Update(products.Items);
         }
 
-        private void HandleCheckBoxClick(object? obj)
+        private async void HandleCheckBoxClick(object? obj)
         {
             if (obj is ManagerMenuAddProduct product)
             {
+                using var _ = new DelegateLoading(this);
+                
                 if (product.IsInSupermarket) // remove from supermarket
                 {
-                    _managerMenuService.RemoveProductFromSupermarket(new StoredProductId { ProductId = product.ProductId, StoragePlaceId = product.StoragePlaceId, SupermarketId = 1});
+                    await _managerMenuService.RemoveProductFromSupermarket(new StoredProductId { ProductId = product.ProductId, StoragePlaceId = product.StoragePlaceId, SupermarketId = 1});
                 }
                 else // add to supermarket
                 {
-                    _managerMenuService.AddProductToSupermarket(new SellingProductId { ProductId = product.ProductId, SupermarketId = 1 });
+                    await _managerMenuService.AddProductToSupermarket(new SellingProductId { ProductId = product.ProductId, SupermarketId = 1 });
                 }
             }
         }

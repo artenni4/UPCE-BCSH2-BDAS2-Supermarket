@@ -9,8 +9,8 @@ namespace Supermarket.Core.UseCases.ManagerMenu
     {
         Task<PagedResult<ManagerMenuProduct>> GetSupermarketProducts(int supermarketId, RecordsRange recordsRange);
         Task<PagedResult<ManagerMenuAddProduct>> GetManagerProductsToAdd(int supermarketId, RecordsRange recordsRange);
-        void RemoveProductFromSupermarket(StoredProductId id);
-        void AddProductToSupermarket(SellingProductId id);
+        Task RemoveProductFromSupermarket(StoredProductId id);
+        Task AddProductToSupermarket(SellingProductId id);
         Task<PagedResult<ManagerMenuEmployee>> GetManagerEmployees(int supermarketId, RecordsRange recordsRange);
         Task<Employee?> GetEmployeeToEdit(int employeeId);
     }
