@@ -84,6 +84,11 @@ namespace Supermarket.Core.UseCases.ManagerMenu
             await _storagePlaceRepository.UpdateAsync(storagePlace);
         }
 
+        public async Task DeleteStorage(int id)
+        {
+            await _storagePlaceRepository.DeleteAsync(id);
+        }
+
         #endregion
     }
 }

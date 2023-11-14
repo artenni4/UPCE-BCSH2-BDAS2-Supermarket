@@ -22,7 +22,7 @@ namespace Supermarket.Core.Domain.Auth
         /// <summary>
         /// Authenticates employee by credentials
         /// </summary>
-        private async Task<Employee> AuthenticateEmployee(LoginData loginData)
+        private async Task<EmployeeRole> AuthenticateEmployee(LoginData loginData)
         {
             var employee = await _employeeRepository.GetByLoginAsync(loginData.Login) ?? throw new InvalidCredentialsException();
 
@@ -38,7 +38,7 @@ namespace Supermarket.Core.Domain.Auth
         /// <summary>
         /// Retrieves roles for employee
         /// </summary>
-        private static ILoggedEmployee AuthorizeEmployee(Employee employee)
+        private static ILoggedEmployee AuthorizeEmployee(EmployeeRole employee)
         {
             if (employee.Roles.Any(role => role is AdminRole))
             {

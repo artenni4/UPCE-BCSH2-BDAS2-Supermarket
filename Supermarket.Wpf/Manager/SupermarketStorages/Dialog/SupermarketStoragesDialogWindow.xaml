@@ -45,7 +45,14 @@
                     </Grid.ColumnDefinitions>
 
                     <TextBlock Grid.Column="0" Text="Typ" Margin="10,0" VerticalAlignment="Center" />
-                    <ComboBox Grid.Column="1" ItemsSource="{Binding StoragePlaceTypes}" DisplayMemberPath="Name" SelectedItem="{Binding StoragePlace.Type}" />
+                    <ComboBox Grid.Column="1" ItemsSource="{Binding StoragePlaceTypes}" SelectedItem="{Binding SelectedStoragePlaceType}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+
                 </Grid>
             </StackPanel>
 

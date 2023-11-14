@@ -18,6 +18,7 @@ namespace Supermarket.Core.UseCases.ManagerMenu
         Task<StoragePlace?> GetStorageToEdit(int storageId);
         Task AddStorage(StoragePlace storagePlace);
         Task EditStorage(StoragePlace storagePlace);
+        Task DeleteStorage(int id);
 
     }
 }

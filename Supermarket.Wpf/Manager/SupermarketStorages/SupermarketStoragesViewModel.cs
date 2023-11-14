@@ -21,7 +21,6 @@ namespace Supermarket.Wpf.Manager.SupermarketStorages
         public ICommand EditCommand { get; }
         public ICommand DeleteCommand { get; }
 
-
         public event EventHandler? LoadingStarted;
         public event EventHandler? LoadingFinished;
         public string TabHeader => "Místa uložení";
@@ -77,7 +76,7 @@ namespace Supermarket.Wpf.Manager.SupermarketStorages
             var result = await _dialogService.ShowAsync<SupermarketStoragesDialogViewModel, StoragePlace, int> (selectedStorageId);
             if (result.IsOk(out var a))
             {
-
+                await InitializeAsync();
             }
         }
 
@@ -92,9 +91,16 @@ namespace Supermarket.Wpf.Manager.SupermarketStorages
             }
         }
 
-        public void DeleteStorage(object? obj)
+        public async void DeleteStorage(object? obj)
         {
+            var result = await _dialogService.ShowConfirmationDialogAsync($"Provedením této akce odstraníte {SelectedStorage?.Code}");
 
+            if (result.IsOk())
+            {
+                int selectedStorageId = SelectedStorage?.Id ?? 0;
+                await _managerMenuService.DeleteStorage(selectedStorageId);
+                await InitializeAsync();
+            }
         }
 
         public bool CanCallDialog(object? obj)

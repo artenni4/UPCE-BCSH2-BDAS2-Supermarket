@@ -74,6 +74,7 @@ namespace Supermarket.Infrastructure.Common
             var dbEntity = TDbEntity.ToDbEntity(entity);
             var identity = TDbEntity.GetEntityIdParameters(entity.Id);
             var insertingValues = dbEntity.GetInsertingValues();
+            insertingValues.AddDynamicParams(identity);
 
             var updater = string.Join(", ", insertingValues.ParameterNames.Select(p => $"{p} = :{p}"));
             var identityCondition = GetIdentityCondition(identity);
