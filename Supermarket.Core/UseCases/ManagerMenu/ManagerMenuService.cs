@@ -16,7 +16,7 @@ namespace Supermarket.Core.UseCases.ManagerMenu
         private readonly ISellingProductRepository _sellingProductRepository;
         private readonly IProductRepository _productRepository;
         private readonly IStoredProductRepository _storedProductRepository;
-        public readonly IEmployeeRepository _employeeRepository;
+        private readonly IEmployeeRepository _employeeRepository;
 
         public ManagerMenuService(ISellingProductRepository sellingProductRepository, IStoredProductRepository storedProductRepository, IProductRepository productRepository, IEmployeeRepository employeeRepository)
         {
@@ -59,6 +59,11 @@ namespace Supermarket.Core.UseCases.ManagerMenu
         public async Task<PagedResult<ManagerMenuEmployee>> GetManagerEmployees(int supermarketId, RecordsRange recordsRange)
         {
             return await _employeeRepository.GetSupermarketEmployees(supermarketId, recordsRange);
+        }
+
+        public async Task<Employee?> GetEmployeeToEdit(int employeeId)
+        {
+            return await _employeeRepository.GetByIdAsync(employeeId);
         }
         #endregion
     }
