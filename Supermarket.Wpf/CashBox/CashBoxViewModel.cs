@@ -5,10 +5,11 @@ using Supermarket.Wpf.LoggedUser;
 using Supermarket.Core.Domain.Auth.LoggedEmployees;
 using Supermarket.Core.UseCases.CashBox;
 using Supermarket.Wpf.Navigation;
+using Supermarket.Wpf.ViewModelResolvers;
 
 namespace Supermarket.Wpf.CashBox
 {
-    public class CashBoxViewModel : NotifyPropertyChangedBase, IAsyncViewModel, IAsyncActivated
+    public class CashBoxViewModel : NotifyPropertyChangedBase, IAsyncViewModel, IAsyncActivated, IAsyncInitialized
     {
         private readonly ILoggedUserService _loggedUserService;
         private readonly ICashBoxService _cashBoxService;
@@ -66,6 +67,17 @@ namespace Supermarket.Wpf.CashBox
             ClearProductsCommand = new RelayCommand(ClearProducts, _ => SelectedProducts.Any());
         }
         
+        public async Task InitializeAsync()
+        {
+            using var _ = new DelegateLoading(this);
+            
+            _categories = await _cashBoxService.GetCategoriesAsync(_loggedUserService.SupermarketId, new RecordsRange { PageNumber = 1, PageSize = 10 });
+            _categoryId = _categories.Items.FirstOrDefault()?.CategoryId;
+            Categories.Update(_categories.Items);
+            
+            await UpdateDisplayedItems();
+        }
+        
         public async Task ActivateAsync()
         {
             var cashBoxes = await _cashBoxService
@@ -80,16 +92,7 @@ namespace Supermarket.Wpf.CashBox
             else
             {
                 await _navigationService.BackAsync();
-                return;
             }
-            
-            using var _ = new DelegateLoading(this);
-            
-            _categories = await _cashBoxService.GetCategoriesAsync(_loggedUserService.SupermarketId, new RecordsRange { PageNumber = 1, PageSize = 10 });
-            _categoryId = _categories.Items.FirstOrDefault()?.CategoryId;
-            Categories.Update(_categories.Items);
-            
-            await UpdateDisplayedItems();
         }
 
         private bool CanSelectCategory(object? arg)
