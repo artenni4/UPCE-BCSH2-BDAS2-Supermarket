@@ -26,7 +26,7 @@ namespace Supermarket.Wpf.Manager
                 if (_selectedTabViewModel != value)
                 {
                     SetProperty(ref _selectedTabViewModel, value);
-                    Task.Run(() => _selectedTabViewModel?.ActivateIfNeeded());
+                    _selectedTabViewModel?.ActivateIfNeeded();
                 }
             }
         }
