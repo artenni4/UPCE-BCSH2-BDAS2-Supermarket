@@ -1,33 +1,22 @@
-﻿using Supermarket.Core.Domain.Common.Paging;
-using Supermarket.Core.Domain.Products;
-using Supermarket.Core.UseCases.ManagerMenu;
-using Supermarket.Wpf.Common;
-using Supermarket.Wpf.ViewModelResolvers;
-using System;
-using System.Collections.Generic;
+﻿using Supermarket.Core.UseCases.ManagerMenu;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
-using System.Windows;
 using System.Windows.Input;
 using Supermarket.Core.Domain.StoredProducts;
 using Supermarket.Core.Domain.SellingProducts;
 
 namespace Supermarket.Wpf.Manager.AddProducts
 {
-    public class AddProductsViewModel : NotifyPropertyChangedBase, IAsyncViewModel, IAsyncInitialized
+    public class AddProductsViewModel : NotifyPropertyChangedBase, ITabViewModel, IAsyncViewModel, IAsyncActivated
     {
         private readonly IManagerMenuService _managerMenuService;
 
-        private PagedResult<ManagerMenuAddProduct>? products;
         public ObservableCollection<ManagerMenuAddProduct> Products { get; set; }
 
         public ICommand CheckBoxClickCommand { get; }
 
         public event EventHandler? LoadingStarted;
         public event EventHandler? LoadingFinished;
+        public string TabHeader => "Přidat zboží";
 
         public AddProductsViewModel(IManagerMenuService managerMenuService)
         {
@@ -38,15 +27,12 @@ namespace Supermarket.Wpf.Manager.AddProducts
             CheckBoxClickCommand = new RelayCommand(HandleCheckBoxClick);
         }
 
-        public async Task InitializeAsync()
+        public async Task ActivateAsync()
         {
             using var _ = new DelegateLoading(this);
 
-            products = await _managerMenuService.GetManagerProductsToAdd(1, new RecordsRange { PageSize = 250, PageNumber = 1 });
-            foreach (var product in products.Items)
-            {
-                Products.Add(product);
-            }
+            var products = await _managerMenuService.GetManagerProductsToAdd(1, new RecordsRange { PageSize = 250, PageNumber = 1 });
+            Products.Update(products.Items);
         }
 
         private void HandleCheckBoxClick(object? obj)
@@ -63,7 +49,5 @@ namespace Supermarket.Wpf.Manager.AddProducts
                 }
             }
         }
-
-
     }
 }

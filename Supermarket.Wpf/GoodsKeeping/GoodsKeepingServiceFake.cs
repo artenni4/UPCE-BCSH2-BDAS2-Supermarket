@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Supermarket.Core.Domain.Common.Paging;
-using Supermarket.Core.UseCases.GoodsKeeping;
+﻿using Supermarket.Core.UseCases.GoodsKeeping;
 
 namespace Supermarket.Wpf.GoodsKeeping;
 

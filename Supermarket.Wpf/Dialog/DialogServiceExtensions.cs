@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-
-namespace Supermarket.Wpf.Dialog;
+﻿namespace Supermarket.Wpf.Dialog;
 
 public static class DialogServiceExtensions
 {

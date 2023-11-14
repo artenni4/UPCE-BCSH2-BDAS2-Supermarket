@@ -1,4 +1,5 @@
-﻿using Supermarket.Wpf.Common;
+﻿using System.Collections.ObjectModel;
+using System.Windows;
 using Supermarket.Wpf.Manager.AddProducts;
 using Supermarket.Wpf.Manager.SupermarketCashboxes;
 using Supermarket.Wpf.Manager.SupermarketEmployees;
@@ -7,17 +8,28 @@ using Supermarket.Wpf.Manager.SupermarketProducts;
 using Supermarket.Wpf.Manager.SupermarketSales;
 using Supermarket.Wpf.Manager.SupermarketStorages;
 using Supermarket.Wpf.ViewModelResolvers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace Supermarket.Wpf.Manager
 {
     public class ManagerMenuViewModel : NotifyPropertyChangedBase, IViewModel, IAsyncInitialized
     {
         private readonly IViewModelResolver _viewModelResolver;
+        
+        private ITabViewModel? _selectedTabViewModel;
+        public ITabViewModel? SelectedTabViewModel
+        {
+            get => _selectedTabViewModel;
+            set
+            {
+                if (_selectedTabViewModel != value)
+                {
+                    SetProperty(ref _selectedTabViewModel, value);
+                    Task.Run(() => _selectedTabViewModel?.ActivateIfNeeded());
+                }
+            }
+        }
 
         private SupermarketProductsViewModel? _supermarketProductsViewModel;
         public SupermarketProductsViewModel? SupermarketProductsViewModel
@@ -68,6 +80,8 @@ namespace Supermarket.Wpf.Manager
             set => SetProperty(ref _supermarketCashboxesViewModel, value);
         }
 
+        public ObservableCollection<ITabViewModel> TabViewModels { get; } = new();
+        
         public ManagerMenuViewModel(IViewModelResolver viewModelResolver)
         {
             _viewModelResolver = viewModelResolver;
@@ -82,6 +96,15 @@ namespace Supermarket.Wpf.Manager
             SupermarketLogsViewModel = await _viewModelResolver.Resolve<SupermarketLogsViewModel>();
             SupermarketSalesViewModel = await _viewModelResolver.Resolve<SupermarketSalesViewModel>();
             SupermarketCashboxesViewModel = await _viewModelResolver.Resolve<SupermarketCashboxesViewModel>();
+            
+            TabViewModels.Add(SupermarketProductsViewModel);
+            TabViewModels.Add(AddProductsViewModel);
+            TabViewModels.Add(SupermarketEmployeesViewModel);
+            TabViewModels.Add(SupermarketLogsViewModel);
+            TabViewModels.Add(SupermarketSalesViewModel);
+            TabViewModels.Add(SupermarketCashboxesViewModel);
+            
+            SelectedTabViewModel = SupermarketProductsViewModel;
         }
     }
 }

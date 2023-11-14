@@ -1,12 +1,8 @@
-﻿using Supermarket.Core.Domain.Common.Paging;
-using Supermarket.Core.UseCases.GoodsKeeping;
-using Supermarket.Wpf.Common;
+﻿using Supermarket.Core.UseCases.GoodsKeeping;
 using Supermarket.Wpf.Dialog;
 using Supermarket.Wpf.GoodsKeeping.GoodsManagement.Dialogs;
 using Supermarket.Wpf.ViewModelResolvers;
-using System;
 using System.Collections.ObjectModel;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace Supermarket.Wpf.GoodsKeeping.GoodsManagement

@@ -1,6 +1,4 @@
-﻿using Supermarket.Wpf.Common;
-
-namespace Supermarket.Wpf.Login
+﻿namespace Supermarket.Wpf.Login
 {
     public class LoginModel : NotifyPropertyChangedBase
     {

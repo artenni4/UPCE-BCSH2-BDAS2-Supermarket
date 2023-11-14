@@ -1,6 +1,4 @@
-﻿using System;
-using System.Windows.Input;
-using Supermarket.Wpf.Common;
+﻿using System.Windows.Input;
 using Supermarket.Wpf.Dialog;
 using Supermarket.Wpf.LoggedUser;
 using Supermarket.Wpf.Navigation;

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using Supermarket.Wpf.Common;
-using Supermarket.Wpf.Navigation;
+﻿using Supermarket.Wpf.Navigation;
 using System.Windows.Input;
 using Supermarket.Wpf.Dialog;
 using Supermarket.Wpf.LoggedUser;
@@ -105,11 +102,12 @@ namespace Supermarket.Wpf.Main
             }
         }
         
-        private void NavigationSucceeded(object? sender, NavigationEventArgs e)
+        private async void NavigationSucceeded(object? sender, NavigationEventArgs e)
         {
             _dialogService.Hide();
             
             ContentViewModel = e.NewViewModel;
+            await ContentViewModel.ActivateIfNeeded();
         }
         
         private bool _isProgressVisible;

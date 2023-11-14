@@ -1,9 +1,4 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Threading.Tasks;
-using Supermarket.Wpf.Common;
-
-namespace Supermarket.Wpf.Dialog;
+﻿namespace Supermarket.Wpf.Dialog;
 
 public interface IDialogService
 {

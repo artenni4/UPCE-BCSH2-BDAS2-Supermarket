@@ -1,20 +1,14 @@
 ﻿using Supermarket.Core.UseCases.ManagerMenu;
-using Supermarket.Wpf.Common;
-using Supermarket.Wpf.ViewModelResolvers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Supermarket.Wpf.Manager.SupermarketLogs
 {
-    public class SupermarketLogsViewModel : NotifyPropertyChangedBase, IAsyncViewModel/*, IAsyncInitialized*/
+    public class SupermarketLogsViewModel : NotifyPropertyChangedBase, ITabViewModel, IAsyncViewModel/*, IAsyncInitialized*/
     {
         private readonly IManagerMenuService _managerMenuService;
 
         public event EventHandler? LoadingStarted;
         public event EventHandler? LoadingFinished;
+        public string TabHeader => "Log";
 
         public SupermarketLogsViewModel(IManagerMenuService managerMenuService)
         {

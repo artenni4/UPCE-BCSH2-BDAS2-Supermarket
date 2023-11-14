@@ -1,14 +1,7 @@
-﻿using Supermarket.Core.Domain.Common.Paging;
-using Supermarket.Core.UseCases.GoodsKeeping;
-using Supermarket.Wpf.CashBox;
-using Supermarket.Wpf.Common;
+﻿using Supermarket.Core.UseCases.GoodsKeeping;
 using Supermarket.Wpf.Dialog;
 using Supermarket.Wpf.ViewModelResolvers;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 

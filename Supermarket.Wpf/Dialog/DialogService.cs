@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using Supermarket.Wpf.Common;
-using Supermarket.Wpf.ViewModelResolvers;
+﻿using Supermarket.Wpf.ViewModelResolvers;
 
 namespace Supermarket.Wpf.Dialog;
 

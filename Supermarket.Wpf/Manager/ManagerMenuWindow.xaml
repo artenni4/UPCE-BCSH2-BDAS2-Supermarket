@@ -11,32 +11,40 @@
              xmlns:logs="clr-namespace:Supermarket.Wpf.Manager.SupermarketLogs"
              xmlns:sales="clr-namespace:Supermarket.Wpf.Manager.SupermarketSales"
              xmlns:cashboxes="clr-namespace:Supermarket.Wpf.Manager.SupermarketCashboxes"
-             
+             d:DataContext="{d:DesignInstance Type=local:ManagerMenuViewModelFake, IsDesignTimeCreatable=True}"
              mc:Ignorable="d" 
              d:DesignHeight="1080" d:DesignWidth="1920">
     <Grid>
-        <TabControl>
-            <TabItem Header="Naše produkty" Width="200">
-                <supermarketProducts:SupermarketProductsWindow DataContext="{Binding SupermarketProductsViewModel}" />
-            </TabItem>
-            <TabItem Header="Přidat zboží" Width="200">
-                <addProducts:AddProductsWindow DataContext="{Binding AddProductsViewModel}" />
-            </TabItem>
-            <TabItem Header="Zaměstnanci" Width="200">
-                <employees:SupermarketEmployeesWindow DataContext="{Binding SupermarketEmployeesViewModel}" />
-            </TabItem>
-            <TabItem Header="Místa uložení" Width="200">
-                <storages:SupermarketStoragesWindow DataContext="{Binding SupermarketStoragesViewModel}" />
-            </TabItem>
-            <TabItem Header="Log" Width="200">
-                <logs:SupermarketLogsView DataContext="{Binding SupermarketLogsViewModel}" />
-            </TabItem>
-            <TabItem Header="Prodeje" Width="200">
-                <sales:SupermarketSalesWindow DataContext="{Binding SupermarketSalesViewModel}" />
-            </TabItem>
-            <TabItem Header="Pokladny" Width="200">
-                <cashboxes:SupermarketCashboxesWindow DataContext="{Binding SupermarketCashboxesViewModel}" />
-            </TabItem>
+        <TabControl ItemsSource="{Binding TabViewModels}"
+                    SelectedItem="{Binding SelectedTabViewModel, Mode=TwoWay}">
+            <TabControl.Resources>
+                <DataTemplate DataType="{x:Type supermarketProducts:SupermarketProductsViewModel}">
+                    <supermarketProducts:SupermarketProductsWindow />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type addProducts:AddProductsViewModel}">
+                    <addProducts:AddProductsWindow />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type employees:SupermarketEmployeesViewModel}">
+                    <employees:SupermarketEmployeesWindow />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type storages:SupermarketStoragesViewModel}">
+                    <storages:SupermarketStoragesWindow />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type logs:SupermarketLogsViewModel}">
+                    <logs:SupermarketLogsView />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type sales:SupermarketSalesViewModel}">
+                    <sales:SupermarketSalesWindow />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type cashboxes:SupermarketCashboxesViewModel}">
+                    <cashboxes:SupermarketCashboxesWindow />
+                </DataTemplate>
+            </TabControl.Resources>
+            <TabControl.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding TabHeader}"></TextBlock>
+                </DataTemplate>
+            </TabControl.ItemTemplate>
         </TabControl>
     </Grid>
 </UserControl>

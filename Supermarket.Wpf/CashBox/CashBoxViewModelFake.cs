@@ -1,6 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using System.Linq;
-using Supermarket.Core.UseCases.CashBox;
+﻿using Supermarket.Core.UseCases.CashBox;
 using Supermarket.Wpf.Dialog;
 using Supermarket.Wpf.LoggedUser;
 using Supermarket.Wpf.Navigation;

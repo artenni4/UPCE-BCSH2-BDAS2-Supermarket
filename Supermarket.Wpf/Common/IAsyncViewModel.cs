@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Supermarket.Wpf.Common;
+﻿namespace Supermarket.Wpf.Common;
 
 public interface IAsyncViewModel : IViewModel
 {

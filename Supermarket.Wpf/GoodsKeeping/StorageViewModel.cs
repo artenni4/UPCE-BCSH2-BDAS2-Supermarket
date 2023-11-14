@@ -1,8 +1,6 @@
-﻿using Supermarket.Wpf.Common;
-using Supermarket.Wpf.GoodsKeeping.ArrivalRegistration;
+﻿using Supermarket.Wpf.GoodsKeeping.ArrivalRegistration;
 using Supermarket.Wpf.GoodsKeeping.GoodsManagement;
 using Supermarket.Wpf.ViewModelResolvers;
-using System.Threading.Tasks;
 
 namespace Supermarket.Wpf.GoodsKeeping
 {

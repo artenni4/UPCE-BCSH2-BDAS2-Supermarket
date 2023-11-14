@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Threading.Tasks;
-using Supermarket.Wpf.Common.Dialogs.Confirmation;
+﻿using Supermarket.Wpf.Common.Dialogs.Confirmation;
 using Supermarket.Wpf.Common.Dialogs.DropDown;
 using Supermarket.Wpf.Common.Dialogs.Input;
 using Supermarket.Wpf.Dialog;

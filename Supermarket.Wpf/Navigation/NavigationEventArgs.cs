@@ -1,6 +1,4 @@
-﻿using Supermarket.Wpf.Common;
-
-namespace Supermarket.Wpf.Navigation
+﻿namespace Supermarket.Wpf.Navigation
 {
     public class NavigationEventArgs
     {

@@ -1,6 +1,4 @@
 ﻿using Supermarket.Core.Domain.Auth.LoggedEmployees;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 
 namespace Supermarket.Wpf.LoggedUser
 {

@@ -1,14 +1,9 @@
-﻿using System;
-using System.Threading.Tasks;
-using Supermarket.Wpf.Common;
-using Supermarket.Wpf.Navigation;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using System.Windows;
 using Supermarket.Wpf.LoggedUser;
 using Supermarket.Core.UseCases.Login;
 using Supermarket.Core.Domain.Auth;
 using Supermarket.Core.Domain.Auth.LoggedEmployees;
-using Supermarket.Core.Domain.Common.Paging;
 using Supermarket.Wpf.Dialog;
 using Supermarket.Wpf.ViewModelResolvers;
 

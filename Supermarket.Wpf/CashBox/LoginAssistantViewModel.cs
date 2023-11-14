@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Input;
 using Supermarket.Core.Domain.Auth;
 using Supermarket.Core.Domain.Auth.LoggedEmployees;

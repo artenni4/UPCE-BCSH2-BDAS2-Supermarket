@@ -1,7 +1,4 @@
-﻿using System;
-using Supermarket.Wpf.Common;
-
-namespace Supermarket.Wpf.Dialog;
+﻿namespace Supermarket.Wpf.Dialog;
 
 public interface IDialogViewModel<TResult, TParameters> : IViewModel
 {

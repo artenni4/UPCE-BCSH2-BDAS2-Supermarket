@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Supermarket.Core.UseCases.ManagerMenu;
 using Supermarket.Wpf.CashBox;
-using Supermarket.Wpf.Common.Dialogs;
 using Supermarket.Wpf.Common.Dialogs.Confirmation;
 using Supermarket.Wpf.Common.Dialogs.DropDown;
 using Supermarket.Wpf.Common.Dialogs.Input;

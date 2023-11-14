@@ -1,19 +1,14 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
 using Supermarket.Wpf.Dialog;
 using Supermarket.Wpf.LoggedUser;
-using Supermarket.Wpf.ViewModelResolvers;
-using Supermarket.Core.Domain.Common.Paging;
 using Supermarket.Core.Domain.Auth.LoggedEmployees;
 using Supermarket.Core.UseCases.CashBox;
 using Supermarket.Wpf.Navigation;
 
 namespace Supermarket.Wpf.CashBox
 {
-    public class CashBoxViewModel : NotifyPropertyChangedBase, IAsyncViewModel, IAsyncInitialized
+    public class CashBoxViewModel : NotifyPropertyChangedBase, IAsyncViewModel, IAsyncActivated
     {
         private readonly ILoggedUserService _loggedUserService;
         private readonly ICashBoxService _cashBoxService;
@@ -71,7 +66,7 @@ namespace Supermarket.Wpf.CashBox
             ClearProductsCommand = new RelayCommand(ClearProducts, _ => SelectedProducts.Any());
         }
         
-        public async Task InitializeAsync()
+        public async Task ActivateAsync()
         {
             var cashBoxes = await _cashBoxService
                 .GetCashBoxesAsync(_loggedUserService.SupermarketId, new RecordsRange { PageNumber = 1, PageSize = 100 });
@@ -84,7 +79,7 @@ namespace Supermarket.Wpf.CashBox
             }
             else
             {
-                await _navigationService.NavigateToAsync(ApplicationView.Login);
+                await _navigationService.BackAsync();
                 return;
             }
             
@@ -92,7 +87,7 @@ namespace Supermarket.Wpf.CashBox
             
             _categories = await _cashBoxService.GetCategoriesAsync(_loggedUserService.SupermarketId, new RecordsRange { PageNumber = 1, PageSize = 10 });
             _categoryId = _categories.Items.FirstOrDefault()?.CategoryId;
-            Categories.AddRange(_categories.Items);
+            Categories.Update(_categories.Items);
             
             await UpdateDisplayedItems();
         }
@@ -166,7 +161,7 @@ namespace Supermarket.Wpf.CashBox
                 return;
             }
             
-            _products = await _cashBoxService.GetProductsAsync(1, new RecordsRange { PageSize = 10, PageNumber = _currentPage }, _categoryId.Value, null);
+            _products = await _cashBoxService.GetProductsAsync(_loggedUserService.SupermarketId, new RecordsRange { PageSize = 10, PageNumber = _currentPage }, _categoryId.Value, null);
             DisplayedProducts.Update(_products.Items);
         }
 

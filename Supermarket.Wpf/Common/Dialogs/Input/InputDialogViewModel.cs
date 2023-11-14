@@ -1,6 +1,4 @@
-﻿using System;
-using System.Windows.Input;
-using Supermarket.Wpf.Common.Dialogs.Confirmation;
+﻿using System.Windows.Input;
 using Supermarket.Wpf.Dialog;
 
 namespace Supermarket.Wpf.Common.Dialogs.Input;

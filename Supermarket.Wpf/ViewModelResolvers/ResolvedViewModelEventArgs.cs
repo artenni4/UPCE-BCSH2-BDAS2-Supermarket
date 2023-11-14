@@ -1,7 +1,4 @@
-﻿using System;
-using Supermarket.Wpf.Common;
-
-namespace Supermarket.Wpf.ViewModelResolvers;
+﻿namespace Supermarket.Wpf.ViewModelResolvers;
 
 public class ResolvedViewModelEventArgs : EventArgs
 {

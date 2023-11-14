@@ -1,8 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using Supermarket.Wpf.Common;
-
-namespace Supermarket.Wpf.ViewModelResolvers;
+﻿namespace Supermarket.Wpf.ViewModelResolvers;
 
 public class ViewModelResolverFake : IViewModelResolver
 {

@@ -1,10 +1,5 @@
-﻿using Supermarket.Core.Domain.Auth.LoggedEmployees;
-using Supermarket.Core.Domain.Employees.Roles;
-using Supermarket.Wpf.LoggedUser;
-using System;
-using System.Collections.Generic;
+﻿using Supermarket.Wpf.LoggedUser;
 using System.Globalization;
-using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 

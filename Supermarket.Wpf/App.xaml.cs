@@ -1,12 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Supermarket.Wpf.Main;
-using Supermarket.Wpf.Navigation;
-using System;
 using System.Diagnostics;
 using System.Windows;
 using Supermarket.Core;
 using Supermarket.Infrastructure;
-using Supermarket.Wpf.Common;
 using Supermarket.Wpf.ViewModelResolvers;
 
 namespace Supermarket.Wpf

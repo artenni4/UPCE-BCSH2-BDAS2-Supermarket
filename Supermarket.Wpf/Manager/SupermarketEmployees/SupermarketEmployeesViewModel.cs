@@ -1,18 +1,11 @@
-﻿using Supermarket.Core.Domain.Common.Paging;
-using Supermarket.Core.UseCases.ManagerMenu;
-using Supermarket.Wpf.Common;
+﻿using Supermarket.Core.UseCases.ManagerMenu;
 using Supermarket.Wpf.LoggedUser;
 using Supermarket.Wpf.ViewModelResolvers;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Supermarket.Wpf.Manager.SupermarketEmployees
 {
-    public class SupermarketEmployeesViewModel : NotifyPropertyChangedBase, IAsyncViewModel, IAsyncInitialized
+    public class SupermarketEmployeesViewModel : NotifyPropertyChangedBase, ITabViewModel, IAsyncViewModel, IAsyncInitialized
     {
         private readonly IManagerMenuService _managerMenuService;
         private readonly ILoggedUserService _loggedUserService;
@@ -22,6 +15,7 @@ namespace Supermarket.Wpf.Manager.SupermarketEmployees
 
         public event EventHandler? LoadingStarted;
         public event EventHandler? LoadingFinished;
+        public string TabHeader => "Zaměstnanci";
 
         public SupermarketEmployeesViewModel(IManagerMenuService managerMenuService, ILoggedUserService loggedUserService)
         {
@@ -35,5 +29,6 @@ namespace Supermarket.Wpf.Manager.SupermarketEmployees
         {
             _employees = await _managerMenuService.GetManagerEmployees(_loggedUserService.SupermarketId, new RecordsRange { PageSize = 250, PageNumber = 1 });
         }
+
     }
 }
