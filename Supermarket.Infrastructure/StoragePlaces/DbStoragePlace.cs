@@ -47,13 +47,9 @@ internal class DbStoragePlace : IDbEntity<StoragePlace, int, DbStoragePlace>
         misto_ulozeni_typ = entity.Type.ToString()
     };
 
-    public static DynamicParameters GetEntityIdParameters(int id)
-    {
-        var parameters = new DynamicParameters();
-        parameters.Add("@misto_ulozeni_id", id);
-
-        return parameters;
-    }
+    public static DynamicParameters GetEntityIdParameters(int id) =>
+        new DynamicParameters()
+            .AddParameter(nameof(misto_ulozeni_id), id);
 
     public static DynamicParameters GetOutputIdentityParameters()
     {
@@ -66,6 +62,9 @@ internal class DbStoragePlace : IDbEntity<StoragePlace, int, DbStoragePlace>
     }
 
     public DynamicParameters GetInsertingValues() =>
+        new DynamicParameters().AddParameter(nameof(kod), kod).AddParameter(nameof(misto_ulozeni_typ), misto_ulozeni_typ).AddParameter(nameof(supermarket_id), supermarket_id).AddParameter(nameof(poloha), poloha);
+
+    public DynamicParameters GetUpdateValues() =>
         new DynamicParameters().AddParameter(nameof(misto_ulozeni_id), misto_ulozeni_id).AddParameter(nameof(kod), kod).AddParameter(nameof(misto_ulozeni_typ), misto_ulozeni_typ).AddParameter(nameof(supermarket_id), supermarket_id).AddParameter(nameof(poloha), poloha);
 
 }

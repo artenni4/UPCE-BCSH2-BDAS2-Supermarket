@@ -4,6 +4,6 @@
     {
         SKLAD = 0,
         PULT = 1,
-        OTHER = 2
+        JINE = 2
     }
 }

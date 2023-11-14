@@ -1,5 +1,4 @@
 ﻿using Supermarket.Core.Domain.Common;
-using Supermarket.Core.Domain.Employees.Roles;
 
 namespace Supermarket.Core.Domain.Employees
 {
@@ -12,6 +11,7 @@ namespace Supermarket.Core.Domain.Employees
         public required string Name { get; init; }
         public required string Surname { get; init; }
         public required DateTimeOffset StartedWorking { get; init; }
-        public required IReadOnlyList<IEmployeeRole> Roles { get; init; }
+        public required int? ManagerId { get; init; }
+        public required int? SupermarketId { get; init; }
     }
 }

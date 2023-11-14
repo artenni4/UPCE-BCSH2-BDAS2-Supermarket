@@ -6,7 +6,7 @@ namespace Supermarket.Core.Domain.Employees
 {
     public interface IEmployeeRepository : ICrudRepository<Employee, int>
     {
-        Task<Employee?> GetByLoginAsync(string login);
+        Task<EmployeeRole?> GetByLoginAsync(string login);
         Task<PagedResult<ManagerMenuEmployee>> GetSupermarketEmployees(int supermarketId, RecordsRange recordsRange);
     }
 }

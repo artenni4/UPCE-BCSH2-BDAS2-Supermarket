@@ -18,9 +18,9 @@ namespace Supermarket.Infrastructure.Employees
         {
         }
 
-        public Task<Employee?> GetByLoginAsync(string login)
+        public Task<EmployeeRole?> GetByLoginAsync(string login)
         {
-            if (login != "a") return Task.FromResult((Employee?)null);
+            if (login != "a") return Task.FromResult((EmployeeRole?)null);
 
             var passwordBytes = Encoding.UTF8.GetBytes("a");
             var salt = new byte[16] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
@@ -31,13 +31,11 @@ namespace Supermarket.Infrastructure.Employees
 
             byte[] hashBytes = SHA256.HashData(combinedBytes);
 
-            return Task.FromResult((Employee?)new Employee
+            return Task.FromResult((EmployeeRole?)new EmployeeRole
             {
                 Id = 1,
-                Login = "a",
                 Name = "David",
                 Surname = "Biba",
-                StartedWorking = new DateTimeOffset(2020, 10, 1, 0, 0, 0, TimeSpan.Zero),
                 PasswordHash = hashBytes,
                 PasswordHashSalt = salt,
                 Roles = new IEmployeeRole[]
