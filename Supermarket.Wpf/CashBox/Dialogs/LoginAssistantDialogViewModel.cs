@@ -5,16 +5,16 @@ using Supermarket.Core.Domain.Auth.LoggedEmployees;
 using Supermarket.Core.UseCases.CashBox;
 using Supermarket.Wpf.Dialog;
 
-namespace Supermarket.Wpf.CashBox;
+namespace Supermarket.Wpf.CashBox.Dialogs;
 
-public class LoginAssistantViewModel : NotifyPropertyChangedBase, IDialogViewModel<LoggedSupermarketEmployee>, IAsyncViewModel
+public class LoginAssistantDialogViewModel : NotifyPropertyChangedBase, IDialogViewModel<LoggedSupermarketEmployee>, IAsyncViewModel
 {
     private readonly ICashBoxService _cashBoxService;
 
     public ICommand AssistantLoginCommand { get; }
     public ICommand CancelCommand { get; }
     
-    public LoginAssistantViewModel(ICashBoxService cashBoxService)
+    public LoginAssistantDialogViewModel(ICashBoxService cashBoxService)
     {
         _cashBoxService = cashBoxService;
 
