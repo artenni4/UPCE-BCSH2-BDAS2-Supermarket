@@ -63,7 +63,9 @@ namespace Supermarket.Infrastructure.Employees
                                 FROM
                                     ZAMESTNANCI z
                                 LEFT JOIN
-                                    ROLE r ON z.role_id = r.role_id
+                                    ROLE_ZAMESTNANCU rz ON z.zamestnanec_id = rz.zamestnanec_id
+                                LEFT JOIN
+                                    ROLE r ON rz.role_id = r.role_id
                                 WHERE
                                     z.supermarket_id = :supermarket_id
                                 GROUP BY

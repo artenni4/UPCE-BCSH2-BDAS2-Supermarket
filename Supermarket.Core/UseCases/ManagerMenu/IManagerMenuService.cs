@@ -1,6 +1,7 @@
 ﻿using Supermarket.Core.Domain.Common.Paging;
 using Supermarket.Core.Domain.Employees;
 using Supermarket.Core.Domain.SellingProducts;
+using Supermarket.Core.Domain.StoragePlaces;
 using Supermarket.Core.Domain.StoredProducts;
 
 namespace Supermarket.Core.UseCases.ManagerMenu
@@ -13,5 +14,10 @@ namespace Supermarket.Core.UseCases.ManagerMenu
         Task AddProductToSupermarket(SellingProductId id);
         Task<PagedResult<ManagerMenuEmployee>> GetManagerEmployees(int supermarketId, RecordsRange recordsRange);
         Task<Employee?> GetEmployeeToEdit(int employeeId);
+        Task<PagedResult<StoragePlace>> GetStoragePlaces(int supermarketId, RecordsRange recordsRange);
+        Task<StoragePlace?> GetStorageToEdit(int storageId);
+        Task AddStorage(StoragePlace storagePlace);
+        Task EditStorage(StoragePlace storagePlace);
+
     }
 }

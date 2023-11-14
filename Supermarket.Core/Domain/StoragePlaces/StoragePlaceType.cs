@@ -2,8 +2,8 @@
 {
     public enum StoragePlaceType
     {
-        Sklad = 0,
-        Pult = 1,
-        Other = 2
+        SKLAD = 0,
+        PULT = 1,
+        OTHER = 2
     }
 }

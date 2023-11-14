@@ -19,6 +19,9 @@
         xmlns:managerLogs="clr-namespace:Supermarket.Wpf.Manager.SupermarketLogs"
         xmlns:managerSales="clr-namespace:Supermarket.Wpf.Manager.SupermarketSales"
         xmlns:managerCashboxes="clr-namespace:Supermarket.Wpf.Manager.SupermarketCashboxes"
+        xmlns:managerEmployeesDialogs="clr-namespace:Supermarket.Wpf.Manager.SupermarketEmployees.Dialog"
+        xmlns:managerStoragesDialogs="clr-namespace:Supermarket.Wpf.Manager.SupermarketStorages.Dialog"
+        
         xmlns:confirmation="clr-namespace:Supermarket.Wpf.Common.Dialogs.Confirmation"
         xmlns:input="clr-namespace:Supermarket.Wpf.Common.Dialogs.Input"
         xmlns:dropdown="clr-namespace:Supermarket.Wpf.Common.Dialogs.DropDown"
@@ -67,6 +70,12 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type goodsManagementDialogs:MoveStoredProductViewModel}" >
             <goodsManagementDialogs:MoveStoredProductWindow />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type managerEmployeesDialogs:ManagerMenuEmployeeDialogViewModel}" >
+            <managerEmployeesDialogs:ManagerMenuEmployeeDialogWindow />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type managerStoragesDialogs:SupermarketStoragesDialogViewModel}" >
+            <managerStoragesDialogs:SupermarketStoragesDialogWindow />
         </DataTemplate>
         
         <converter:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />

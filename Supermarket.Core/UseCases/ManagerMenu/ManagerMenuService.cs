@@ -2,12 +2,8 @@
 using Supermarket.Core.Domain.Employees;
 using Supermarket.Core.Domain.Products;
 using Supermarket.Core.Domain.SellingProducts;
+using Supermarket.Core.Domain.StoragePlaces;
 using Supermarket.Core.Domain.StoredProducts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Supermarket.Core.UseCases.ManagerMenu
 {
@@ -17,15 +13,16 @@ namespace Supermarket.Core.UseCases.ManagerMenu
         private readonly IProductRepository _productRepository;
         private readonly IStoredProductRepository _storedProductRepository;
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly IStoragePlaceRepository _storagePlaceRepository;
 
-        public ManagerMenuService(ISellingProductRepository sellingProductRepository, IStoredProductRepository storedProductRepository, IProductRepository productRepository, IEmployeeRepository employeeRepository)
+        public ManagerMenuService(ISellingProductRepository sellingProductRepository, IStoredProductRepository storedProductRepository, IProductRepository productRepository, IEmployeeRepository employeeRepository, IStoragePlaceRepository storagePlaceRepository)
         {
             _sellingProductRepository = sellingProductRepository;
             _productRepository = productRepository;
             _storedProductRepository = storedProductRepository;
             _employeeRepository = employeeRepository;
+            _storagePlaceRepository = storagePlaceRepository;
         }
-
 
         #region SupermarketProducts
         public async Task<PagedResult<ManagerMenuProduct>> GetSupermarketProducts(int supermarketId, RecordsRange recordsRange)
@@ -64,6 +61,29 @@ namespace Supermarket.Core.UseCases.ManagerMenu
         {
             return await _employeeRepository.GetByIdAsync(employeeId);
         }
+        #endregion
+
+        #region StoragePlaces
+        public async Task<PagedResult<StoragePlace>> GetStoragePlaces(int supermarketId, RecordsRange recordsRange)
+        {
+            return await _storagePlaceRepository.GetSupermarketStoragePlaces(supermarketId, recordsRange);
+        }
+
+        public async Task<StoragePlace?> GetStorageToEdit(int storageId)
+        {
+            return await _storagePlaceRepository.GetByIdAsync(storageId);
+        }
+
+        public async Task AddStorage(StoragePlace storagePlace)
+        {
+            await _storagePlaceRepository.AddAsync(storagePlace);
+        }
+
+        public async Task EditStorage(StoragePlace storagePlace)
+        {
+            await _storagePlaceRepository.UpdateAsync(storagePlace);
+        }
+
         #endregion
     }
 }

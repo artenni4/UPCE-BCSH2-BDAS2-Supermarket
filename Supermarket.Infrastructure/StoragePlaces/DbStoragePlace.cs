@@ -9,7 +9,7 @@ internal class DbStoragePlace : IDbEntity<StoragePlace, int, DbStoragePlace>
     public required string kod { get; init; }
     public string? poloha { get; init; }
     public required int supermarket_id { get; init; }
-    public required StoragePlaceType misto_ulozeni_typ { get; init; }
+    public required string misto_ulozeni_typ { get; init; }
     
     public static string TableName => "MISTA_ULOZENI";
 
@@ -20,20 +20,32 @@ internal class DbStoragePlace : IDbEntity<StoragePlace, int, DbStoragePlace>
 
     public StoragePlace ToDomainEntity()
     {
-        return new StoragePlace
+        if (Enum.TryParse(typeof(StoragePlaceType), misto_ulozeni_typ, out var storagePlaceType))
         {
-            Id = misto_ulozeni_id,
-            Code = kod,
-            Location = poloha,
-            SupermarketId = supermarket_id,
-            Type = misto_ulozeni_typ
-        };
+            return new StoragePlace
+            {
+                Id = misto_ulozeni_id,
+                Code = kod,
+                Location = poloha,
+                SupermarketId = supermarket_id,
+                Type = (StoragePlaceType)storagePlaceType
+            };
+        }
+        else
+        {
+            throw new InvalidOperationException($"Invalid value for StoragePlaceType: {misto_ulozeni_typ}");
+        }
     }
 
-    public static DbStoragePlace ToDbEntity(StoragePlace entity)
+
+    public static DbStoragePlace ToDbEntity(StoragePlace entity) => new()
     {
-        throw new NotImplementedException();
-    }
+        misto_ulozeni_id = entity.Id,
+        kod = entity.Code,
+        poloha = entity.Location,
+        supermarket_id = entity.SupermarketId,
+        misto_ulozeni_typ = entity.Type.ToString()
+    };
 
     public static DynamicParameters GetEntityIdParameters(int id)
     {
@@ -52,4 +64,8 @@ internal class DbStoragePlace : IDbEntity<StoragePlace, int, DbStoragePlace>
     {
         throw new NotImplementedException();
     }
+
+    public DynamicParameters GetInsertingValues() =>
+        new DynamicParameters().AddParameter(nameof(misto_ulozeni_id), misto_ulozeni_id).AddParameter(nameof(kod), kod).AddParameter(nameof(misto_ulozeni_typ), misto_ulozeni_typ).AddParameter(nameof(supermarket_id), supermarket_id).AddParameter(nameof(poloha), poloha);
+
 }
