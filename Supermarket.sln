@@ -9,6 +9,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Supermarket.Infrastructure"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Supermarket.Wpf", "Supermarket.Wpf\Supermarket.Wpf.csproj", "{CA6B1736-08E7-4563-B596-E4280565CF7A}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{78AFC81D-D5FC-4111-B8A7-7357A485CD56}"
+	ProjectSection(SolutionItems) = preProject
+		Scripts\script.ddl = Scripts\script.ddl
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
