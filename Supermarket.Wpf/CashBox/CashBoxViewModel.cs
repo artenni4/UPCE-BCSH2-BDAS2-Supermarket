@@ -4,6 +4,7 @@ using Supermarket.Wpf.Dialog;
 using Supermarket.Wpf.LoggedUser;
 using Supermarket.Core.Domain.Auth.LoggedEmployees;
 using Supermarket.Core.UseCases.CashBox;
+using Supermarket.Wpf.CashBox.Dialogs;
 using Supermarket.Wpf.Navigation;
 using Supermarket.Wpf.ViewModelResolvers;
 
@@ -133,7 +134,7 @@ namespace Supermarket.Wpf.CashBox
 
         private async void InviteAssistant(object? obj)
         {
-            var result = await _dialogService.ShowAsync<LoginAssistantViewModel, LoggedSupermarketEmployee>();
+            var result = await _dialogService.ShowAsync<LoginAssistantDialogViewModel, LoggedSupermarketEmployee>();
             if (result.IsOk(out var loggedEmployee))
             {
                 _loggedUserService.SetSupermarketEmployee(loggedEmployee);
