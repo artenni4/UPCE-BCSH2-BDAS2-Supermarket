@@ -26,7 +26,7 @@ internal class SellingProductRepository : CrudRepositoryBase<SellingProduct, Sel
         
         const string sql = @"SELECT z.* FROM ZBOZI z
                      JOIN PRODAVANE_ZBOZI pz ON (z.zbozi_id = pz.zbozi_id)
-                     WHERE pz.supermarket_id = :supermarket_id AND z.druh_zbozi_id = :druh_zbozi_id AND z.nazev LIKE '%' || :hledani || '%'";
+                     WHERE pz.supermarket_id = :supermarket_id AND z.druh_zbozi_id = :druh_zbozi_id AND z.nazev LIKE '%' || :hledani || '%' AND pz.aktivni = 1";
 
         var orderByColumns = DbProduct.IdentityColumns
             .Select(ic => $"z.{ic}");
@@ -57,7 +57,7 @@ internal class SellingProductRepository : CrudRepositoryBase<SellingProduct, Sel
                             LEFT JOIN
                                 ULOZENI_ZBOZI uz ON z.zbozi_id = uz.zbozi_id and uz.supermarket_id = :supermarket_id
                             WHERE
-                                pz.supermarket_id = :supermarket_id
+                                pz.supermarket_id = :supermarket_id AND pz.aktivni = 1
                             GROUP BY
                                 z.zbozi_id, z.nazev, z.cena, d.dodavatel_id, d.nazev";
 

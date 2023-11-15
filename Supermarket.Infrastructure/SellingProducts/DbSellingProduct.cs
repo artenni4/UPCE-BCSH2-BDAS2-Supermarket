@@ -8,7 +8,7 @@ internal class DbSellingProduct : IDbEntity<SellingProduct, SellingProductId, Db
 {
     public required int zbozi_id { get; init; }
     public required int supermarket_id { get; init; }
-    
+    public required int aktivni { get; init; }
     
     public static string TableName => "PRODAVANE_ZBOZI";
     
@@ -20,13 +20,15 @@ internal class DbSellingProduct : IDbEntity<SellingProduct, SellingProductId, Db
 
     public SellingProduct ToDomainEntity() => new()
     {
-        Id = new SellingProductId(zbozi_id, supermarket_id)
+        Id = new SellingProductId(zbozi_id, supermarket_id),
+        IsActive = Convert.ToBoolean(aktivni)
     };
 
     public static DbSellingProduct ToDbEntity(SellingProduct entity) => new()
     {
         supermarket_id = entity.Id.SupermarketId,
-        zbozi_id = entity.Id.ProductId
+        zbozi_id = entity.Id.ProductId,
+        aktivni = Convert.ToInt32(entity.IsActive)
     };
 
     public static DynamicParameters GetEntityIdParameters(SellingProductId id) =>
@@ -35,7 +37,7 @@ internal class DbSellingProduct : IDbEntity<SellingProduct, SellingProductId, Db
             .AddParameter(nameof(zbozi_id), id.ProductId);
 
     public DynamicParameters GetInsertingValues() =>
-        new DynamicParameters().AddParameter(nameof(zbozi_id), zbozi_id).AddParameter(nameof(supermarket_id), supermarket_id);
+        new DynamicParameters().AddParameter(nameof(aktivni), aktivni);
 }
 
 
