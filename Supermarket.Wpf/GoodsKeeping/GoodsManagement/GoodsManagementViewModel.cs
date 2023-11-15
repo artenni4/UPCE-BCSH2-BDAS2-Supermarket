@@ -42,8 +42,8 @@ namespace Supermarket.Wpf.GoodsKeeping.GoodsManagement
 
             StoredProducts = new();
 
-            MoveCommand = new RelayCommand(MoveProduct);
-            DeleteCommand = new RelayCommand(DeleteProduct);
+            MoveCommand = new RelayCommand(MoveProduct, CanCallDialog);
+            DeleteCommand = new RelayCommand(DeleteProduct, CanCallDialog);
         }
 
         public async Task InitializeAsync()
@@ -85,6 +85,9 @@ namespace Supermarket.Wpf.GoodsKeeping.GoodsManagement
             }
         }
 
-
+        public bool CanCallDialog(object? obj)
+        {
+            return SelectedStoredProduct != null;
+        }
     }
 }

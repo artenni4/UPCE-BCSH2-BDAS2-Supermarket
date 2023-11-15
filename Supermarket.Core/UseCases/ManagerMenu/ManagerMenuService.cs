@@ -49,13 +49,20 @@ namespace Supermarket.Core.UseCases.ManagerMenu
 
         public async Task RemoveProductFromSupermarket(StoredProductId id)
         {
-            await _storedProductRepository.DeleteAsync(id);
-            await _sellingProductRepository.DeleteAsync(new SellingProductId { ProductId = id.ProductId, SupermarketId = id.SupermarketId });
+            await _sellingProductRepository.UpdateAsync(new SellingProduct { Id = new SellingProductId { ProductId = id.ProductId, SupermarketId = id.SupermarketId }, IsActive = false });
         }
 
         public async Task AddProductToSupermarket(SellingProductId id)
         {
-            await _sellingProductRepository.AddAsync(new SellingProduct { Id = id});
+            var product = await _sellingProductRepository.GetByIdAsync(id);
+            if (product == null)
+            {
+                await _sellingProductRepository.AddAsync(new SellingProduct { Id = id, IsActive = true });
+            }
+            else
+            {
+                await _sellingProductRepository.UpdateAsync(new SellingProduct { Id = id, IsActive = true });
+            }
         }
         #endregion
 

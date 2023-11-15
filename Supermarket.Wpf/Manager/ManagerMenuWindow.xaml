@@ -30,9 +30,6 @@
                 <DataTemplate DataType="{x:Type storages:SupermarketStoragesViewModel}">
                     <storages:SupermarketStoragesWindow />
                 </DataTemplate>
-                <DataTemplate DataType="{x:Type logs:SupermarketLogsViewModel}">
-                    <logs:SupermarketLogsView />
-                </DataTemplate>
                 <DataTemplate DataType="{x:Type sales:SupermarketSalesViewModel}">
                     <sales:SupermarketSalesWindow />
                 </DataTemplate>

@@ -22,9 +22,9 @@ internal class ProductRepository : CrudRepositoryBase<Product, int, DbProduct>, 
                                 z.nazev as nazev,
                                 z.cena as cena,
                                 NVL(MAX(uz.misto_ulozeni_id), 0) as misto_ulozeni_id,
-                                CASE WHEN MAX(pz.supermarket_id) IS NOT NULL THEN 1 ELSE 0 END AS is_in_supermarket,
                                 d.nazev AS dodavatel_nazev,
-                                d.dodavatel_id as dodavatel_id
+                                d.dodavatel_id as dodavatel_id,
+                                pz.aktivni as is_in_supermarket
                             FROM
                                 ZBOZI z
                             LEFT JOIN
@@ -34,7 +34,7 @@ internal class ProductRepository : CrudRepositoryBase<Product, int, DbProduct>, 
                             LEFT JOIN
                                 ULOZENI_ZBOZI uz ON z.zbozi_id = uz.zbozi_id AND uz.supermarket_id = :supermarket_id
                             GROUP BY
-                                z.zbozi_id, z.nazev, z.cena, d.nazev, d.dodavatel_id";
+                                z.zbozi_id, z.nazev, z.cena, d.nazev, d.dodavatel_id, pz.aktivni";
 
         var orderByColumns = DbProduct.IdentityColumns
             .Select(ic => $"z.{ic}");

@@ -37,14 +37,28 @@ namespace Supermarket.Infrastructure.Sales
             var parameters = new DynamicParameters()
                 .AddParameter("supermarket_id", supermarketId).AddParameter("datum_od", dateFrom).AddParameter("datum_do", dateTo);
 
-            const string sql = @"SELECT
+            const string sql = @"WITH AggregatedZbozi AS (
+                                    SELECT
+                                        prodej_id,
+                                        LISTAGG(DISTINCT z.nazev || ' ' || pz.kusy || mj.zkratka || ' ' || pz.celkova_cena || 'Kč', ', ') WITHIN GROUP (ORDER BY z.nazev) AS zbozi
+                                    FROM
+                                        PRODANE_ZBOZI pz
+                                    JOIN
+                                        ZBOZI z ON z.zbozi_id = pz.zbozi_id
+                                    JOIN
+                                        MERNE_JEDNOTKY mj ON z.merna_jednotka_id = mj.merna_jednotka_id
+                                    GROUP BY
+                                        prodej_id
+                                )
+
+                                SELECT
                                     p.prodej_id,
                                     p.datum,
                                     pk.pokladna_id,
                                     pk.nazev as pokladna_nazev,
                                     SUM(pl.castka) as cena,
                                     LISTAGG(DISTINCT tp.nazev, ', ') WITHIN GROUP (ORDER BY tp.nazev) AS typ_placeni_nazev,
-                                    LISTAGG(DISTINCT z.nazev || ' ' || pz.kusy || mj.zkratka || ' ' || pz.celkova_cena || 'Kč', ', ') WITHIN GROUP (ORDER BY z.nazev) AS zbozi
+                                    az.zbozi
                                 FROM
                                     PRODEJE p
                                 JOIN
@@ -54,17 +68,16 @@ namespace Supermarket.Infrastructure.Sales
                                 JOIN
                                     TYPY_PLACENI tp ON tp.typ_placeni_id = pl.typ_placeni_id
                                 JOIN
-                                    PRODANE_ZBOZI pz ON pz.prodej_id = p.prodej_id
-                                JOIN
-                                    ZBOZI z ON z.zbozi_id = pz.zbozi_id
-                                JOIN
-                                    MERNE_JEDNOTKY mj ON z.merna_jednotka_id = mj.merna_jednotka_id
-                                WHERE pk.supermarket_id = :supermarket_id AND p.datum BETWEEN :datum_od AND :datum_do
+                                    AggregatedZbozi az ON az.prodej_id = p.prodej_id
+                                WHERE
+                                    pk.supermarket_id = :supermarket_id
+                                    AND p.datum BETWEEN :datum_od AND :datum_do
                                 GROUP BY
                                     p.prodej_id,
                                     p.datum,
                                     pk.pokladna_id,
-                                    pk.nazev";
+                                    pk.nazev,
+                                    az.zbozi";
 
             var orderByColumns = DbManagerMenuSale.IdentityColumns
             .Select(ic => $"p.{ic}");

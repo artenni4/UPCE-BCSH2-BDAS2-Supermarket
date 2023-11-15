@@ -40,7 +40,6 @@ namespace Supermarket.Wpf.Manager
             var addProductsViewModel = await _viewModelResolver.Resolve<AddProductsViewModel>();
             var supermarketEmployeesViewModel = await _viewModelResolver.Resolve<SupermarketEmployeesViewModel>();
             var supermarketStoragesViewModel = await _viewModelResolver.Resolve<SupermarketStoragesViewModel>();
-            var supermarketLogsViewModel = await _viewModelResolver.Resolve<SupermarketLogsViewModel>();
             var supermarketSalesViewModel = await _viewModelResolver.Resolve<SupermarketSalesViewModel>();
             var supermarketCashboxesViewModel = await _viewModelResolver.Resolve<SupermarketCashboxesViewModel>();
             
@@ -48,7 +47,6 @@ namespace Supermarket.Wpf.Manager
             TabViewModels.Add(addProductsViewModel);
             TabViewModels.Add(supermarketEmployeesViewModel);
             TabViewModels.Add(supermarketStoragesViewModel);
-            TabViewModels.Add(supermarketLogsViewModel);
             TabViewModels.Add(supermarketSalesViewModel);
             TabViewModels.Add(supermarketCashboxesViewModel);
             
