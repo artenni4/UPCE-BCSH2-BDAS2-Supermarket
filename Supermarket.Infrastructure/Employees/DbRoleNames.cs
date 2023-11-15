@@ -1,4 +1,4 @@
-﻿namespace Supermarket.Core.Domain.Employees.Roles
+﻿namespace Supermarket.Infrastructure.Employees
 {
     public static class DbRoleNames
     {

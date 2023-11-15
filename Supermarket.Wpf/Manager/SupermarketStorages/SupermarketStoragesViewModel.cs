@@ -5,7 +5,10 @@ using Supermarket.Wpf.LoggedUser;
 using Supermarket.Wpf.Manager.SupermarketStorages.Dialog;
 using Supermarket.Wpf.ViewModelResolvers;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Windows;
 using System.Windows.Input;
+using Supermarket.Core.Domain.Common;
 
 namespace Supermarket.Wpf.Manager.SupermarketStorages
 {
@@ -91,14 +94,23 @@ namespace Supermarket.Wpf.Manager.SupermarketStorages
 
         public async void DeleteStorage(object? obj)
         {
-            var result = await _dialogService.ShowConfirmationDialogAsync($"Provedením této akce odstraníte {SelectedStorage?.Code}");
+            Debug.Assert(SelectedStorage != null, nameof(SelectedStorage) + " != null");
+            var result = await _dialogService.ShowConfirmationDialogAsync($"Provedením této akce odstraníte {SelectedStorage.Code}");
 
-            if (result.IsOk())
+            if (!result.IsOk())
             {
-                int selectedStorageId = SelectedStorage?.Id ?? 0;
-                await _managerMenuService.DeleteStorage(selectedStorageId);
-                await InitializeAsync();
+                return;
             }
+            
+            try
+            {
+                await _managerMenuService.DeleteStorage(SelectedStorage.Id);
+            }
+            catch (OperationCannotBeExecutedException)
+            {
+                MessageBox.Show("Místo uložení nelze smazat protože již se používá", "Chyba", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            await InitializeAsync();
         }
 
         public bool CanCallDialog(object? obj)

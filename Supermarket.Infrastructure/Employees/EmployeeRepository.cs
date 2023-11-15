@@ -126,7 +126,7 @@ namespace Supermarket.Infrastructure.Employees
                 DbRoleNames.GoodsKeeper => new GoodsKeeperRole(supermarketId),
                 DbRoleNames.Cashier => new CashierRole(supermarketId),
                 DbRoleNames.SuperAdmin => new AdminRole(),
-                _ => throw new DatabaseException($"Role [{role}] does not exist")
+                _ => throw new RepositoryInconsistencyException($"Role [{role}] does not exist")
             }).ToArray();
         }
 

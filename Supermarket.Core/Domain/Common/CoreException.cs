@@ -1,9 +1,9 @@
 ﻿namespace Supermarket.Core.Domain.Common
 {
     /// <summary>
-    /// Base exception for all custom exceptions in core layers
+    /// Base exception for all custom exceptions
     /// </summary>
-    public class CoreException : Exception
+    public abstract class CoreException : Exception
     {
         public CoreException()
         {

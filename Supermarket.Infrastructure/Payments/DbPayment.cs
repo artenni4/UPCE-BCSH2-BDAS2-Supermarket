@@ -29,7 +29,7 @@ internal class DbPayment : IDbEntity<Payment, PaymentId, DbPayment>
         1 => PaymentType.Hotovost,
         2 => PaymentType.Karta,
         3 => PaymentType.Kupon,
-        _ => throw new DatabaseException("Payment type not supported")
+        _ => throw new RepositoryInconsistencyException("Payment type not supported")
     };
 
     private static int ToPaymentTypeId(PaymentType paymentType) => paymentType switch

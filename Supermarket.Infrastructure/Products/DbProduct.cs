@@ -36,7 +36,7 @@ internal class DbProduct : IDbEntity<Product, int, DbProduct>
             4 => MeasureUnit.Millilitre,
             5 => MeasureUnit.Piece,
             6 => MeasureUnit.Meter,
-            _ => throw new DatabaseException($"Measure unit [{merna_jednotka_id}] is not known")
+            _ => throw new RepositoryInconsistencyException($"Measure unit [{merna_jednotka_id}] is not known")
         },
         ByWeight = naVahu != 0,
         Name = nazev,
@@ -98,6 +98,6 @@ internal class DbProduct : IDbEntity<Product, int, DbProduct>
             return 6;
         }
 
-        throw new DatabaseException($"Mapping for measure unit [{measureUnit}] is not implemented");
+        throw new RepositoryInconsistencyException($"Mapping for measure unit [{measureUnit}] is not implemented");
     }
 }

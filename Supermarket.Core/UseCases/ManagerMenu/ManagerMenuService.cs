@@ -71,7 +71,7 @@ namespace Supermarket.Core.UseCases.ManagerMenu
 
             if (employee == null)
             {
-                throw new InconsistencyException("Zaměstnanec nebyl nalezn");
+                throw new ApplicationInconsistencyException("Zaměstnanec nebyl nalezn");
             }
 
             return employee;
@@ -106,7 +106,14 @@ namespace Supermarket.Core.UseCases.ManagerMenu
 
         public async Task DeleteStorage(int id)
         {
-            await _storagePlaceRepository.DeleteAsync(id);
+            try
+            {
+                await _storagePlaceRepository.DeleteAsync(id);
+            }
+            catch (RepositoryOperationFailedException e)
+            {
+                throw new OperationCannotBeExecutedException(e);
+            }
         }
 
         #endregion
