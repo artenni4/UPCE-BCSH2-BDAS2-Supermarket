@@ -14,10 +14,10 @@ namespace Supermarket.Infrastructure.CashBoxes
         public required string kod { get; init; }
         public required string? poznamky { get; init; }
 
-        public static IReadOnlyList<string> IdentityColumns { get; } = new[]
+        public static IReadOnlySet<string> IdentityColumns { get; } = new HashSet<string>
         {
-        nameof(pokladna_id)
-    };
+            nameof(pokladna_id)
+        };
 
         public ManagerMenuCashbox ToDomainEntity() => new()
         {
@@ -39,5 +39,7 @@ namespace Supermarket.Infrastructure.CashBoxes
 
         public static DynamicParameters GetEntityIdParameters(int id) =>
             new DynamicParameters().AddParameter(nameof(pokladna_id), id);
+
+        public DynamicParameters GetInsertingValues() => this.GetPropertiesExceptIdentity();
     }
 }
