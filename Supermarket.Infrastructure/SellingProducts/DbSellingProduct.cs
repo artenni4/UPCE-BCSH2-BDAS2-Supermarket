@@ -12,7 +12,7 @@ internal class DbSellingProduct : IDbEntity<SellingProduct, SellingProductId, Db
     
     public static string TableName => "PRODAVANE_ZBOZI";
     
-    public static IReadOnlyList<string> IdentityColumns { get; } = new[]
+    public static IReadOnlySet<string> IdentityColumns { get; } = new HashSet<string>
     {
         nameof(zbozi_id),
         nameof(supermarket_id)

@@ -16,7 +16,7 @@ public class CashBoxServiceFake : ICashBoxService
         return Task.FromResult(PagedResult<CashBoxProductCategory>.Empty());
     }
 
-    public Task AddSaleAsync(int cashBoxId, CashBoxPaymentType cashBoxPaymentType, IReadOnlyList<CashBoxSoldProduct> soldProducts, IReadOnlyList<Coupon> coupons)
+    public Task AddSaleAsync(int cashBoxId, CashBoxPayment cashBoxPayment, IReadOnlyList<CashBoxSoldProduct> soldProducts)
     {
         throw new NotImplementedException();
     }

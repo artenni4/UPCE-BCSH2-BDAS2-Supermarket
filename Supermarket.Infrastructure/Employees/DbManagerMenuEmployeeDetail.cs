@@ -23,7 +23,7 @@ namespace Supermarket.Infrastructure.Employees
         public required bool isAdmin { get; init; }
 
         public static string TableName => "ZAMESTNANCI";
-        public static IReadOnlyList<string> IdentityColumns { get; } = new[]
+        public static IReadOnlySet<string> IdentityColumns { get; } = new HashSet<string>
         {
             nameof(zamestnanec_id)
         };
@@ -56,5 +56,7 @@ namespace Supermarket.Infrastructure.Employees
 
         public static DynamicParameters GetEntityIdParameters(int id) =>
             new DynamicParameters().AddParameter(nameof(zamestnanec_id), id);
+
+        public DynamicParameters GetInsertingValues() => this.GetPropertiesExceptIdentity();
     }
 }

@@ -15,7 +15,7 @@ namespace Supermarket.Infrastructure.Suppliers
 
         public static string TableName => "DODAVATELE";
 
-        public static IReadOnlyList<string> IdentityColumns { get; } = new[]
+        public static IReadOnlySet<string> IdentityColumns { get; } = new HashSet<string>
         {
             nameof(dodavatel_id)
         };
@@ -34,5 +34,10 @@ namespace Supermarket.Infrastructure.Suppliers
 
         public static DynamicParameters GetEntityIdParameters(int id) =>
         new DynamicParameters().AddParameter(nameof(dodavatel_id), id);
+
+        public DynamicParameters GetInsertingValues()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

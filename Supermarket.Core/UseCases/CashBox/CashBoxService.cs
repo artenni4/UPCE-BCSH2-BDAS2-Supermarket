@@ -1,6 +1,7 @@
 ﻿using Supermarket.Core.Domain.Auth;
 using Supermarket.Core.Domain.Auth.LoggedEmployees;
 using Supermarket.Core.Domain.CashBoxes;
+using Supermarket.Core.Domain.Common;
 using Supermarket.Core.Domain.Common.Paging;
 using Supermarket.Core.Domain.Payments;
 using Supermarket.Core.Domain.Sales;
@@ -56,16 +57,52 @@ namespace Supermarket.Core.UseCases.CashBox
             return result.Select(CashBoxProduct.FromProduct);
         }
 
-        public Task AddSaleAsync(int cashBoxId, CashBoxPaymentType cashBoxPaymentType, IReadOnlyList<CashBoxSoldProduct> soldProducts, IReadOnlyList<Coupon> coupons)
+        public async Task AddSaleAsync(int cashBoxId, CashBoxPayment cashBoxPayment, IReadOnlyList<CashBoxSoldProduct> soldProducts)
         {
             // TODO return id of new record, test transactions
-            _saleRepository.AddAsync(new Sale
+            var cashBox = await _cashBoxRepository.GetByIdAsync(cashBoxId);
+            if (cashBox is null)
+            {
+                throw new InconsistencyException("Cash box must exist when adding sale to it");
+            }
+            
+            var saleId = await _saleRepository.AddAndGetIdAsync(new Sale
             {
                 Id = 0,
                 CashBoxId = cashBoxId,
                 Date = DateTimeOffset.Now,
             });
-            throw new NotImplementedException();
+
+            foreach (var soldProduct in soldProducts)
+            {
+                await _soldProductRepository.AddAsync(new SoldProduct
+                {
+                    Id = new SoldProductId(saleId, cashBox.SupermarketId, soldProduct.ProductId),
+                    Pieces = soldProduct.Count,
+                    Price = soldProduct.Price
+                });
+            }
+
+            foreach (var coupon in cashBoxPayment.Coupons)
+            {
+                await _paymentRepository.AddAsync(new Payment
+                {
+                    Id = new PaymentId(saleId, PaymentType.Kupon),
+                    Amount = coupon.Discount
+                });
+            }
+
+            var paymentType = cashBoxPayment.PaymentType switch
+            {
+                CashBoxPaymentType.Cash => PaymentType.Hotovost,
+                CashBoxPaymentType.Card => PaymentType.Karta,
+                _ => throw new ArgumentException(nameof(cashBoxPayment.PaymentType)),
+            };
+            await _paymentRepository.AddAsync(new Payment
+            {
+                Id = new PaymentId(saleId, paymentType),
+                Amount = cashBoxPayment.Total
+            });
         }
 
         public async Task<LoggedSupermarketEmployee> AssistantLoginAsync(LoginData loginData, int cashBoxId)

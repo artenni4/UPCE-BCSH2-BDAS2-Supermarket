@@ -4,6 +4,7 @@ using Microsoft.Extensions.Options;
 using Oracle.ManagedDataAccess.Client;
 using Supermarket.Core.Domain.CashBoxes;
 using Supermarket.Core.Domain.Employees;
+using Supermarket.Core.Domain.Payments;
 using Supermarket.Core.Domain.ProductCategories;
 using Supermarket.Core.Domain.Products;
 using Supermarket.Core.Domain.Regions;
@@ -28,6 +29,7 @@ using Supermarket.Infrastructure.StoredProducts;
 using Supermarket.Infrastructure.Suppliers;
 using Supermarket.Core.Domain.Suppliers;
 using Supermarket.Infrastructure.CashBoxes;
+using Supermarket.Infrastructure.Payments;
 
 namespace Supermarket.Infrastructure;
 
@@ -58,6 +60,7 @@ public static class InfrastructureDependencies
         serviceCollection.AddScoped<ISupermarketRepository, SupermarketRepository>();
         serviceCollection.AddScoped<IRegionRepository, RegionRepository>();
         serviceCollection.AddScoped<ISaleRepository, SaleRepository>();
+        serviceCollection.AddScoped<IPaymentRepository, PaymentRepository>();
         serviceCollection.AddScoped<ICashBoxRepository, CashBoxRepository>();
         serviceCollection.AddScoped<ISellingProductRepository, SellingProductRepository>();
         serviceCollection.AddScoped<IStoredProductRepository, StoredProductRepository>();

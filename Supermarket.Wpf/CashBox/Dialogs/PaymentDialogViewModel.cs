@@ -63,25 +63,37 @@ public class PaymentDialogViewModel : NotifyPropertyChangedBase, IDialogViewMode
 
     private async void PayWithCash(object? obj)
     {
+        if (Price.HasValue == false)
+        {
+            return;
+        }
+        
         var dialogResult = await _dialogService.ShowConfirmationDialogAsync("POKLADNÁ VYŽADUJE VLOŽENI HOTOVOSTI", ConfirmationButtons.Ok);
         if (!dialogResult.IsOk())
         {
             return;
         }
-        
-        var paymentResult = new PaymentDialogResult(CashBoxPaymentType.Cash, Coupons.ToArray());
+
+        var total = Total ?? Price.Value;
+        var paymentResult = new PaymentDialogResult(CashBoxPaymentType.Cash, total, Coupons.ToArray());
         ResultReceived?.Invoke(this, DialogResult<PaymentDialogResult>.Ok(paymentResult));
     }
 
     private async void PayByCard(object? obj)
     {
+        if (Price.HasValue == false)
+        {
+            return;
+        }
+        
         var dialogResult = await _dialogService.ShowConfirmationDialogAsync("POKLADNÁ VYŽADUJE ZAPLACENÍ KARTOU", ConfirmationButtons.Ok);
         if (!dialogResult.IsOk())
         {
             return;
         }
         
-        var paymentResult = new PaymentDialogResult(CashBoxPaymentType.Card, Coupons.ToArray());
+        var total = Total ?? Price.Value;
+        var paymentResult = new PaymentDialogResult(CashBoxPaymentType.Card, total, Coupons.ToArray());
         ResultReceived?.Invoke(this, DialogResult<PaymentDialogResult>.Ok(paymentResult));
     }
 
