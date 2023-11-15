@@ -1,8 +1,8 @@
 ﻿using Supermarket.Core.Domain.Common.Paging;
-using Supermarket.Core.Domain.Employees;
 using Supermarket.Core.Domain.SellingProducts;
 using Supermarket.Core.Domain.StoragePlaces;
 using Supermarket.Core.Domain.StoredProducts;
+using Cashbox = Supermarket.Core.Domain.CashBoxes.CashBox;
 
 namespace Supermarket.Core.UseCases.ManagerMenu
 {
@@ -21,6 +21,10 @@ namespace Supermarket.Core.UseCases.ManagerMenu
         Task EditStorage(StoragePlace storagePlace);
         Task DeleteStorage(int id);
         Task<PagedResult<ManagerMenuSale>> GetSupermarketSales(int supermarket, DateTime dateFrom, DateTime dateTo, RecordsRange recordsRange);
-
+        Task<PagedResult<ManagerMenuCashbox>> GetSupermarketCashboxes(int supermarketId, RecordsRange recordsRange);
+        Task<Cashbox?> GetCashboxToEdit(int cashboxId);
+        Task DeleteCashbox(int cashboxId);
+        Task AddCashbox(Cashbox cashbox);
+        Task EditCashbox(Cashbox cashbox);
     }
 }

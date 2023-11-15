@@ -52,6 +52,8 @@ namespace Supermarket.Wpf.Manager.SupermarketEmployees
 
         public async Task InitializeAsync()
         {
+            using var _ = new DelegateLoading(this);
+
             await GetEmployees();
         }
 

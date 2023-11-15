@@ -1,4 +1,5 @@
-﻿using Supermarket.Core.Domain.Common;
+﻿using Supermarket.Core.Domain.CashBoxes;
+using Supermarket.Core.Domain.Common;
 using Supermarket.Core.Domain.Common.Paging;
 using Supermarket.Core.Domain.Employees;
 using Supermarket.Core.Domain.Products;
@@ -6,6 +7,7 @@ using Supermarket.Core.Domain.Sales;
 using Supermarket.Core.Domain.SellingProducts;
 using Supermarket.Core.Domain.StoragePlaces;
 using Supermarket.Core.Domain.StoredProducts;
+using Cashbox = Supermarket.Core.Domain.CashBoxes.CashBox;
 
 namespace Supermarket.Core.UseCases.ManagerMenu
 {
@@ -17,8 +19,9 @@ namespace Supermarket.Core.UseCases.ManagerMenu
         private readonly IEmployeeRepository _employeeRepository;
         private readonly IStoragePlaceRepository _storagePlaceRepository;
         private readonly ISaleRepository _saleRepository;
+        private readonly ICashBoxRepository _cashBoxRepository;
 
-        public ManagerMenuService(ISellingProductRepository sellingProductRepository, IStoredProductRepository storedProductRepository, IProductRepository productRepository, IEmployeeRepository employeeRepository, IStoragePlaceRepository storagePlaceRepository, ISaleRepository saleRepository)
+        public ManagerMenuService(ISellingProductRepository sellingProductRepository, IStoredProductRepository storedProductRepository, IProductRepository productRepository, IEmployeeRepository employeeRepository, IStoragePlaceRepository storagePlaceRepository, ISaleRepository saleRepository, ICashBoxRepository cashBoxRepository)
         {
             _sellingProductRepository = sellingProductRepository;
             _productRepository = productRepository;
@@ -26,6 +29,7 @@ namespace Supermarket.Core.UseCases.ManagerMenu
             _employeeRepository = employeeRepository;
             _storagePlaceRepository = storagePlaceRepository;
             _saleRepository = saleRepository;
+            _cashBoxRepository = cashBoxRepository;
         }
 
         #region SupermarketProducts
@@ -65,7 +69,7 @@ namespace Supermarket.Core.UseCases.ManagerMenu
         {
             var employee = await _employeeRepository.GetEmployeeDetail(employeeId);
 
-            if (employee== null)
+            if (employee == null)
             {
                 throw new InconsistencyException("Zaměstnanec nebyl nalezn");
             }
@@ -111,5 +115,34 @@ namespace Supermarket.Core.UseCases.ManagerMenu
         {
             return await _saleRepository.GetSupermarketSales(supermarketId, dateFrom, dateTo, recordsRange);
         }
+
+        #region SupermarketCashboxes
+
+        public async Task<PagedResult<ManagerMenuCashbox>> GetSupermarketCashboxes(int supermarketId, RecordsRange recordsRange)
+        {
+            return await _cashBoxRepository.GetSupermarketCashboxes(supermarketId, recordsRange);
+        }
+
+        public async Task<Cashbox?> GetCashboxToEdit(int cashboxId)
+        {
+            return await _cashBoxRepository.GetByIdAsync(cashboxId);
+        }
+
+        public async Task DeleteCashbox(int cashboxId)
+        {
+            await _cashBoxRepository.DeleteAsync(cashboxId);
+        }
+
+        public async Task AddCashbox(Cashbox cashbox)
+        {
+            await _cashBoxRepository.AddAsync(cashbox);
+        }
+
+        public async Task EditCashbox(Cashbox cashbox)
+        {
+            await _cashBoxRepository.UpdateAsync(cashbox);
+        }
+
+        #endregion
     }
 }

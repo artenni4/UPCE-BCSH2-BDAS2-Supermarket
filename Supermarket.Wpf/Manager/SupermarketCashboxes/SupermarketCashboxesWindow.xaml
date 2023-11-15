@@ -6,15 +6,31 @@
              xmlns:local="clr-namespace:Supermarket.Wpf.Manager.SupermarketCashboxes"
              mc:Ignorable="d" 
              d:DesignHeight="1080" d:DesignWidth="1920">
-    <Border Grid.Column="0" Margin="10,10,10,0" Style="{StaticResource PanelBorderStyle}">
+    <Border Grid.Column="0" Margin="0,10,10,0" Style="{StaticResource PanelBorderStyle}">
         <Grid>
-            <DataGrid ItemsSource="{Binding qwe}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False" Width="1000" ColumnWidth="*" HorizontalAlignment="Left" Height="Auto" SelectedItem="{Binding SelectedStoredProduct, Mode=TwoWay}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <DataGrid Grid.Column="0" ItemsSource="{Binding Cashboxes}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False" ColumnWidth="*" Height="Auto" SelectedItem="{Binding SelectedCashbox, Mode=TwoWay}">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Název" Binding="{Binding }" Width="500" IsReadOnly="True" FontSize="25" />
-                    <DataGridTextColumn Header="Počet" Binding="{Binding }" Width="200" IsReadOnly="True" FontSize="25" />
-                    <DataGridTextColumn Header="Místo uložení" Binding="{Binding }" Width="*" IsReadOnly="True" FontSize="25" />
+                    <DataGridTextColumn Header="Název" Binding="{Binding Name}" IsReadOnly="True" FontSize="25" />
+                    <DataGridTextColumn Header="Kód" Binding="{Binding Code}" IsReadOnly="True" FontSize="25" />
+                    <DataGridTemplateColumn Header="Poznámka" IsReadOnly="True" >
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Notes}" TextWrapping="Wrap" FontSize="25"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
+
+            <StackPanel Grid.Column="1" HorizontalAlignment="Right" Margin="10 0 10 0">
+                <Button Content="Přidat" Command="{Binding AddCommand}" Style="{StaticResource DarkButtonStyle}" Width="Auto" Margin="0,10,0,0" />
+                <Button Content="Edit" Command="{Binding EditCommand}" Margin="0,10,0,0" />
+                <Button Content="Delete" Command="{Binding DeleteCommand}" Style="{StaticResource RedButtonStyle}" Margin="0,10,0,0" />
+            </StackPanel>
 
         </Grid>
     </Border>

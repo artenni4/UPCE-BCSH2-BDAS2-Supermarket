@@ -38,4 +38,7 @@ public class DbCashBox : IDbEntity<CashBox, int, DbCashBox>
 
     public static DynamicParameters GetEntityIdParameters(int id) =>
         new DynamicParameters().AddParameter(nameof(pokladna_id), id);
+
+    public DynamicParameters GetInsertingValues() =>
+        new DynamicParameters().AddParameter(nameof(supermarket_id), supermarket_id).AddParameter(nameof(nazev), nazev).AddParameter(nameof(kod), kod).AddParameter(nameof(poznamky), poznamky);
 }

@@ -34,6 +34,8 @@ namespace Supermarket.Wpf.Manager.SupermarketSales
 
         public async Task InitializeAsync()
         {
+            using var _ = new DelegateLoading(this);
+
             DateFrom = DateTime.Today;
             DateTo = DateTime.Today.AddDays(1).AddMinutes(-1);
             await GetSales();

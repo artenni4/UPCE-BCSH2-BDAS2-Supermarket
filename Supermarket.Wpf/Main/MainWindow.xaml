@@ -21,6 +21,7 @@
         xmlns:managerCashboxes="clr-namespace:Supermarket.Wpf.Manager.SupermarketCashboxes"
         xmlns:managerEmployeesDialogs="clr-namespace:Supermarket.Wpf.Manager.SupermarketEmployees.Dialog"
         xmlns:managerStoragesDialogs="clr-namespace:Supermarket.Wpf.Manager.SupermarketStorages.Dialog"
+        xmlns:managerCashboxesDialogs="clr-namespace:Supermarket.Wpf.Manager.SupermarketCashboxes.Dialog"
         
         xmlns:confirmation="clr-namespace:Supermarket.Wpf.Common.Dialogs.Confirmation"
         xmlns:input="clr-namespace:Supermarket.Wpf.Common.Dialogs.Input"
@@ -80,6 +81,9 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type managerStoragesDialogs:SupermarketStoragesDialogViewModel}" >
             <managerStoragesDialogs:SupermarketStoragesDialogWindow />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type managerCashboxesDialogs:SupermarketCashboxesDialogViewModel}" >
+            <managerCashboxesDialogs:SupermarketCashboxesDialogWindow />
         </DataTemplate>
         
         <converter:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />

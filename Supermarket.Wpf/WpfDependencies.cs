@@ -16,6 +16,7 @@ using Supermarket.Wpf.Main;
 using Supermarket.Wpf.Manager;
 using Supermarket.Wpf.Manager.AddProducts;
 using Supermarket.Wpf.Manager.SupermarketCashboxes;
+using Supermarket.Wpf.Manager.SupermarketCashboxes.Dialog;
 using Supermarket.Wpf.Manager.SupermarketEmployees;
 using Supermarket.Wpf.Manager.SupermarketEmployees.Dialog;
 using Supermarket.Wpf.Manager.SupermarketLogs;
@@ -64,6 +65,7 @@ public static class WpfDependencies
         serviceCollection.AddTransient<SupermarketCashboxesViewModel>();
         serviceCollection.AddTransient<ManagerMenuEmployeeDialogViewModel>();
         serviceCollection.AddTransient<SupermarketStoragesDialogViewModel>();
+        serviceCollection.AddTransient<SupermarketCashboxesDialogViewModel>();
 
         return serviceCollection;
     }
