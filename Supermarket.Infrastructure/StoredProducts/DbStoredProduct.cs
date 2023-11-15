@@ -13,7 +13,7 @@ internal class DbStoredProduct : IDbEntity<StoredProduct, StoredProductId, DbSto
     
     public static string TableName => "ULOZENI_ZBOZI";
 
-    public static IReadOnlyList<string> IdentityColumns { get; } = new[]
+    public static IReadOnlySet<string> IdentityColumns { get; } = new HashSet<string>()
     {
         nameof(misto_ulozeni_id),
         nameof(supermarket_id),

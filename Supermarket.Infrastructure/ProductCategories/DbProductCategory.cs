@@ -11,7 +11,7 @@ internal class DbProductCategory : IDbEntity<ProductCategory, int, DbProductCate
 
     public static string TableName => "DRUHY_ZBOZI";
 
-    public static IReadOnlyList<string> IdentityColumns { get; } = new[]
+    public static IReadOnlySet<string> IdentityColumns { get; } = new HashSet<string>
     {
         nameof(druh_zbozi_id)
     };
@@ -36,12 +36,7 @@ internal class DbProductCategory : IDbEntity<ProductCategory, int, DbProductCate
         throw new NotImplementedException();
     }
 
-    public static DynamicParameters GetOutputIdentityParameters()
-    {
-        throw new NotImplementedException();
-    }
-
-    public static int ExtractIdentity(DynamicParameters dynamicParameters)
+    public DynamicParameters GetInsertingValues()
     {
         throw new NotImplementedException();
     }

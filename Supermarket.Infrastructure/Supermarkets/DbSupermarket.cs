@@ -9,7 +9,7 @@ internal class DbSupermarket : IDbEntity<Core.Domain.Supermarkets.Supermarket, i
     public required int region_id { get; init; }
     
     public static string TableName => "SUPERMARKETY";
-    public static IReadOnlyList<string> IdentityColumns { get; } = new[]
+    public static IReadOnlySet<string> IdentityColumns { get; } = new HashSet<string>
     {
         nameof(supermarket_id)
     };
@@ -30,4 +30,9 @@ internal class DbSupermarket : IDbEntity<Core.Domain.Supermarkets.Supermarket, i
 
     public static DynamicParameters GetEntityIdParameters(int id) => 
         new DynamicParameters().AddParameter(nameof(supermarket_id), id);
+
+    public DynamicParameters GetInsertingValues()
+    {
+        throw new NotImplementedException();
+    }
 }

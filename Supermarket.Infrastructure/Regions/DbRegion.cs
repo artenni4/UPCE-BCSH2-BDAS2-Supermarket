@@ -7,20 +7,21 @@ internal class DbRegion : IDbEntity<Region, int, DbRegion>
 {
     public required int region_id { get; init; }
     public required string nazev { get; init; }
-    
-    
+
+
     public static string TableName => "REGIONY";
-    
-    public static IReadOnlyList<string> IdentityColumns { get; } = new[]
+
+    public static IReadOnlySet<string> IdentityColumns { get; } = new HashSet<string>
     {
         nameof(region_id)
     };
-    
+
     public Region ToDomainEntity() => new()
     {
         Id = region_id,
         Name = nazev
     };
+
     public static DbRegion ToDbEntity(Region entity) => new()
     {
         region_id = entity.Id,
@@ -32,13 +33,5 @@ internal class DbRegion : IDbEntity<Region, int, DbRegion>
         throw new NotImplementedException();
     }
 
-    public static DynamicParameters GetOutputIdentityParameters()
-    {
-        throw new NotImplementedException();
-    }
-
-    public static int ExtractIdentity(DynamicParameters dynamicParameters)
-    {
-        throw new NotImplementedException();
-    }
+    public DynamicParameters GetInsertingValues() => this.GetAllProperties();
 }

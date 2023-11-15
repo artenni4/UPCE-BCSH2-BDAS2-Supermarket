@@ -19,7 +19,7 @@ internal class DbProduct : IDbEntity<Product, int, DbProduct>
 
     public static string TableName => "ZBOZI";
 
-    public static IReadOnlyList<string> IdentityColumns { get; } = new[]
+    public static IReadOnlySet<string> IdentityColumns { get; } = new HashSet<string>
     {
         nameof(zbozi_id)
     };
@@ -63,6 +63,8 @@ internal class DbProduct : IDbEntity<Product, int, DbProduct>
 
     public static DynamicParameters GetEntityIdParameters(int id) =>
         new DynamicParameters().AddParameter(nameof(zbozi_id), id);
+
+    public DynamicParameters GetInsertingValues() => this.GetPropertiesExceptIdentity();
 
     private static int GetMeasureUnitId(MeasureUnit measureUnit)
     {

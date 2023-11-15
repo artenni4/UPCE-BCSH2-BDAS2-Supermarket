@@ -13,7 +13,7 @@ public class DbCashBox : IDbEntity<CashBox, int, DbCashBox>
     public required string kod { get; init; }
     public required string? poznamky { get; init; }
 
-    public static IReadOnlyList<string> IdentityColumns { get; } = new[]
+    public static IReadOnlySet<string> IdentityColumns { get; } = new HashSet<string>
     {
         nameof(pokladna_id)
     };
@@ -39,6 +39,5 @@ public class DbCashBox : IDbEntity<CashBox, int, DbCashBox>
     public static DynamicParameters GetEntityIdParameters(int id) =>
         new DynamicParameters().AddParameter(nameof(pokladna_id), id);
 
-    public DynamicParameters GetInsertingValues() =>
-        new DynamicParameters().AddParameter(nameof(supermarket_id), supermarket_id).AddParameter(nameof(nazev), nazev).AddParameter(nameof(kod), kod).AddParameter(nameof(poznamky), poznamky);
+    public DynamicParameters GetInsertingValues() => this.GetPropertiesExceptIdentity();
 }

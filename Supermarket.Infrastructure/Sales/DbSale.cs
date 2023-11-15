@@ -11,7 +11,7 @@ internal class DbSale : IDbEntity<Sale, int, DbSale>
     
     public static string TableName => "PRODEJE";
     
-    public static IReadOnlyList<string> IdentityColumns { get; } = new[]
+    public static IReadOnlySet<string> IdentityColumns { get; } = new HashSet<string>
     {
         nameof(prodej_id)
     };
@@ -32,4 +32,8 @@ internal class DbSale : IDbEntity<Sale, int, DbSale>
         datum = entity.Date,
         pokladna_id = entity.CashBoxId,
     };
+
+    public DynamicParameters GetInsertingValues() => new DynamicParameters()
+        .AddParameter(nameof(datum), datum)
+        .AddParameter(nameof(pokladna_id), pokladna_id);
 }

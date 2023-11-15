@@ -11,4 +11,13 @@ public class SelectedProductModel
     public required decimal Count { get; init; }
     public required MeasureUnit MeasureUnit { get; init; }
     public decimal OverallPrice => Count * Price;
+
+    public static SelectedProductModel FromCashBoxProduct(CashBoxProduct product, decimal count) => new SelectedProductModel
+    {
+        ProductId = product.ProductId,
+        Count = count,
+        MeasureUnit = product.MeasureUnit,
+        Price = product.Price,
+        ProductName = product.Name
+    };
 }

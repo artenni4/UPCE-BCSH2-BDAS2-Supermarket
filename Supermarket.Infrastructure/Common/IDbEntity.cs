@@ -1,4 +1,6 @@
-﻿using Dapper;
+﻿using System.Collections.Immutable;
+using System.Reflection;
+using Dapper;
 using Supermarket.Core.Domain.Common;
 
 namespace Supermarket.Infrastructure.Common;
@@ -22,7 +24,7 @@ public interface IDbEntity<TEntity, TId, TSelf>
     /// Primary keys in the table.
     /// Contains names of properties in the type
     /// </summary>
-    static abstract IReadOnlyList<string> IdentityColumns { get; }
+    static abstract IReadOnlySet<string> IdentityColumns { get; }
     
     /// <summary>
     /// Maps instance of db entity to domain entity
@@ -39,9 +41,9 @@ public interface IDbEntity<TEntity, TId, TSelf>
     /// </summary>
     /// <param name="id">id of entity</param>
     static abstract DynamicParameters GetEntityIdParameters(TId id);
-    
+
     /// <summary>
     /// Gets insert values selector and parameters
     /// </summary>
-    DynamicParameters GetInsertingValues() => new(this);
+    DynamicParameters GetInsertingValues();
 }

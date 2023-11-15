@@ -13,7 +13,7 @@ internal class DbStoragePlace : IDbEntity<StoragePlace, int, DbStoragePlace>
     
     public static string TableName => "MISTA_ULOZENI";
 
-    public static IReadOnlyList<string> IdentityColumns { get; } = new[]
+    public static IReadOnlySet<string> IdentityColumns { get; } = new HashSet<string>
     {
         nameof(misto_ulozeni_id)
     };

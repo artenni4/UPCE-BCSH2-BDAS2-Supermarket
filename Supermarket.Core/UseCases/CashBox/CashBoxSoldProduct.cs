@@ -3,6 +3,7 @@
     public class CashBoxSoldProduct
     {
         public required int ProductId { get; init; }
-        public required decimal Count { get; set; }
+        public required decimal Count { get; init; }
+        public required decimal Price { get; init; }
     }
 }

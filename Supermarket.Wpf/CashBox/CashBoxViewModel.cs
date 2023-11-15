@@ -85,10 +85,12 @@ namespace Supermarket.Wpf.CashBox
                 var soldProducts = SelectedProducts.Select(p => new CashBoxSoldProduct
                 {
                     ProductId = p.ProductId,
-                    Count = p.Count
+                    Count = p.Count,
+                    Price = p.OverallPrice,
                 }).ToArray();
-                
-                await _cashBoxService.AddSaleAsync(_cashBoxId.Value, paymentDialogResult.CashBoxPaymentType, soldProducts, paymentDialogResult.UsedCoupons);
+
+                var cashBoxPayment = paymentDialogResult.ToCashBoxPayment();
+                await _cashBoxService.AddSaleAsync(_cashBoxId.Value, cashBoxPayment, soldProducts);
                 SelectedProducts.Clear();
             }
         }
@@ -225,14 +227,7 @@ namespace Supermarket.Wpf.CashBox
                 }
             }
             
-            SelectedProducts.Add(new SelectedProductModel
-            {
-                ProductId = selectedProduct.ProductId,
-                ProductName = selectedProduct.Name,
-                Price = selectedProduct.Price,
-                MeasureUnit = selectedProduct.MeasureUnit,
-                Count = count
-            });
+            SelectedProducts.Add(SelectedProductModel.FromCashBoxProduct(selectedProduct, count));
         }
     }
 }

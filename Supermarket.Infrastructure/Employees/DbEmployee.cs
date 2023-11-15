@@ -16,7 +16,7 @@ internal class DbEmployee : IDbEntity<Employee, int, DbEmployee>
     public required int? manazer_id { get; init; }
 
     public static string TableName => "ZAMESTNANCI";
-    public static IReadOnlyList<string> IdentityColumns { get; } = new[]
+    public static IReadOnlySet<string> IdentityColumns { get; } = new HashSet<string>
     {
         nameof(zamestnanec_id)
     };
@@ -49,4 +49,6 @@ internal class DbEmployee : IDbEntity<Employee, int, DbEmployee>
 
     public static DynamicParameters GetEntityIdParameters(int id) =>
         new DynamicParameters().AddParameter(nameof(zamestnanec_id), id);
+
+    public DynamicParameters GetInsertingValues() => this.GetPropertiesExceptIdentity();
 }
