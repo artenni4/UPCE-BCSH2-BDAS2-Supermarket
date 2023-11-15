@@ -52,26 +52,50 @@ namespace Supermarket.Wpf.Manager.SupermarketEmployees
 
         public async Task InitializeAsync()
         {
+            await GetEmployees();
+        }
+
+        private async Task GetEmployees()
+        {
             _employees = await _managerMenuService.GetManagerEmployees(_loggedUserService.SupermarketId, new RecordsRange { PageSize = 250, PageNumber = 1 });
+
+            foreach(var emp in _employees.Items)
+            {
+                Employees.Add(emp);
+            }
+            
         }
 
         public async void AddEmployee(object? obj)
         {
-            var result = await _dialogService.ShowAsync<ManagerMenuEmployeeDialogViewModel, Employee>();
+            int selectedEmployeeId = 0;
+            var result = await _dialogService.ShowAsync<ManagerMenuEmployeeDialogViewModel, Employee, int>(selectedEmployeeId);
             if (result.IsOk(out var a))
             {
 
             }
         }
 
-        public void EditEmployee(object? obj)
+        public async void EditEmployee(object? obj)
         {
+            int selectedEmployeeId = SelectedEmployee?.EmployeeId ?? 0;
+            var result = await _dialogService.ShowAsync<ManagerMenuEmployeeDialogViewModel, Employee, int>(selectedEmployeeId);
+            if (result.IsOk(out var a))
+            {
 
+            }
         }
 
-        public void DeleteEmployee(object? obj)
+        public async void DeleteEmployee(object? obj)
         {
+            var result = await _dialogService.ShowConfirmationDialogAsync($"Provedením této akce odstraníte {SelectedEmployee?.Name} {SelectedEmployee?.Surname}");
 
+            if (result.IsOk())
+            {
+                int selectedEmployeeId = SelectedEmployee?.EmployeeId ?? 0;
+                await _managerMenuService.DeleteEmployee(selectedEmployeeId);
+                await InitializeAsync();
+            }
         }
 
         private bool CanOpenDialog(object? arg)

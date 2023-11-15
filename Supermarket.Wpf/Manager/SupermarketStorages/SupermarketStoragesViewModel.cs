@@ -1,9 +1,7 @@
-﻿using Supermarket.Core.Domain.Employees;
-using Supermarket.Core.Domain.StoragePlaces;
+﻿using Supermarket.Core.Domain.StoragePlaces;
 using Supermarket.Core.UseCases.ManagerMenu;
 using Supermarket.Wpf.Dialog;
 using Supermarket.Wpf.LoggedUser;
-using Supermarket.Wpf.Manager.SupermarketEmployees.Dialog;
 using Supermarket.Wpf.Manager.SupermarketStorages.Dialog;
 using Supermarket.Wpf.ViewModelResolvers;
 using System.Collections.ObjectModel;

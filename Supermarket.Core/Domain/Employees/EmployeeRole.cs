@@ -11,6 +11,7 @@ namespace Supermarket.Core.Domain.Employees
         public required string Surname { get; init; }
         public required byte[] PasswordHash { get; init; }
         public required byte[] PasswordHashSalt { get; init; }
-
+        public required string Login { get; init; }
+        public required DateTimeOffset HireDate { get; init; }
     }
 }

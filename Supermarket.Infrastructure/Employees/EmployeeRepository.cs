@@ -43,7 +43,9 @@ namespace Supermarket.Infrastructure.Employees
                     new CashierRole(SupermarketId: 1),
                     new GoodsKeeperRole(SupermarketId: 1),
                     new ManagerRole(SupermarketId: 1)
-                }
+                },
+                Login = "A",
+                HireDate = new DateTimeOffset(DateTime.Today.AddDays(-7))
             });
         }
 
@@ -57,7 +59,7 @@ namespace Supermarket.Infrastructure.Employees
                                     z.jmeno,
                                     z.prijmeni,
                                     z.datum_nastupu,
-                                    LISTAGG(r.nazev, ',') WITHIN GROUP (ORDER BY r.nazev) AS role
+                                    LISTAGG(r.nazev, ', ') WITHIN GROUP (ORDER BY r.nazev) AS role
                                 FROM
                                     ZAMESTNANCI z
                                 LEFT JOIN
@@ -77,6 +79,39 @@ namespace Supermarket.Infrastructure.Employees
             return result.Select(dbProduct => dbProduct.ToDomainEntity());
         }
 
+        public async Task<ManagerMenuEmployeeDetail?> GetEmployeeDetail(int employeeId)
+        {
+            var parameters = new DynamicParameters().AddParameter("zamestnanec_id", employeeId);
+
+            const string sql = @"SELECT
+                                    z.zamestnanec_id,
+                                    z.jmeno,
+                                    z.prijmeni,
+                                    z.datum_nastupu,
+                                    z.login,
+                                    MAX(CASE WHEN r.role_id = 1 THEN 1 ELSE 0 END) AS isPokladnik,
+                                    MAX(CASE WHEN r.role_id = 2 THEN 1 ELSE 0 END) AS isNakladac,
+                                    MAX(CASE WHEN r.role_id = 3 THEN 1 ELSE 0 END) AS isManazer,
+                                    MAX(CASE WHEN r.role_id = 4 THEN 1 ELSE 0 END) AS isAdmin
+                                FROM
+                                    ZAMESTNANCI z
+                                LEFT JOIN
+                                    ROLE_ZAMESTNANCU rz ON z.zamestnanec_id = rz.zamestnanec_id
+                                LEFT JOIN
+                                    ROLE r ON rz.role_id = r.role_id
+                                WHERE
+                                    z.zamestnanec_id = :zamestnanec_id
+                                GROUP BY
+                                    z.zamestnanec_id, z.jmeno, z.prijmeni, z.datum_nastupu, z.login";
+
+            var orderByColumns = DbManagerMenuEmployeeDetail.IdentityColumns
+                .Select(ic => $"z.{ic}");
+
+            DbManagerMenuEmployeeDetail? result = await _oracleConnection.QuerySingleOrDefaultAsync<DbManagerMenuEmployeeDetail>(sql, parameters);
+
+            return result?.ToDomainEntity();
+        }
+
         private static IEmployeeRole[] FromDbRoles(int supermarketId, IEnumerable<string> roles)
         {
             return roles.Select<string, IEmployeeRole>(role => role switch
@@ -88,5 +123,6 @@ namespace Supermarket.Infrastructure.Employees
                 _ => throw new DatabaseException($"Role [{role}] does not exist")
             }).ToArray();
         }
+
     }
 }
