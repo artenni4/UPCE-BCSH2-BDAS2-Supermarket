@@ -36,6 +36,8 @@
                 </x:Array>
             </converters:MultiAndBooleanToVisibilityConverter.TrueCondition>
         </converters:MultiAndBooleanToVisibilityConverter>
+        
+        <converters:CurrencyValueConverter x:Key="CurrencyValueConverter" />
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -59,8 +61,8 @@
                     <StackPanel Grid.Row="0">
                         <TextBlock Text="POKLADNA " HorizontalAlignment="Center" Foreground="#1B2060" FontSize="35" FontWeight="DemiBold" VerticalAlignment="Center"/>
                         <ScrollViewer VerticalScrollBarVisibility="Auto">
-                            <ListBox Background="Transparent" BorderThickness="0" ItemsSource="{Binding SelectedProducts}">
-                                <ListBox.ItemTemplate>
+                            <ItemsControl Background="Transparent" BorderThickness="0" ItemsSource="{Binding SelectedProducts}">
+                                <ItemsControl.ItemTemplate>
                                     <DataTemplate>
                                     <Grid>
                                         <Grid.ColumnDefinitions>
@@ -69,18 +71,18 @@
                                         </Grid.ColumnDefinitions>
                                         
                                         <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
-                                            <TextBlock Text="{Binding CashBoxProduct.Name}" Foreground="#1B2060" />
+                                            <TextBlock Text="{Binding ProductName}" Foreground="#1B2060" />
                                             
                                             <StackPanel Orientation="Horizontal" Margin="10,0">
                                                 <TextBlock Text="{Binding Count}" Foreground="#1B2060" />
-                                                <TextBlock Text="{Binding CashBoxProduct.MeasureUnit}" Foreground="#1B2060"  />
+                                                <TextBlock Text="{Binding MeasureUnit.Abbreviation}" Foreground="#1B2060"  />
                                             </StackPanel>
                                             
-                                            <TextBlock Text="{Binding OverallPrice}" Foreground="#1B2060" />
+                                            <TextBlock Text="{Binding OverallPrice, Converter={StaticResource CurrencyValueConverter}}" Foreground="#1B2060" />
                                         </StackPanel>
                                         
                                         <Button Grid.Column="1" Margin="10,0" Foreground="Red" Style="{StaticResource TransparentButton}"
-                                                Command="{Binding DataContext.RemoveProductCommand, RelativeSource={RelativeSource AncestorType=ListBox}}" CommandParameter="{Binding}">
+                                                Command="{Binding DataContext.RemoveProductCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}">
                                             <Button.Visibility>
                                                 <MultiBinding Converter="{StaticResource AssistantVisibilityConverter}">
                                                     <Binding Path="DataContext.IsAssistantLoggedIn" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}" />
@@ -91,13 +93,13 @@
                                         </Button>
                                     </Grid>
                                     </DataTemplate>
-                                </ListBox.ItemTemplate>
-                            </ListBox>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
                         </ScrollViewer>
                     </StackPanel>
                     
                     <StackPanel Grid.Row="1" Margin="10">
-                        <Button Content="ZAPLATIT"
+                        <Button Content="ZAPLATIT" Command="{Binding PaymentCommand}"
                                 Style="{StaticResource DarkButtonStyle}" />
                         
                         <Button Command="{Binding ClearProductsCommand}" 

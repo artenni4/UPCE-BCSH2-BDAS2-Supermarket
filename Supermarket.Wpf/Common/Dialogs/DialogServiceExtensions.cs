@@ -19,7 +19,7 @@ public static class DialogServiceExtensions
     public static async Task<DialogResult<string>> ShowInputDialogAsync(
         this IDialogService dialogService,
         string title,
-        string inputLabel,
+        string? inputLabel,
         Func<string?, bool>? validator = default)
     {
         var parameters = new InputDialogParameters(title, inputLabel, validator);
@@ -29,7 +29,7 @@ public static class DialogServiceExtensions
     public static async Task<DialogResult<TParsable>> ShowInputDialogAsync<TParsable>(
         this IDialogService dialogService,
         string title,
-        string inputLabel,
+        string? inputLabel,
         IFormatProvider? formatProvider = default)
         where TParsable : IParsable<TParsable>
     {

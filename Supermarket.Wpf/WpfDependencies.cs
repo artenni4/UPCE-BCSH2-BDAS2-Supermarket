@@ -47,6 +47,7 @@ public static class WpfDependencies
         serviceCollection.AddTransient<InputDialogViewModel>();
         serviceCollection.AddTransient<DropDownDialogViewModel>();
         serviceCollection.AddTransient<LoginAssistantDialogViewModel>();
+        serviceCollection.AddTransient<PaymentDialogViewModel>();
 
         serviceCollection.AddTransient<StorageViewModel>();
         serviceCollection.AddTransient<ArrivalRegistrationViewModel>();

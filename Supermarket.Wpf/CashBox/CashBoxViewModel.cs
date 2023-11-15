@@ -3,6 +3,7 @@ using System.Windows.Input;
 using Supermarket.Wpf.Dialog;
 using Supermarket.Wpf.LoggedUser;
 using Supermarket.Core.Domain.Auth.LoggedEmployees;
+using Supermarket.Core.Domain.SoldProducts;
 using Supermarket.Core.UseCases.CashBox;
 using Supermarket.Wpf.CashBox.Dialogs;
 using Supermarket.Wpf.Navigation;
@@ -48,6 +49,7 @@ namespace Supermarket.Wpf.CashBox
         public ICommand InviteAssistantCommand { get; }
         public ICommand AssistantExitCommand { get; }
         public ICommand ClearProductsCommand { get; }
+        public ICommand PaymentCommand { get; }
 
         public CashBoxViewModel(ICashBoxService cashBoxService, IDialogService dialogService, ILoggedUserService loggedUserService, INavigationService navigationService)
         {
@@ -66,8 +68,31 @@ namespace Supermarket.Wpf.CashBox
             InviteAssistantCommand = new RelayCommand(InviteAssistant);
             AssistantExitCommand = new RelayCommand(AssistantExit);
             ClearProductsCommand = new RelayCommand(ClearProducts, _ => SelectedProducts.Any());
+            PaymentCommand = new RelayCommand(Payment, _ => SelectedProducts.Any());
         }
-        
+
+        private async void Payment(object? obj)
+        {
+            if (_cashBoxId.HasValue == false)
+            {
+                return;
+            }
+            
+            var price = SelectedProducts.Sum(p => p.OverallPrice);
+            var dialogResult = await _dialogService.ShowAsync<PaymentDialogViewModel, PaymentDialogResult, decimal>(price);
+            if (dialogResult.IsOk(out var paymentDialogResult))
+            {
+                var soldProducts = SelectedProducts.Select(p => new CashBoxSoldProduct
+                {
+                    ProductId = p.ProductId,
+                    Count = p.Count
+                }).ToArray();
+                
+                await _cashBoxService.AddSaleAsync(_cashBoxId.Value, paymentDialogResult.CashBoxPaymentType, soldProducts, paymentDialogResult.UsedCoupons);
+                SelectedProducts.Clear();
+            }
+        }
+
         public async Task InitializeAsync()
         {
             using var _ = new DelegateLoading(this);
@@ -191,7 +216,8 @@ namespace Supermarket.Wpf.CashBox
             decimal count = 1;
             if (selectedProduct.IsByWeight)
             {
-                var dialogResult = await _dialogService.ShowInputDialogAsync<decimal>(title: "POČET", inputLabel: selectedProduct.MeasureUnit);
+                var dialogResult = await _dialogService
+                    .ShowInputDialogAsync<decimal>(title: "POČET", inputLabel: selectedProduct.MeasureUnit.Abbreviation);
 
                 if (! dialogResult.IsOk(out count))
                 {
@@ -199,7 +225,14 @@ namespace Supermarket.Wpf.CashBox
                 }
             }
             
-            SelectedProducts.Add(new SelectedProductModel { CashBoxProduct = selectedProduct, Count = count });
+            SelectedProducts.Add(new SelectedProductModel
+            {
+                ProductId = selectedProduct.ProductId,
+                ProductName = selectedProduct.Name,
+                Price = selectedProduct.Price,
+                MeasureUnit = selectedProduct.MeasureUnit,
+                Count = count
+            });
         }
     }
 }

@@ -4,7 +4,7 @@ public class DialogServiceFake : IDialogService
 {
     public event EventHandler<DialogViewModelEventArgs>? DialogShown;
     public event EventHandler? DialogHidden;
-    public IViewModel? CurrentDialog { get; }
+    public IEnumerable<IViewModel> DisplayedDialogs { get; } = Enumerable.Empty<IViewModel>();
 
     public Task<DialogResult<TResult>> ShowAsync<TDialog, TResult, TParameters>(TParameters parameters) where TDialog : class, IDialogViewModel<TResult, TParameters>
     {

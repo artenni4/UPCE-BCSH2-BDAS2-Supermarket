@@ -25,7 +25,7 @@
         xmlns:confirmation="clr-namespace:Supermarket.Wpf.Common.Dialogs.Confirmation"
         xmlns:input="clr-namespace:Supermarket.Wpf.Common.Dialogs.Input"
         xmlns:dropdown="clr-namespace:Supermarket.Wpf.Common.Dialogs.DropDown"
-        xmlns:cashbox1="clr-namespace:Supermarket.Wpf.CashBox.Dialogs"
+        xmlns:cashboxDialogs="clr-namespace:Supermarket.Wpf.CashBox.Dialogs"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type=local:MainViewModelFake, IsDesignTimeCreatable=True}"
         MinHeight="600" MinWidth="800"
@@ -66,8 +66,11 @@
         <DataTemplate DataType="{x:Type dropdown:DropDownDialogViewModel}">
             <dropdown:DropDownDialog />
         </DataTemplate>
-        <DataTemplate DataType="{x:Type cashbox1:LoginAssistantDialogViewModel}">
-            <cashbox1:LoginAssistantDialog />
+        <DataTemplate DataType="{x:Type cashboxDialogs:LoginAssistantDialogViewModel}">
+            <cashboxDialogs:LoginAssistantDialog />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type cashboxDialogs:PaymentDialogViewModel}">
+            <cashboxDialogs:PaymentDialog />
         </DataTemplate>
         <DataTemplate DataType="{x:Type goodsManagementDialogs:MoveStoredProductViewModel}" >
             <goodsManagementDialogs:MoveStoredProductWindow />
@@ -90,9 +93,20 @@
         <ContentPresenter Content="{Binding ContentViewModel}" />
         
         <!-- Dialog view -->
-        <Grid Background="#80000000" Visibility="{Binding DialogViewModel, Converter={StaticResource NullToVisibilityConverter}}">
-            <ContentPresenter Content="{Binding DialogViewModel}" />
-        </Grid>
+        <ItemsControl ItemsSource="{Binding DialogStack}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Grid />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Grid Background="#80000000">
+                        <ContentPresenter Content="{Binding}" />
+                    </Grid>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
 
         <!-- Loading -->
         <Grid Background="#80000000" Visibility="{Binding IsProgressVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
