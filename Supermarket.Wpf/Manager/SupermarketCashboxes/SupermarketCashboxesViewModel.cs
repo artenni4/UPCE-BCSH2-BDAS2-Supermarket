@@ -96,7 +96,7 @@ namespace Supermarket.Wpf.Manager.SupermarketCashboxes
             if (result.IsOk())
             {
                 int selectedCashboxId = SelectedCashbox?.Id ?? 0;
-                await _managerMenuService.DeleteEmployee(selectedCashboxId);
+                await _managerMenuService.DeleteCashbox(selectedCashboxId);
                 await InitializeAsync();
             }
         }
