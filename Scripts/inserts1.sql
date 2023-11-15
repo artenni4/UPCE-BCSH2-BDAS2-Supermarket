@@ -783,4 +783,19 @@ insert into prodane_zbozi values(20, 2589, 3, 6, 15);
 insert into prodane_zbozi values(20, 2589, 3, 6, 6);
 
 insert into zamestnanci values(null, 'viktor', '12345678912345671234567891234567', '1234567891234567', 'Viktor', 'Fibonacci', TO_DATE('01-05-2005', 'dd-MM-yyyy'), 1, null);
+insert into zamestnanci values(null, 'donald', '12345678912345671234567891234567', '1234567891234567', 'Donald', 'McGoogle', TO_DATE('22-07-2012', 'dd-MM-yyyy'), 1, null);
 
+insert into role values(1, 'Pokladnik');
+insert into role values(2, 'Manazer');
+insert into role values(3, 'Nakladac');
+insert into role values(4, 'Admin');
+
+insert into role_zamestnancu values(1, 1);
+insert into role_zamestnancu values(3, 1);
+
+insert into role_zamestnancu values(2, 2);
+insert into role_zamestnancu values(3, 2);
+insert into role_zamestnancu values(1, 2);
+
+insert into platba values(5000, 1, 1);
+insert into platba values(50, 1, 3);

@@ -2,6 +2,7 @@
 using Supermarket.Core.Domain.Common.Paging;
 using Supermarket.Core.Domain.Employees;
 using Supermarket.Core.Domain.Products;
+using Supermarket.Core.Domain.Sales;
 using Supermarket.Core.Domain.SellingProducts;
 using Supermarket.Core.Domain.StoragePlaces;
 using Supermarket.Core.Domain.StoredProducts;
@@ -15,14 +16,16 @@ namespace Supermarket.Core.UseCases.ManagerMenu
         private readonly IStoredProductRepository _storedProductRepository;
         private readonly IEmployeeRepository _employeeRepository;
         private readonly IStoragePlaceRepository _storagePlaceRepository;
+        private readonly ISaleRepository _saleRepository;
 
-        public ManagerMenuService(ISellingProductRepository sellingProductRepository, IStoredProductRepository storedProductRepository, IProductRepository productRepository, IEmployeeRepository employeeRepository, IStoragePlaceRepository storagePlaceRepository)
+        public ManagerMenuService(ISellingProductRepository sellingProductRepository, IStoredProductRepository storedProductRepository, IProductRepository productRepository, IEmployeeRepository employeeRepository, IStoragePlaceRepository storagePlaceRepository, ISaleRepository saleRepository)
         {
             _sellingProductRepository = sellingProductRepository;
             _productRepository = productRepository;
             _storedProductRepository = storedProductRepository;
             _employeeRepository = employeeRepository;
             _storagePlaceRepository = storagePlaceRepository;
+            _saleRepository = saleRepository;
         }
 
         #region SupermarketProducts
@@ -103,5 +106,10 @@ namespace Supermarket.Core.UseCases.ManagerMenu
         }
 
         #endregion
+
+        public async Task<PagedResult<ManagerMenuSale>> GetSupermarketSales(int supermarketId, DateTime dateFrom, DateTime dateTo, RecordsRange recordsRange)
+        {
+            return await _saleRepository.GetSupermarketSales(supermarketId, dateFrom, dateTo, recordsRange);
+        }
     }
 }

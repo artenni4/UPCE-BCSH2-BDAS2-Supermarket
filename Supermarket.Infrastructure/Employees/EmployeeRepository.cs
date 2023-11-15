@@ -112,6 +112,12 @@ namespace Supermarket.Infrastructure.Employees
             return result?.ToDomainEntity();
         }
 
+        //public async Task EditEmployeeAsync(ManagerMenuEmployeeDetail employee)
+        //{
+        //    var parameters = new DynamicParameters()
+        //        .Add
+        //}
+
         private static IEmployeeRole[] FromDbRoles(int supermarketId, IEnumerable<string> roles)
         {
             return roles.Select<string, IEmployeeRole>(role => role switch

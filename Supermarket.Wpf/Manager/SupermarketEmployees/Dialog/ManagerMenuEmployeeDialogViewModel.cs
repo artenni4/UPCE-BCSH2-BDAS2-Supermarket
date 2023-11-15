@@ -56,7 +56,12 @@ namespace Supermarket.Wpf.Manager.SupermarketEmployees.Dialog
 
         private void ConfirmEdit(object? obj)
         {
+            //var emp = new Employee
+            //{
+            //    Id = Employee.Id,
 
+            //};
+            //await _managerMenuService.SaveEmplo
 
             //var result = new Employee { };
             //ResultReceived?.Invoke(this, DialogResult<Employee>.Ok(result));
@@ -65,6 +70,9 @@ namespace Supermarket.Wpf.Manager.SupermarketEmployees.Dialog
 
         private bool CanConfirmEdit(object? arg)
         {
+            if (Employee != null)
+                return true;
+
             return false;
         }
 
