@@ -20,6 +20,7 @@ namespace Supermarket.Core.UseCases.ManagerMenu
         Task AddStorage(StoragePlace storagePlace);
         Task EditStorage(StoragePlace storagePlace);
         Task DeleteStorage(int id);
+        Task<PagedResult<ManagerMenuSale>> GetSupermarketSales(int supermarket, DateTime dateFrom, DateTime dateTo, RecordsRange recordsRange);
 
     }
 }

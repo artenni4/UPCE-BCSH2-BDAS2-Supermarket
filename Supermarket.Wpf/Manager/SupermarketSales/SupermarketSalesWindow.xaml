@@ -8,14 +8,50 @@
              d:DesignHeight="1080" d:DesignWidth="1920">
     <Border Grid.Column="0" Margin="10,10,10,0" Style="{StaticResource PanelBorderStyle}">
         <Grid>
-            <DataGrid ItemsSource="{Binding }" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False" Width="1000" ColumnWidth="*" HorizontalAlignment="Left" Height="Auto" SelectedItem="{Binding SelectedStoredProduct, Mode=TwoWay}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <DataGrid Grid.Column="0" ItemsSource="{Binding Sales}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False"  ColumnWidth="*" HorizontalAlignment="Left" Height="Auto" SelectedItem="{Binding SelectedStoredProduct, Mode=TwoWay}">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Název" Binding="{Binding }" Width="500" IsReadOnly="True" FontSize="25" />
-                    <DataGridTextColumn Header="Počet" Binding="{Binding }" Width="200" IsReadOnly="True" FontSize="25" />
-                    <DataGridTextColumn Header="Místo uložení" Binding="{Binding }" Width="*" IsReadOnly="True" FontSize="25" />
+                    <DataGridTemplateColumn Header="Datum"  IsReadOnly="True" >
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Date}" TextWrapping="Wrap" FontSize="25"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Zboží" IsReadOnly="True" >
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Products}" TextWrapping="Wrap" FontSize="25"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <DataGridTextColumn Header="Cena" Binding="{Binding Price, StringFormat={}{0}Kč}" IsReadOnly="True" FontSize="25" />
+                    <DataGridTextColumn Header="Typ placení" Binding="{Binding PaymentType}"  IsReadOnly="True" FontSize="25" />
+                    <DataGridTemplateColumn Header="Pokladna" IsReadOnly="True" >
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding CashboxName}" TextWrapping="Wrap" FontSize="25"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
 
+            <StackPanel Grid.Column="1" HorizontalAlignment="Right">
+                <StackPanel Width="300">
+                    <TextBlock Text="Datum od:"/>
+                    <DatePicker Margin="0 0 0 10" SelectedDate="{Binding DateFrom}" FontSize="40" />
+                </StackPanel>
+                <StackPanel Width="300">
+                    <TextBlock Text="Datum do:"/>
+                    <DatePicker Margin="0 0 0 10" SelectedDate="{Binding DateTo}" FontSize="40" />
+                </StackPanel>
+                <Button Command="{Binding SearchCommand}" Content="Hledat" />
+            </StackPanel>
         </Grid>
     </Border>
 </UserControl>
