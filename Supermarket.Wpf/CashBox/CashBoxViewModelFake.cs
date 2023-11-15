@@ -1,4 +1,5 @@
-﻿using Supermarket.Core.UseCases.CashBox;
+﻿using Supermarket.Core.Domain.Products;
+using Supermarket.Core.UseCases.CashBox;
 using Supermarket.Wpf.Dialog;
 using Supermarket.Wpf.LoggedUser;
 using Supermarket.Wpf.Navigation;
@@ -12,16 +13,16 @@ public class CashBoxViewModelFake : CashBoxViewModel
     {
         var cashBoxProducts = new CashBoxProduct[]
         {
-            new() { ProductId = 1, Name = "AAA", IsByWeight = true, MeasureUnit = "kg", Price = 100 },
-            new() { ProductId = 2, Name = "BBB", IsByWeight = true, MeasureUnit = "kg", Price = 100  },
-            new() { ProductId = 3, Name = "CCCCCCCC CCCC", IsByWeight = true, MeasureUnit = "kg", Price = 100  },
-            new() { ProductId = 1, Name = "AAA", IsByWeight = true, MeasureUnit = "kg", Price = 100  },
-            new() { ProductId = 2, Name = "BBB", IsByWeight = true, MeasureUnit = "kg", Price = 100  },
-            new() { ProductId = 3, Name = "CCCCCCCC CCCC", IsByWeight = true, MeasureUnit = "kg", Price = 100  },
-            new() { ProductId = 1, Name = "AAA", IsByWeight = true, MeasureUnit = "kg", Price = 100  },
-            new() { ProductId = 2, Name = "BBB", IsByWeight = true, MeasureUnit = "kg", Price = 100  },
-            new() { ProductId = 3, Name = "CCCCCCCC CCCC", IsByWeight = true, MeasureUnit = "kg", Price = 100  },
-            new() { ProductId = 3, Name = "CCCCCCCC CCCC", IsByWeight = true, MeasureUnit = "kg", Price = 100  },
+            new() { ProductId = 1, Name = "AAA", IsByWeight = true, MeasureUnit = MeasureUnit.Kilogram, Price = 100 },
+            new() { ProductId = 2, Name = "BBB", IsByWeight = true, MeasureUnit = MeasureUnit.Kilogram, Price = 100  },
+            new() { ProductId = 3, Name = "CCCCCCCC CCCC", IsByWeight = true, MeasureUnit = MeasureUnit.Kilogram, Price = 100  },
+            new() { ProductId = 1, Name = "AAA", IsByWeight = true, MeasureUnit = MeasureUnit.Kilogram, Price = 100  },
+            new() { ProductId = 2, Name = "BBB", IsByWeight = true, MeasureUnit = MeasureUnit.Kilogram, Price = 100  },
+            new() { ProductId = 3, Name = "CCCCCCCC CCCC", IsByWeight = true, MeasureUnit = MeasureUnit.Kilogram, Price = 100  },
+            new() { ProductId = 1, Name = "AAA", IsByWeight = true, MeasureUnit = MeasureUnit.Kilogram, Price = 100  },
+            new() { ProductId = 2, Name = "BBB", IsByWeight = true, MeasureUnit = MeasureUnit.Kilogram, Price = 100  },
+            new() { ProductId = 3, Name = "CCCCCCCC CCCC", IsByWeight = true, MeasureUnit = MeasureUnit.Kilogram, Price = 100  },
+            new() { ProductId = 3, Name = "CCCCCCCC CCCC", IsByWeight = true, MeasureUnit = MeasureUnit.Kilogram, Price = 100  },
         };
         
         DisplayedProducts.Update(cashBoxProducts);
@@ -44,8 +45,11 @@ public class CashBoxViewModelFake : CashBoxViewModel
 
         SelectedProducts.Update(cashBoxProducts.Select(cashBoxProduct => new SelectedProductModel
         {
-            CashBoxProduct = cashBoxProduct,
-            Count = 10,
+            ProductId = cashBoxProduct.ProductId,
+            ProductName = cashBoxProduct.Name,
+            Price = cashBoxProduct.Price,
+            MeasureUnit = cashBoxProduct.MeasureUnit,
+            Count = 10
         }).ToArray());
     }
 }

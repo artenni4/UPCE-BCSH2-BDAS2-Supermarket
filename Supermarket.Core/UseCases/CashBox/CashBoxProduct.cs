@@ -7,7 +7,7 @@ public class CashBoxProduct
     public required int ProductId { get; init; }
     public required string Name { get; init; }
     public required bool IsByWeight { get; init; }
-    public required string MeasureUnit { get; init; }
+    public required MeasureUnit MeasureUnit { get; init; }
     public required decimal Price { get; init; }
 
     public static CashBoxProduct FromProduct(Product product) => new()
@@ -15,7 +15,7 @@ public class CashBoxProduct
         ProductId = product.Id,
         Name = product.Name,
         IsByWeight = product.ByWeight,
-        MeasureUnit = product.MeasureUnit.Abbreviation,
+        MeasureUnit = product.MeasureUnit,
         Price = product.Price
     };
 }

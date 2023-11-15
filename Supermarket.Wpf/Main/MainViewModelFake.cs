@@ -14,5 +14,6 @@ public class MainViewModelFake : MainViewModel
             new ViewModelResolverFake(),
             new LoggedUserServiceFake())
     {
+        DialogStack.Add(new MenuViewModel(new NavigationServiceFake(), new LoggedUserServiceFake()));
     }
 }

@@ -5,9 +5,6 @@ namespace Supermarket.Wpf.Dialog;
 public class DialogService : IDialogService
 {
     private readonly IViewModelResolver _viewModelResolver;
-
-    private static readonly object IsShowingLock = new();
-    private bool _isShowing;
     private Action? _tryCancelDialog;
     
     public DialogService(IViewModelResolver viewModelResolver)
@@ -17,24 +14,12 @@ public class DialogService : IDialogService
     
     public event EventHandler<DialogViewModelEventArgs>? DialogShown;
     public event EventHandler? DialogHidden;
-    public IViewModel? CurrentDialog { get; private set; }
+
+    private readonly Stack<IViewModel> _dialogStack = new();
+    public IEnumerable<IViewModel> DisplayedDialogs => _dialogStack;
     
-    private void CheckShowingDialogAlready()
-    {
-        lock (IsShowingLock)
-        {
-            if (_isShowing)
-            {
-                throw new InvalidOperationException("Other dialog is already displayed");
-            }
-
-            _isShowing = true;
-        }
-    }
-
     public async Task<DialogResult<TResult>> ShowAsync<TDialog, TResult, TParameters>(TParameters parameters) where TDialog : class, IDialogViewModel<TResult, TParameters>
     {
-        CheckShowingDialogAlready();
         var viewModel = await _viewModelResolver.Resolve<TDialog>();
         viewModel.SetParameters(parameters);
         ShowDialog(viewModel);
@@ -54,7 +39,6 @@ public class DialogService : IDialogService
 
     public async Task<DialogResult<TResult>> ShowAsync<TDialog, TResult>() where TDialog : class, IDialogViewModel<TResult>
     {
-        CheckShowingDialogAlready();
         var viewModel = await _viewModelResolver.Resolve<TDialog>();
         ShowDialog(viewModel);
 
@@ -73,7 +57,6 @@ public class DialogService : IDialogService
 
     public async Task<DialogResult> ShowAsync<TDialog>() where TDialog : class, IDialogViewModel
     {
-        CheckShowingDialogAlready();
         var viewModel = await _viewModelResolver.Resolve<TDialog>();
         ShowDialog(viewModel);
 
@@ -93,17 +76,13 @@ public class DialogService : IDialogService
     public void Hide()
     {
         _tryCancelDialog?.Invoke();
-        CurrentDialog = null;
+        _dialogStack.Pop();
         DialogHidden?.Invoke(this, EventArgs.Empty);
-        lock (IsShowingLock)
-        {
-            _isShowing = false;
-        }
     }
 
     private void ShowDialog(IViewModel viewModel)
     {
-        CurrentDialog = viewModel;
+        _dialogStack.Push(viewModel);
         DialogShown?.Invoke(this, new DialogViewModelEventArgs { ViewModel = viewModel });
     }
 }

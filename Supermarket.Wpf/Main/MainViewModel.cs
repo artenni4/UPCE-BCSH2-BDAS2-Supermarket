@@ -1,4 +1,5 @@
-﻿using Supermarket.Wpf.Navigation;
+﻿using System.Collections.ObjectModel;
+using Supermarket.Wpf.Navigation;
 using System.Windows.Input;
 using Supermarket.Wpf.Dialog;
 using Supermarket.Wpf.LoggedUser;
@@ -14,6 +15,8 @@ namespace Supermarket.Wpf.Main
         private readonly ILoggedUserService _loggedUserService;
         
         public ICommand ToggleMenuOrCloseDialogCommand { get; }
+
+        public ObservableCollection<IViewModel> DialogStack { get; } = new();
         
         public MainViewModel(INavigationService navigationService,
             IDialogService dialogService,
@@ -28,8 +31,8 @@ namespace Supermarket.Wpf.Main
             
             navigationService.NavigationSucceeded += NavigationSucceeded;
             
-            dialogService.DialogShown += (_, args) => DialogViewModel = args.ViewModel;
-            dialogService.DialogHidden += (_, _) => DialogViewModel = null;
+            dialogService.DialogShown += (_, args) => DialogStack.Add(args.ViewModel);
+            dialogService.DialogHidden += (_, _) => DialogStack.RemoveAt(DialogStack.Count - 1);
 
             loggedUserService.UserLoggedIn += UserLoggedIn;
 
@@ -70,7 +73,7 @@ namespace Supermarket.Wpf.Main
         
         private async void ToggleMenuOrHideDialog(object? obj)
         {
-            if (_dialogService.CurrentDialog is not null)
+            if (_dialogService.DisplayedDialogs.Any())
             {
                 _dialogService.Hide();
                 return;
@@ -104,8 +107,6 @@ namespace Supermarket.Wpf.Main
         
         private async void NavigationSucceeded(object? sender, NavigationEventArgs e)
         {
-            _dialogService.Hide();
-            
             ContentViewModel = e.NewViewModel;
             await ContentViewModel.ActivateIfNeeded();
         }
@@ -122,13 +123,6 @@ namespace Supermarket.Wpf.Main
         {
             get => _contentViewModel;
             private set => SetProperty(ref _contentViewModel, value);
-        }
-
-        private IViewModel? _dialogViewModel;
-        public IViewModel? DialogViewModel
-        {
-            get => _dialogViewModel;
-            private set => SetProperty(ref _dialogViewModel, value);
         }
     }
 }
