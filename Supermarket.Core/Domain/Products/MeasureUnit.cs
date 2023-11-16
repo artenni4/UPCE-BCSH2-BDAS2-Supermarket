@@ -18,6 +18,16 @@
         public static readonly MeasureUnit Piece = new("kus", "ks");
         public static readonly MeasureUnit Meter = new("metr", "m");
 
+        public static IReadOnlyList<MeasureUnit> Values { get; } = new List<MeasureUnit>()
+        {
+            Kilogram,
+            Gram,
+            Litre,
+            Millilitre,
+            Piece,
+            Meter
+        };
+
         public override bool Equals(object? obj)
         {
             if (ReferenceEquals(null, obj)) return false;
