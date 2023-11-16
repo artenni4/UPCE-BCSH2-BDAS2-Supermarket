@@ -1,4 +1,5 @@
 ﻿using Supermarket.Core.Domain.Regions;
+using Supermarket.Core.Domain.Suppliers;
 using Supermarket.Core.UseCases.Admin;
 using Supermarket.Wpf.Dialog;
 using Supermarket.Wpf.ViewModelResolvers;
@@ -99,7 +100,7 @@ namespace Supermarket.Wpf.Admin.Supermarkets.Dialog
 
         private bool CanConfirmEdit(object? arg)
         {
-            if (Supermarket?.Address != string.Empty && SelectedRegion != null)
+            if (!string.IsNullOrEmpty(Supermarket?.Address) && SelectedRegion != null)
             {
                 return true;
             }

@@ -72,14 +72,12 @@ namespace Supermarket.Wpf.Admin.Suppliers.Dialog
                     await _adminMenuService.AddSupplier(Supplier);
                     ResultReceived?.Invoke(this, DialogResult<Supplier>.Ok(Supplier));
                 }
-
             }
-
         }
 
         private bool CanConfirmEdit(object? arg)
         {
-            if (Supplier?.Name != string.Empty)
+            if (ValidateInput.IsValidStringInput(Supplier?.Name))
             {
                 return true;
             }

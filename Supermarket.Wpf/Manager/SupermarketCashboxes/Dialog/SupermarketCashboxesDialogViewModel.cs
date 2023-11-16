@@ -1,5 +1,6 @@
 ﻿using Supermarket.Core.Domain.CashBoxes;
 using Supermarket.Core.Domain.Employees;
+using Supermarket.Core.Domain.Suppliers;
 using Supermarket.Core.UseCases.ManagerMenu;
 using Supermarket.Wpf.Dialog;
 using Supermarket.Wpf.LoggedUser;
@@ -77,7 +78,7 @@ namespace Supermarket.Wpf.Manager.SupermarketCashboxes.Dialog
 
         private bool CanConfirmEdit(object? arg)
         {
-            if (Cashbox != null)
+            if (ValidateInput.IsValidStringInput(Cashbox?.Name) && ValidateInput.IsValidStringInput(Cashbox?.Code))
                 return true;
 
             return false;

@@ -1,4 +1,5 @@
 ﻿using Supermarket.Core.Domain.ProductCategories;
+using Supermarket.Core.Domain.Suppliers;
 using Supermarket.Core.UseCases.Admin;
 using Supermarket.Wpf.Dialog;
 using Supermarket.Wpf.ViewModelResolvers;
@@ -71,7 +72,7 @@ namespace Supermarket.Wpf.Admin.ProductCategories.Dialog
 
         private bool CanConfirmEdit(object? arg)
         {
-            if (Category?.Name != string.Empty)
+            if (ValidateInput.IsValidStringInput(Category?.Name))
             {
                 return true;
             }
