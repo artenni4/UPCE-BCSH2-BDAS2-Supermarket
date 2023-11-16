@@ -22,8 +22,12 @@ namespace Supermarket.Core.UseCases.Admin
         Task AddCategory(ProductCategory category);
         Task EditCategory(ProductCategory category);
         Task DeleteCategory(int categoryId);
-
         Task<PagedResult<Region>> GetAllRegions(RecordsRange recordsRange);
         Task<Region?> GetRegion(int id);
+        Task AddRegion(Region region);
+        Task EditRegion(Region region);
+        Task DeleteRegion(int regionId);
+
+
     }
 }

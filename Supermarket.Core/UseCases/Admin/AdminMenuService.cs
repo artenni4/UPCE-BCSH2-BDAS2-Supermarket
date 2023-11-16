@@ -125,6 +125,7 @@ namespace Supermarket.Core.UseCases.Admin
         }
         #endregion
 
+        #region Regions
         public async Task<PagedResult<Region>> GetAllRegions(RecordsRange recordsRange)
         {
             return await _regionRepository.GetPagedAsync(recordsRange);
@@ -135,6 +136,28 @@ namespace Supermarket.Core.UseCases.Admin
             return await _regionRepository.GetByIdAsync(id);
         }
 
-        
+        public async Task AddRegion(Region region)
+        {
+            await _regionRepository.AddAsync(region);
+        }
+
+        public async Task EditRegion(Region region)
+        {
+            await _regionRepository.UpdateAsync(region);
+        }
+
+        public async Task DeleteRegion(int regionId)
+        {
+            try
+            {
+                await _regionRepository.DeleteAsync(regionId);
+            }
+            catch (RepositoryOperationFailedException e)
+            {
+                throw new OperationCannotBeExecutedException(e);
+            }
+        }
+
+        #endregion
     }
 }

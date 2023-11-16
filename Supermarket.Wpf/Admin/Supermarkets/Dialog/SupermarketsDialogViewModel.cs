@@ -1,5 +1,4 @@
 ﻿using Supermarket.Core.Domain.Regions;
-using Supermarket.Core.Domain.Suppliers;
 using Supermarket.Core.UseCases.Admin;
 using Supermarket.Wpf.Dialog;
 using Supermarket.Wpf.ViewModelResolvers;
