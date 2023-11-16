@@ -50,12 +50,18 @@ namespace Supermarket.Infrastructure.Employees
             });
         }
 
-        public async Task<PagedResult<ManagerMenuEmployee>> GetSupermarketEmployees(int supermarketId, RecordsRange recordsRange)
+        public async Task<PagedResult<ManagerMenuEmployee>> GetSupermarketEmployees(int employeeId, RecordsRange recordsRange)
         {
             var parameters = new DynamicParameters()
-            .AddParameter("supermarket_id", supermarketId);
+                .AddParameter("zamestnanec_id", employeeId);
 
-            const string sql = @"SELECT
+            const string sql = @"WITH podrizene AS (
+                                    SELECT z.zamestnanec_id FROM zamestnanci z
+                                    WHERE z.zamestnanec_id != :zamestnanec_id
+                                    CONNECT BY PRIOR z.zamestnanec_id = z.manazer_id
+                                    START WITH z.zamestnanec_id = :zamestnanec_id)
+
+                                SELECT
                                     z.zamestnanec_id,
                                     z.jmeno,
                                     z.prijmeni,
@@ -68,12 +74,11 @@ namespace Supermarket.Infrastructure.Employees
                                 LEFT JOIN
                                     ROLE r ON rz.role_id = r.role_id
                                 WHERE
-                                    z.supermarket_id = :supermarket_id
+                                    z.zamestnanec_id IN (SELECT * FROM podrizene)
                                 GROUP BY
                                     z.zamestnanec_id, z.jmeno, z.prijmeni, z.datum_nastupu";
 
-            var orderByColumns = DbEmployee.IdentityColumns
-            .Select(ic => $"z.{ic}");
+            var orderByColumns = DbEmployee.IdentityColumns.Select(ic => $"z.{ic}");
 
             var result = await GetPagedResult<DbManagerMenuEmployees>(recordsRange, sql, orderByColumns, parameters);
 
@@ -111,6 +116,28 @@ namespace Supermarket.Infrastructure.Employees
             DbManagerMenuEmployeeDetail? result = await _oracleConnection.QuerySingleOrDefaultAsync<DbManagerMenuEmployeeDetail>(sql, parameters);
 
             return result?.ToDomainEntity();
+        }
+
+        public async Task<PagedResult<PossibleManagerForEmployee>> GetPossibleManagersForEmployee(int employeeId, RecordsRange recordsRange)
+        {
+            var parameters = new DynamicParameters()
+                .AddParameter("zamestnanec_id", employeeId);
+            
+            const string sql = @"WITH manazeri AS (
+                                    SELECT DISTINCT z.zamestnanec_id FROM zamestnanci z
+                                    LEFT JOIN ROLE_ZAMESTNANCU rz ON z.zamestnanec_id = rz.zamestnanec_id
+                                    WHERE rz.role_id = 3)
+
+                                SELECT z.* FROM zamestnanci z
+                                WHERE z.zamestnanec_id IN (SELECT * FROM manazeri)
+                                CONNECT BY PRIOR z.zamestnanec_id = z.manazer_id
+                                START WITH z.zamestnanec_id = :zamestnanec_id";
+            
+            var orderByColumns = DbEmployee.IdentityColumns.Select(ic => $"z.{ic}");
+
+            var result = await GetPagedResult<DbPossibleManagerForEmployee>(recordsRange, sql, orderByColumns, parameters);
+            
+            return result.Select(dbProduct => dbProduct.ToDomainEntity());
         }
 
         //public async Task EditEmployeeAsync(ManagerMenuEmployeeDetail employee)

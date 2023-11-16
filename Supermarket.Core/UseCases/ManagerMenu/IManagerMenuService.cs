@@ -15,10 +15,11 @@ namespace Supermarket.Core.UseCases.ManagerMenu
         Task RemoveProductFromSupermarket(StoredProductId id);
         Task AddProductToSupermarket(SellingProductId id);
         Task<PagedResult<ManagerMenuEmployee>> GetManagerEmployees(int supermarketId, RecordsRange recordsRange);
-        Task<ManagerMenuEmployeeDetail?> GetEmployeeToEdit(int employeeId);
+        Task<ManagerMenuEmployeeDetail> GetEmployeeToEdit(int employeeId);
+        Task<PagedResult<PossibleManagerForEmployee>> GetPossibleManagersForEmployee(int employeeId, RecordsRange recordsRange);
         Task DeleteEmployee(int employeeId);
         Task<PagedResult<StoragePlace>> GetStoragePlaces(int supermarketId, RecordsRange recordsRange);
-        Task<StoragePlace?> GetStorageToEdit(int storageId);
+        Task<StoragePlace> GetStorageToEdit(int storageId);
         Task AddStorage(StoragePlace storagePlace);
         Task EditStorage(StoragePlace storagePlace);
         

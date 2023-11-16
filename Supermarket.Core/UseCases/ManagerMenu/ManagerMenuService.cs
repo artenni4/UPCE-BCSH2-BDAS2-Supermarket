@@ -7,7 +7,6 @@ using Supermarket.Core.Domain.Sales;
 using Supermarket.Core.Domain.SellingProducts;
 using Supermarket.Core.Domain.StoragePlaces;
 using Supermarket.Core.Domain.StoredProducts;
-using Supermarket.Core.Domain.Suppliers;
 using Cashbox = Supermarket.Core.Domain.CashBoxes.CashBox;
 
 namespace Supermarket.Core.UseCases.ManagerMenu
@@ -73,7 +72,7 @@ namespace Supermarket.Core.UseCases.ManagerMenu
             return await _employeeRepository.GetSupermarketEmployees(supermarketId, recordsRange);
         }
 
-        public async Task<ManagerMenuEmployeeDetail?> GetEmployeeToEdit(int employeeId)
+        public async Task<ManagerMenuEmployeeDetail> GetEmployeeToEdit(int employeeId)
         {
             var employee = await _employeeRepository.GetEmployeeDetail(employeeId);
 
@@ -83,6 +82,11 @@ namespace Supermarket.Core.UseCases.ManagerMenu
             }
 
             return employee;
+        }
+
+        public async Task<PagedResult<PossibleManagerForEmployee>> GetPossibleManagersForEmployee(int employeeId, RecordsRange recordsRange)
+        {
+            return await _employeeRepository.GetPossibleManagersForEmployee(employeeId, recordsRange);
         }
 
         public async Task DeleteEmployee(int employeeId)
@@ -97,9 +101,15 @@ namespace Supermarket.Core.UseCases.ManagerMenu
             return await _storagePlaceRepository.GetSupermarketStoragePlaces(supermarketId, recordsRange);
         }
 
-        public async Task<StoragePlace?> GetStorageToEdit(int storageId)
+        public async Task<StoragePlace> GetStorageToEdit(int storageId)
         {
-            return await _storagePlaceRepository.GetByIdAsync(storageId);
+            var storagePlace = await _storagePlaceRepository.GetByIdAsync(storageId);
+            if (storagePlace == null)
+            {
+                throw new ApplicationInconsistencyException("Storage place was not found");
+            }
+
+            return storagePlace;
         }
 
         public async Task AddStorage(StoragePlace storagePlace)
