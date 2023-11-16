@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Supermarket.Core.UseCases.ManagerMenu;
 
-namespace Supermarket.Core.UseCases.ManagerMenu.Db
+namespace Supermarket.Infrastructure.Products
 {
     public class DbManagerMenuAddProduct
     {

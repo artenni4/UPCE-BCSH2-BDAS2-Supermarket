@@ -63,7 +63,7 @@ namespace Supermarket.Core.UseCases.CashBox
             var cashBox = await _cashBoxRepository.GetByIdAsync(cashBoxId);
             if (cashBox is null)
             {
-                throw new InconsistencyException("Cash box must exist when adding sale to it");
+                throw new ApplicationInconsistencyException("Cash box must exist when adding sale to it");
             }
             
             var saleId = await _saleRepository.AddAndGetIdAsync(new Sale

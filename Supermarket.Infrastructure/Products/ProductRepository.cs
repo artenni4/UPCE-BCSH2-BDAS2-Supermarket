@@ -3,7 +3,6 @@ using Oracle.ManagedDataAccess.Client;
 using Supermarket.Core.Domain.Common.Paging;
 using Supermarket.Core.Domain.Products;
 using Supermarket.Core.UseCases.ManagerMenu;
-using Supermarket.Core.UseCases.ManagerMenu.Db;
 
 namespace Supermarket.Infrastructure.Products;
 

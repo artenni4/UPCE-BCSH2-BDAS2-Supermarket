@@ -91,7 +91,15 @@ namespace Supermarket.Infrastructure.Common
             var identityCondition = GetIdentityCondition(identity);
 
             var sql = $"DELETE FROM {TDbEntity.TableName} WHERE {identityCondition}";
-            await _oracleConnection.ExecuteAsync(sql, identity);
+
+            try
+            {
+                await _oracleConnection.ExecuteAsync(sql, identity);
+            }
+            catch (OracleException e)
+            {
+                throw new RepositoryOperationFailedException("Delete", sql, e);
+            }
         }
 
         private static DynamicParameters GetPagingParameters(RecordsRange recordsRange)
