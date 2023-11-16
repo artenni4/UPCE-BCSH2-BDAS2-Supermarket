@@ -1,5 +1,6 @@
 ﻿using Supermarket.Core.Domain.Common;
 using Supermarket.Core.Domain.Common.Paging;
+using Supermarket.Core.Domain.ProductCategories;
 using Supermarket.Core.Domain.Regions;
 using Supermarket.Core.Domain.Supermarkets;
 using Supermarket.Core.Domain.Suppliers;
@@ -11,12 +12,14 @@ namespace Supermarket.Core.UseCases.Admin
         private readonly ISupplierRepository _supplierRepository;
         private readonly ISupermarketRepository _supermarketRepository;
         private readonly IRegionRepository _regionRepository;
+        private readonly IProductCategoryRepository _productCategoryRepository;
 
-        public AdminMenuService(ISupplierRepository supplierRepository, ISupermarketRepository supermarketRepository, IRegionRepository regionRepository)
+        public AdminMenuService(ISupplierRepository supplierRepository, ISupermarketRepository supermarketRepository, IRegionRepository regionRepository, IProductCategoryRepository productCategoryRepository)
         {
             _supplierRepository = supplierRepository;
             _supermarketRepository = supermarketRepository;
             _regionRepository = regionRepository;
+            _productCategoryRepository = productCategoryRepository;
         }
 
         #region Suppliers
@@ -88,6 +91,39 @@ namespace Supermarket.Core.UseCases.Admin
         }
         #endregion
 
+        #region Categories
+        public async Task<PagedResult<ProductCategory>> GetAllCategories(RecordsRange recordsRange)
+        {
+            return await _productCategoryRepository.GetPagedAsync(recordsRange);
+        }
+
+        public async Task<ProductCategory?> GetCategory(int id)
+        {
+            return await _productCategoryRepository.GetByIdAsync(id);
+        }
+
+        public async Task AddCategory(ProductCategory category)
+        {
+            await _productCategoryRepository.AddAsync(category);
+        }
+
+        public async Task EditCategory(ProductCategory category)
+        {
+            await _productCategoryRepository.UpdateAsync(category);
+        }
+
+        public async Task DeleteCategory(int categoryId)
+        {
+            try
+            {
+                await _productCategoryRepository.DeleteAsync(categoryId);
+            }
+            catch (RepositoryOperationFailedException e)
+            {
+                throw new OperationCannotBeExecutedException(e);
+            }
+        }
+        #endregion
 
         public async Task<PagedResult<Region>> GetAllRegions(RecordsRange recordsRange)
         {
@@ -98,5 +134,7 @@ namespace Supermarket.Core.UseCases.Admin
         {
             return await _regionRepository.GetByIdAsync(id);
         }
+
+        
     }
 }

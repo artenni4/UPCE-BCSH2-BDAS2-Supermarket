@@ -87,5 +87,4 @@ namespace Supermarket.Wpf.Admin.Suppliers.Dialog
                 return false;
         }
     }
-
 }

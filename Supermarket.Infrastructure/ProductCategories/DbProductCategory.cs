@@ -26,18 +26,15 @@ internal class DbProductCategory : IDbEntity<ProductCategory, int, DbProductCate
         };
     }
 
-    public static DbProductCategory ToDbEntity(ProductCategory entity)
+    public static DbProductCategory ToDbEntity(ProductCategory entity) => new()
     {
-        throw new NotImplementedException();
-    }
+        druh_zbozi_id = entity.Id,
+        nazev = entity.Name,
+        popis = entity.Description
+    };
 
-    public static DynamicParameters GetEntityIdParameters(int id)
-    {
-        throw new NotImplementedException();
-    }
+    public static DynamicParameters GetEntityIdParameters(int id) =>
+        new DynamicParameters().AddParameter(nameof(druh_zbozi_id), id);
 
-    public DynamicParameters GetInsertingValues()
-    {
-        throw new NotImplementedException();
-    }
+    public DynamicParameters GetInsertingValues() => this.GetPropertiesExceptIdentity();
 }

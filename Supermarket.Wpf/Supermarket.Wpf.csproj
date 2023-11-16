@@ -65,7 +65,6 @@
     <Folder Include="Admin\Employees\" />
     <Folder Include="Admin\Products\Dialog\" />
     <Folder Include="Admin\Regions\" />
-    <Folder Include="Admin\ProductCategories\" />
   </ItemGroup>
 
 </Project>

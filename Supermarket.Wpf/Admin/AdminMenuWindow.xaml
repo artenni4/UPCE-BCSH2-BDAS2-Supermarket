@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Supermarket.Wpf.Admin"
              xmlns:suppliers="clr-namespace:Supermarket.Wpf.Admin.Suppliers"
+             xmlns:categories="clr-namespace:Supermarket.Wpf.Admin.ProductCategories"
              
              xmlns:supermarkets="clr-namespace:Supermarket.Wpf.Admin.Supermarkets"
              
@@ -19,6 +20,9 @@
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type supermarkets:AdminSupermarketsViewModel}">
                     <supermarkets:AdminSupermarketsWindow />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type categories:AdminMenuCategoriesViewModel}">
+                    <categories:AdminMenuCategoriesWindow />
                 </DataTemplate>
             </TabControl.Resources>
             <TabControl.ItemTemplate>

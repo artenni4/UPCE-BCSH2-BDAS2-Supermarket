@@ -3,7 +3,6 @@ using System.Windows.Input;
 using Supermarket.Wpf.Dialog;
 using Supermarket.Wpf.LoggedUser;
 using Supermarket.Core.Domain.Auth.LoggedEmployees;
-using Supermarket.Core.Domain.SoldProducts;
 using Supermarket.Core.UseCases.CashBox;
 using Supermarket.Wpf.CashBox.Dialogs;
 using Supermarket.Wpf.Navigation;
