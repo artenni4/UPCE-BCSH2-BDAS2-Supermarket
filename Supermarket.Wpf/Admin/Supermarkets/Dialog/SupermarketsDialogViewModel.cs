@@ -99,7 +99,7 @@ namespace Supermarket.Wpf.Admin.Supermarkets.Dialog
 
         private bool CanConfirmEdit(object? arg)
         {
-            if (Supermarket?.Address != string.Empty && SelectedRegion != null)
+            if (!string.IsNullOrEmpty(Supermarket?.Address) && SelectedRegion != null)
             {
                 return true;
             }

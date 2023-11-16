@@ -1,27 +1,26 @@
-﻿using Supermarket.Core.Domain.ProductCategories;
-using Supermarket.Core.Domain.Suppliers;
+﻿using Supermarket.Core.Domain.Regions;
 using Supermarket.Core.UseCases.Admin;
 using Supermarket.Wpf.Dialog;
 using Supermarket.Wpf.ViewModelResolvers;
 using System.Windows.Input;
 
-namespace Supermarket.Wpf.Admin.ProductCategories.Dialog
+namespace Supermarket.Wpf.Admin.Regions.Dialog
 {
-    class CategoriesDialogViewModel : NotifyPropertyChangedBase, IDialogViewModel<ProductCategory, int>, IAsyncViewModel, IAsyncInitialized
+    public class RegionsDialogViewModel : NotifyPropertyChangedBase, IDialogViewModel<Region, int>, IAsyncViewModel, IAsyncInitialized
     {
         private readonly IAdminMenuService _adminMenuService;
 
         public ICommand Confirm { get; }
         public ICommand Cancel { get; }
 
-        public ProductCategory? Category { get; set; }
-        public int CategoryId { get; set; }
+        public Region? Region { get; set; }
+        public int RegionId { get; set; }
 
-        public event EventHandler<DialogResult<ProductCategory>>? ResultReceived;
+        public event EventHandler<DialogResult<Region>>? ResultReceived;
         public event EventHandler? LoadingStarted;
         public event EventHandler? LoadingFinished;
 
-        public CategoriesDialogViewModel(IAdminMenuService adminMenuService)
+        public RegionsDialogViewModel(IAdminMenuService adminMenuService)
         {
             _adminMenuService = adminMenuService;
 
@@ -33,46 +32,45 @@ namespace Supermarket.Wpf.Admin.ProductCategories.Dialog
         {
             using var _ = new DelegateLoading(this);
 
-            if (CategoryId != 0)
+            if (RegionId != 0)
             {
-                Category = await _adminMenuService.GetCategory(CategoryId);
+                Region = await _adminMenuService.GetRegion(RegionId);
             }
             else
             {
-                Category = new ProductCategory
+                Region = new Region
                 {
                     Id = 0,
-                    Name = "",
-                    Description = ""
+                    Name = ""
                 };
             }
         }
 
         private void CancelEdit(object? obj)
         {
-            ResultReceived?.Invoke(this, DialogResult<ProductCategory>.Cancel());
+            ResultReceived?.Invoke(this, DialogResult<Region>.Cancel());
         }
 
         private async void ConfirmEdit(object? obj)
         {
-            if (Category != null)
+            if (Region != null)
             {
-                if (CategoryId != 0)
+                if (RegionId != 0)
                 {
-                    await _adminMenuService.EditCategory(Category);
-                    ResultReceived?.Invoke(this, DialogResult<ProductCategory>.Ok(Category));
+                    await _adminMenuService.EditRegion(Region);
+                    ResultReceived?.Invoke(this, DialogResult<Region>.Ok(Region));
                 }
                 else
                 {
-                    await _adminMenuService.AddCategory(Category);
-                    ResultReceived?.Invoke(this, DialogResult<ProductCategory>.Ok(Category));
+                    await _adminMenuService.AddRegion(Region);
+                    ResultReceived?.Invoke(this, DialogResult<Region>.Ok(Region));
                 }
             }
         }
 
         private bool CanConfirmEdit(object? arg)
         {
-            if (ValidateInput.IsValidStringInput(Category?.Name))
+            if (ValidateInput.IsValidStringInput(Region?.Name))
             {
                 return true;
             }
@@ -82,7 +80,7 @@ namespace Supermarket.Wpf.Admin.ProductCategories.Dialog
 
         public async void SetParameters(int parameters)
         {
-            CategoryId = parameters;
+            RegionId = parameters;
             await InitializeAsync();
         }
     }

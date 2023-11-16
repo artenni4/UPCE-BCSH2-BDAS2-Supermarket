@@ -1,5 +1,6 @@
 ﻿using Supermarket.Core.Domain.Employees;
 using Supermarket.Core.Domain.StoragePlaces;
+using Supermarket.Core.Domain.Suppliers;
 using Supermarket.Core.UseCases.ManagerMenu;
 using Supermarket.Wpf.Dialog;
 using Supermarket.Wpf.LoggedUser;
@@ -116,7 +117,7 @@ namespace Supermarket.Wpf.Manager.SupermarketStorages.Dialog
 
         private bool CanConfirmEdit(object? arg)
         {
-            if (StoragePlace?.Code != string.Empty)
+            if (ValidateInput.IsValidStringInput(StoragePlace?.Code))
             {
                 return true;
             }
