@@ -1,0 +1,54 @@
+﻿<UserControl x:Class="Supermarket.Wpf.Admin.Supermarkets.Dialog.SupermarketsDialogWindow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Supermarket.Wpf.Admin.Supermarkets.Dialog"
+             mc:Ignorable="d" 
+                       d:DesignHeight="1080" d:DesignWidth="1920">
+    <Border BorderBrush="Transparent" Background="White" Width="450" Height="450">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="20" ShadowDepth="2" Color="Gray"/>
+        </Border.Effect>
+        <Grid Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0" Orientation="Vertical">
+                <TextBlock Text="ADD/EDIT" HorizontalAlignment="Center" />
+
+                <Grid HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0,10">
+                    <StackPanel>
+                        <TextBlock Text="Adresa:"/>
+                        <TextBox Text="{Binding Supermarket.Address, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    </StackPanel>
+                </Grid>
+                <Grid HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0,10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                </Grid>
+
+                    <StackPanel>
+                        <TextBlock Text="Region:"/>
+                        <ComboBox ItemsSource="{Binding Regions}" SelectedItem="{Binding SelectedRegion, Mode=TwoWay}"  Height="50px">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Name}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </StackPanel>
+            </StackPanel>
+
+            <StackPanel Grid.Row="2" Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                <Button Command="{Binding Confirm}" Content="OK" />
+                <Button Command="{Binding Cancel}" Content="Cancel" Margin="0,10,0,0" />
+            </StackPanel>
+        </Grid>
+    </Border>
+</UserControl>

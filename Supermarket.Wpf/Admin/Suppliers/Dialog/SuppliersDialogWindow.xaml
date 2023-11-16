@@ -20,7 +20,7 @@
                 <TextBlock Text="ADD/EDIT" HorizontalAlignment="Center" />
 
                         <TextBlock Text="Nazev:"/>
-                        <TextBox  Text="{Binding Supplier.Name}"/>
+                        <TextBox  Text="{Binding Supplier.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             </StackPanel>
 
             <StackPanel Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Center">

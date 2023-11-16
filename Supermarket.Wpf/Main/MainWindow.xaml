@@ -24,7 +24,7 @@
         xmlns:managerCashboxesDialogs="clr-namespace:Supermarket.Wpf.Manager.SupermarketCashboxes.Dialog"
         xmlns:adminMenu="clr-namespace:Supermarket.Wpf.Admin"
         xmlns:adminMenuSuppliersDialogs="clr-namespace:Supermarket.Wpf.Admin.Suppliers.Dialog"
-        
+        xmlns:adminMenuSupermarketsDialogs="clr-namespace:Supermarket.Wpf.Admin.Supermarkets.Dialog"
         
         xmlns:confirmation="clr-namespace:Supermarket.Wpf.Common.Dialogs.Confirmation"
         xmlns:input="clr-namespace:Supermarket.Wpf.Common.Dialogs.Input"
@@ -94,6 +94,9 @@
 
         <DataTemplate DataType="{x:Type adminMenuSuppliersDialogs:SuppliersDialogViewModel}" >
             <adminMenuSuppliersDialogs:SuppliersDialogWindow />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type adminMenuSupermarketsDialogs:SupermarketsDialogViewModel}" >
+            <adminMenuSupermarketsDialogs:SupermarketsDialogWindow/>
         </DataTemplate>
 
         <converter:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />

@@ -63,10 +63,9 @@
   <ItemGroup>
     <Folder Include="Admin\Logs\" />
     <Folder Include="Admin\Employees\" />
+    <Folder Include="Admin\Products\Dialog\" />
     <Folder Include="Admin\Regions\" />
     <Folder Include="Admin\ProductCategories\" />
-    <Folder Include="Admin\Supermarkets\" />
-    <Folder Include="Admin\Products\" />
   </ItemGroup>
 
 </Project>

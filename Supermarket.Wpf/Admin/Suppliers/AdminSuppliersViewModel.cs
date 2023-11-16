@@ -1,4 +1,5 @@
 ﻿using Supermarket.Core.Domain.CashBoxes;
+using Supermarket.Core.Domain.Common;
 using Supermarket.Core.Domain.Suppliers;
 using Supermarket.Core.UseCases.Admin;
 using Supermarket.Infrastructure.CashBoxes;
@@ -12,6 +13,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace Supermarket.Wpf.Admin.Suppliers
@@ -73,7 +75,7 @@ namespace Supermarket.Wpf.Admin.Suppliers
         {
             int selectedSupplierId = 0;
             var result = await _dialogService.ShowAsync<SuppliersDialogViewModel, Supplier, int>(selectedSupplierId);
-            if (result.IsOk(out var cashBox))
+            if (result.IsOk(out var _))
             {
                 await InitializeAsync();
             }
@@ -83,7 +85,7 @@ namespace Supermarket.Wpf.Admin.Suppliers
         {
             int selectedSupplierId = SelectedSupplier?.Id ?? 0;
             var result = await _dialogService.ShowAsync<SuppliersDialogViewModel, Supplier, int>(selectedSupplierId);
-            if (result.IsOk(out var cashBox))
+            if (result.IsOk(out var _))
             {
                 await InitializeAsync();
             }
@@ -96,7 +98,14 @@ namespace Supermarket.Wpf.Admin.Suppliers
             if (result.IsOk())
             {
                 int selectedSupplierId = SelectedSupplier?.Id ?? 0;
-                await _adminMenuService.DeleteSupplier(selectedSupplierId);
+                try
+                {
+                    await _adminMenuService.DeleteSupplier(selectedSupplierId);
+                }
+                catch (OperationCannotBeExecutedException) 
+                {
+                    MessageBox.Show("Nelze smazat dodavatele protože již se používá", "Chyba", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
                 await InitializeAsync();
             }
         }

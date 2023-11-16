@@ -3,6 +3,7 @@ using Oracle.ManagedDataAccess.Client;
 using Supermarket.Core.Domain.Common.Paging;
 using Supermarket.Core.Domain.StoragePlaces;
 using Supermarket.Core.Domain.Supermarkets;
+using Supermarket.Core.UseCases.Admin;
 using Supermarket.Infrastructure.StoragePlaces;
 
 namespace Supermarket.Infrastructure.Supermarkets;
@@ -24,5 +25,24 @@ internal class SupermarketRepository : CrudRepositoryBase<Core.Domain.Supermarke
         var result = await GetPagedResult<DbStoragePlace>(recordsRange, sql, orderByColumns, parameters);
 
         return result.Select(dbStoragePlace => dbStoragePlace.ToDomainEntity());
+    }
+
+    public async Task<PagedResult<AdminSupermarket>> GetAdminSupermarkets(RecordsRange recordsRange)
+    {
+        var parameters = new DynamicParameters();
+        const string sql = @"SELECT
+                                s.supermarket_id,
+                                s.adresa,
+                                s.region_id,
+                                r.nazev as region_nazev
+                            FROM
+                                SUPERMARKETY s
+                            JOIN
+                                REGIONY r on r.region_id = s.region_id";
+
+        var orderByColumns = DbAdminSupermarket.IdentityColumns.Select(ic => $"s.{ic}");
+        var result = await GetPagedResult<DbAdminSupermarket>(recordsRange, sql, orderByColumns, parameters);
+
+        return result.Select(dbSupermarket => dbSupermarket.ToDomainEntity());
     }
 }

@@ -61,7 +61,7 @@ namespace Supermarket.Wpf.Manager.SupermarketEmployees.Dialog
             //    Id = Employee.Id,
 
             //};
-            //await _managerMenuService.SaveEmplo
+            //await _adminMenuService.SaveEmplo
 
             //var result = new Employee { };
             //ResultReceived?.Invoke(this, DialogResult<Employee>.Ok(result));

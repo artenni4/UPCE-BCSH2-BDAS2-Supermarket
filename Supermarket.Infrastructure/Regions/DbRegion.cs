@@ -28,10 +28,8 @@ internal class DbRegion : IDbEntity<Region, int, DbRegion>
         nazev = entity.Name
     };
 
-    public static DynamicParameters GetEntityIdParameters(int id)
-    {
-        throw new NotImplementedException();
-    }
+    public static DynamicParameters GetEntityIdParameters(int id) =>
+        new DynamicParameters().AddParameter(nameof(region_id), id);
 
-    public DynamicParameters GetInsertingValues() => this.GetAllProperties();
+    public DynamicParameters GetInsertingValues() => this.GetPropertiesExceptIdentity();
 }

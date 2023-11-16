@@ -2,6 +2,8 @@
 using Supermarket.Core.UseCases.Admin;
 using Supermarket.Core.UseCases.ManagerMenu;
 using Supermarket.Wpf.Admin;
+using Supermarket.Wpf.Admin.Supermarkets;
+using Supermarket.Wpf.Admin.Supermarkets.Dialog;
 using Supermarket.Wpf.Admin.Suppliers;
 using Supermarket.Wpf.Admin.Suppliers.Dialog;
 using Supermarket.Wpf.CashBox;
@@ -75,6 +77,8 @@ public static class WpfDependencies
         serviceCollection.AddTransient<AdminMenuViewModel>();
         serviceCollection.AddTransient<AdminSuppliersViewModel>();
         serviceCollection.AddTransient<SuppliersDialogViewModel>();
+        serviceCollection.AddTransient<AdminSupermarketsViewModel>();
+        serviceCollection.AddTransient<SupermarketsDialogViewModel>();
 
         return serviceCollection;
     }

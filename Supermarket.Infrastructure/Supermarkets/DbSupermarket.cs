@@ -31,8 +31,5 @@ internal class DbSupermarket : IDbEntity<Core.Domain.Supermarkets.Supermarket, i
     public static DynamicParameters GetEntityIdParameters(int id) => 
         new DynamicParameters().AddParameter(nameof(supermarket_id), id);
 
-    public DynamicParameters GetInsertingValues()
-    {
-        throw new NotImplementedException();
-    }
+    public DynamicParameters GetInsertingValues() => this.GetPropertiesExceptIdentity();
 }
