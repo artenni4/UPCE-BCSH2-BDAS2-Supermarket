@@ -1,5 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Supermarket.Core.UseCases.Admin;
 using Supermarket.Core.UseCases.ManagerMenu;
+using Supermarket.Wpf.Admin;
+using Supermarket.Wpf.Admin.Suppliers;
+using Supermarket.Wpf.Admin.Suppliers.Dialog;
 using Supermarket.Wpf.CashBox;
 using Supermarket.Wpf.CashBox.Dialogs;
 using Supermarket.Wpf.Common.Dialogs.Confirmation;
@@ -38,6 +42,7 @@ public static class WpfDependencies
         serviceCollection.AddSingleton<IViewModelResolver, ViewModelResolver>();
         serviceCollection.AddSingleton<ILoggedUserService, LoggedUserService>();
         serviceCollection.AddSingleton<IManagerMenuService, ManagerMenuService>();
+        serviceCollection.AddSingleton<IAdminMenuService, AdminMenuService>();
         serviceCollection.AddSingleton<MainViewModel>();
 
         serviceCollection.AddTransient<MenuViewModel>();
@@ -66,6 +71,10 @@ public static class WpfDependencies
         serviceCollection.AddTransient<ManagerMenuEmployeeDialogViewModel>();
         serviceCollection.AddTransient<SupermarketStoragesDialogViewModel>();
         serviceCollection.AddTransient<SupermarketCashboxesDialogViewModel>();
+
+        serviceCollection.AddTransient<AdminMenuViewModel>();
+        serviceCollection.AddTransient<AdminSuppliersViewModel>();
+        serviceCollection.AddTransient<SuppliersDialogViewModel>();
 
         return serviceCollection;
     }

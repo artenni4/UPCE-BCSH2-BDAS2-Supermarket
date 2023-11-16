@@ -36,7 +36,7 @@
                         Content="Manažer" Command="{Binding NavigateToManagerCommand}" Margin="0,5,0,0" />
                 
                 <Button Grid.Row="3" Visibility="{Binding LoggedUserService, Converter={StaticResource RoleToVisibilityConverter}, ConverterParameter='Admin'}"
-                        Content="Admin" Margin="0,5,0,0" />
+                        Content="Admin" Command="{Binding NavigateToAdminCommand}" Margin="0,5,0,0" />
                 
                 <Button Grid.Row="5" Content="Odhlásit se" Margin="0,5,0,0" 
                         Command="{Binding LogOutCommand}" Style="{StaticResource RedButtonStyle}" />

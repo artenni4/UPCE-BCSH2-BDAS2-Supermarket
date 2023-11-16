@@ -2,6 +2,7 @@
 using Supermarket.Core.Domain.SellingProducts;
 using Supermarket.Core.Domain.StoragePlaces;
 using Supermarket.Core.Domain.StoredProducts;
+using Supermarket.Core.Domain.Suppliers;
 using Cashbox = Supermarket.Core.Domain.CashBoxes.CashBox;
 
 namespace Supermarket.Core.UseCases.ManagerMenu

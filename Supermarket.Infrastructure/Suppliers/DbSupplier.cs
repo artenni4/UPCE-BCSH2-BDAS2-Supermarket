@@ -1,10 +1,5 @@
 ﻿using Dapper;
 using Supermarket.Core.Domain.Suppliers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Supermarket.Infrastructure.Suppliers
 {
@@ -33,11 +28,8 @@ namespace Supermarket.Infrastructure.Suppliers
         };
 
         public static DynamicParameters GetEntityIdParameters(int id) =>
-        new DynamicParameters().AddParameter(nameof(dodavatel_id), id);
+            new DynamicParameters().AddParameter(nameof(dodavatel_id), id);
 
-        public DynamicParameters GetInsertingValues()
-        {
-            throw new NotImplementedException();
-        }
+        public DynamicParameters GetInsertingValues() => this.GetPropertiesExceptIdentity();
     }
 }

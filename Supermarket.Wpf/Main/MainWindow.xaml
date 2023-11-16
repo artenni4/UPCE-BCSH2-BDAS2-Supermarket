@@ -22,6 +22,9 @@
         xmlns:managerEmployeesDialogs="clr-namespace:Supermarket.Wpf.Manager.SupermarketEmployees.Dialog"
         xmlns:managerStoragesDialogs="clr-namespace:Supermarket.Wpf.Manager.SupermarketStorages.Dialog"
         xmlns:managerCashboxesDialogs="clr-namespace:Supermarket.Wpf.Manager.SupermarketCashboxes.Dialog"
+        xmlns:adminMenu="clr-namespace:Supermarket.Wpf.Admin"
+        xmlns:adminMenuSuppliersDialogs="clr-namespace:Supermarket.Wpf.Admin.Suppliers.Dialog"
+        
         
         xmlns:confirmation="clr-namespace:Supermarket.Wpf.Common.Dialogs.Confirmation"
         xmlns:input="clr-namespace:Supermarket.Wpf.Common.Dialogs.Input"
@@ -54,6 +57,9 @@
         <DataTemplate DataType="{x:Type managerMenuProducts:SupermarketProductsViewModel}">
             <managerMenuProducts:SupermarketProductsWindow />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type adminMenu:AdminMenuViewModel}">
+            <adminMenu:AdminMenuWindow />
+        </DataTemplate>
         <!-- DataTemplates for dialogs -->
         <DataTemplate DataType="{x:Type local:MenuViewModel}">
             <local:PopupMenu />
@@ -85,7 +91,11 @@
         <DataTemplate DataType="{x:Type managerCashboxesDialogs:SupermarketCashboxesDialogViewModel}" >
             <managerCashboxesDialogs:SupermarketCashboxesDialogWindow />
         </DataTemplate>
-        
+
+        <DataTemplate DataType="{x:Type adminMenuSuppliersDialogs:SuppliersDialogViewModel}" >
+            <adminMenuSuppliersDialogs:SuppliersDialogWindow />
+        </DataTemplate>
+
         <converter:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
         <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </Window.Resources>

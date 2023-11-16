@@ -5,6 +5,7 @@
         Login,
         CashBox,
         Storage,
-        Manager
+        Manager,
+        Admin
     }
 }

@@ -11,6 +11,7 @@ namespace Supermarket.Wpf.Main
         public ICommand NavigateToCashboxCommand { get; }
         public ICommand NavigateToGoodsKeepingCommand { get; }
         public ICommand NavigateToManagerCommand { get; }
+        public ICommand NavigateToAdminCommand { get; }
 
         public MenuViewModel(INavigationService navigationService, ILoggedUserService loggedUserService)
         {
@@ -29,6 +30,10 @@ namespace Supermarket.Wpf.Main
             NavigateToManagerCommand = new RelayCommand(
                 _ => ResultReceived?.Invoke(this, DialogResult<MenuResult>.Ok(MenuResult.Navigate(ApplicationView.Manager))),
                 _ => navigationService.CurrentView != ApplicationView.Manager);
+
+            NavigateToAdminCommand = new RelayCommand(
+                _ => ResultReceived?.Invoke(this, DialogResult<MenuResult>.Ok(MenuResult.Navigate(ApplicationView.Admin))),
+                _ => navigationService.CurrentView != ApplicationView.Admin);
         }
 
         private ILoggedUserService? _loggedUserService;

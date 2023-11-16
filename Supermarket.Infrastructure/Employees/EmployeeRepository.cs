@@ -42,7 +42,8 @@ namespace Supermarket.Infrastructure.Employees
                 {
                     new CashierRole(SupermarketId: 1),
                     new GoodsKeeperRole(SupermarketId: 1),
-                    new ManagerRole(SupermarketId: 1)
+                    new ManagerRole(SupermarketId: 1),
+                    new AdminRole()
                 },
                 Login = "A",
                 HireDate = new DateTimeOffset(DateTime.Today.AddDays(-7))
