@@ -11,7 +11,7 @@ namespace Supermarket.Wpf.Common
                 return false;
             }
 
-            Regex regex = new Regex("^[a-zA-Z0-9]*$");
+            Regex regex = new Regex("^[a-zA-Z0-9ěščřžýáíéúůďťňĚŠČŘŽÝÁÍÉÚŮĎŤŇ]*$");
 
             return regex.IsMatch(input);
         }
