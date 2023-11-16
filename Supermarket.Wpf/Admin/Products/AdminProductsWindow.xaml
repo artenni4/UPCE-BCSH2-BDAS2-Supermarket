@@ -21,15 +21,15 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn Header="Na vahu" Binding="{Binding Name}" IsReadOnly="True" FontSize="25" />
-                    <DataGridTextColumn Header="Cena" Binding="{Binding Price, StringFormat={}{0}Kč}" IsReadOnly="True" FontSize="25" />
-                    <DataGridTemplateColumn Header="Hmotnost"  IsReadOnly="True" >
+                    <DataGridTemplateColumn Header="Druh"  IsReadOnly="True" >
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Weight}" TextWrapping="Wrap" FontSize="25"/>
+                                <TextBlock Text="{Binding CategoryName}" TextWrapping="Wrap" FontSize="25"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="Na vahu" Binding="{Binding IsByWeight}" IsReadOnly="True" FontSize="25" />
+                    <DataGridTextColumn Header="Cena" Binding="{Binding Price, StringFormat={}{0}Kč}" IsReadOnly="True" FontSize="25" />
                     <DataGridTemplateColumn Header="Carovy kod"  IsReadOnly="True" >
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>

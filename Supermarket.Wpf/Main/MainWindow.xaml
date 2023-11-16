@@ -24,6 +24,7 @@
         xmlns:managerCashboxesDialogs="clr-namespace:Supermarket.Wpf.Manager.SupermarketCashboxes.Dialog"
         xmlns:adminMenu="clr-namespace:Supermarket.Wpf.Admin"
         xmlns:adminMenuSuppliersDialogs="clr-namespace:Supermarket.Wpf.Admin.Suppliers.Dialog"
+        xmlns:adminMenuProductsDialogs="clr-namespace:Supermarket.Wpf.Admin.Products.Dialog"
         xmlns:adminMenuSupermarketsDialogs="clr-namespace:Supermarket.Wpf.Admin.Supermarkets.Dialog"
         xmlns:adminMenuCategoriesDialogs="clr-namespace:Supermarket.Wpf.Admin.ProductCategories.Dialog"
         xmlns:adminMenRegionsDialogs="clr-namespace:Supermarket.Wpf.Admin.Regions.Dialog"
@@ -96,6 +97,9 @@
 
         <DataTemplate DataType="{x:Type adminMenuSuppliersDialogs:SuppliersDialogViewModel}" >
             <adminMenuSuppliersDialogs:SuppliersDialogWindow />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type adminMenuProductsDialogs:ProductsDialogViewModel}" >
+            <adminMenuProductsDialogs:ProductsDialogWindow/>
         </DataTemplate>
         <DataTemplate DataType="{x:Type adminMenuSupermarketsDialogs:SupermarketsDialogViewModel}" >
             <adminMenuSupermarketsDialogs:SupermarketsDialogWindow/>

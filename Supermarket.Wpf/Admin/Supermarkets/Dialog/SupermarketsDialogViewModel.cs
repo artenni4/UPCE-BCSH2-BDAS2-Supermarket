@@ -18,7 +18,12 @@ namespace Supermarket.Wpf.Admin.Supermarkets.Dialog
         public SupermarketModel? Supermarket { get; set; }
         public int SupermarketId { get; set; }
         public ObservableCollection<Region> Regions { get; } = new ObservableCollection<Region>();
-        public Region? SelectedRegion { get; set; }
+        private Region? _selectedRegion;
+        public Region? SelectedRegion 
+        {
+            get => _selectedRegion; 
+            set => SetProperty(ref _selectedRegion, value);
+        }
 
         public event EventHandler<DialogResult<SupermarketModel>>? ResultReceived;
         public event EventHandler? LoadingStarted;

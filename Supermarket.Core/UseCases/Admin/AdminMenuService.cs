@@ -1,6 +1,7 @@
 ﻿using Supermarket.Core.Domain.Common;
 using Supermarket.Core.Domain.Common.Paging;
 using Supermarket.Core.Domain.ProductCategories;
+using Supermarket.Core.Domain.Products;
 using Supermarket.Core.Domain.Regions;
 using Supermarket.Core.Domain.Supermarkets;
 using Supermarket.Core.Domain.Suppliers;
@@ -13,13 +14,15 @@ namespace Supermarket.Core.UseCases.Admin
         private readonly ISupermarketRepository _supermarketRepository;
         private readonly IRegionRepository _regionRepository;
         private readonly IProductCategoryRepository _productCategoryRepository;
+        private readonly IProductRepository _productRepository;
 
-        public AdminMenuService(ISupplierRepository supplierRepository, ISupermarketRepository supermarketRepository, IRegionRepository regionRepository, IProductCategoryRepository productCategoryRepository)
+        public AdminMenuService(ISupplierRepository supplierRepository, ISupermarketRepository supermarketRepository, IRegionRepository regionRepository, IProductCategoryRepository productCategoryRepository, IProductRepository productRepository)
         {
             _supplierRepository = supplierRepository;
             _supermarketRepository = supermarketRepository;
             _regionRepository = regionRepository;
             _productCategoryRepository = productCategoryRepository;
+            _productRepository = productRepository;
         }
 
         #region Suppliers
@@ -157,7 +160,42 @@ namespace Supermarket.Core.UseCases.Admin
                 throw new OperationCannotBeExecutedException(e);
             }
         }
+        #endregion
+
+        #region Products
+        public async Task<PagedResult<AdminProduct>> GetAdminProducts(RecordsRange recordsRange)
+        {
+            return await _productRepository.GetAdminProducts(recordsRange);
+        }
+
+        public async Task<Product?> GetProduct(int productId)
+        {
+            return await _productRepository.GetByIdAsync(productId);
+        }
+
+        public async Task AddProduct(Product product)
+        {
+            await _productRepository.AddAsync(product);
+        }
+
+        public async Task EditProduct(Product product)
+        {
+            await _productRepository.UpdateAsync(product);
+        }
+
+        public async Task DeleteProduct(int productId)
+        {
+            try
+            {
+                await _productRepository.DeleteAsync(productId);
+            }
+            catch (RepositoryOperationFailedException e)
+            {
+                throw new OperationCannotBeExecutedException(e);
+            }
+        }
 
         #endregion
+
     }
 }

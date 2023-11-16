@@ -24,7 +24,6 @@
             Gram,
             Litre,
             Millilitre,
-            Piece,
             Meter
         };
 
@@ -57,10 +56,13 @@
         {
             return first.Equals(second);
         }
-        
-        public static bool operator !=(MeasureUnit first, MeasureUnit second)
+
+        public static bool operator !=(MeasureUnit? first, MeasureUnit? second)
         {
+            if (ReferenceEquals(first, second)) return false;
+            if (first is null || second is null) return true;
             return !first.Equals(second);
         }
+
     }
 }
