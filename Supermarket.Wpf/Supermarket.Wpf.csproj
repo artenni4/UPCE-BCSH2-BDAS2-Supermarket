@@ -62,7 +62,6 @@
 
   <ItemGroup>
     <Folder Include="Admin\Logs\" />
-    <Folder Include="Admin\Employees\" />
   </ItemGroup>
 
 </Project>

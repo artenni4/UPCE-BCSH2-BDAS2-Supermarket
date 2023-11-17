@@ -3,6 +3,7 @@ using Supermarket.Core.Domain.ProductCategories;
 using Supermarket.Core.Domain.Products;
 using Supermarket.Core.Domain.Regions;
 using Supermarket.Core.Domain.Suppliers;
+using Supermarket.Core.UseCases.ManagerMenu;
 
 namespace Supermarket.Core.UseCases.Admin
 {
@@ -33,6 +34,11 @@ namespace Supermarket.Core.UseCases.Admin
         Task AddProduct(Product product);
         Task EditProduct(Product product);
         Task DeleteProduct(int productId);
-
+        Task<PagedResult<AdminEmployee>> GetAllEmployees(RecordsRange recordsRange);
+        Task<AdminEmployeeDetail> GetEmployeeToEdit(int employeeId);
+        Task EditEmployee(AdminEditEmployee editEmployee);
+        Task AddEmployee(AdminAddEmployee employee);
+        Task DeleteEmployee(int employeeId);
+        Task<PagedResult<PossibleManagerForEmployee>> GetPossibleManagers(int supermarketId, RecordsRange recordsRange);
     }
 }

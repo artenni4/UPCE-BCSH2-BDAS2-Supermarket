@@ -9,6 +9,7 @@
              xmlns:products="clr-namespace:Supermarket.Wpf.Admin.Products"
              xmlns:supermarkets="clr-namespace:Supermarket.Wpf.Admin.Supermarkets"
              xmlns:regions="clr-namespace:Supermarket.Wpf.Admin.Regions"
+             xmlns:employees="clr-namespace:Supermarket.Wpf.Admin.Employees"
              
              mc:Ignorable="d" 
              d:DesignHeight="1080" d:DesignWidth="1920">
@@ -30,6 +31,9 @@
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type regions:AdminRegionsViewModel}">
                     <regions:AdminRegionsWindow />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type employees:AdminEmployeesViewModel}">
+                    <employees:AdminEmployeesWindow />
                 </DataTemplate>
             </TabControl.Resources>
             <TabControl.ItemTemplate>

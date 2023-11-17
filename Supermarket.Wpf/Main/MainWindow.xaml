@@ -28,6 +28,7 @@
         xmlns:adminMenuSupermarketsDialogs="clr-namespace:Supermarket.Wpf.Admin.Supermarkets.Dialog"
         xmlns:adminMenuCategoriesDialogs="clr-namespace:Supermarket.Wpf.Admin.ProductCategories.Dialog"
         xmlns:adminMenRegionsDialogs="clr-namespace:Supermarket.Wpf.Admin.Regions.Dialog"
+        xmlns:adminMenuEmployeesDialogs="clr-namespace:Supermarket.Wpf.Admin.Employees.Dialog"
         
         xmlns:confirmation="clr-namespace:Supermarket.Wpf.Common.Dialogs.Confirmation"
         xmlns:input="clr-namespace:Supermarket.Wpf.Common.Dialogs.Input"
@@ -109,6 +110,9 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type adminMenRegionsDialogs:RegionsDialogViewModel}" >
             <adminMenRegionsDialogs:RegionsDialogWindow/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type adminMenuEmployeesDialogs:EmployeesDialogViewModel}" >
+            <adminMenuEmployeesDialogs:EmployeesDialogWindow/>
         </DataTemplate>
 
         <converter:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />

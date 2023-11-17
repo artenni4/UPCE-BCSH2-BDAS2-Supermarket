@@ -162,7 +162,14 @@ namespace Supermarket.Core.UseCases.ManagerMenu
 
         public async Task DeleteEmployee(int employeeId)
         {
-            await _employeeRepository.DeleteAsync(employeeId);
+            try
+            {
+                await _employeeRepository.DeleteAsync(employeeId);
+            }
+            catch (RepositoryOperationFailedException e)
+            {
+                throw new OperationCannotBeExecutedException(e);
+            }
         }
         #endregion
 

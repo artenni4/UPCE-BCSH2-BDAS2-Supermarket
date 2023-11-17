@@ -1,5 +1,6 @@
 ﻿using Supermarket.Core.Domain.Common;
 using Supermarket.Core.Domain.Common.Paging;
+using Supermarket.Core.UseCases.Admin;
 using Supermarket.Core.UseCases.ManagerMenu;
 
 namespace Supermarket.Core.Domain.Employees
@@ -15,5 +16,7 @@ namespace Supermarket.Core.Domain.Employees
         Task<PagedResult<PossibleManagerForEmployee>> GetPossibleManagersForAdmin(int supermarketId, RecordsRange recordsRange);
         Task<PagedResult<ManagerMenuEmployee>> GetSupermarketEmployeesForManager(int employeeId, RecordsRange recordsRange);
         Task<PagedResult<ManagerMenuEmployee>> GetSupermarketEmployeesForAdmin(int supermarketId, RecordsRange recordsRange);
+        Task<PagedResult<AdminEmployee>> GetAdminMenuEmployees(RecordsRange recordsRange);
+        Task<AdminEmployeeDetail?> GetAdminEmployeeDetail(int employeeId);
     }
 }
