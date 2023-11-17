@@ -84,6 +84,7 @@ namespace Supermarket.Wpf.Admin.Employees.Dialog
                     IsCashier = false,
                     IsGoodsKeeper = false,
                     IsManager = false,
+                    PersonalNumber = ""
                 };
             }
 
@@ -151,7 +152,8 @@ namespace Supermarket.Wpf.Admin.Employees.Dialog
                     HireDate = Employee.HireDate,
                     SupermarketId = SelectedSupermarket?.Id,
                     ManagerId = SelectedManager?.EmployeeId,
-                    Roles = roles
+                    Roles = roles,
+                    PersonalNumber = Employee.PersonalNumber
                 };
 
                 await _adminMenuService.AddEmployee(addEmp);
@@ -168,7 +170,8 @@ namespace Supermarket.Wpf.Admin.Employees.Dialog
                     HireDate = Employee.HireDate,
                     ManagerId = SelectedManager?.EmployeeId,
                     Roles = roles,
-                    SupermarketId = SelectedSupermarket?.Id
+                    SupermarketId = SelectedSupermarket?.Id,
+                    PersonalNumber = Employee.PersonalNumber
                 };
 
                 await _adminMenuService.EditEmployee(editEmp);

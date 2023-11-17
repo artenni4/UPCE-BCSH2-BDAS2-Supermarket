@@ -14,5 +14,6 @@ namespace Supermarket.Core.UseCases.Admin
         public required int SupplierId { get; set; }
         public required string SupplierName { get; set; }
         public required string Description { get; set; }
+        public required string PersonalNumber { get; set; }
     }
 }

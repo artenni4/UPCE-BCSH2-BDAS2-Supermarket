@@ -14,6 +14,7 @@ internal class DbEmployee : IDbEntity<Employee, int, DbEmployee>
     public required DateTimeOffset datum_nastupu { get; init; }
     public required int? supermarket_id { get; init; }
     public required int? manazer_id { get; init; }
+    public required string? rodne_cislo { get; init; }
 
     public static string TableName => "ZAMESTNANCI";
     public static IReadOnlySet<string> IdentityColumns { get; } = new HashSet<string>
@@ -31,7 +32,8 @@ internal class DbEmployee : IDbEntity<Employee, int, DbEmployee>
         Surname = prijmeni,
         StartedWorking = datum_nastupu,
         ManagerId = manazer_id,
-        SupermarketId = supermarket_id
+        SupermarketId = supermarket_id,
+        PersonalNumber = rodne_cislo
     };
 
     public static DbEmployee ToDbEntity(Employee entity) => new()
@@ -44,7 +46,8 @@ internal class DbEmployee : IDbEntity<Employee, int, DbEmployee>
         prijmeni = entity.Surname,
         datum_nastupu = entity.StartedWorking,
         manazer_id = entity.ManagerId,
-        supermarket_id = entity.SupermarketId
+        supermarket_id = entity.SupermarketId,
+        rodne_cislo = entity.PersonalNumber
     };
 
     public static DynamicParameters GetEntityIdParameters(int id) =>

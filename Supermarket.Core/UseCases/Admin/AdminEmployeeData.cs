@@ -12,5 +12,6 @@ namespace Supermarket.Core.UseCases.Admin
         public required int? ManagerId { get; init; }
         public required int? SupermarketId { get; init; }
         public required IReadOnlySet<SupermarketEmployeeRole> Roles { get; init; }
+        public required string PersonalNumber { get; init; }
     }
 }

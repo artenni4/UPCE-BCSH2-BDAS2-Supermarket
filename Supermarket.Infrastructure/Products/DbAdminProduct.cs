@@ -16,6 +16,7 @@ namespace Supermarket.Infrastructure.Products
         public required int merna_jednotka_id { get; set; }
         public required string merna_jednotka_nazev { get; set; }
         public required string popis { get; set; }
+        public required string rodne_cislo { get; set; }
 
         public AdminProduct ToDomainEntity() => new AdminProduct
         {
@@ -28,7 +29,8 @@ namespace Supermarket.Infrastructure.Products
             SupplierName = dodavatel_nazev,
             Description = popis,
             CategoryId = druh_id,
-            CategoryName = druh_nazev
+            CategoryName = druh_nazev,
+            PersonalNumber = rodne_cislo
         };
     }
 }

@@ -36,11 +36,13 @@
                 <StackPanel Grid.Row="0" Grid.Column="0" Margin="10,0">
                     <TextBlock Text="Jméno:"/>
                     <TextBox  Text="{Binding Employee.Name}"/>
+                    <TextBlock Text="Příjmení:"/>
+                    <TextBox Text="{Binding Employee.Surname}"/>
                 </StackPanel>
 
                 <StackPanel Grid.Row="1" Grid.Column="0" Margin="10,0">
-                    <TextBlock Text="Příjmení:"/>
-                    <TextBox Text="{Binding Employee.Surname}"/>
+                    <TextBlock Text="Rodné číslo:"/>
+                    <TextBox Text="{Binding Employee.PersonalNumber}"/>
                 </StackPanel>
 
                 <StackPanel Grid.Row="2" Grid.Column="0" Margin="10,0">
@@ -63,12 +65,12 @@
                     <TextBlock Text="Heslo:"/>
                     <PasswordBox components:PasswordBoxHelper.Password="{Binding EmployeePassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
-                <StackPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="10,0">
+                <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="10,0">
                     <TextBlock Text="Supermarket:"/>
                     <ComboBox ItemsSource="{Binding Supermarkets}" DisplayMemberPath="Address"
                               SelectedItem="{Binding SelectedSupermarket}" />
                 </StackPanel>
-                <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="10,0">
+                <StackPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="10,0">
                     <TextBlock Text="Manažer:"/>
                     <ComboBox ItemsSource="{Binding Managers}" DisplayMemberPath="FullName"
                               SelectedItem="{Binding SelectedManager}" />

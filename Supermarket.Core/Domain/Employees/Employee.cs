@@ -13,5 +13,6 @@ namespace Supermarket.Core.Domain.Employees
         public required DateTimeOffset StartedWorking { get; init; }
         public required int? ManagerId { get; init; }
         public required int? SupermarketId { get; init; }
+        public string? PersonalNumber { get; init; }
     }
 }

@@ -20,7 +20,7 @@ namespace Supermarket.Infrastructure.Employees
         public required bool isNakladac { get; init; }
         public required bool isManazer { get; init; }
         public required bool isAdmin { get; init; }
-
+        public required string rodne_cislo { get; init; }
 
         public static string TableName => "ZAMESTNANCI";
         public static IReadOnlySet<string> IdentityColumns { get; } = new HashSet<string>
@@ -40,7 +40,8 @@ namespace Supermarket.Infrastructure.Employees
             IsGoodsKeeper = isNakladac,
             IsManager = isManazer,
             Login = login,
-            ManagerId = manazer_id
+            ManagerId = manazer_id,
+            PersonalNumber = rodne_cislo
         };
     }
 }

@@ -13,6 +13,7 @@ namespace Supermarket.Core.Domain.Employees
         public required byte[] PasswordHashSalt { get; init; }
         public required string Login { get; init; }
         public required DateTime HireDate { get; init; }
+        public string? PersonalNumber { get; init; }
         
         public Employee ToEmployee()
         {
@@ -29,6 +30,7 @@ namespace Supermarket.Core.Domain.Employees
                 PasswordHashSalt = PasswordHashSalt,
                 StartedWorking = HireDate,
                 SupermarketId = supermarketEmployee?.SupermarketId,
+                PersonalNumber = PersonalNumber
             };
         }
     }
