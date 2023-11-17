@@ -55,11 +55,6 @@ namespace Supermarket.Wpf.Admin.Supermarkets.Dialog
                 };
             }
 
-            if (Supermarket != null && SupermarketId != 0)
-            {
-                SelectedRegion = await _adminMenuService.GetRegion(Supermarket.RegionId);
-            }
-
             GetRegions();
         }
 
@@ -76,6 +71,11 @@ namespace Supermarket.Wpf.Admin.Supermarkets.Dialog
             foreach (var region in regions.Items)
             {
                 Regions.Add(region);
+            }
+
+            if (Supermarket != null && SupermarketId != 0)
+            {
+                SelectedRegion = Regions.FirstOrDefault(x => x.Id == Supermarket.RegionId);
             }
         }
 

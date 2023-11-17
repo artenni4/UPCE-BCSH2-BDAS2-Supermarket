@@ -18,23 +18,33 @@ namespace Supermarket.Wpf.Admin.Products.Dialog
 
         public Product? Product { get; set; }
         public int ProductId { get; set; }
-        public ObservableCollection<MeasureUnit> MeasureUnits { get; } = new ObservableCollection<MeasureUnit>();
         private PagedResult<Supplier>? _suppliers;
         public ObservableCollection<Supplier> Suppliers { get; } = new();
         private PagedResult<ProductCategory>? _categories;
         public ObservableCollection<ProductCategory> Categories { get; } = new();
-
-        private bool _isByWeight;
-        public bool IsByWeight
+        public static ObservableCollection<MeasureUnit> MeasureUnits { get; set; } = new ObservableCollection<MeasureUnit>()
         {
-            get => _isByWeight;
+            MeasureUnit.Kilogram,
+            MeasureUnit.Gram,
+            MeasureUnit.Litre,
+            MeasureUnit.Millilitre,
+            MeasureUnit.Meter,
+            MeasureUnit.Piece
+        };
+
+
+        private bool _byWeight;
+        public bool ByWeight
+        {
+            get => _byWeight;
             set
             {
-                if (_isByWeight != value)
+                if (_byWeight != value)
                 {
-                    _isByWeight = value;
-                    OnPropertyChanged(nameof(IsByWeight));
-                    UpdateMeasureUnitAvailability();
+                    _byWeight = value;
+                    OnPropertyChanged(nameof(ByWeight));
+                    UpdateMeasureUnits();
+                    IsMeasureUnitEnabled = _byWeight;
                 }
             }
         }
@@ -49,6 +59,20 @@ namespace Supermarket.Wpf.Admin.Products.Dialog
                 {
                     _selectedMeasureUnit = value;
                     OnPropertyChanged(nameof(SelectedMeasureUnit));
+                }
+            }
+        }
+
+        private bool _isMeasureUnitEnabled;
+        public bool IsMeasureUnitEnabled
+        {
+            get => _isMeasureUnitEnabled;
+            set
+            {
+                if (_isMeasureUnitEnabled != value)
+                {
+                    _isMeasureUnitEnabled = value;
+                    OnPropertyChanged(nameof(IsMeasureUnitEnabled));
                 }
             }
         }
@@ -81,8 +105,6 @@ namespace Supermarket.Wpf.Admin.Products.Dialog
             }
         }
 
-        public bool IsMeasureUnitEnabled => IsByWeight;
-
         public event EventHandler<DialogResult<Product>>? ResultReceived;
         public event EventHandler? LoadingStarted;
         public event EventHandler? LoadingFinished;
@@ -113,22 +135,27 @@ namespace Supermarket.Wpf.Admin.Products.Dialog
                     ByWeight = false,
                     Price = 0,
                     Description = "",
-                    MeasureUnit = MeasureUnit.Kilogram,
+                    MeasureUnit = MeasureUnit.Piece,
                     ProductCategoryId = 0,
                     SupplierId = 0,
-                    Weight = 0 
+                    Weight = 0
                 };
             }
 
-            if (Product != null && ProductId != 0)
+            if (Product?.Name != string.Empty)
             {
-                SelectedMeasureUnit = Product.MeasureUnit;
-                SelectedSupplier = await _adminMenuService.GetSupplier(Product.SupplierId);
-                SelectedCategory = await _adminMenuService.GetCategory(Product.ProductCategoryId);
+                if (Product != null)
+                {
+                    ByWeight = Product.ByWeight;
+                }
             }
-
-            if (ProductId == 0)
+            else
             {
+                ByWeight = false;
+                MeasureUnits = new ObservableCollection<MeasureUnit>()
+                {
+                    MeasureUnit.Piece
+                };
                 SelectedMeasureUnit = MeasureUnit.Piece;
             }
 
@@ -143,23 +170,55 @@ namespace Supermarket.Wpf.Admin.Products.Dialog
             await InitializeAsync();
         }
 
-        private void GetMeasureUnits()
+        private void UpdateMeasureUnits()
         {
             MeasureUnits.Clear();
-            foreach (var mUnit in MeasureUnit.Values)
+            if (ByWeight)
             {
-                MeasureUnits.Add(mUnit);
+                MeasureUnits.Add(MeasureUnit.Kilogram);
+                MeasureUnits.Add(MeasureUnit.Gram);
+                MeasureUnits.Add(MeasureUnit.Litre);
+                MeasureUnits.Add(MeasureUnit.Millilitre);
+                MeasureUnits.Add(MeasureUnit.Meter);
+                SelectedMeasureUnit = MeasureUnits.FirstOrDefault();
+            }
+            else
+            {
+                MeasureUnits.Add(MeasureUnit.Piece);
+                SelectedMeasureUnit = MeasureUnits.FirstOrDefault();
+            }
+
+            OnPropertyChanged(nameof(SelectedMeasureUnit));
+            OnPropertyChanged(nameof(IsMeasureUnitEnabled));
+        }
+
+
+        private void GetMeasureUnits()
+        {
+            if (ProductId == 0)
+            {
+                SelectedMeasureUnit = MeasureUnit.Piece;
+            }
+
+            if (Product != null && ProductId != 0)
+            {
+                SelectedMeasureUnit = MeasureUnits.FirstOrDefault(s => s.Name == Product.MeasureUnit.Name);
             }
         }
 
         private async void GetSuppliers()
         {
-            _suppliers = await _adminMenuService.GetAllSuppliers(new RecordsRange { PageSize = 300, PageNumber= 1 });
-            
+            _suppliers = await _adminMenuService.GetAllSuppliers(new RecordsRange { PageSize = 300, PageNumber = 1 });
+
             Suppliers.Clear();
-            foreach(var supplier in _suppliers.Items)
+            foreach (var supplier in _suppliers.Items)
             {
                 Suppliers.Add(supplier);
+            }
+
+            if (Product != null && ProductId != 0)
+            {
+                SelectedSupplier = Suppliers.FirstOrDefault(s => s.Id == Product.SupplierId);
             }
         }
 
@@ -168,9 +227,14 @@ namespace Supermarket.Wpf.Admin.Products.Dialog
             _categories = await _adminMenuService.GetAllCategories(new RecordsRange { PageSize = 100, PageNumber = 1 });
 
             Categories.Clear();
-            foreach(var category in _categories.Items)
+            foreach (var category in _categories.Items)
             {
                 Categories.Add(category);
+            }
+
+            if (Product != null && ProductId != 0)
+            {
+                SelectedCategory = Categories.FirstOrDefault(s => s.Id == Product.ProductCategoryId);
             }
         }
 
@@ -183,12 +247,12 @@ namespace Supermarket.Wpf.Admin.Products.Dialog
         {
             if (Product != null && SelectedMeasureUnit != null && SelectedSupplier != null && SelectedCategory != null)
             {
-                var saveProduct = new Product 
+                var saveProduct = new Product
                 {
-                    Id = Product.Id, 
+                    Id = Product.Id,
                     Name = Product.Name,
                     Barcode = Product.Barcode,
-                    ByWeight = Product.ByWeight,
+                    ByWeight = ByWeight,
                     Description = Product.Description,
                     MeasureUnit = SelectedMeasureUnit,
                     Price = Product.Price,
@@ -219,13 +283,5 @@ namespace Supermarket.Wpf.Admin.Products.Dialog
                 return false;
         }
 
-        private void UpdateMeasureUnitAvailability()
-        {
-            if (!IsByWeight)
-            {
-                SelectedMeasureUnit = MeasureUnit.Piece;
-            }
-            OnPropertyChanged(nameof(IsMeasureUnitEnabled));
-        }
     }
 }

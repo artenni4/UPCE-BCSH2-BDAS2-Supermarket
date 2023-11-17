@@ -36,7 +36,8 @@
                         </ComboBox.ItemTemplate>
                     </ComboBox>
                 </StackPanel>
-                <CheckBox Margin="0,10,0,10" IsChecked="{Binding IsByWeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="Na vahu" />
+                <CheckBox Margin="0,10,0,10" IsChecked="{Binding ByWeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="Na vahu" />
+
                 <StackPanel>
                     <TextBlock Text="Merna jednotka:"/>
                     <ComboBox ItemsSource="{Binding MeasureUnits}" SelectedItem="{Binding SelectedMeasureUnit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  Height="50px" IsEnabled="{Binding IsMeasureUnitEnabled}">
