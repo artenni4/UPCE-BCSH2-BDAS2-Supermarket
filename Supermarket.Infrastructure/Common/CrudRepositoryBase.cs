@@ -2,6 +2,7 @@
 using Oracle.ManagedDataAccess.Client;
 using Supermarket.Core.Domain.Common;
 using Supermarket.Core.Domain.Common.Paging;
+using System.Collections.Generic;
 
 namespace Supermarket.Infrastructure.Common
 {

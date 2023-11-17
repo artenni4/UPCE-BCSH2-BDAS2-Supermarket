@@ -141,7 +141,8 @@ namespace Supermarket.Infrastructure.Employees
                                     z.heslo_salt,
                                     MAX(CASE WHEN r.role_id = 1 THEN 1 ELSE 0 END) AS isPokladnik,
                                     MAX(CASE WHEN r.role_id = 2 THEN 1 ELSE 0 END) AS isManazer,
-                                    MAX(CASE WHEN r.role_id = 3 THEN 1 ELSE 0 END) AS isNakladac
+                                    MAX(CASE WHEN r.role_id = 3 THEN 1 ELSE 0 END) AS isNakladac,
+                                    MAX(CASE WHEN r.role_id = 4 THEN 1 ELSE 0 END) AS isAdmin
                                 FROM
                                     ZAMESTNANCI z
                                 LEFT JOIN
