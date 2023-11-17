@@ -4,6 +4,8 @@ using Supermarket.Core.UseCases.ManagerMenu;
 using Supermarket.Wpf.Admin;
 using Supermarket.Wpf.Admin.ProductCategories;
 using Supermarket.Wpf.Admin.ProductCategories.Dialog;
+using Supermarket.Wpf.Admin.Products;
+using Supermarket.Wpf.Admin.Products.Dialog;
 using Supermarket.Wpf.Admin.Regions;
 using Supermarket.Wpf.Admin.Regions.Dialog;
 using Supermarket.Wpf.Admin.Supermarkets;
@@ -81,6 +83,8 @@ public static class WpfDependencies
         serviceCollection.AddTransient<AdminMenuViewModel>();
         serviceCollection.AddTransient<AdminSuppliersViewModel>();
         serviceCollection.AddTransient<SuppliersDialogViewModel>();
+        serviceCollection.AddTransient<AdminProductsViewModel>();
+        serviceCollection.AddTransient<ProductsDialogViewModel>();
         serviceCollection.AddTransient<AdminSupermarketsViewModel>();
         serviceCollection.AddTransient<SupermarketsDialogViewModel>();
         serviceCollection.AddTransient<AdminMenuCategoriesViewModel>();

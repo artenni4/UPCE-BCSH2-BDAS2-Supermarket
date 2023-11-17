@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:Supermarket.Wpf.Admin"
              xmlns:suppliers="clr-namespace:Supermarket.Wpf.Admin.Suppliers"
              xmlns:categories="clr-namespace:Supermarket.Wpf.Admin.ProductCategories"
-             
+             xmlns:products="clr-namespace:Supermarket.Wpf.Admin.Products"
              xmlns:supermarkets="clr-namespace:Supermarket.Wpf.Admin.Supermarkets"
              xmlns:regions="clr-namespace:Supermarket.Wpf.Admin.Regions"
              
@@ -18,6 +18,9 @@
             <TabControl.Resources>
                 <DataTemplate DataType="{x:Type suppliers:AdminSuppliersViewModel}">
                     <suppliers:AdminSuppliersWindow />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type products:AdminProductsViewModel}">
+                    <products:AdminProductsWindow />
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type supermarkets:AdminSupermarketsViewModel}">
                     <supermarkets:AdminSupermarketsWindow />

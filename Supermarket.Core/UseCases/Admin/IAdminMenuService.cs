@@ -1,5 +1,6 @@
 ﻿using Supermarket.Core.Domain.Common.Paging;
 using Supermarket.Core.Domain.ProductCategories;
+using Supermarket.Core.Domain.Products;
 using Supermarket.Core.Domain.Regions;
 using Supermarket.Core.Domain.Suppliers;
 
@@ -27,7 +28,11 @@ namespace Supermarket.Core.UseCases.Admin
         Task AddRegion(Region region);
         Task EditRegion(Region region);
         Task DeleteRegion(int regionId);
-
+        Task<PagedResult<AdminProduct>> GetAdminProducts(RecordsRange recordsRange);
+        Task<Product?> GetProduct(int productId);
+        Task AddProduct(Product product);
+        Task EditProduct(Product product);
+        Task DeleteProduct(int productId);
 
     }
 }

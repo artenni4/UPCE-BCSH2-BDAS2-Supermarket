@@ -18,16 +18,6 @@
         public static readonly MeasureUnit Piece = new("kus", "ks");
         public static readonly MeasureUnit Meter = new("metr", "m");
 
-        public static IReadOnlyList<MeasureUnit> Values { get; } = new List<MeasureUnit>()
-        {
-            Kilogram,
-            Gram,
-            Litre,
-            Millilitre,
-            Piece,
-            Meter
-        };
-
         public override bool Equals(object? obj)
         {
             if (ReferenceEquals(null, obj)) return false;
@@ -57,10 +47,13 @@
         {
             return first.Equals(second);
         }
-        
-        public static bool operator !=(MeasureUnit first, MeasureUnit second)
+
+        public static bool operator !=(MeasureUnit? first, MeasureUnit? second)
         {
+            if (ReferenceEquals(first, second)) return false;
+            if (first is null || second is null) return true;
             return !first.Equals(second);
         }
+
     }
 }

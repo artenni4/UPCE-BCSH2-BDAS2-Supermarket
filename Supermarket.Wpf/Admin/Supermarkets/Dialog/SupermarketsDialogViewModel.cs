@@ -18,7 +18,12 @@ namespace Supermarket.Wpf.Admin.Supermarkets.Dialog
         public SupermarketModel? Supermarket { get; set; }
         public int SupermarketId { get; set; }
         public ObservableCollection<Region> Regions { get; } = new ObservableCollection<Region>();
-        public Region? SelectedRegion { get; set; }
+        private Region? _selectedRegion;
+        public Region? SelectedRegion 
+        {
+            get => _selectedRegion; 
+            set => SetProperty(ref _selectedRegion, value);
+        }
 
         public event EventHandler<DialogResult<SupermarketModel>>? ResultReceived;
         public event EventHandler? LoadingStarted;
@@ -50,11 +55,6 @@ namespace Supermarket.Wpf.Admin.Supermarkets.Dialog
                 };
             }
 
-            if (Supermarket != null && SupermarketId != 0)
-            {
-                SelectedRegion = await _adminMenuService.GetRegion(Supermarket.RegionId);
-            }
-
             GetRegions();
         }
 
@@ -71,6 +71,11 @@ namespace Supermarket.Wpf.Admin.Supermarkets.Dialog
             foreach (var region in regions.Items)
             {
                 Regions.Add(region);
+            }
+
+            if (Supermarket != null && SupermarketId != 0)
+            {
+                SelectedRegion = Regions.FirstOrDefault(x => x.Id == Supermarket.RegionId);
             }
         }
 

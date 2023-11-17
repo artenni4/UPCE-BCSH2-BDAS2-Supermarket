@@ -1,4 +1,5 @@
 ﻿using Supermarket.Wpf.Admin.ProductCategories;
+using Supermarket.Wpf.Admin.Products;
 using Supermarket.Wpf.Admin.Regions;
 using Supermarket.Wpf.Admin.Supermarkets;
 using Supermarket.Wpf.Admin.Suppliers;
@@ -34,12 +35,13 @@ namespace Supermarket.Wpf.Admin
         public async Task InitializeAsync()
         {
             var suppliersViewModel = await _viewModelResolver.Resolve<AdminSuppliersViewModel>();
-
+            var productsViewModel = await _viewModelResolver.Resolve<AdminProductsViewModel>();
             var supermarketsViewModel = await _viewModelResolver.Resolve<AdminSupermarketsViewModel>();
             var categoriesViewModel = await _viewModelResolver.Resolve<AdminMenuCategoriesViewModel>();
             var regionsViewModel = await _viewModelResolver.Resolve<AdminRegionsViewModel>();
 
             TabViewModels.Add(suppliersViewModel);
+            TabViewModels.Add(productsViewModel);
             TabViewModels.Add(supermarketsViewModel);
             TabViewModels.Add(categoriesViewModel);
             TabViewModels.Add(regionsViewModel);
