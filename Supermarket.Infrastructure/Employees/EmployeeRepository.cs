@@ -1,7 +1,9 @@
-﻿using Oracle.ManagedDataAccess.Client;
+﻿using System.Data;
+using Oracle.ManagedDataAccess.Client;
 using System.Security.Cryptography;
 using System.Text;
 using Dapper;
+using Supermarket.Core.Domain.Auth;
 using Supermarket.Core.Domain.Common;
 using Supermarket.Core.Domain.Employees;
 using Supermarket.Core.Domain.Employees.Roles;
@@ -14,43 +16,57 @@ namespace Supermarket.Infrastructure.Employees
 {
     internal class EmployeeRepository : CrudRepositoryBase<Employee, int, DbEmployee>, IEmployeeRepository
     {
+        private static readonly byte[] ReservedAdminHashSalt = new byte[16] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
+        private static readonly EmployeeRole ReservedAdmin = new EmployeeRole
+        {
+            Id = 999,
+            Login = "ADMIN",
+            Name = "ADMIN",
+            Surname = "BEJBA",
+            HireDate = DateTime.MinValue,
+            PasswordHash = PasswordHashing.GenerateSaltedHash("ADMIN", ReservedAdminHashSalt),
+            PasswordHashSalt = ReservedAdminHashSalt,
+            RoleInfo = new Admin()
+        };
+        
         public EmployeeRepository(OracleConnection oracleConnection) : base(oracleConnection)
         {
         }
 
-        public Task<EmployeeRole?> GetByLoginAsync(string login)
+        public Task<EmployeeRole?> GetRoleByLoginAsync(string login)
         {
-            if (login != "a") return Task.FromResult((EmployeeRole?)null);
-
-            var passwordBytes = Encoding.UTF8.GetBytes("a");
-            var salt = new byte[16] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
-
-            byte[] combinedBytes = new byte[passwordBytes.Length + salt.Length];
-            Array.Copy(passwordBytes, 0, combinedBytes, 0, passwordBytes.Length);
-            Array.Copy(salt, 0, combinedBytes, passwordBytes.Length, salt.Length);
-
-            byte[] hashBytes = SHA256.HashData(combinedBytes);
-
-            return Task.FromResult((EmployeeRole?)new EmployeeRole
+            if (login == ReservedAdmin.Login)
             {
-                Id = 1,
-                Name = "David",
-                Surname = "Biba",
-                PasswordHash = hashBytes,
-                PasswordHashSalt = salt,
-                Roles = new IEmployeeRole[]
-                {
-                    new CashierRole(SupermarketId: 1),
-                    new GoodsKeeperRole(SupermarketId: 1),
-                    new ManagerRole(SupermarketId: 1),
-                    new AdminRole()
-                },
-                Login = "A",
-                HireDate = new DateTimeOffset(DateTime.Today.AddDays(-7))
-            });
+                return Task.FromResult((EmployeeRole?)ReservedAdmin);
+            }
+
+            return Task.FromResult((EmployeeRole?)null);
         }
 
-        public async Task<PagedResult<ManagerMenuEmployee>> GetSupermarketEmployees(int employeeId, RecordsRange recordsRange)
+        public Task<EmployeeRole?> GetRoleByIdAsync(int employeeId)
+        {
+            if (employeeId == ReservedAdmin.Id)
+            {
+                return Task.FromResult((EmployeeRole?)ReservedAdmin);
+            }
+
+            return Task.FromResult((EmployeeRole?)null);
+        }
+
+        public async Task AddAsync(EmployeeRole employeeRole)
+        {
+            var employeeId = await AddAndGetIdAsync(employeeRole.ToEmployee());
+            await AddEmployeeRoles(employeeRole, employeeId);
+        }
+        
+        public async Task UpdateAsync(EmployeeRole employeeRole)
+        {
+            await UpdateAsync(employeeRole.ToEmployee());
+            await DeleteEmployeeRoles(employeeRole);
+            await AddEmployeeRoles(employeeRole, employeeRole.Id);
+        }
+
+        public async Task<PagedResult<ManagerMenuEmployee>> GetSupermarketEmployeesForManager(int employeeId, RecordsRange recordsRange)
         {
             var parameters = new DynamicParameters()
                 .AddParameter("zamestnanec_id", employeeId);
@@ -84,6 +100,35 @@ namespace Supermarket.Infrastructure.Employees
 
             return result.Select(dbProduct => dbProduct.ToDomainEntity());
         }
+        
+        public async Task<PagedResult<ManagerMenuEmployee>> GetSupermarketEmployeesForAdmin(int supermarketId, RecordsRange recordsRange)
+        {
+            var parameters = new DynamicParameters()
+                .AddParameter("supermarket_id", supermarketId);
+
+            const string sql = @"SELECT
+                                    z.zamestnanec_id,
+                                    z.jmeno,
+                                    z.prijmeni,
+                                    z.datum_nastupu,
+                                    LISTAGG(r.nazev, ', ') WITHIN GROUP (ORDER BY r.nazev) AS role
+                                FROM
+                                    ZAMESTNANCI z
+                                LEFT JOIN
+                                    ROLE_ZAMESTNANCU rz ON z.zamestnanec_id = rz.zamestnanec_id
+                                LEFT JOIN
+                                    ROLE r ON rz.role_id = r.role_id
+                                WHERE
+                                    z.supermarket_id = :supermarket_id
+                                GROUP BY
+                                    z.zamestnanec_id, z.jmeno, z.prijmeni, z.datum_nastupu";
+
+            var orderByColumns = DbEmployee.IdentityColumns.Select(ic => $"z.{ic}");
+
+            var result = await GetPagedResult<DbManagerMenuEmployees>(recordsRange, sql, orderByColumns, parameters);
+
+            return result.Select(dbProduct => dbProduct.ToDomainEntity());
+        }
 
         public async Task<ManagerMenuEmployeeDetail?> GetEmployeeDetail(int employeeId)
         {
@@ -95,10 +140,11 @@ namespace Supermarket.Infrastructure.Employees
                                     z.prijmeni,
                                     z.datum_nastupu,
                                     z.login,
+                                    z.manazer_id,
+                                    z.supermarket_id,
                                     MAX(CASE WHEN r.role_id = 1 THEN 1 ELSE 0 END) AS isPokladnik,
-                                    MAX(CASE WHEN r.role_id = 2 THEN 1 ELSE 0 END) AS isNakladac,
-                                    MAX(CASE WHEN r.role_id = 3 THEN 1 ELSE 0 END) AS isManazer,
-                                    MAX(CASE WHEN r.role_id = 4 THEN 1 ELSE 0 END) AS isAdmin
+                                    MAX(CASE WHEN r.role_id = 2 THEN 1 ELSE 0 END) AS isManazer,
+                                    MAX(CASE WHEN r.role_id = 3 THEN 1 ELSE 0 END) AS isNakladac
                                 FROM
                                     ZAMESTNANCI z
                                 LEFT JOIN
@@ -108,17 +154,17 @@ namespace Supermarket.Infrastructure.Employees
                                 WHERE
                                     z.zamestnanec_id = :zamestnanec_id
                                 GROUP BY
-                                    z.zamestnanec_id, z.jmeno, z.prijmeni, z.datum_nastupu, z.login";
+                                    z.zamestnanec_id, z.jmeno, z.prijmeni, z.datum_nastupu, z.login, z.manazer_id, z.supermarket_id";
 
             var orderByColumns = DbManagerMenuEmployeeDetail.IdentityColumns
                 .Select(ic => $"z.{ic}");
 
-            DbManagerMenuEmployeeDetail? result = await _oracleConnection.QuerySingleOrDefaultAsync<DbManagerMenuEmployeeDetail>(sql, parameters);
+            var result = await _oracleConnection.QuerySingleOrDefaultAsync<DbManagerMenuEmployeeDetail>(sql, parameters);
 
             return result?.ToDomainEntity();
         }
 
-        public async Task<PagedResult<PossibleManagerForEmployee>> GetPossibleManagersForEmployee(int employeeId, RecordsRange recordsRange)
+        public async Task<PagedResult<PossibleManagerForEmployee>> GetPossibleManagersForManager(int employeeId, RecordsRange recordsRange)
         {
             var parameters = new DynamicParameters()
                 .AddParameter("zamestnanec_id", employeeId);
@@ -126,9 +172,9 @@ namespace Supermarket.Infrastructure.Employees
             const string sql = @"WITH manazeri AS (
                                     SELECT DISTINCT z.zamestnanec_id FROM zamestnanci z
                                     LEFT JOIN ROLE_ZAMESTNANCU rz ON z.zamestnanec_id = rz.zamestnanec_id
-                                    WHERE rz.role_id = 3)
+                                    WHERE rz.role_id = 2)
 
-                                SELECT z.* FROM zamestnanci z
+                                SELECT z.zamestnanec_id, z.jmeno, z.prijmeni FROM zamestnanci z
                                 WHERE z.zamestnanec_id IN (SELECT * FROM manazeri)
                                 CONNECT BY PRIOR z.zamestnanec_id = z.manazer_id
                                 START WITH z.zamestnanec_id = :zamestnanec_id";
@@ -139,24 +185,57 @@ namespace Supermarket.Infrastructure.Employees
             
             return result.Select(dbProduct => dbProduct.ToDomainEntity());
         }
-
-        //public async Task EditEmployeeAsync(ManagerMenuEmployeeDetail employee)
-        //{
-        //    var parameters = new DynamicParameters()
-        //        .Add
-        //}
-
-        private static IEmployeeRole[] FromDbRoles(int supermarketId, IEnumerable<string> roles)
+        
+        public async Task<PagedResult<PossibleManagerForEmployee>> GetPossibleManagersForAdmin(int supermarketId, RecordsRange recordsRange)
         {
-            return roles.Select<string, IEmployeeRole>(role => role switch
+            var parameters = new DynamicParameters()
+                .AddParameter("supermarket_id", supermarketId);
+            
+            const string sql = @"SELECT z.zamestnanec_id, z.jmeno, z.prijmeni FROM zamestnanci z
+                                    LEFT JOIN ROLE_ZAMESTNANCU rz ON z.zamestnanec_id = rz.zamestnanec_id
+                                    WHERE rz.role_id = 2 AND z.supermarket_id = :supermarket_id";
+            
+            var orderByColumns = DbEmployee.IdentityColumns.Select(ic => $"z.{ic}");
+
+            var result = await GetPagedResult<DbPossibleManagerForEmployee>(recordsRange, sql, orderByColumns, parameters);
+            
+            return result.Select(dbProduct => dbProduct.ToDomainEntity());
+        }
+        
+        private async Task DeleteEmployeeRoles(EmployeeRole employeeRole)
+        {
+            var deleteParameters = new DynamicParameters()
+                .AddParameter("zamestnanec_id", employeeRole.Id);
+            const string sqlDeleteRoles = "DELETE FROM ROLE_ZAMESTNANCU WHERE zamestnanec_id = :zamestnanec_id";
+            await _oracleConnection.ExecuteAsync(sqlDeleteRoles, deleteParameters);
+        }
+        
+        private async Task AddEmployeeRoles(EmployeeRole employeeRole, int employeeId)
+        {
+            const string sql = "INSERT INTO ROLE_ZAMESTNANCU VALUES (:role_id, :zamestnanec_id)";
+            foreach (var dbEmployeeRole in DbEmployeeRole.ToDbEmployeeRoles(employeeId, employeeRole.RoleInfo))
             {
-                DbRoleNames.Manager => new ManagerRole(supermarketId),
-                DbRoleNames.GoodsKeeper => new GoodsKeeperRole(supermarketId),
-                DbRoleNames.Cashier => new CashierRole(supermarketId),
-                DbRoleNames.SuperAdmin => new AdminRole(),
-                _ => throw new RepositoryInconsistencyException($"Role [{role}] does not exist")
-            }).ToArray();
+                var parameters = new DynamicParameters()
+                    .AddParameter("role_id", dbEmployeeRole.role_id)
+                    .AddParameter("zamestnanec_id", dbEmployeeRole.zamestnanec_id);
+                await _oracleConnection.ExecuteAsync(sql, parameters);
+            }
         }
 
+        private async Task<int> AddAndGetIdAsync(Employee sale)
+        {
+            var dbEntity = DbEmployee.ToDbEntity(sale);
+            var insertingValues = dbEntity.GetInsertingValues();
+            
+            var selector = string.Join(", ", insertingValues.ParameterNames);
+            var parameters = string.Join(", ", insertingValues.ParameterNames.Select(v => ":" + v));
+            
+            var sql = $"INSERT INTO {DbEmployee.TableName} ({selector}) VALUES ({parameters}) RETURNING prodej_id INTO :prodej_id";
+
+            insertingValues.Add(nameof(DbEmployee.zamestnanec_id), dbType: DbType.Int32, direction: ParameterDirection.Output);
+            await _oracleConnection.ExecuteAsync(sql, insertingValues);
+
+            return insertingValues.Get<int>(nameof(DbEmployee.zamestnanec_id));
+        }
     }
 }

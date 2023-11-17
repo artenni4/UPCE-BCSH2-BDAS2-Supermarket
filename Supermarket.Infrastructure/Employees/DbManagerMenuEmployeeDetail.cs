@@ -17,10 +17,11 @@ namespace Supermarket.Infrastructure.Employees
         public required string jmeno { get; init; }
         public required string prijmeni { get; init; }
         public required DateTime datum_nastupu { get; init; }
+        public required int manazer_id { get; init; }
+        public required int supermarket_id { get; init; }
         public required bool isPokladnik { get; init; }
         public required bool isNakladac { get; init; }
         public required bool isManazer { get; init; }
-        public required bool isAdmin { get; init; }
 
         public static string TableName => "ZAMESTNANCI";
         public static IReadOnlySet<string> IdentityColumns { get; } = new HashSet<string>
@@ -35,10 +36,11 @@ namespace Supermarket.Infrastructure.Employees
             Name = jmeno,
             Surname = prijmeni,
             HireDate = datum_nastupu,
+            ManagerId = manazer_id,
+            SupermarketId = supermarket_id,
             IsCashier = isPokladnik,
             IsGoodsKeeper = isNakladac,
             IsManager = isManazer,
-            IsAdmin = isAdmin
         };
 
         public static DbManagerMenuEmployeeDetail ToDbEntity(ManagerMenuEmployeeDetail entity) => new()
@@ -51,7 +53,8 @@ namespace Supermarket.Infrastructure.Employees
             isPokladnik = entity.IsCashier,
             isNakladac = entity.IsGoodsKeeper,
             isManazer = entity.IsManager,
-            isAdmin = entity.IsAdmin
+            manazer_id = entity.ManagerId,
+            supermarket_id = entity.SupermarketId
         };
 
         public static DynamicParameters GetEntityIdParameters(int id) =>

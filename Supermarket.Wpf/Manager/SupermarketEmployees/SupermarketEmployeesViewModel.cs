@@ -15,7 +15,6 @@ namespace Supermarket.Wpf.Manager.SupermarketEmployees
         private readonly ILoggedUserService _loggedUserService;
         private readonly IDialogService _dialogService;
 
-        private PagedResult<ManagerMenuEmployee>? _employees;
         public ObservableCollection<ManagerMenuEmployee> Employees { get; set; }
 
         private ManagerMenuEmployee? _selectedEmployee;
@@ -59,32 +58,32 @@ namespace Supermarket.Wpf.Manager.SupermarketEmployees
 
         private async Task GetEmployees()
         {
-            _employees = await _managerMenuService.GetManagerEmployees(_loggedUserService.SupermarketId, new RecordsRange { PageSize = 250, PageNumber = 1 });
-
-            foreach(var emp in _employees.Items)
+            if (!_loggedUserService.IsEmployee(out var employeeData))
             {
-                Employees.Add(emp);
+                throw new UiInconsistencyException($"Unauthorized user is not allowed in {nameof(SupermarketEmployeesViewModel)}");
             }
             
+            var employees = await _managerMenuService.GetSupermarketEmployees(employeeData.Id, _loggedUserService.SupermarketId, new RecordsRange { PageSize = 250, PageNumber = 1 });
+            Employees.Update(employees.Items);
         }
 
         public async void AddEmployee(object? obj)
         {
             int selectedEmployeeId = 0;
-            var result = await _dialogService.ShowAsync<ManagerMenuEmployeeDialogViewModel, Employee, int>(selectedEmployeeId);
-            if (result.IsOk(out var a))
+            var result = await _dialogService.ShowAsync<ManagerMenuEmployeeDialogViewModel, int>(selectedEmployeeId);
+            if (result.IsOk())
             {
-
+                await InitializeAsync();
             }
         }
 
         public async void EditEmployee(object? obj)
         {
             int selectedEmployeeId = SelectedEmployee?.EmployeeId ?? 0;
-            var result = await _dialogService.ShowAsync<ManagerMenuEmployeeDialogViewModel, Employee, int>(selectedEmployeeId);
-            if (result.IsOk(out var a))
+            var result = await _dialogService.ShowAsync<ManagerMenuEmployeeDialogViewModel, int>(selectedEmployeeId);
+            if (result.IsOk())
             {
-
+                await InitializeAsync();
             }
         }
 

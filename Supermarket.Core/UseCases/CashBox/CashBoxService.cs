@@ -59,7 +59,6 @@ namespace Supermarket.Core.UseCases.CashBox
 
         public async Task AddSaleAsync(int cashBoxId, CashBoxPayment cashBoxPayment, IReadOnlyList<CashBoxSoldProduct> soldProducts)
         {
-            // TODO return id of new record, test transactions
             var cashBox = await _cashBoxRepository.GetByIdAsync(cashBoxId);
             if (cashBox is null)
             {

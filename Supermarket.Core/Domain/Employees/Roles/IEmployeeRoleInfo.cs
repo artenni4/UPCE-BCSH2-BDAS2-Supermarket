@@ -3,7 +3,7 @@
     /// <summary>
     /// Marker for employee role
     /// </summary>
-    public interface IEmployeeRole
+    public interface IEmployeeRoleInfo
     {
     }
 }

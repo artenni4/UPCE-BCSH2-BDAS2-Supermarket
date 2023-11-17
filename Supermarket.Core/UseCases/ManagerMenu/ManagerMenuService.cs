@@ -1,7 +1,10 @@
-﻿using Supermarket.Core.Domain.CashBoxes;
+﻿using Supermarket.Core.Domain.Auth;
+using Supermarket.Core.Domain.Auth.LoggedEmployees;
+using Supermarket.Core.Domain.CashBoxes;
 using Supermarket.Core.Domain.Common;
 using Supermarket.Core.Domain.Common.Paging;
 using Supermarket.Core.Domain.Employees;
+using Supermarket.Core.Domain.Employees.Roles;
 using Supermarket.Core.Domain.Products;
 using Supermarket.Core.Domain.Sales;
 using Supermarket.Core.Domain.SellingProducts;
@@ -67,26 +70,94 @@ namespace Supermarket.Core.UseCases.ManagerMenu
         #endregion
 
         #region Employees
-        public async Task<PagedResult<ManagerMenuEmployee>> GetManagerEmployees(int supermarketId, RecordsRange recordsRange)
+
+        public async Task AddEmployee(ManagerAddEmployee managerAddEmployee)
         {
-            return await _employeeRepository.GetSupermarketEmployees(supermarketId, recordsRange);
+            var salt = PasswordHashing.GenerateSalt();
+            var passwordHash = PasswordHashing.GenerateSaltedHash(managerAddEmployee.Password, salt);
+
+            await _employeeRepository.AddAsync(new EmployeeRole
+            {
+                Id = managerAddEmployee.Id,
+                Login = managerAddEmployee.Login,
+                Name = managerAddEmployee.Name,
+                Surname = managerAddEmployee.Surname,
+                HireDate = managerAddEmployee.HireDate,
+                RoleInfo = new SupermarketEmployee(managerAddEmployee.SupermarketId, managerAddEmployee.ManagerId, managerAddEmployee.Roles),
+                PasswordHash = passwordHash,
+                PasswordHashSalt = salt
+            });
+        }
+
+        public async Task<PagedResult<ManagerMenuEmployee>> GetSupermarketEmployees(int employeeId, int supermarketId, RecordsRange recordsRange)
+        {
+            var employee = await _employeeRepository.GetRoleByIdAsync(employeeId);
+            if (employee is null)
+            {
+                throw new ApplicationInconsistencyException($"Employee {employeeId} was not found");
+            }
+            
+            if (employee.RoleInfo is Domain.Employees.Roles.Admin)
+            {
+                return await _employeeRepository.GetSupermarketEmployeesForAdmin(supermarketId, recordsRange);
+            }
+            return await _employeeRepository.GetSupermarketEmployeesForManager(employeeId, recordsRange);
         }
 
         public async Task<ManagerMenuEmployeeDetail> GetEmployeeToEdit(int employeeId)
         {
             var employee = await _employeeRepository.GetEmployeeDetail(employeeId);
-
             if (employee == null)
             {
-                throw new ApplicationInconsistencyException("Zaměstnanec nebyl nalezn");
+                throw new ApplicationInconsistencyException("Employee was not found");
             }
 
             return employee;
         }
 
-        public async Task<PagedResult<PossibleManagerForEmployee>> GetPossibleManagersForEmployee(int employeeId, RecordsRange recordsRange)
+        public async Task EditEmployee(ManagerEditEmployee managerEditEmployee)
         {
-            return await _employeeRepository.GetPossibleManagersForEmployee(employeeId, recordsRange);
+            var oldEmployee = await _employeeRepository.GetByIdAsync(managerEditEmployee.Id);
+            if (oldEmployee is null)
+            {
+                throw new ApplicationInconsistencyException($"Employee {managerEditEmployee.Id} not found");
+            }
+
+            if (oldEmployee.SupermarketId.HasValue is false)
+            {
+                throw new ApplicationInconsistencyException("Edited employee by manager must have supermarket id");
+            }
+            
+            var password = managerEditEmployee.NewPassword is null 
+                ? oldEmployee.PasswordHash
+                : PasswordHashing.GenerateSaltedHash(managerEditEmployee.NewPassword, oldEmployee.PasswordHashSalt);
+            
+            await _employeeRepository.UpdateAsync(new EmployeeRole
+            {
+                Id = managerEditEmployee.Id,
+                Login = managerEditEmployee.Login,
+                Name = managerEditEmployee.Name,
+                Surname = managerEditEmployee.Surname,
+                HireDate = managerEditEmployee.HireDate,
+                RoleInfo = new SupermarketEmployee(oldEmployee.SupermarketId.Value, managerEditEmployee.ManagerId, managerEditEmployee.Roles),
+                PasswordHash = password,
+                PasswordHashSalt = oldEmployee.PasswordHashSalt
+            });
+        }
+
+        public async Task<PagedResult<PossibleManagerForEmployee>> GetPossibleManagers(int employeeId, int supermarketId, RecordsRange recordsRange)
+        {
+            var employee = await _employeeRepository.GetRoleByIdAsync(employeeId);
+            if (employee is null)
+            {
+                throw new ApplicationInconsistencyException($"Employee {employeeId} was not found");
+            }
+            
+            if (employee.RoleInfo is Domain.Employees.Roles.Admin)
+            {
+                return await _employeeRepository.GetPossibleManagersForAdmin(supermarketId, recordsRange);
+            }
+            return await _employeeRepository.GetPossibleManagersForManager(employeeId, recordsRange);
         }
 
         public async Task DeleteEmployee(int employeeId)

@@ -6,17 +6,21 @@ namespace Supermarket.Wpf.LoggedUser
     internal class LoggedUserService : ILoggedUserService
     {
         private EmployeeData? _employeeData;
-        private IReadOnlyList<SupermarketEmployeeRole>? _roles;
+        private IReadOnlySet<SupermarketEmployeeRole>? _roles;
 
         public bool IsUserSet { get; private set; }
 
-        public bool IsEmployee
+        bool ILoggedUserService.IsEmployee([NotNullWhen(true)] out EmployeeData? employeeData)
         {
-            get
+            CheckUserIsSet();
+            if (_employeeData is not null)
             {
-                CheckUserIsSet();
-                return _employeeData is not null;
+                employeeData = _employeeData;
+                return true;
             }
+
+            employeeData = null;
+            return false;
         }
 
         public bool IsCustomer
@@ -58,7 +62,7 @@ namespace Supermarket.Wpf.LoggedUser
 
         public bool IsSupermarketEmployee(
             [NotNullWhen(true)] out EmployeeData? loggedSupermarketEmployee,
-            [NotNullWhen(true)] out IReadOnlyList<SupermarketEmployeeRole>? roles)
+            [NotNullWhen(true)] out IReadOnlySet<SupermarketEmployeeRole>? roles)
         {
             CheckUserIsSet();
             

@@ -10,11 +10,11 @@ namespace Supermarket.Wpf.LoggedUser
         /// If returns false, getters in the service will throw exception
         /// </summary>
         bool IsUserSet { get; }
-        
+
         /// <summary>
         /// Checks whether current user is employee
         /// </summary>
-        bool IsEmployee { get; }
+        bool IsEmployee([NotNullWhen(true)] out EmployeeData? employeeData);
         
         /// <summary>
         /// Checks whether current user is customer
@@ -36,7 +36,7 @@ namespace Supermarket.Wpf.LoggedUser
         /// </summary>
         bool IsSupermarketEmployee(
             [NotNullWhen(true)] out EmployeeData? loggedSupermarketEmployee,
-            [NotNullWhen(true)] out IReadOnlyList<SupermarketEmployeeRole>? roles);
+            [NotNullWhen(true)] out IReadOnlySet<SupermarketEmployeeRole>? roles);
         
         /// <summary>
         /// Raised when user is set

@@ -3,7 +3,7 @@ using System.Text;
 
 namespace Supermarket.Core.Domain.Auth
 {
-    internal static class PasswordHashing
+    public static class PasswordHashing
     {
         /// <summary>
         /// Generates random salt for a hash

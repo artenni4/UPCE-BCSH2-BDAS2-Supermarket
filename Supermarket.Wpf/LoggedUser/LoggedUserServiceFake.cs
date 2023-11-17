@@ -6,7 +6,11 @@ namespace Supermarket.Wpf.LoggedUser;
 public class LoggedUserServiceFake : ILoggedUserService
 {
     public bool IsUserSet { get; }
-    public bool IsEmployee { get; }
+    bool ILoggedUserService.IsEmployee([NotNullWhen(true)] out EmployeeData? employeeData)
+    {
+        throw new NotImplementedException();
+    }
+
     public bool IsCustomer { get; }
     public int SupermarketId { get; }
     public bool IsAdmin([NotNullWhen(true)] out EmployeeData? loggedAdmin)
@@ -14,7 +18,7 @@ public class LoggedUserServiceFake : ILoggedUserService
         throw new NotImplementedException();
     }
 
-    public bool IsSupermarketEmployee([NotNullWhen(true)] out EmployeeData? loggedSupermarketEmployee,[NotNullWhen(true)]  out IReadOnlyList<SupermarketEmployeeRole>? roles)
+    public bool IsSupermarketEmployee([NotNullWhen(true)] out EmployeeData? loggedSupermarketEmployee,[NotNullWhen(true)]  out IReadOnlySet<SupermarketEmployeeRole>? roles)
     {
         throw new NotImplementedException();
     }

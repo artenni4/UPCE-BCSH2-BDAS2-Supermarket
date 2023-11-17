@@ -24,7 +24,7 @@ namespace Supermarket.Core.Domain.Auth
         /// </summary>
         private async Task<EmployeeRole> AuthenticateEmployee(LoginData loginData)
         {
-            var employee = await _employeeRepository.GetByLoginAsync(loginData.Login) ?? throw new InvalidCredentialsException();
+            var employee = await _employeeRepository.GetRoleByLoginAsync(loginData.Login) ?? throw new InvalidCredentialsException();
 
             var loginPasswordHash = PasswordHashing.GenerateSaltedHash(loginData.Password, employee.PasswordHashSalt);
             if (PasswordHashing.HashesAreEqual(loginPasswordHash, employee.PasswordHash) == false)
@@ -40,26 +40,17 @@ namespace Supermarket.Core.Domain.Auth
         /// </summary>
         private static ILoggedEmployee AuthorizeEmployee(EmployeeRole employee)
         {
-            if (employee.Roles.Any(role => role is AdminRole))
+            if (employee.RoleInfo is Admin)
             {
                 return new LoggedAdmin(employee.Id, employee.Name, employee.Surname);
             }
 
-            var supermarketEmployeeRoles = employee.Roles.Select(r => r switch
+            if (employee.RoleInfo is SupermarketEmployee supermarketEmployee)
             {
-                CashierRole => SupermarketEmployeeRole.Cashier,
-                GoodsKeeperRole => SupermarketEmployeeRole.GoodsKeeper,
-                ManagerRole => SupermarketEmployeeRole.Manager,
-                _ => throw new NotSupportedException($"{r} is not supported role")
-            }).ToArray();
+                return new LoggedSupermarketEmployee(employee.Id, employee.Name, employee.Surname, supermarketEmployee.SupermarketId, supermarketEmployee.Roles);
+            }
 
-            var supermarketId = employee.Roles
-                .OfType<ISupermarketEmployeeRole>()
-                .Select(r => r.SupermarketId)
-                .Distinct()
-                .Single();
-            
-            return new LoggedSupermarketEmployee(employee.Id, employee.Name, employee.Surname, supermarketId, supermarketEmployeeRoles);
+            throw new NotSupportedException($"{employee.RoleInfo} is not supported role");
         }
     }
 }
