@@ -83,6 +83,15 @@ namespace Supermarket.Wpf.GoodsKeeping.GoodsManagement.Dialogs
 
         private bool CanConfirmMove(object? arg)
         {
+            if (MeasureUnit is null)
+            {
+                return false;
+            }
+            
+            if (MeasureUnit == MeasureUnit.Piece)
+            {
+                return int.TryParse(ProductCount, out _);
+            }
             return decimal.TryParse(ProductCount, out _);
         }
 

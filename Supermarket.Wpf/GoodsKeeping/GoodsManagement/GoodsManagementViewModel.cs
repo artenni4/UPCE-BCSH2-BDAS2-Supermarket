@@ -79,15 +79,18 @@ namespace Supermarket.Wpf.GoodsKeeping.GoodsManagement
 
         public async void DeleteProduct(object? obj)
         {
-            if (SelectedStoredProduct != null)
+            if (SelectedStoredProduct == null)
             {
-                var dialogResult = await _dialogService.ShowInputDialogAsync<decimal>(title: "POČET", inputLabel: "KG/KS");
-                if (dialogResult.IsOk(out var count))
-                {
-                    await _goodsKeepingService.DeleteProductStorageAsync(SelectedStoredProduct.StoragePlaceId, SelectedStoredProduct.ProductId, count);
-                    await ActivateAsync();
-                }
+                return;
             }
+            
+            var dialogResult = await _dialogService.ShowProductCountDialog(SelectedStoredProduct.MeasureUnit);
+            if (!dialogResult.IsOk(out var count))
+            {
+                return;
+            }
+            await _goodsKeepingService.DeleteProductStorageAsync(SelectedStoredProduct.StoragePlaceId, SelectedStoredProduct.ProductId, count);
+            await ActivateAsync();
         }
 
         public bool CanCallDialog(object? obj)
