@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Supermarket.Wpf.GoodsKeeping.GoodsManagement.Dialogs"
              mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance Type=local:MoveStoredProductViewModel, IsDesignTimeCreatable=False}"
              d:DesignHeight="1080" d:DesignWidth="1920">
     <Border BorderBrush="Transparent" Background="White" Width="350" Height="350">
         <Border.Effect>
@@ -27,7 +28,7 @@
                     </Grid.ColumnDefinitions>
 
                     <TextBox Grid.Column="0" Text="{Binding ProductCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                    <TextBlock Grid.Column="1" Text="KG/KS" Margin="10,0" VerticalAlignment="Center" />
+                    <TextBlock Grid.Column="1" Text="{Binding MeasureUnit.Abbreviation, FallbackValue=KS}" Margin="10,0" VerticalAlignment="Center" />
                 </Grid>
                 <ComboBox ItemsSource="{Binding StoragePlaces}" DisplayMemberPath="Code" SelectedItem="{Binding SelectedPlace}" />
 

@@ -213,17 +213,11 @@ namespace Supermarket.Wpf.CashBox
             {
                 return;
             }
-            
-            decimal count = 1;
-            if (selectedProduct.IsByWeight)
-            {
-                var dialogResult = await _dialogService
-                    .ShowInputDialogAsync<decimal>(title: "POČET", inputLabel: selectedProduct.MeasureUnit.Abbreviation);
 
-                if (! dialogResult.IsOk(out count))
-                {
-                    return;
-                }
+            var dialogResult = await _dialogService.ShowProductCountDialog(selectedProduct.MeasureUnit);
+            if (! dialogResult.IsOk(out var count))
+            {
+                return;
             }
             
             SelectedProducts.Add(SelectedProductModel.FromCashBoxProduct(selectedProduct, count));

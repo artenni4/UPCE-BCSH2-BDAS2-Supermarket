@@ -1,4 +1,5 @@
-﻿using Supermarket.Wpf.Common.Dialogs.Confirmation;
+﻿using Supermarket.Core.Domain.Products;
+using Supermarket.Wpf.Common.Dialogs.Confirmation;
 using Supermarket.Wpf.Common.Dialogs.DropDown;
 using Supermarket.Wpf.Common.Dialogs.Input;
 using Supermarket.Wpf.Dialog;
@@ -70,5 +71,27 @@ public static class DialogServiceExtensions
         }
 
         throw new NotSupportedException($"{result} dialog result is not supported");
+    }
+
+    public static async Task<DialogResult<decimal>> ShowProductCountDialog(this IDialogService dialogService, MeasureUnit measureUnit)
+    {
+        if (measureUnit != MeasureUnit.Piece)
+        {
+            return await dialogService.ShowInputDialogAsync<decimal>(title: "POČET", inputLabel: measureUnit.Abbreviation);
+        }
+        
+        var dialogResult = await dialogService.ShowInputDialogAsync<int>(title: "POČET", inputLabel: measureUnit.Abbreviation);
+        if (dialogResult.IsOk(out var productCountInt))
+        {
+            return DialogResult<decimal>.Ok(productCountInt);
+        }
+
+        if (dialogResult.IsCancelled())
+        {
+            return DialogResult<decimal>.Cancel();
+        }
+
+        throw new NotSupportedException($"{nameof(measureUnit)} is not supported");
+
     }
 }

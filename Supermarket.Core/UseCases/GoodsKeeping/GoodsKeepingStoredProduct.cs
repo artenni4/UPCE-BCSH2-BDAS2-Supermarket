@@ -1,4 +1,6 @@
-﻿namespace Supermarket.Core.UseCases.GoodsKeeping;
+﻿using Supermarket.Core.Domain.Products;
+
+namespace Supermarket.Core.UseCases.GoodsKeeping;
 
 public class GoodsKeepingStoredProduct
 {
@@ -7,5 +9,5 @@ public class GoodsKeepingStoredProduct
     public required decimal Count { get; init; }
     public required int StoragePlaceId { get; init; }
     public required string StoragePlaceCode { get; init; }
-
+    public required MeasureUnit MeasureUnit { get; init; }
 }

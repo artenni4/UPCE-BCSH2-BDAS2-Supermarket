@@ -4,6 +4,7 @@ using Supermarket.Wpf.GoodsKeeping.GoodsManagement.Dialogs;
 using Supermarket.Wpf.ViewModelResolvers;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using Supermarket.Core.Domain.Products;
 
 namespace Supermarket.Wpf.GoodsKeeping.GoodsManagement
 {
@@ -58,14 +59,21 @@ namespace Supermarket.Wpf.GoodsKeeping.GoodsManagement
 
         public async void MoveProduct(object? obj)
         {
-            if (SelectedStoredProduct != null)
+            if (SelectedStoredProduct == null)
             {
-                var result = await _dialogService.ShowAsync<MoveStoredProductViewModel, MoveProduct>();
-                if (result.IsOk(out var moveResult))
+                return;
+            }
+            
+            var result = await _dialogService.ShowAsync<MoveStoredProductViewModel, MoveProduct, MeasureUnit>(SelectedStoredProduct.MeasureUnit);
+            if (result.IsOk(out var moveResult))
+            {
+                await _goodsKeepingService.MoveProductAsync(SelectedStoredProduct.StoragePlaceId, new MovingProduct
                 {
-                    await _goodsKeepingService.MoveProductAsync(SelectedStoredProduct.StoragePlaceId, new MovingProduct { Count = moveResult.Count, NewStoragePlaceId = moveResult.StorageId, ProductId = SelectedStoredProduct.ProductId, SupermarketId = 1 });
-                    await ActivateAsync();
-                }
+                    Count = moveResult.Count,
+                    NewStoragePlaceId = moveResult.StorageId,
+                    ProductId = SelectedStoredProduct.ProductId,
+                });
+                await ActivateAsync();
             }
         }
 

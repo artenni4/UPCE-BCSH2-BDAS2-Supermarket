@@ -28,16 +28,7 @@ internal class DbProduct : IDbEntity<Product, int, DbProduct>
     {
         Id = zbozi_id,
         ProductCategoryId = druh_zbozi_id,
-        MeasureUnit = merna_jednotka_id switch
-        {
-            1 => MeasureUnit.Kilogram,
-            2 => MeasureUnit.Gram,
-            3 => MeasureUnit.Litre,
-            4 => MeasureUnit.Millilitre,
-            5 => MeasureUnit.Piece,
-            6 => MeasureUnit.Meter,
-            _ => throw new RepositoryInconsistencyException($"Measure unit [{merna_jednotka_id}] is not known")
-        },
+        MeasureUnit = DbMeasureUnit.GetMeasureUnit(merna_jednotka_id),
         ByWeight = naVahu != 0,
         Name = nazev,
         Price = cena,
@@ -51,7 +42,7 @@ internal class DbProduct : IDbEntity<Product, int, DbProduct>
     {
         zbozi_id = entity.Id,
         druh_zbozi_id = entity.ProductCategoryId,
-        merna_jednotka_id = GetMeasureUnitId(entity.MeasureUnit),
+        merna_jednotka_id = DbMeasureUnit.GetMeasureUnitId(entity.MeasureUnit),
         carovyKod = entity.Barcode,
         cena = entity.Price,
         hmotnost = entity.Weight,
@@ -66,38 +57,5 @@ internal class DbProduct : IDbEntity<Product, int, DbProduct>
 
     public DynamicParameters GetInsertingValues() => this.GetPropertiesExceptIdentity();
 
-    private static int GetMeasureUnitId(MeasureUnit measureUnit)
-    {
-        if (measureUnit == MeasureUnit.Kilogram)
-        {
-            return 1;
-        }
-            
-        if (measureUnit == MeasureUnit.Gram)
-        {
-            return 2;
-        }
-
-        if (measureUnit == MeasureUnit.Litre)
-        {
-            return 3;
-        }
-            
-        if (measureUnit == MeasureUnit.Millilitre)
-        {
-            return 4;
-        }
-            
-        if (measureUnit == MeasureUnit.Piece)
-        {
-            return 5;
-        }
-
-        if (measureUnit == MeasureUnit.Meter)
-        {
-            return 6;
-        }
-
-        throw new RepositoryInconsistencyException($"Mapping for measure unit [{measureUnit}] is not implemented");
-    }
+    
 }

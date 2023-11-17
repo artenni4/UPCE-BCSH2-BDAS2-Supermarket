@@ -4,6 +4,7 @@ using Supermarket.Wpf.ViewModelResolvers;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
+using Supermarket.Core.Domain.Products;
 
 namespace Supermarket.Wpf.GoodsKeeping.ArrivalRegistration
 {
@@ -132,23 +133,26 @@ namespace Supermarket.Wpf.GoodsKeeping.ArrivalRegistration
 
         public async void ProductClick(object? obj)
         {
-            if (obj is GoodsKeepingProduct selectedProduct)
+            if (obj is not GoodsKeepingProduct selectedProduct)
             {
-                var dialogResult = await _dialogService.ShowInputDialogAsync<decimal>(title: "POČET", inputLabel: selectedProduct.MeasureUnit);
-
-                if (dialogResult.IsOk(out var productCount))
-                {
-                    SelectedProducts.Add(new GoodsKeepingProduct
-                    {
-                        ProductId = selectedProduct.ProductId,
-                        Name = selectedProduct.Name,
-                        Weight = productCount,
-                        MeasureUnit = selectedProduct.MeasureUnit,
-                        IsByWeight = selectedProduct.IsByWeight,
-                        Price = selectedProduct.Price
-                    });
-                }
+                return;
             }
+
+            var dialogResult = await _dialogService.ShowProductCountDialog(selectedProduct.MeasureUnit);
+            if (!dialogResult.IsOk(out var productCount))
+            {
+                return;
+            }
+            
+            SelectedProducts.Add(new GoodsKeepingProduct
+            {
+                ProductId = selectedProduct.ProductId,
+                Name = selectedProduct.Name,
+                Weight = productCount,
+                MeasureUnit = selectedProduct.MeasureUnit,
+                IsByWeight = selectedProduct.IsByWeight,
+                Price = selectedProduct.Price
+            });
         }
 
         public async void AcceptClick(object? obj)

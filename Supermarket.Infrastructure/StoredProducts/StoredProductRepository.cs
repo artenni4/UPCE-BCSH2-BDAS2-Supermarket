@@ -3,6 +3,7 @@ using Oracle.ManagedDataAccess.Client;
 using Supermarket.Core.Domain.Common.Paging;
 using Supermarket.Core.Domain.StoredProducts;
 using Supermarket.Core.UseCases.GoodsKeeping;
+using Supermarket.Infrastructure.Products;
 
 namespace Supermarket.Infrastructure.StoredProducts;
 
@@ -17,7 +18,13 @@ internal class StoredProductRepository : CrudRepositoryBase<StoredProduct, Store
         var parameters = new DynamicParameters()
             .AddParameter("supermarket_id", supermarketId);
 
-        const string sql = @"SELECT mu.misto_ulozeni_id as misto_ulozeni_id, mu.kod as kod, uz.kusy as kusy, uz.zbozi_id as zbozi_id, z.nazev as nazev
+        const string sql = @"SELECT 
+                                mu.misto_ulozeni_id as misto_ulozeni_id,
+                                mu.kod as kod, 
+                                uz.kusy as kusy,
+                                uz.zbozi_id as zbozi_id,
+                                z.nazev as nazev,
+                                z.merna_jednotka_id
                             FROM MISTA_ULOZENI mu
                             JOIN ULOZENI_ZBOZI uz ON mu.misto_ulozeni_id = uz.misto_ulozeni_id
                             JOIN ZBOZI z ON z.zbozi_id = uz.zbozi_id
@@ -54,6 +61,7 @@ internal class StoredProductRepository : CrudRepositoryBase<StoredProduct, Store
         public required decimal kusy { get; set; }
         public required string kod { get; set; }
         public required int misto_ulozeni_id { get; set; }
+        public required int merna_jednotka_id { get; set; }
 
         public GoodsKeepingStoredProduct ToDomainEntity() => new GoodsKeepingStoredProduct
         {
@@ -61,7 +69,8 @@ internal class StoredProductRepository : CrudRepositoryBase<StoredProduct, Store
             ProductName = nazev,
             Count = kusy,
             StoragePlaceCode = kod,
-            StoragePlaceId = misto_ulozeni_id
+            StoragePlaceId = misto_ulozeni_id,
+            MeasureUnit = DbMeasureUnit.GetMeasureUnit(merna_jednotka_id)
         };
     }
 

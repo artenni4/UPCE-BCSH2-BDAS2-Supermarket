@@ -1,4 +1,5 @@
-﻿using Supermarket.Core.Domain.Common.Paging;
+﻿using Supermarket.Core.Domain.Common;
+using Supermarket.Core.Domain.Common.Paging;
 using Supermarket.Core.Domain.SellingProducts;
 using Supermarket.Core.Domain.StoragePlaces;
 using Supermarket.Core.Domain.StoredProducts;
@@ -63,8 +64,14 @@ namespace Supermarket.Core.UseCases.GoodsKeeping
 
         public async Task MoveProductAsync(int storagePlaceId, MovingProduct movingProduct)
         {
-            var id = new StoredProductId { StoragePlaceId = storagePlaceId, SupermarketId = movingProduct.SupermarketId, ProductId = movingProduct.ProductId };
-            var newId = new StoredProductId { StoragePlaceId = movingProduct.NewStoragePlaceId, SupermarketId = movingProduct.SupermarketId, ProductId = movingProduct.ProductId };
+            var storagePlace = await _storagePlaceRepository.GetByIdAsync(storagePlaceId);
+            if (storagePlace is null)
+            {
+                throw new ApplicationInconsistencyException($"Storage place {storagePlaceId} was not found");
+            }
+            
+            var id = new StoredProductId { StoragePlaceId = storagePlaceId, SupermarketId = storagePlace.SupermarketId, ProductId = movingProduct.ProductId };
+            var newId = new StoredProductId { StoragePlaceId = movingProduct.NewStoragePlaceId, SupermarketId = storagePlace.SupermarketId, ProductId = movingProduct.ProductId };
 
             var storedProduct = await _storedProductRepository.GetByIdAsync(id);
             var storedFoundProduct = await _storedProductRepository.GetByIdAsync(newId);
