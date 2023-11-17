@@ -274,7 +274,8 @@ namespace Supermarket.Core.UseCases.Admin
                     HireDate = editEmployee.HireDate,
                     RoleInfo = new Domain.Employees.Roles.Admin(),
                     PasswordHash = password,
-                    PasswordHashSalt = oldEmployee.PasswordHashSalt
+                    PasswordHashSalt = oldEmployee.PasswordHashSalt,
+                    PersonalNumber = oldEmployee.PersonalNumber
                 });
             }
             else
@@ -292,7 +293,8 @@ namespace Supermarket.Core.UseCases.Admin
                     HireDate = editEmployee.HireDate,
                     RoleInfo = new SupermarketEmployee(oldEmployee.SupermarketId.Value, editEmployee.ManagerId, editEmployee.Roles),
                     PasswordHash = password,
-                    PasswordHashSalt = oldEmployee.PasswordHashSalt
+                    PasswordHashSalt = oldEmployee.PasswordHashSalt,
+                    PersonalNumber = editEmployee.PersonalNumber
                 });
             }
             
@@ -332,7 +334,8 @@ namespace Supermarket.Core.UseCases.Admin
                     HireDate = employee.HireDate,
                     RoleInfo = new SupermarketEmployee(employee.SupermarketId.Value, employee.ManagerId, employee.Roles),
                     PasswordHash = passwordHash,
-                    PasswordHashSalt = salt
+                    PasswordHashSalt = salt,
+                    PersonalNumber = employee.PersonalNumber
                 });
             }
 

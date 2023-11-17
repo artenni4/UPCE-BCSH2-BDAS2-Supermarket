@@ -11,6 +11,7 @@ namespace Supermarket.Infrastructure.Employees
         public required int? supermarket_id { get; init; }
         public required string supermarket_nazev { get; init; }
         public required string role { get; init; }
+        public required string rodne_cislo { get; init; }
 
         public static string TableName => "ZAMESTNANCI";
         public static IReadOnlySet<string> IdentityColumns { get; } = new HashSet<string>
@@ -26,7 +27,8 @@ namespace Supermarket.Infrastructure.Employees
             HireDate = datum_nastupu,
             SupermarketId = supermarket_id,
             SupermarketName = supermarket_nazev,
-            Roles = role
+            Roles = role,
+            PersonalNumber = rodne_cislo
         };
 
     }

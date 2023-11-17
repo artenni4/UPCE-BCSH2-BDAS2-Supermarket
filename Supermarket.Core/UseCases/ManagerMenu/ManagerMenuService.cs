@@ -85,7 +85,8 @@ namespace Supermarket.Core.UseCases.ManagerMenu
                 HireDate = managerAddEmployee.HireDate,
                 RoleInfo = new SupermarketEmployee(managerAddEmployee.SupermarketId, managerAddEmployee.ManagerId, managerAddEmployee.Roles),
                 PasswordHash = passwordHash,
-                PasswordHashSalt = salt
+                PasswordHashSalt = salt,
+                PersonalNumber = null
             });
         }
 
@@ -141,7 +142,8 @@ namespace Supermarket.Core.UseCases.ManagerMenu
                 HireDate = managerEditEmployee.HireDate,
                 RoleInfo = new SupermarketEmployee(oldEmployee.SupermarketId.Value, managerEditEmployee.ManagerId, managerEditEmployee.Roles),
                 PasswordHash = password,
-                PasswordHashSalt = oldEmployee.PasswordHashSalt
+                PasswordHashSalt = oldEmployee.PasswordHashSalt,
+                PersonalNumber = oldEmployee.PersonalNumber
             });
         }
 

@@ -1,6 +1,5 @@
 ﻿using System.Data;
 using Oracle.ManagedDataAccess.Client;
-using System.Security.Cryptography;
 using Dapper;
 using Supermarket.Core.Domain.Auth;
 using Supermarket.Core.Domain.Employees;
@@ -379,6 +378,7 @@ namespace Supermarket.Infrastructure.Employees
                                     z.jmeno,
                                     z.prijmeni,
                                     z.datum_nastupu,
+                                    z.rodne_cislo,
                                     s.supermarket_id,
                                     s.adresa as supermarket_nazev,
                                     LISTAGG(r.nazev, ', ') WITHIN GROUP (ORDER BY r.nazev) AS role
@@ -391,7 +391,7 @@ namespace Supermarket.Infrastructure.Employees
                                 LEFT JOIN
                                     SUPERMARKETY s on s.supermarket_id = z.supermarket_id
                                 GROUP BY
-                                    z.zamestnanec_id, z.jmeno, z.prijmeni, z.datum_nastupu, s.supermarket_id, s.adresa";
+                                    z.zamestnanec_id, z.jmeno, z.prijmeni, z.datum_nastupu, s.supermarket_id, s.adresa, z.rodne_cislo";
 
             var orderByColumns = DbEmployee.IdentityColumns.Select(ic => $"z.{ic}");
 
@@ -412,6 +412,7 @@ namespace Supermarket.Infrastructure.Employees
                                     z.login,
                                     z.manazer_id,
                                     z.supermarket_id,
+                                    z.rodne_cislo,
                                     MAX(CASE WHEN r.role_id = 1 THEN 1 ELSE 0 END) AS isPokladnik,
                                     MAX(CASE WHEN r.role_id = 2 THEN 1 ELSE 0 END) AS isManazer,
                                     MAX(CASE WHEN r.role_id = 3 THEN 1 ELSE 0 END) AS isNakladac,
@@ -425,7 +426,7 @@ namespace Supermarket.Infrastructure.Employees
                                 WHERE
                                     z.zamestnanec_id = :zamestnanec_id
                                 GROUP BY
-                                    z.zamestnanec_id, z.jmeno, z.prijmeni, z.datum_nastupu, z.login, z.manazer_id, z.supermarket_id";
+                                    z.zamestnanec_id, z.jmeno, z.prijmeni, z.datum_nastupu, z.login, z.manazer_id, z.supermarket_id, z.rodne_cislo";
 
             var orderByColumns = DbEmployee.IdentityColumns
                 .Select(ic => $"z.{ic}");

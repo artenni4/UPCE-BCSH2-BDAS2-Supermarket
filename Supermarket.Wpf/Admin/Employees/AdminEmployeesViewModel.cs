@@ -1,14 +1,11 @@
 ﻿using Supermarket.Core.Domain.Common;
-using Supermarket.Core.Domain.Suppliers;
 using Supermarket.Core.UseCases.Admin;
-using Supermarket.Wpf.Admin.Suppliers.Dialog;
 using Supermarket.Wpf.Dialog;
 using Supermarket.Wpf.ViewModelResolvers;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using System.Windows;
 using Supermarket.Wpf.Admin.Employees.Dialog;
-using Supermarket.Core.Domain.Employees;
 
 namespace Supermarket.Wpf.Admin.Employees
 {

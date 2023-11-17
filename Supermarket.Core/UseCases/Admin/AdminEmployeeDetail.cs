@@ -15,5 +15,6 @@ namespace Supermarket.Core.UseCases.Admin
         public required bool IsGoodsKeeper { get; init; }
         public required bool IsManager { get; init; }
         public required bool IsAdmin { get; init;}
+        public required string PersonalNumber { get; init; }
     }
 }
