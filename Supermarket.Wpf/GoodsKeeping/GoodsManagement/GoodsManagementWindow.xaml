@@ -12,7 +12,7 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <DataGrid Grid.Column="0" ItemsSource="{Binding StoredProducts}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False" Height="Auto" SelectedItem="{Binding SelectedStoredProduct, Mode=TwoWay}">
+                <DataGrid Grid.Column="0" ItemsSource="{Binding StoredProducts}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False" Height="1000" SelectedItem="{Binding SelectedStoredProduct, Mode=TwoWay}">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Název" Binding="{Binding ProductName}" Width="500" IsReadOnly="True" FontSize="25" />
                         <DataGridTextColumn Header="Počet" Binding="{Binding Count}" Width="200" IsReadOnly="True" FontSize="25" />

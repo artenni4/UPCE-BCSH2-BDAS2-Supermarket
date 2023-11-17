@@ -49,7 +49,6 @@ internal class DbStoredProduct : IDbEntity<StoredProduct, StoredProductId, DbSto
         return new StoredProductId(storagePlaceId, supermarketId, productId);
     }
 
-    public DynamicParameters GetInsertingValues() =>
-        new DynamicParameters().AddParameter(nameof(zbozi_id), zbozi_id).AddParameter(nameof(supermarket_id), supermarket_id).AddParameter(nameof(misto_ulozeni_id), misto_ulozeni_id).AddParameter(nameof(kusy), kusy);
+    public DynamicParameters GetInsertingValues() => this.GetPropertiesExceptIdentity();
 
 }

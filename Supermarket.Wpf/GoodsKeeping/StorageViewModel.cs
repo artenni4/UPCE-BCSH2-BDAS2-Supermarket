@@ -1,13 +1,30 @@
 ﻿using Supermarket.Wpf.GoodsKeeping.ArrivalRegistration;
 using Supermarket.Wpf.GoodsKeeping.GoodsManagement;
+using Supermarket.Wpf.Manager.SupermarketProducts;
 using Supermarket.Wpf.ViewModelResolvers;
+using System.Collections.ObjectModel;
 
 namespace Supermarket.Wpf.GoodsKeeping
 {
     public class StorageViewModel : NotifyPropertyChangedBase, IViewModel, IAsyncInitialized
     {
         private readonly IViewModelResolver _viewModelResolver;
-        
+        public ObservableCollection<ITabViewModel> TabViewModels { get; } = new();
+
+        private ITabViewModel? _selectedTabViewModel;
+        public ITabViewModel? SelectedTabViewModel
+        {
+            get => _selectedTabViewModel;
+            set
+            {
+                if (_selectedTabViewModel != value)
+                {
+                    SetProperty(ref _selectedTabViewModel, value);
+                    _selectedTabViewModel?.ActivateIfNeeded();
+                }
+            }
+        }
+
         private ArrivalRegistrationViewModel? _arrivalViewModel;
         public ArrivalRegistrationViewModel? ArrivalViewModel
         {
@@ -29,8 +46,13 @@ namespace Supermarket.Wpf.GoodsKeeping
 
         public async Task InitializeAsync()
         {
-            ArrivalViewModel = await _viewModelResolver.Resolve<ArrivalRegistrationViewModel>();
-            GoodsManagementViewModel = await _viewModelResolver.Resolve<GoodsManagementViewModel>();
+            var arrivalViewModel = await _viewModelResolver.Resolve<ArrivalRegistrationViewModel>();
+            var goodsManagementViewModel = await _viewModelResolver.Resolve<GoodsManagementViewModel>();
+
+            TabViewModels.Add(arrivalViewModel);
+            TabViewModels.Add(goodsManagementViewModel);
+
+            SelectedTabViewModel = arrivalViewModel;
         }
     }
 }

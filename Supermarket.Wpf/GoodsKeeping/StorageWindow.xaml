@@ -9,13 +9,21 @@
              mc:Ignorable="d" 
              d:DesignHeight="1080" d:DesignWidth="1920">
     <Grid>
-        <TabControl>
-            <TabItem Header="Arrival registration">
-                <arrival:ArrivalRegistationWindow DataContext="{Binding ArrivalViewModel}" />
-            </TabItem>
-            <TabItem Header="Goods management">
-                <management:GoodsManagementWindow DataContext="{Binding GoodsManagementViewModel}" />
-            </TabItem>
+        <TabControl ItemsSource="{Binding TabViewModels}"
+                    SelectedItem="{Binding SelectedTabViewModel, Mode=TwoWay}">
+            <TabControl.Resources>
+                <DataTemplate DataType="{x:Type arrival:ArrivalRegistrationViewModel}">
+                    <arrival:ArrivalRegistationWindow/>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type management:GoodsManagementViewModel}">
+                    <management:GoodsManagementWindow/>
+                </DataTemplate>
+            </TabControl.Resources>
+            <TabControl.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding TabHeader}"></TextBlock>
+                </DataTemplate>
+            </TabControl.ItemTemplate>
         </TabControl>
     </Grid>
 </UserControl>

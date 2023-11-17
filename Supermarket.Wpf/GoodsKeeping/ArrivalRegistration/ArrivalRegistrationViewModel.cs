@@ -7,7 +7,7 @@ using System.Windows.Input;
 
 namespace Supermarket.Wpf.GoodsKeeping.ArrivalRegistration
 {
-    public class ArrivalRegistrationViewModel : NotifyPropertyChangedBase, IAsyncViewModel, IAsyncInitialized
+    public class ArrivalRegistrationViewModel : NotifyPropertyChangedBase, ITabViewModel, IAsyncViewModel, IAsyncInitialized
     {
         private readonly IGoodsKeepingService _goodsKeepingService;
         private readonly IDialogService _dialogService;
@@ -46,6 +46,8 @@ namespace Supermarket.Wpf.GoodsKeeping.ArrivalRegistration
             }
         }
 
+        public string TabHeader => "Příjezdy";
+
         public ArrivalRegistrationViewModel(IGoodsKeepingService goodsKeepingService, IDialogService dialogService)
         {
             _goodsKeepingService = goodsKeepingService;
@@ -55,7 +57,6 @@ namespace Supermarket.Wpf.GoodsKeeping.ArrivalRegistration
             Categories = new();
             SelectedProducts = new();
             StoragePlaces = new();
-
 
             NextPageCommand = new RelayCommand(NextPage, _ => products?.HasNext == true);
             PreviousPageCommand = new RelayCommand(PreviousPage, _ => products?.HasPrevious == true);

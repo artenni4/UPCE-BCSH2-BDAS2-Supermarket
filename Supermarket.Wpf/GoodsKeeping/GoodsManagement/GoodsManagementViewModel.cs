@@ -7,7 +7,7 @@ using System.Windows.Input;
 
 namespace Supermarket.Wpf.GoodsKeeping.GoodsManagement
 {
-    public class GoodsManagementViewModel : NotifyPropertyChangedBase, IAsyncViewModel, IAsyncInitialized
+    public class GoodsManagementViewModel : NotifyPropertyChangedBase, ITabViewModel, IAsyncViewModel, IAsyncActivated
     {
         private readonly IGoodsKeepingService _goodsKeepingService;
         private readonly IDialogService _dialogService;
@@ -35,6 +35,8 @@ namespace Supermarket.Wpf.GoodsKeeping.GoodsManagement
         public ICommand MoveCommand { get; }
         public ICommand DeleteCommand { get; }
 
+        public string TabHeader => "Goods management";
+
         public GoodsManagementViewModel(IGoodsKeepingService goodsKeepingService, IDialogService dialogService)
         {
             _goodsKeepingService = goodsKeepingService;
@@ -46,17 +48,12 @@ namespace Supermarket.Wpf.GoodsKeeping.GoodsManagement
             DeleteCommand = new RelayCommand(DeleteProduct, CanCallDialog);
         }
 
-        public async Task InitializeAsync()
+        public async Task ActivateAsync()
         {
             using var _ = new DelegateLoading(this);
 
-            StoredProducts.Clear();
-
-            storedProducts = await _goodsKeepingService.GetStoredProducts(1, new RecordsRange { PageSize = 25, PageNumber = 1 });
-            foreach(var item in storedProducts.Items)
-            {
-                StoredProducts.Add(item);
-            }
+            storedProducts = await _goodsKeepingService.GetStoredProducts(1, new RecordsRange { PageSize = 600, PageNumber = 1 });
+            StoredProducts.Update(storedProducts.Items);
         }
 
         public async void MoveProduct(object? obj)
@@ -67,7 +64,7 @@ namespace Supermarket.Wpf.GoodsKeeping.GoodsManagement
                 if (result.IsOk(out var moveResult))
                 {
                     await _goodsKeepingService.MoveProductAsync(SelectedStoredProduct.StoragePlaceId, new MovingProduct { Count = moveResult.Count, NewStoragePlaceId = moveResult.StorageId, ProductId = SelectedStoredProduct.ProductId, SupermarketId = 1 });
-                    await InitializeAsync();
+                    await ActivateAsync();
                 }
             }
         }
@@ -80,7 +77,7 @@ namespace Supermarket.Wpf.GoodsKeeping.GoodsManagement
                 if (dialogResult.IsOk(out var count))
                 {
                     await _goodsKeepingService.DeleteProductStorageAsync(SelectedStoredProduct.StoragePlaceId, SelectedStoredProduct.ProductId, count);
-                    await InitializeAsync();
+                    await ActivateAsync();
                 }
             }
         }
@@ -89,5 +86,7 @@ namespace Supermarket.Wpf.GoodsKeeping.GoodsManagement
         {
             return SelectedStoredProduct != null;
         }
+
+        
     }
 }
