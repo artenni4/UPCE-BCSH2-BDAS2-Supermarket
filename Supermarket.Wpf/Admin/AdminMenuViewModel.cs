@@ -1,4 +1,5 @@
-﻿using Supermarket.Wpf.Admin.ProductCategories;
+﻿using Supermarket.Wpf.Admin.Employees;
+using Supermarket.Wpf.Admin.ProductCategories;
 using Supermarket.Wpf.Admin.Products;
 using Supermarket.Wpf.Admin.Regions;
 using Supermarket.Wpf.Admin.Supermarkets;
@@ -39,12 +40,14 @@ namespace Supermarket.Wpf.Admin
             var supermarketsViewModel = await _viewModelResolver.Resolve<AdminSupermarketsViewModel>();
             var categoriesViewModel = await _viewModelResolver.Resolve<AdminMenuCategoriesViewModel>();
             var regionsViewModel = await _viewModelResolver.Resolve<AdminRegionsViewModel>();
+            var employeesViewModel = await _viewModelResolver.Resolve<AdminEmployeesViewModel>();
 
             TabViewModels.Add(suppliersViewModel);
             TabViewModels.Add(productsViewModel);
             TabViewModels.Add(supermarketsViewModel);
             TabViewModels.Add(categoriesViewModel);
             TabViewModels.Add(regionsViewModel);
+            TabViewModels.Add(employeesViewModel);
 
             SelectedTabViewModel = suppliersViewModel;
         }
