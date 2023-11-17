@@ -37,8 +37,12 @@ namespace Supermarket.Infrastructure.Employees
 
         public async Task<EmployeeRole?> GetRoleByLoginAsync(string login)
         {
+            if (login == ReservedAdmin.Login)
+            {
+                return (EmployeeRole?)ReservedAdmin;
+            }
             var parameters = new DynamicParameters()
-                .AddParameter("login", login);
+            .AddParameter("login", login);
 
             const string sql = @"SELECT
                                     z.zamestnanec_id,
@@ -380,7 +384,7 @@ namespace Supermarket.Infrastructure.Employees
             var selector = string.Join(", ", insertingValues.ParameterNames);
             var parameters = string.Join(", ", insertingValues.ParameterNames.Select(v => ":" + v));
             
-            var sql = $"INSERT INTO {DbEmployee.TableName} ({selector}) VALUES ({parameters}) RETURNING prodej_id INTO :prodej_id";
+            var sql = $"INSERT INTO {DbEmployee.TableName} ({selector}) VALUES ({parameters}) RETURNING zamestnanec_id INTO :zamestnanec_id";
 
             insertingValues.Add(nameof(DbEmployee.zamestnanec_id), dbType: DbType.Int32, direction: ParameterDirection.Output);
             await _oracleConnection.ExecuteAsync(sql, insertingValues);
