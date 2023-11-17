@@ -286,30 +286,10 @@ namespace Supermarket.Infrastructure.Employees
         {
             var parameters = new DynamicParameters().AddParameter("zamestnanec_id", employeeId);
 
-            const string sql = @"SELECT
-                                    z.zamestnanec_id,
-                                    z.jmeno,
-                                    z.prijmeni,
-                                    z.datum_nastupu,
-                                    z.login,
-                                    z.manazer_id,
-                                    z.supermarket_id,
-                                    MAX(CASE WHEN r.role_id = 1 THEN 1 ELSE 0 END) AS isPokladnik,
-                                    MAX(CASE WHEN r.role_id = 2 THEN 1 ELSE 0 END) AS isManazer,
-                                    MAX(CASE WHEN r.role_id = 3 THEN 1 ELSE 0 END) AS isNakladac
-                                FROM
-                                    ZAMESTNANCI z
-                                LEFT JOIN
-                                    ROLE_ZAMESTNANCU rz ON z.zamestnanec_id = rz.zamestnanec_id
-                                LEFT JOIN
-                                    ROLE r ON rz.role_id = r.role_id
-                                WHERE
-                                    z.zamestnanec_id = :zamestnanec_id
-                                GROUP BY
-                                    z.zamestnanec_id, z.jmeno, z.prijmeni, z.datum_nastupu, z.login, z.manazer_id, z.supermarket_id";
+            const string sql = @"SELECT * FROM ManagerEmployeeDetail WHERE zamestnanec_id = :zamestnanec_id";
 
             var orderByColumns = DbManagerMenuEmployeeDetail.IdentityColumns
-                .Select(ic => $"z.{ic}");
+                .Select(ic => $"ManagerEmployeeDetail.{ic}");
 
             var result = await _oracleConnection.QuerySingleOrDefaultAsync<DbManagerMenuEmployeeDetail>(sql, parameters);
 
