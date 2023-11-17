@@ -98,7 +98,6 @@ namespace Supermarket.Wpf.Main
                 }
                 else if (menuResult.IsLogOut())
                 {
-                    _dialogService.Hide();
                     await _navigationService.NavigateToAsync(ApplicationView.Login);
                     _loggedUserService.UnsetUser();
                 }

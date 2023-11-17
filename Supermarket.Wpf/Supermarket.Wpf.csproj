@@ -59,9 +59,4 @@
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Admin\Logs\" />
-  </ItemGroup>
-
 </Project>
