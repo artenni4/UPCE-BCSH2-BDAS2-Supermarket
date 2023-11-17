@@ -1,4 +1,5 @@
 ﻿using Supermarket.Core.UseCases.ManagerMenu;
+using Supermarket.Wpf.LoggedUser;
 using System.Collections.ObjectModel;
 
 namespace Supermarket.Wpf.Manager.SupermarketProducts
@@ -6,6 +7,7 @@ namespace Supermarket.Wpf.Manager.SupermarketProducts
     public class SupermarketProductsViewModel : NotifyPropertyChangedBase, ITabViewModel, IAsyncViewModel, IAsyncActivated
     {
         private readonly IManagerMenuService _managerMenuService;
+        private readonly ILoggedUserService _loggedUserService;
 
         public event EventHandler? LoadingStarted;
         public event EventHandler? LoadingFinished;
@@ -14,12 +16,13 @@ namespace Supermarket.Wpf.Manager.SupermarketProducts
         
         public string TabHeader => "Naše produkty";
 
-        public SupermarketProductsViewModel(IManagerMenuService managerMenuService)
+        public SupermarketProductsViewModel(IManagerMenuService managerMenuService, ILoggedUserService loggedUserService)
         {
             _managerMenuService = managerMenuService;
+            _loggedUserService = loggedUserService;
         }
 
-        public async Task ActivateAsync()
+    public async Task ActivateAsync()
         {
             using var _ = new DelegateLoading(this);
 

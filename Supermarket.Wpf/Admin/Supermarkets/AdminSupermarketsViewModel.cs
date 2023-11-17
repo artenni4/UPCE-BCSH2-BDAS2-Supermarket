@@ -90,7 +90,7 @@ namespace Supermarket.Wpf.Admin.Supermarkets
                 int selectedSupermarketId = SelectedSupermarket?.Id ?? 0;
                 try
                 {
-                    await _adminMenuService.DeleteSupplier(selectedSupermarketId);
+                    await _adminMenuService.DeleteSupermarket(selectedSupermarketId);
                 }
                 catch (OperationCannotBeExecutedException)
                 {

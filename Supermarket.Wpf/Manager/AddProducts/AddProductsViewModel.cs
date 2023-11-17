@@ -34,7 +34,7 @@ namespace Supermarket.Wpf.Manager.AddProducts
         {
             using var _ = new DelegateLoading(this);
 
-            var products = await _managerMenuService.GetManagerProductsToAdd(1, new RecordsRange { PageSize = 250, PageNumber = 1 });
+            var products = await _managerMenuService.GetManagerProductsToAdd(_loggedUserService.SupermarketId, new RecordsRange { PageSize = 250, PageNumber = 1 });
             Products.Update(products.Items);
         }
 
