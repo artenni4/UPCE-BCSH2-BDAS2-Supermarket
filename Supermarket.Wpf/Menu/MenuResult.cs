@@ -1,6 +1,6 @@
 ﻿using Supermarket.Wpf.Navigation;
 
-namespace Supermarket.Wpf.Main;
+namespace Supermarket.Wpf.Menu;
 
 public class MenuResult
 {

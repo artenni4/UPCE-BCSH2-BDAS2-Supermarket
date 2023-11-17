@@ -29,9 +29,9 @@ namespace Supermarket.Wpf.Admin.Employees.Dialog
             set => SetProperty(ref _selectedManager, value);
         }
 
-        public ObservableCollection<AdminSupermarket> Supermarkets { get; } = new ObservableCollection<AdminSupermarket>();
-        private AdminSupermarket? _selectedSupermarket;
-        public AdminSupermarket? SelectedSupermarket
+        public ObservableCollection<AdminMenuSupermarket> Supermarkets { get; } = new ObservableCollection<AdminMenuSupermarket>();
+        private AdminMenuSupermarket? _selectedSupermarket;
+        public AdminMenuSupermarket? SelectedSupermarket
         {
             get => _selectedSupermarket;
             set

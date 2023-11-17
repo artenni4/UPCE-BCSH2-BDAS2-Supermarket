@@ -14,11 +14,11 @@ namespace Supermarket.Wpf.Admin.Supermarkets
         private readonly IAdminMenuService _adminMenuService;
         private readonly IDialogService _dialogService;
 
-        private PagedResult<AdminSupermarket>? _supermarkets;
-        public ObservableCollection<AdminSupermarket> Supermarkets { get; set; }
+        private PagedResult<AdminMenuSupermarket>? _supermarkets;
+        public ObservableCollection<AdminMenuSupermarket> Supermarkets { get; set; }
 
-        private AdminSupermarket? _selectedSupermarket;
-        public AdminSupermarket? SelectedSupermarket
+        private AdminMenuSupermarket? _selectedSupermarket;
+        public AdminMenuSupermarket? SelectedSupermarket
         {
             get => _selectedSupermarket;
             set

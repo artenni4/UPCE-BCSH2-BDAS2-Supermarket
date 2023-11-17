@@ -30,7 +30,12 @@ public class LoggedUserServiceFake : ILoggedUserService
         throw new NotImplementedException();
     }
 
-    public void SetAdmin(LoggedAdmin loggedAdmin, int supermarketId)
+    public void SetAdmin(LoggedAdmin loggedAdmin)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void SetAdminSupermarket(int supermarketId)
     {
         throw new NotImplementedException();
     }

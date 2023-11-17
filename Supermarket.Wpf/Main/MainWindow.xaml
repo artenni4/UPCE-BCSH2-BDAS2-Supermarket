@@ -34,6 +34,7 @@
         xmlns:input="clr-namespace:Supermarket.Wpf.Common.Dialogs.Input"
         xmlns:dropdown="clr-namespace:Supermarket.Wpf.Common.Dialogs.DropDown"
         xmlns:cashboxDialogs="clr-namespace:Supermarket.Wpf.CashBox.Dialogs"
+        xmlns:menu="clr-namespace:Supermarket.Wpf.Menu"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type=local:MainViewModelFake, IsDesignTimeCreatable=True}"
         MinHeight="600" MinWidth="800"
@@ -65,8 +66,8 @@
             <adminMenu:AdminMenuWindow />
         </DataTemplate>
         <!-- DataTemplates for dialogs -->
-        <DataTemplate DataType="{x:Type local:MenuViewModel}">
-            <local:PopupMenu />
+        <DataTemplate DataType="{x:Type menu:MenuViewModel}">
+            <menu:PopupMenu />
         </DataTemplate>
         <DataTemplate DataType="{x:Type confirmation:ConfirmationDialogViewModel}">
             <confirmation:ConfirmationDialog />

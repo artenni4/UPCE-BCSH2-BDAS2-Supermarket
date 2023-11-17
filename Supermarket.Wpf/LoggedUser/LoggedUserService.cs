@@ -7,10 +7,11 @@ namespace Supermarket.Wpf.LoggedUser
     {
         private EmployeeData? _employeeData;
         private IReadOnlySet<SupermarketEmployeeRole>? _roles;
-
+        private bool _adminHasSupermarketId;
+        
         public bool IsUserSet { get; private set; }
 
-        bool ILoggedUserService.IsEmployee([NotNullWhen(true)] out EmployeeData? employeeData)
+        public bool IsEmployee([NotNullWhen(true)] out EmployeeData? employeeData)
         {
             CheckUserIsSet();
             if (_employeeData is not null)
@@ -38,6 +39,10 @@ namespace Supermarket.Wpf.LoggedUser
             get
             {
                 CheckUserIsSet();
+                if (IsAdmin(out _) && _adminHasSupermarketId == false)
+                {
+                    throw new InvalidOperationException($"Admin does not have {SupermarketId} set yet");
+                }
                 return _supermarketId;
             }
             private set => _supermarketId = value;
@@ -87,12 +92,22 @@ namespace Supermarket.Wpf.LoggedUser
             UserLoggedIn?.Invoke(this, EventArgs.Empty);
         }
 
-        public void SetAdmin(LoggedAdmin loggedAdmin, int supermarketId)
+        public void SetAdmin(LoggedAdmin loggedAdmin)
         {
             _employeeData = EmployeeData.FromLoggedEmployee(loggedAdmin);
-            SupermarketId = supermarketId;
             IsUserSet = true;
+            _adminHasSupermarketId = false;
             UserLoggedIn?.Invoke(this, EventArgs.Empty);
+        }
+
+        public void SetAdminSupermarket(int supermarketId)
+        {
+            if (IsAdmin(out _) == false)
+            {
+                throw new InvalidOperationException("Current user is not admin");
+            }
+            SupermarketId = supermarketId;
+            _adminHasSupermarketId = true;
         }
 
         public void SetCustomer(int supermarketId)

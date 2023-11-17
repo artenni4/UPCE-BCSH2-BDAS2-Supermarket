@@ -2,7 +2,7 @@
 
 namespace Supermarket.Core.UseCases.Admin
 {
-    public class AdminSupermarket : IEntity<int>
+    public class AdminMenuSupermarket : IEntity<int>
     {
         public required int Id { get; set; }
         public required string Address { get; set; }

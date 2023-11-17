@@ -14,7 +14,7 @@ namespace Supermarket.Core.UseCases.Admin
         Task AddSupplier(Supplier supplier);
         Task EditSupplier(Supplier supplier);
         Task DeleteSupplier(int supplierId);
-        Task<PagedResult<AdminSupermarket>> GetAllSupermarkets(RecordsRange recordsRange);
+        Task<PagedResult<AdminMenuSupermarket>> GetAllSupermarkets(RecordsRange recordsRange);
         Task<Domain.Supermarkets.Supermarket?> GetSupermarket(int supermarketId);
         Task AddSupermarket(Domain.Supermarkets.Supermarket supermarket);
         Task EditSupermarket(Domain.Supermarkets.Supermarket supermarket);
