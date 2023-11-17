@@ -160,7 +160,13 @@ namespace Supermarket.Wpf.CashBox
 
         private async void InviteAssistant(object? obj)
         {
-            var result = await _dialogService.ShowAsync<LoginAssistantDialogViewModel, LoggedSupermarketEmployee>();
+            if (!_cashBoxId.HasValue)
+            {
+                return;
+            }
+            
+            var parameters = new LoginAssistantParameters(_cashBoxId.Value);
+            var result = await _dialogService.ShowAsync<LoginAssistantDialogViewModel, LoggedSupermarketEmployee, LoginAssistantParameters>(parameters);
             if (result.IsOk(out var loggedEmployee))
             {
                 _loggedUserService.SetSupermarketEmployee(loggedEmployee);

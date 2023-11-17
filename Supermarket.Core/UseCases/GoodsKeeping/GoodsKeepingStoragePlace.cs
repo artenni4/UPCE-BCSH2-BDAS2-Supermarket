@@ -4,12 +4,12 @@ namespace Supermarket.Core.UseCases.GoodsKeeping;
 
 public class GoodsKeepingStoragePlace
 {
-    public required int StoragePlaceId { get; init; }
+    public required int Id { get; init; }
     public required string Code { get; init; }
 
     public static GoodsKeepingStoragePlace FromStoragePlace(StoragePlace stPlace) => new()
     {
-        StoragePlaceId = stPlace.Id,
+        Id = stPlace.Id,
         Code = stPlace.Code
     };
 }

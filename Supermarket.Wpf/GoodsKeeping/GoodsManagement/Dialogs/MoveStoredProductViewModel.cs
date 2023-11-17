@@ -25,8 +25,7 @@ namespace Supermarket.Wpf.GoodsKeeping.GoodsManagement.Dialogs
         private readonly IGoodsKeepingService _goodsKeepingService;
         private readonly ILoggedUserService _loggedUserService;
 
-        private PagedResult<SupplyWarehouse>? storagePlaces;
-        public ObservableCollection<SupplyWarehouse> StoragePlaces { get; set; }
+        public ObservableCollection<GoodsKeepingStoragePlace> StoragePlaces { get; set; }
 
         private string? _productCount;
         public string? ProductCount
@@ -42,8 +41,8 @@ namespace Supermarket.Wpf.GoodsKeeping.GoodsManagement.Dialogs
             set => SetProperty(ref _measureUnit, value);
         }
 
-        private SupplyWarehouse? _selectedPlace;
-        public SupplyWarehouse? SelectedPlace
+        private GoodsKeepingStoragePlace? _selectedPlace;
+        public GoodsKeepingStoragePlace? SelectedPlace
         {
             get => _selectedPlace;
             set
@@ -98,14 +97,8 @@ namespace Supermarket.Wpf.GoodsKeeping.GoodsManagement.Dialogs
         public async Task InitializeAsync()
         {
             using var _ = new DelegateLoading(this);
-            storagePlaces = await _goodsKeepingService.GetWarehousesAsync(_loggedUserService.SupermarketId, new RecordsRange { PageSize = 30, PageNumber = 1 });
-
-            for (int i = 0; i < storagePlaces.Items.Count; i++)
-            {
-                StoragePlaces.Add(storagePlaces.Items[i]);
-            }
+            var storagePlaces = await _goodsKeepingService.GetStoragePlacesAsync(_loggedUserService.SupermarketId, new RecordsRange { PageSize = 250, PageNumber = 1 });
+            StoragePlaces.Update(storagePlaces.Items);
         }
-
-
     }
 }

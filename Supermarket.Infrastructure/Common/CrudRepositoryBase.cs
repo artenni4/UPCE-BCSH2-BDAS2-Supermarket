@@ -73,16 +73,19 @@ namespace Supermarket.Infrastructure.Common
         public virtual async Task UpdateAsync(TEntity entity)
         {
             var dbEntity = TDbEntity.ToDbEntity(entity);
-            var identity = TDbEntity.GetEntityIdParameters(entity.Id);
+            var identityParameters = TDbEntity.GetEntityIdParameters(entity.Id);
             var insertingValues = dbEntity.GetInsertingValues();
-            insertingValues.AddDynamicParams(identity);
+            try
+            {
+                insertingValues.AddDynamicParams(identityParameters);
+            }
+            catch (ArgumentException) { } // duplicate parameters, typically means that inserting values contains primary key and can be ignored  
 
             var updater = string.Join(", ", insertingValues.ParameterNames.Select(p => $"{p} = :{p}"));
-            var identityCondition = GetIdentityCondition(identity);
+            var identityCondition = GetIdentityCondition(identityParameters);
 
             var sql = $"UPDATE {TDbEntity.TableName} SET {updater} WHERE {identityCondition}";
             
-            insertingValues.AddDynamicParams(identityCondition);
             await _oracleConnection.ExecuteAsync(sql, insertingValues);
         }
 
