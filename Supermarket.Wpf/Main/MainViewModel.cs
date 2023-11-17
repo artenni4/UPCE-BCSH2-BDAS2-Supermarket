@@ -14,7 +14,6 @@ namespace Supermarket.Wpf.Main
     {
         private readonly IDialogService _dialogService;
         private readonly INavigationService _navigationService;
-        private readonly ILoggedUserService _loggedUserService;
         private readonly IMenuService _menuService;
         
         public ICommand ToggleMenuOrCloseDialogCommand { get; }
@@ -24,11 +23,10 @@ namespace Supermarket.Wpf.Main
         public MainViewModel(INavigationService navigationService,
             IDialogService dialogService,
             IViewModelResolver viewModelResolver,
-            ILoggedUserService loggedUserService, IMenuService menuService)
+            IMenuService menuService)
         {
             _dialogService = dialogService;
             _navigationService = navigationService;
-            _loggedUserService = loggedUserService;
             _menuService = menuService;
 
             ToggleMenuOrCloseDialogCommand = new RelayCommand(ToggleMenuOrHideDialog);
@@ -38,25 +36,7 @@ namespace Supermarket.Wpf.Main
             dialogService.DialogShown += (_, args) => DialogStack.Add(args.ViewModel);
             dialogService.DialogHidden += (_, _) => DialogStack.RemoveAt(DialogStack.Count - 1);
 
-            loggedUserService.UserLoggedIn += UserLoggedIn;
-
             viewModelResolver.ViewModelResolved += ViewModelResolved;
-        }
-
-        private async void UserLoggedIn(object? sender, EventArgs e)
-        {
-            if (ContentViewModel is not LoginViewModel)
-            {
-                return;
-            }
-
-            if (_loggedUserService.IsCustomer)
-            {
-                await _navigationService.NavigateToAsync(ApplicationView.CashBox);
-                return;
-            }
-                
-            await _menuService.TryShowMenuAsync();
         }
 
         private void ViewModelResolved(object? sender, ResolvedViewModelEventArgs e)

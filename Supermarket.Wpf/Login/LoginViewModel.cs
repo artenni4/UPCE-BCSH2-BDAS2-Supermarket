@@ -5,6 +5,7 @@ using Supermarket.Core.UseCases.Login;
 using Supermarket.Core.Domain.Auth;
 using Supermarket.Core.Domain.Auth.LoggedEmployees;
 using Supermarket.Wpf.Dialog;
+using Supermarket.Wpf.Menu;
 using Supermarket.Wpf.Navigation;
 using Supermarket.Wpf.ViewModelResolvers;
 
@@ -15,6 +16,7 @@ namespace Supermarket.Wpf.Login
         private readonly ILoginService _loginService;
         private readonly ILoggedUserService _loggedUserService;
         private readonly IDialogService _dialogService;
+        private readonly IMenuService _menuService;
         private readonly INavigationService _navigationService;
 
         private PagedResult<CustomerSupermarket> _supermarkets = PagedResult<CustomerSupermarket>.Empty();
@@ -22,12 +24,13 @@ namespace Supermarket.Wpf.Login
         public ICommand EmployeeLoginCommand { get; }
         public ICommand CustomerLoginCommand { get; }
 
-        public LoginViewModel(ILoginService loginService, ILoggedUserService loggedUserService, IDialogService dialogService, INavigationService navigationService)
+        public LoginViewModel(ILoginService loginService, ILoggedUserService loggedUserService, IDialogService dialogService, INavigationService navigationService, IMenuService menuService)
         {
             _loginService = loginService;
             _loggedUserService = loggedUserService;
             _dialogService = dialogService;
             _navigationService = navigationService;
+            _menuService = menuService;
 
             EmployeeLoginCommand = new RelayCommand(EmployeeLoginAsync, CanEmployeeLogin);
             CustomerLoginCommand = new RelayCommand(CustomerLogin);
@@ -76,7 +79,10 @@ namespace Supermarket.Wpf.Login
             catch (InvalidCredentialsException)
             {
                 MessageBox.Show("Špatné příhlašovací údaje", "Chyba", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
             }
+            
+            await _menuService.TryShowMenuAsync();
         }
 
         private async void CustomerLogin(object? obj)

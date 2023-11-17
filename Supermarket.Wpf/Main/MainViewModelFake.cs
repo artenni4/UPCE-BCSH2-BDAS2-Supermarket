@@ -13,7 +13,6 @@ public class MainViewModelFake : MainViewModel
             new NavigationServiceFake(),
             new DialogServiceFake(),
             new ViewModelResolverFake(),
-            new LoggedUserServiceFake(),
             new MenuServiceFake())
     {
         DialogStack.Add(new MenuViewModel(new NavigationServiceFake(), new LoggedUserServiceFake(), new ApplicationMenuServiceFake(), new DialogServiceFake()));
