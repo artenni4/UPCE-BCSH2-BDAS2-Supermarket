@@ -33,8 +33,8 @@ namespace Supermarket.Wpf.Main
             
             navigationService.NavigationSucceeded += NavigationSucceeded;
             
-            dialogService.DialogShown += (_, args) => DialogStack.Add(args.ViewModel);
-            dialogService.DialogHidden += (_, _) => DialogStack.RemoveAt(DialogStack.Count - 1);
+            dialogService.DialogShown += (_, _) => DialogStack.Update(_dialogService.DisplayedDialogs.Reverse());
+            dialogService.DialogHidden += (_, _) => DialogStack.Update(_dialogService.DisplayedDialogs.Reverse());
 
             viewModelResolver.ViewModelResolved += ViewModelResolved;
         }

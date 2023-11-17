@@ -206,7 +206,7 @@ namespace Supermarket.Wpf.Admin.Employees.Dialog
 
         private bool CanConfirmEdit(object? arg)
         {
-            if (Employee == null || (_loggedUserService.IsAdmin(out _) == false && SelectedManager == null))
+            if (Employee == null)
             {
                 return false;
             }
