@@ -1,12 +1,13 @@
 ﻿using System.Collections.ObjectModel;
 using Supermarket.Core.UseCases.GoodsKeeping;
 using Supermarket.Wpf.Dialog;
+using Supermarket.Wpf.LoggedUser;
 
 namespace Supermarket.Wpf.GoodsKeeping.ArrivalRegistration;
 
 public class ArrivalRegistrationViewModelFake : ArrivalRegistrationViewModel
 {
-    public ArrivalRegistrationViewModelFake() : base(new GoodsKeepingServiceFake(), new DialogServiceFake())
+    public ArrivalRegistrationViewModelFake() : base(new GoodsKeepingServiceFake(), new DialogServiceFake(), new LoggedUserServiceFake())
     {
         //DisplayedProducts = new ObservableCollection<GoodsKeepingProduct>(new GoodsKeepingProduct[]
         //{

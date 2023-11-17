@@ -99,7 +99,6 @@ namespace Supermarket.Core.UseCases.GoodsKeeping
                     await _storedProductRepository.DeleteAsync(storedProduct.Id);
                 }
             }
-
         }
 
         public async Task SupplyProductsToWarehouseAsync(int warehouseId, IReadOnlyList<SuppliedProduct> suppliedProducts)

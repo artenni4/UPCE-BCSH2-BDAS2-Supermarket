@@ -22,11 +22,11 @@ namespace Supermarket.Wpf.Manager.SupermarketProducts
             _loggedUserService = loggedUserService;
         }
 
-    public async Task ActivateAsync()
+        public async Task ActivateAsync()
         {
             using var _ = new DelegateLoading(this);
 
-            var products = await _managerMenuService.GetSupermarketProducts(1, new RecordsRange { PageSize = 250, PageNumber = 1 });
+            var products = await _managerMenuService.GetSupermarketProducts(_loggedUserService.SupermarketId, new RecordsRange { PageSize = 250, PageNumber = 1 });
             Products.Update(products.Items);
         }
     }

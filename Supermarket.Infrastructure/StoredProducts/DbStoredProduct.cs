@@ -38,17 +38,11 @@ internal class DbStoredProduct : IDbEntity<StoredProduct, StoredProductId, DbSto
     };
 
     public static DynamicParameters GetEntityIdParameters(StoredProductId id) =>
-        new DynamicParameters().AddParameter(nameof(zbozi_id), id.ProductId).AddParameter(nameof(supermarket_id), id.SupermarketId).AddParameter(nameof(misto_ulozeni_id), id.StoragePlaceId);
+        new DynamicParameters()
+            .AddParameter(nameof(zbozi_id), id.ProductId)
+            .AddParameter(nameof(supermarket_id), id.SupermarketId)
+            .AddParameter(nameof(misto_ulozeni_id), id.StoragePlaceId);
 
-    public static StoredProductId ExtractIdentity(DynamicParameters dynamicParameters)
-    {
-        int storagePlaceId = dynamicParameters.Get<int>(nameof(misto_ulozeni_id));
-        int supermarketId = dynamicParameters.Get<int>(nameof(supermarket_id));
-        int productId = dynamicParameters.Get<int>(nameof(zbozi_id));
-
-        return new StoredProductId(storagePlaceId, supermarketId, productId);
-    }
-
-    public DynamicParameters GetInsertingValues() => this.GetPropertiesExceptIdentity();
+    public DynamicParameters GetInsertingValues() => this.GetAllProperties();
 
 }

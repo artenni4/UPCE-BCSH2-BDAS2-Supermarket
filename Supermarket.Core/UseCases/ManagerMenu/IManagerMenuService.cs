@@ -31,7 +31,7 @@ namespace Supermarket.Core.UseCases.ManagerMenu
         /// <param name="id">ID of storage place</param>
         /// <exception cref="OperationCannotBeExecutedException">storage cannot be deleted</exception>
         Task DeleteStorage(int id);
-        Task<PagedResult<ManagerMenuSale>> GetSupermarketSales(int supermarket, DateTime dateFrom, DateTime dateTo, RecordsRange recordsRange);
+        Task<PagedResult<ManagerMenuSale>> GetSupermarketSales(int supermarketId, DateTime dateFrom, DateTime dateTo, RecordsRange recordsRange);
         Task<PagedResult<ManagerMenuCashbox>> GetSupermarketCashboxes(int supermarketId, RecordsRange recordsRange);
         Task<Cashbox?> GetCashboxToEdit(int cashboxId);
         Task DeleteCashbox(int cashboxId);

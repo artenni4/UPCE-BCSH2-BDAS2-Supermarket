@@ -5,12 +5,14 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
 using Supermarket.Core.Domain.Products;
+using Supermarket.Wpf.LoggedUser;
 
 namespace Supermarket.Wpf.GoodsKeeping.ArrivalRegistration
 {
     public class ArrivalRegistrationViewModel : NotifyPropertyChangedBase, ITabViewModel, IAsyncViewModel, IAsyncInitialized
     {
         private readonly IGoodsKeepingService _goodsKeepingService;
+        private readonly ILoggedUserService _loggedUserService;
         private readonly IDialogService _dialogService;
 
         public event EventHandler? LoadingStarted;
@@ -49,10 +51,11 @@ namespace Supermarket.Wpf.GoodsKeeping.ArrivalRegistration
 
         public string TabHeader => "Příjezdy";
 
-        public ArrivalRegistrationViewModel(IGoodsKeepingService goodsKeepingService, IDialogService dialogService)
+        public ArrivalRegistrationViewModel(IGoodsKeepingService goodsKeepingService, IDialogService dialogService, ILoggedUserService loggedUserService)
         {
             _goodsKeepingService = goodsKeepingService;
             _dialogService = dialogService;
+            _loggedUserService = loggedUserService;
 
             DisplayedProducts = new();
             Categories = new();
@@ -72,9 +75,9 @@ namespace Supermarket.Wpf.GoodsKeeping.ArrivalRegistration
         {
             using var _ = new DelegateLoading(this);
 
-            categories = await _goodsKeepingService.GetCategoriesAsync(1, new RecordsRange { PageSize = 10, PageNumber = 1 });
+            categories = await _goodsKeepingService.GetCategoriesAsync(_loggedUserService.SupermarketId, new RecordsRange { PageSize = 10, PageNumber = 1 });
             categoryId = categories.Items.FirstOrDefault()?.CategoryId;
-            storagePlaces = await _goodsKeepingService.GetWarehousesAsync(1, new RecordsRange { PageSize = 30, PageNumber = 1 });
+            storagePlaces = await _goodsKeepingService.GetWarehousesAsync(_loggedUserService.SupermarketId, new RecordsRange { PageSize = 30, PageNumber = 1 });
             for (int i = 0; i < categories.Items.Count; i++)
             {
                 Categories.Add(categories.Items[i]);
@@ -111,7 +114,7 @@ namespace Supermarket.Wpf.GoodsKeeping.ArrivalRegistration
                 return;
             }
 
-            products = await _goodsKeepingService.GetProductsAsync(1, new RecordsRange { PageSize = 10, PageNumber = currentPage }, categoryId.Value, null);
+            products = await _goodsKeepingService.GetProductsAsync(_loggedUserService.SupermarketId, new RecordsRange { PageSize = 10, PageNumber = currentPage }, categoryId.Value, null);
             DisplayedProducts.Clear();
 
             for (int i = 0; i < products.Items.Count; i++)

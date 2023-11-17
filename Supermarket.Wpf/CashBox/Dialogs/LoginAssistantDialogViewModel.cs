@@ -7,10 +7,11 @@ using Supermarket.Wpf.Dialog;
 
 namespace Supermarket.Wpf.CashBox.Dialogs;
 
-public class LoginAssistantDialogViewModel : NotifyPropertyChangedBase, IDialogViewModel<LoggedSupermarketEmployee>, IAsyncViewModel
+public class LoginAssistantDialogViewModel : NotifyPropertyChangedBase, IDialogViewModel<LoggedSupermarketEmployee, LoginAssistantParameters>, IAsyncViewModel
 {
     private readonly ICashBoxService _cashBoxService;
 
+    private int? _cashBoxId;
     public ICommand AssistantLoginCommand { get; }
     public ICommand CancelCommand { get; }
     
@@ -18,15 +19,20 @@ public class LoginAssistantDialogViewModel : NotifyPropertyChangedBase, IDialogV
     {
         _cashBoxService = cashBoxService;
 
-        AssistantLoginCommand = new RelayCommand(AssistantLogin);
+        AssistantLoginCommand = new RelayCommand(AssistantLogin, CanLogin);
         CancelCommand = new RelayCommand(Cancel);
+    }
+
+    private bool CanLogin(object? arg)
+    {
+        return !string.IsNullOrEmpty(Login) && !string.IsNullOrEmpty(Password);
     }
 
     private void Cancel(object? obj) => ResultReceived?.Invoke(this, DialogResult<LoggedSupermarketEmployee>.Cancel());
 
     private async void AssistantLogin(object? obj)
     {
-        if (string.IsNullOrEmpty(Login) || string.IsNullOrEmpty(Password))
+        if (string.IsNullOrEmpty(Login) || string.IsNullOrEmpty(Password) || !_cashBoxId.HasValue)
         {
             return;
         }
@@ -34,7 +40,7 @@ public class LoginAssistantDialogViewModel : NotifyPropertyChangedBase, IDialogV
         try
         {
             using var _ = new DelegateLoading(this);
-            var loggedEmployee = await _cashBoxService.AssistantLoginAsync(new LoginData { Login = Login, Password = Password }, 1);
+            var loggedEmployee = await _cashBoxService.AssistantLoginAsync(new LoginData { Login = Login, Password = Password }, _cashBoxId.Value);
             ResultReceived?.Invoke(this, DialogResult<LoggedSupermarketEmployee>.Ok(loggedEmployee));
         }
         catch (InvalidCredentialsException)
@@ -63,6 +69,11 @@ public class LoginAssistantDialogViewModel : NotifyPropertyChangedBase, IDialogV
 
     public event EventHandler? LoadingStarted;
     public event EventHandler? LoadingFinished;
+
+    public void SetParameters(LoginAssistantParameters parameters)
+    {
+        _cashBoxId = parameters.CashBoxId;
+    }
 
     public event EventHandler<DialogResult<LoggedSupermarketEmployee>>? ResultReceived;
 }

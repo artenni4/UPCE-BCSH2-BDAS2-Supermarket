@@ -5,15 +5,16 @@ using Supermarket.Wpf.ViewModelResolvers;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using Supermarket.Core.Domain.Products;
+using Supermarket.Wpf.LoggedUser;
 
 namespace Supermarket.Wpf.GoodsKeeping.GoodsManagement
 {
     public class GoodsManagementViewModel : NotifyPropertyChangedBase, ITabViewModel, IAsyncViewModel, IAsyncActivated
     {
+        private readonly ILoggedUserService _loggedUserService;
         private readonly IGoodsKeepingService _goodsKeepingService;
         private readonly IDialogService _dialogService;
 
-        private PagedResult<GoodsKeepingStoredProduct>? storedProducts;
         public ObservableCollection<GoodsKeepingStoredProduct> StoredProducts { get; set; }
 
         private GoodsKeepingStoredProduct? _selectedStoredProduct;
@@ -38,10 +39,11 @@ namespace Supermarket.Wpf.GoodsKeeping.GoodsManagement
 
         public string TabHeader => "Goods management";
 
-        public GoodsManagementViewModel(IGoodsKeepingService goodsKeepingService, IDialogService dialogService)
+        public GoodsManagementViewModel(IGoodsKeepingService goodsKeepingService, IDialogService dialogService, ILoggedUserService loggedUserService)
         {
             _goodsKeepingService = goodsKeepingService;
             _dialogService = dialogService;
+            _loggedUserService = loggedUserService;
 
             StoredProducts = new();
 
@@ -53,7 +55,8 @@ namespace Supermarket.Wpf.GoodsKeeping.GoodsManagement
         {
             using var _ = new DelegateLoading(this);
 
-            storedProducts = await _goodsKeepingService.GetStoredProducts(1, new RecordsRange { PageSize = 600, PageNumber = 1 });
+            var storedProducts = await _goodsKeepingService
+                .GetStoredProducts(_loggedUserService.SupermarketId, new RecordsRange { PageSize = 600, PageNumber = 1 });
             StoredProducts.Update(storedProducts.Items);
         }
 
