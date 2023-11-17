@@ -56,7 +56,15 @@ namespace Supermarket.Wpf.LoggedUser
         /// <summary>
         /// Remembers logged in admin
         /// </summary>
-        void SetAdmin(LoggedAdmin loggedAdmin, int supermarketId);
+        void SetAdmin(LoggedAdmin loggedAdmin);
+        
+        /// <summary>
+        /// Sets supermarket id for admin.
+        /// Throws exception if current user is not admin
+        /// </summary>
+        /// <param name="supermarketId">id of supermarket</param>
+        /// <exception cref="InvalidOperationException">current user is not admin</exception>
+        void SetAdminSupermarket(int supermarketId);
         
         /// <summary>
         /// Remembers logged in customer

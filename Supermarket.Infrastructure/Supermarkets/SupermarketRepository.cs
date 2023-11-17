@@ -27,7 +27,7 @@ internal class SupermarketRepository : CrudRepositoryBase<Core.Domain.Supermarke
         return result.Select(dbStoragePlace => dbStoragePlace.ToDomainEntity());
     }
 
-    public async Task<PagedResult<AdminSupermarket>> GetAdminSupermarkets(RecordsRange recordsRange)
+    public async Task<PagedResult<AdminMenuSupermarket>> GetAdminSupermarkets(RecordsRange recordsRange)
     {
         var parameters = new DynamicParameters();
         const string sql = @"SELECT

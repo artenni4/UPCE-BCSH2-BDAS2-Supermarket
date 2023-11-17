@@ -14,7 +14,7 @@ using Cashbox = Supermarket.Core.Domain.CashBoxes.CashBox;
 
 namespace Supermarket.Core.UseCases.ManagerMenu
 {
-    public class ManagerMenuService : IManagerMenuService
+    internal class ManagerMenuService : IManagerMenuService
     {
         private readonly ISellingProductRepository _sellingProductRepository;
         private readonly IProductRepository _productRepository;

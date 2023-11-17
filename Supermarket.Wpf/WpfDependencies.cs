@@ -36,6 +36,7 @@ using Supermarket.Wpf.Manager.SupermarketProducts;
 using Supermarket.Wpf.Manager.SupermarketSales;
 using Supermarket.Wpf.Manager.SupermarketStorages;
 using Supermarket.Wpf.Manager.SupermarketStorages.Dialog;
+using Supermarket.Wpf.Menu;
 using Supermarket.Wpf.Navigation;
 using Supermarket.Wpf.ViewModelResolvers;
 
@@ -47,10 +48,9 @@ public static class WpfDependencies
     {
         serviceCollection.AddSingleton<INavigationService, NavigationService>();
         serviceCollection.AddSingleton<IDialogService, DialogService>();
+        serviceCollection.AddSingleton<IMenuService, MenuService>();
         serviceCollection.AddSingleton<IViewModelResolver, ViewModelResolver>();
         serviceCollection.AddSingleton<ILoggedUserService, LoggedUserService>();
-        serviceCollection.AddSingleton<IManagerMenuService, ManagerMenuService>();
-        serviceCollection.AddSingleton<IAdminMenuService, AdminMenuService>();
         serviceCollection.AddSingleton<MainViewModel>();
 
         serviceCollection.AddTransient<MenuViewModel>();

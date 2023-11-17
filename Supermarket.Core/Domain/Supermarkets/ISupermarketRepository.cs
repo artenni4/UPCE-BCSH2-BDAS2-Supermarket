@@ -8,5 +8,5 @@ namespace Supermarket.Core.Domain.Supermarkets;
 public interface ISupermarketRepository : ICrudRepository<Supermarket, int>
 {
     Task<PagedResult<StoragePlace>> GetSupermarketWarehouses(int supermarketId, RecordsRange recordsRange);
-    Task<PagedResult<AdminSupermarket>> GetAdminSupermarkets(RecordsRange recordsRange);
+    Task<PagedResult<AdminMenuSupermarket>> GetAdminSupermarkets(RecordsRange recordsRange);
 }

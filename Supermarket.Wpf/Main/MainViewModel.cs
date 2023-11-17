@@ -1,9 +1,11 @@
 ﻿using System.Collections.ObjectModel;
 using Supermarket.Wpf.Navigation;
 using System.Windows.Input;
+using Supermarket.Core.UseCases.Login;
 using Supermarket.Wpf.Dialog;
 using Supermarket.Wpf.LoggedUser;
 using Supermarket.Wpf.Login;
+using Supermarket.Wpf.Menu;
 using Supermarket.Wpf.ViewModelResolvers;
 
 namespace Supermarket.Wpf.Main
@@ -13,6 +15,7 @@ namespace Supermarket.Wpf.Main
         private readonly IDialogService _dialogService;
         private readonly INavigationService _navigationService;
         private readonly ILoggedUserService _loggedUserService;
+        private readonly IMenuService _menuService;
         
         public ICommand ToggleMenuOrCloseDialogCommand { get; }
 
@@ -21,12 +24,13 @@ namespace Supermarket.Wpf.Main
         public MainViewModel(INavigationService navigationService,
             IDialogService dialogService,
             IViewModelResolver viewModelResolver,
-            ILoggedUserService loggedUserService)
+            ILoggedUserService loggedUserService, IMenuService menuService)
         {
             _dialogService = dialogService;
             _navigationService = navigationService;
             _loggedUserService = loggedUserService;
-            
+            _menuService = menuService;
+
             ToggleMenuOrCloseDialogCommand = new RelayCommand(ToggleMenuOrHideDialog);
             
             navigationService.NavigationSucceeded += NavigationSucceeded;
@@ -52,7 +56,7 @@ namespace Supermarket.Wpf.Main
                 return;
             }
                 
-            await TryShowMenu();
+            await _menuService.TryShowMenuAsync();
         }
 
         private void ViewModelResolved(object? sender, ResolvedViewModelEventArgs e)
@@ -79,29 +83,7 @@ namespace Supermarket.Wpf.Main
                 return;
             }
             
-            await TryShowMenu();
-        }
-
-        private async Task TryShowMenu()
-        {
-            if (!_loggedUserService.IsUserSet || _loggedUserService.IsCustomer)
-            {
-                return;
-            }
-            
-            var result = await _dialogService.ShowAsync<MenuViewModel, MenuResult>();
-            if (result.IsOk(out var menuResult))
-            {
-                if (menuResult.IsNavigate(out var applicationView))
-                {
-                    await _navigationService.NavigateToAsync(applicationView);
-                }
-                else if (menuResult.IsLogOut())
-                {
-                    await _navigationService.NavigateToAsync(ApplicationView.Login);
-                    _loggedUserService.UnsetUser();
-                }
-            }
+            await _menuService.TryShowMenuAsync();
         }
         
         private async void NavigationSucceeded(object? sender, NavigationEventArgs e)

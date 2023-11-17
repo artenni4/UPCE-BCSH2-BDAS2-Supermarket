@@ -1,5 +1,6 @@
 ﻿using Supermarket.Wpf.Dialog;
 using Supermarket.Wpf.LoggedUser;
+using Supermarket.Wpf.Menu;
 using Supermarket.Wpf.Navigation;
 using Supermarket.Wpf.ViewModelResolvers;
 
@@ -12,8 +13,9 @@ public class MainViewModelFake : MainViewModel
             new NavigationServiceFake(),
             new DialogServiceFake(),
             new ViewModelResolverFake(),
-            new LoggedUserServiceFake())
+            new LoggedUserServiceFake(),
+            new MenuServiceFake())
     {
-        DialogStack.Add(new MenuViewModel(new NavigationServiceFake(), new LoggedUserServiceFake()));
+        DialogStack.Add(new MenuViewModel(new NavigationServiceFake(), new LoggedUserServiceFake(), new ApplicationMenuServiceFake(), new DialogServiceFake()));
     }
 }

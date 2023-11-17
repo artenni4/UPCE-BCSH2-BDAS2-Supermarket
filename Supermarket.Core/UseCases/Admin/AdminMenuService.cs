@@ -8,7 +8,7 @@ using Supermarket.Core.Domain.Suppliers;
 
 namespace Supermarket.Core.UseCases.Admin
 {
-    public class AdminMenuService : IAdminMenuService
+    internal class AdminMenuService : IAdminMenuService
     {
         private readonly ISupplierRepository _supplierRepository;
         private readonly ISupermarketRepository _supermarketRepository;
@@ -61,7 +61,7 @@ namespace Supermarket.Core.UseCases.Admin
 
 
         #region Supermarkets
-        public async Task<PagedResult<AdminSupermarket>> GetAllSupermarkets(RecordsRange recordsRange)
+        public async Task<PagedResult<AdminMenuSupermarket>> GetAllSupermarkets(RecordsRange recordsRange)
         {
             return await _supermarketRepository.GetAdminSupermarkets(recordsRange);
         }

@@ -3,7 +3,7 @@ using Supermarket.Core.UseCases.Admin;
 
 namespace Supermarket.Infrastructure.Supermarkets
 {
-    internal class DbAdminSupermarket : IDbEntity<AdminSupermarket, int, DbAdminSupermarket>
+    internal class DbAdminSupermarket : IDbEntity<AdminMenuSupermarket, int, DbAdminSupermarket>
     {
         public required int supermarket_id { get; init; }
         public required string adresa { get; init; }
@@ -16,7 +16,7 @@ namespace Supermarket.Infrastructure.Supermarkets
             nameof(supermarket_id)
         };
 
-        public AdminSupermarket ToDomainEntity() => new()
+        public AdminMenuSupermarket ToDomainEntity() => new()
         {
             Id = supermarket_id,
             Address = adresa,
@@ -24,7 +24,7 @@ namespace Supermarket.Infrastructure.Supermarkets
             RegionName = region_nazev
         };
 
-        public static DbAdminSupermarket ToDbEntity(AdminSupermarket entity) => new()
+        public static DbAdminSupermarket ToDbEntity(AdminMenuSupermarket entity) => new()
         {
             supermarket_id = entity.Id,
             adresa = entity.Address,

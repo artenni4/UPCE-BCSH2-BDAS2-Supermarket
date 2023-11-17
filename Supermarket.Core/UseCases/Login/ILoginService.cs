@@ -19,6 +19,6 @@ namespace Supermarket.Core.UseCases.Login
         /// <summary>
         /// Gets list of all supermarkets for admin to choose from
         /// </summary>
-        Task<PagedResult<AdminLoginSupermarket>> GetSupermarketsAsync(RecordsRange recordsRange);
+        Task<PagedResult<CustomerSupermarket>> GetSupermarketsAsync(RecordsRange recordsRange);
     }
 }

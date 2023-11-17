@@ -22,10 +22,10 @@ namespace Supermarket.Core.UseCases.Login
             return await _authDomainService.AuthEmployeeAsync(loginData);
         }
 
-        public async Task<PagedResult<AdminLoginSupermarket>> GetSupermarketsAsync(RecordsRange recordsRange)
+        public async Task<PagedResult<CustomerSupermarket>> GetSupermarketsAsync(RecordsRange recordsRange)
         {
             var supermarkets = await _supermarketRepository.GetPagedAsync(recordsRange);
-            return supermarkets.Select(s => new AdminLoginSupermarket
+            return supermarkets.Select(s => new CustomerSupermarket
             {
                 Id = s.Id,
                 Address = s.Address

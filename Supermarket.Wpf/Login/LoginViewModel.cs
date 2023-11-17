@@ -5,6 +5,7 @@ using Supermarket.Core.UseCases.Login;
 using Supermarket.Core.Domain.Auth;
 using Supermarket.Core.Domain.Auth.LoggedEmployees;
 using Supermarket.Wpf.Dialog;
+using Supermarket.Wpf.Navigation;
 using Supermarket.Wpf.ViewModelResolvers;
 
 namespace Supermarket.Wpf.Login
@@ -14,17 +15,19 @@ namespace Supermarket.Wpf.Login
         private readonly ILoginService _loginService;
         private readonly ILoggedUserService _loggedUserService;
         private readonly IDialogService _dialogService;
+        private readonly INavigationService _navigationService;
 
-        private PagedResult<AdminLoginSupermarket> _supermarkets = PagedResult<AdminLoginSupermarket>.Empty();
+        private PagedResult<CustomerSupermarket> _supermarkets = PagedResult<CustomerSupermarket>.Empty();
         
         public ICommand EmployeeLoginCommand { get; }
         public ICommand CustomerLoginCommand { get; }
 
-        public LoginViewModel(ILoginService loginService, ILoggedUserService loggedUserService, IDialogService dialogService)
+        public LoginViewModel(ILoginService loginService, ILoggedUserService loggedUserService, IDialogService dialogService, INavigationService navigationService)
         {
             _loginService = loginService;
             _loggedUserService = loggedUserService;
             _dialogService = dialogService;
+            _navigationService = navigationService;
 
             EmployeeLoginCommand = new RelayCommand(EmployeeLoginAsync, CanEmployeeLogin);
             CustomerLoginCommand = new RelayCommand(CustomerLogin);
@@ -67,13 +70,7 @@ namespace Supermarket.Wpf.Login
                 }
                 else if (loggedEmployee is LoggedAdmin loggedAdmin)
                 {
-                    var dialogResult = await _dialogService.ShowDropDownDialogAsync("Zvolte supermarket",
-                        nameof(AdminLoginSupermarket.Address), _supermarkets.Items);
-
-                    if (dialogResult.IsOk(out var supermarket))
-                    {
-                        _loggedUserService.SetAdmin(loggedAdmin, supermarket.Id);
-                    }
+                    _loggedUserService.SetAdmin(loggedAdmin);
                 }
             }
             catch (InvalidCredentialsException)
@@ -85,12 +82,15 @@ namespace Supermarket.Wpf.Login
         private async void CustomerLogin(object? obj)
         {
             var dialogResult = await _dialogService.ShowDropDownDialogAsync("Zvolte supermarket",
-                nameof(AdminLoginSupermarket.Address), _supermarkets.Items);
+                nameof(CustomerSupermarket.Address), _supermarkets.Items);
 
-            if (dialogResult.IsOk(out var supermarket))
+            if (!dialogResult.IsOk(out var supermarket))
             {
-                _loggedUserService.SetCustomer(supermarket.Id);
+                return;
             }
+            
+            _loggedUserService.SetCustomer(supermarket.Id);
+            await _navigationService.NavigateToAsync(ApplicationView.CashBox);
         }
 
         private bool CanEmployeeLogin(object? arg) => !string.IsNullOrWhiteSpace(EmployeeLoginData.Login) && !string.IsNullOrWhiteSpace(EmployeeLoginData.Password);

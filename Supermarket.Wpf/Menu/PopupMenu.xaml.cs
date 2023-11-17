@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace Supermarket.Wpf.Main
+namespace Supermarket.Wpf.Menu
 {
     /// <summary>
     /// Interaction logic for PopupMenu.xaml
