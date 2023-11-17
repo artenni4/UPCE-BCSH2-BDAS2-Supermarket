@@ -242,3 +242,4 @@ namespace Supermarket.Core.UseCases.ManagerMenu
         #endregion
     }
 }
+

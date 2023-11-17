@@ -36,8 +36,7 @@ internal class DbSellingProduct : IDbEntity<SellingProduct, SellingProductId, Db
             .AddParameter(nameof(supermarket_id), id.SupermarketId)
             .AddParameter(nameof(zbozi_id), id.ProductId);
 
-    public DynamicParameters GetInsertingValues() =>
-        new DynamicParameters().AddParameter(nameof(aktivni), aktivni);
+    public DynamicParameters GetInsertingValues() => this.GetPropertiesExceptIdentity();
 }
 
 
