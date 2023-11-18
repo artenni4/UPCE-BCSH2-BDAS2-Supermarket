@@ -49,10 +49,10 @@ namespace Supermarket.Infrastructure.Employees
                                     z.supermarket_id,
                                     z.heslo_hash,
                                     z.heslo_salt,
-                                    MAX(CASE WHEN r.role_id = 1 THEN 1 ELSE 0 END) AS isPokladnik,
-                                    MAX(CASE WHEN r.role_id = 2 THEN 1 ELSE 0 END) AS isManazer,
-                                    MAX(CASE WHEN r.role_id = 3 THEN 1 ELSE 0 END) AS isNakladac,
-                                    MAX(CASE WHEN r.role_id = 4 THEN 1 ELSE 0 END) AS isAdmin
+                                    je_role_zamestnancu(z.zamestnanec_id, 'Pokladnik') AS isPokladnik,
+                                    je_role_zamestnancu(z.zamestnanec_id, 'Manazer') AS isManazer,
+                                    je_role_zamestnancu(z.zamestnanec_id, 'Nakladac') AS isNakladac,
+                                    je_role_zamestnancu(z.zamestnanec_id, 'Admin') AS isAdmin
                                 FROM
                                     ZAMESTNANCI z
                                 LEFT JOIN
@@ -134,10 +134,10 @@ namespace Supermarket.Infrastructure.Employees
                                     z.supermarket_id,
                                     z.heslo_hash,
                                     z.heslo_salt,
-                                    MAX(CASE WHEN r.role_id = 1 THEN 1 ELSE 0 END) AS isPokladnik,
-                                    MAX(CASE WHEN r.role_id = 2 THEN 1 ELSE 0 END) AS isManazer,
-                                    MAX(CASE WHEN r.role_id = 3 THEN 1 ELSE 0 END) AS isNakladac,
-                                    MAX(CASE WHEN r.role_id = 4 THEN 1 ELSE 0 END) AS isAdmin
+                                    je_role_zamestnancu(z.zamestnanec_id, 'Pokladnik') AS isPokladnik,
+                                    je_role_zamestnancu(z.zamestnanec_id, 'Manazer') AS isManazer,
+                                    je_role_zamestnancu(z.zamestnanec_id, 'Nakladac') AS isNakladac,
+                                    je_role_zamestnancu(z.zamestnanec_id, 'Admin') AS isAdmin
                                 FROM
                                     ZAMESTNANCI z
                                 LEFT JOIN
@@ -413,10 +413,10 @@ namespace Supermarket.Infrastructure.Employees
                                     z.manazer_id,
                                     z.supermarket_id,
                                     z.rodne_cislo,
-                                    MAX(CASE WHEN r.role_id = 1 THEN 1 ELSE 0 END) AS isPokladnik,
-                                    MAX(CASE WHEN r.role_id = 2 THEN 1 ELSE 0 END) AS isManazer,
-                                    MAX(CASE WHEN r.role_id = 3 THEN 1 ELSE 0 END) AS isNakladac,
-                                    MAX(CASE WHEN r.role_id = 4 THEN 1 ELSE 0 END) AS isAdmin
+                                    je_role_zamestnancu(z.zamestnanec_id, 'Pokladnik') AS isPokladnik,
+                                    je_role_zamestnancu(z.zamestnanec_id, 'Manazer') AS isManazer,
+                                    je_role_zamestnancu(z.zamestnanec_id, 'Nakladac') AS isNakladac,
+                                    je_role_zamestnancu(z.zamestnanec_id, 'Admin') AS isAdmin
                                 FROM
                                     ZAMESTNANCI z
                                 LEFT JOIN

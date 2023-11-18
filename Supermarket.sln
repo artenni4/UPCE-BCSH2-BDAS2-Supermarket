@@ -11,11 +11,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Supermarket.Wpf", "Supermar
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{78AFC81D-D5FC-4111-B8A7-7357A485CD56}"
 	ProjectSection(SolutionItems) = preProject
+		Scripts\Functions.sql = Scripts\Functions.sql
 		Scripts\inserts1.sql = Scripts\inserts1.sql
+		Scripts\Procedures.sql = Scripts\Procedures.sql
 		Scripts\script.ddl = Scripts\script.ddl
 		Scripts\truncates.sql = Scripts\truncates.sql
 		Scripts\Views.sql = Scripts\Views.sql
-		Scripts\Functions.sql = Scripts\Functions.sql
 	EndProjectSection
 EndProject
 Global

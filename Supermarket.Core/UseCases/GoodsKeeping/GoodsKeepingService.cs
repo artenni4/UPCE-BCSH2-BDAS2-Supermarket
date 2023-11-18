@@ -64,41 +64,7 @@ namespace Supermarket.Core.UseCases.GoodsKeeping
 
         public async Task MoveProductAsync(int storagePlaceId, MovingProduct movingProduct)
         {
-            var storagePlace = await _storagePlaceRepository.GetByIdAsync(storagePlaceId);
-            if (storagePlace is null)
-            {
-                throw new ApplicationInconsistencyException($"Storage place {storagePlaceId} was not found");
-            }
-            
-            var id = new StoredProductId { StoragePlaceId = storagePlaceId, SupermarketId = storagePlace.SupermarketId, ProductId = movingProduct.ProductId };
-            var newId = new StoredProductId { StoragePlaceId = movingProduct.NewStoragePlaceId, SupermarketId = storagePlace.SupermarketId, ProductId = movingProduct.ProductId };
-
-            var storedProduct = await _storedProductRepository.GetByIdAsync(id);
-            var storedFoundProduct = await _storedProductRepository.GetByIdAsync(newId);
-
-            if (storedFoundProduct != null) // this product is already stored in NewStoragePlace
-            {
-                var newStoredProduct = new StoredProduct { Id = newId, Count = storedFoundProduct.Count + movingProduct.Count };
-                await _storedProductRepository.UpdateAsync(newStoredProduct);
-            }
-            else
-            {
-                var newStoredProduct = new StoredProduct { Id = newId, Count = movingProduct.Count };
-                await _storedProductRepository.AddAsync(newStoredProduct);
-            }
-
-            if (storedProduct != null) // change chosen product's Count
-            {
-                if (storedProduct.Count > movingProduct.Count)
-                {
-                    var oldProduct = new StoredProduct { Id = storedProduct.Id, Count = storedProduct.Count - movingProduct.Count };
-                    await _storedProductRepository.UpdateAsync(oldProduct);
-                }
-                else
-                {
-                    await _storedProductRepository.DeleteAsync(storedProduct.Id);
-                }
-            }
+            await _storagePlaceRepository.MoveProduct(storagePlaceId, movingProduct);
         }
 
         public async Task SupplyProductsToWarehouseAsync(int warehouseId, IReadOnlyList<SuppliedProduct> suppliedProducts)
