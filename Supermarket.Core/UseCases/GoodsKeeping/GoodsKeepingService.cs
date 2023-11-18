@@ -73,15 +73,6 @@ namespace Supermarket.Core.UseCases.GoodsKeeping
             foreach(var product in suppliedProducts)
             {
                 await _storagePlaceRepository.SupplyProductsToWarehouse(warehouseId, product.ProductId, supermarketId, product.Count);
-                //var id = new StoredProductId(warehouseId, warehouse.SupermarketId, product.ProductId);
-                //var storedProduct = await _storedProductRepository.GetByIdAsync(id);
-                //if (storedProduct != null)
-                //{
-                //    var newStoredProduct = new StoredProduct { Id = id, Count = storedProduct.Count + product.Count };
-                //    await _storedProductRepository.UpdateAsync(newStoredProduct);
-                //}
-                //else
-                //    await _storedProductRepository.AddAsync(new StoredProduct { Id = id, Count = product.Count });
             }
         }
     }
