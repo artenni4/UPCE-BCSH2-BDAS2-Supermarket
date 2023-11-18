@@ -32,6 +32,8 @@ using Supermarket.Core.Domain.Suppliers;
 using Supermarket.Infrastructure.CashBoxes;
 using Supermarket.Infrastructure.ChangeLogs;
 using Supermarket.Infrastructure.Payments;
+using Supermarket.Core.Domain.SharedFiles;
+using Supermarket.Infrastructure.SharedFiles;
 
 namespace Supermarket.Infrastructure;
 
@@ -69,7 +71,8 @@ public static class InfrastructureDependencies
         serviceCollection.AddScoped<ISoldProductRepository, SoldProductRepository>();
         serviceCollection.AddScoped<ISupplierRepository, SupplierRepository>();
         serviceCollection.AddScoped<IChangeLogRepository, ChangeLogRepository>();
-        
+        serviceCollection.AddScoped<ISharedFileRepository, SharedFileRepository>();
+
         return serviceCollection;
     }
 }

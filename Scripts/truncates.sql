@@ -20,7 +20,6 @@ DROP SEQUENCE dodavatele_dodavatel_id_seq;
 DROP SEQUENCE druhy_zbozi_druh_zbozi_id_seq;
 DROP SEQUENCE mista_ulozeni_misto_ulozeni_id;
 DROP SEQUENCE pokladny_pokladna_id_seq;
-DROP SEQUENCE prodane_zbozi_prodej_id_seq;
 DROP SEQUENCE prodeje_prodej_id_seq;
 DROP SEQUENCE regiony_region_id_seq;
 DROP SEQUENCE supermarkety_supermarket_id;
