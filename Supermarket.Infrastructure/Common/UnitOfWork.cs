@@ -14,6 +14,7 @@ namespace Supermarket.Infrastructure.Common
 
         public Task<ITransaction> BeginTransactionAsync()
         {
+            _dbConnection.Open();
             var dbTransaction = _dbConnection.BeginTransaction();
             return Task.FromResult(new Transaction(dbTransaction) as ITransaction);
         }
