@@ -51,6 +51,7 @@ namespace Supermarket.Wpf.Admin.Employees.Dialog
 
         private async void UpdateManagers()
         {
+            using var _ = new DelegateLoading(this);
             if (SelectedSupermarket is not null)
             {
                 var managers =
