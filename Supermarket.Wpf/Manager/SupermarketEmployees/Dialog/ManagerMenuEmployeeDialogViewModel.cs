@@ -5,6 +5,7 @@ using Supermarket.Wpf.ViewModelResolvers;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using Supermarket.Core.Domain.Auth.LoggedEmployees;
+using Supermarket.Core.Domain.Employees.Roles;
 
 namespace Supermarket.Wpf.Manager.SupermarketEmployees.Dialog
 {
@@ -39,11 +40,7 @@ namespace Supermarket.Wpf.Manager.SupermarketEmployees.Dialog
         public PossibleManagerForEmployee? SelectedManager
         {
             get => _selectedManager;
-            set
-            {
-                SetProperty(ref _selectedManager, value);
-                Employee.ManagerId = value?.EmployeeId;
-            }
+            set => SetProperty(ref _selectedManager, value);
         }
 
         public ObservableCollection<PossibleManagerForEmployee> PossibleManagersForEmployee { get; } = new();
@@ -84,7 +81,7 @@ namespace Supermarket.Wpf.Manager.SupermarketEmployees.Dialog
                     Login = Employee.Login,
                     Password = EmployeePassword,
                     HireDate = Employee.HireDate.Value,
-                    RoleInfo = Employee.GetEmployeeRoleInfo(_loggedUserService.SupermarketId)
+                    RoleInfo = Employee.GetEmployeeRoleInfo(_loggedUserService.SupermarketId, SelectedManager?.EmployeeId)
                 });
             }
             else
@@ -97,7 +94,7 @@ namespace Supermarket.Wpf.Manager.SupermarketEmployees.Dialog
                     Login = Employee.Login,
                     NewPassword = EmployeePassword,
                     HireDate = Employee.HireDate.Value,
-                    RoleInfo = Employee.GetEmployeeRoleInfo(_loggedUserService.SupermarketId)
+                    RoleInfo = Employee.GetEmployeeRoleInfo(_loggedUserService.SupermarketId, SelectedManager?.EmployeeId)
                 });
             }
 
@@ -128,17 +125,17 @@ namespace Supermarket.Wpf.Manager.SupermarketEmployees.Dialog
         public async void SetParameters(int parameters)
         {
             using var _ = new DelegateLoading(this);
-            
+
             if (parameters != 0)
             {
                 var employeeToEdit = await _managerMenuService.GetEmployeeToEdit(parameters);
                 Employee = ManagerMenuEmployeeModel.FromManagerMenuEmployeeDetail(employeeToEdit);
-                SelectedManager = PossibleManagersForEmployee
-                    .FirstOrDefault(x => x.EmployeeId == Employee.ManagerId);
-            }
-            else
-            {
-                Employee = new ManagerMenuEmployeeModel();
+
+                if (employeeToEdit.RoleInfo is SupermarketEmployee supermarketEmployee)
+                {
+                    SelectedManager = PossibleManagersForEmployee
+                        .FirstOrDefault(x => x.EmployeeId == supermarketEmployee.ManagerId);
+                }
             }
         }
 

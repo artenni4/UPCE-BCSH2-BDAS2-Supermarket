@@ -10,13 +10,12 @@ public class AdminMenuEmployeeModel : NotifyPropertyChangedBase
     private string? _surname;
     private string? _login;
     private DateTime? _hireDate;
-    private int? _managerId;
-    private int? _supermarketId;
     private bool _isCashier;
     private bool _isGoodsKeeper;
     private bool _isManager;
     private bool _isAdmin;
     private string? _personalNumber;
+    private bool _isNotManagerRoleAllowed = true;
 
     public int Id { get; set; }
     
@@ -44,18 +43,6 @@ public class AdminMenuEmployeeModel : NotifyPropertyChangedBase
         set => SetProperty(ref _hireDate, value);
     }
 
-    public int? ManagerId
-    {
-        get => _managerId;
-        set => SetProperty(ref _managerId, value);
-    }
-    
-    public int? SupermarketId
-    {
-        get => _supermarketId;
-        set => SetProperty(ref _supermarketId, value);
-    }
-
     public bool IsCashier
     {
         get => _isCashier;
@@ -67,9 +54,7 @@ public class AdminMenuEmployeeModel : NotifyPropertyChangedBase
         get => _isGoodsKeeper;
         set => SetProperty(ref _isGoodsKeeper, value);
     }
-
-    private bool _isNotManagerRoleAllowed;
-
+    
     public bool IsNotManagerRoleAllowed
     {
         get => _isNotManagerRoleAllowed;
@@ -102,7 +87,6 @@ public class AdminMenuEmployeeModel : NotifyPropertyChangedBase
                 IsCashier = false;
                 IsGoodsKeeper = false;
                 IsManager = false;
-                ManagerId = null;
             }
             IsNotManagerRoleAllowed = !value;
         }
@@ -135,7 +119,6 @@ public class AdminMenuEmployeeModel : NotifyPropertyChangedBase
             model.IsCashier = supermarketEmployee.Roles.Contains(SupermarketEmployeeRole.Cashier);
             model.IsGoodsKeeper = supermarketEmployee.Roles.Contains(SupermarketEmployeeRole.GoodsKeeper);
             model.IsManager = supermarketEmployee.Roles.Contains(SupermarketEmployeeRole.Manager);
-            model.ManagerId = supermarketEmployee.ManagerId;
         }
         else
         {
@@ -145,18 +128,18 @@ public class AdminMenuEmployeeModel : NotifyPropertyChangedBase
         return model;
     }
     
-    public IEmployeeRoleInfo GetEmployeeRoleInfo()
+    public IEmployeeRoleInfo GetEmployeeRoleInfo(int? supermarketId, int? managerId)
     {
         if (IsAdmin)
         {
             return new Core.Domain.Employees.Roles.Admin();
         }
 
-        if (!SupermarketId.HasValue)
+        if (!supermarketId.HasValue)
         {
-            throw new InvalidOperationException($"{nameof(SupermarketId)} is null");
+            throw new InvalidOperationException($"{nameof(supermarketId)} is null");
         }
-        return new SupermarketEmployee(SupermarketId.Value, ManagerId, GetRoles());
+        return new SupermarketEmployee(supermarketId.Value, managerId, GetRoles());
     }
     
     private HashSet<SupermarketEmployeeRole> GetRoles()

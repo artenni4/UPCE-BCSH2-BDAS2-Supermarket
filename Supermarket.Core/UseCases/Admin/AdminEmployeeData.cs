@@ -11,6 +11,6 @@ namespace Supermarket.Core.UseCases.Admin
         public required string Login { get; init; }
         public required DateTime HireDate { get; init; }
         public required IEmployeeRoleInfo RoleInfo { get; init; }
-        public required string PersonalNumber { get; init; }
+        public required string? PersonalNumber { get; init; }
     }
 }

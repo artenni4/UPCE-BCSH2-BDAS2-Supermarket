@@ -17,6 +17,5 @@ namespace Supermarket.Core.Domain.Employees
         Task<PagedResult<ManagerMenuEmployee>> GetSupermarketEmployeesForManager(int managerId, RecordsRange recordsRange);
         Task<PagedResult<ManagerMenuEmployee>> GetSupermarketEmployeesForAdmin(int supermarketId, RecordsRange recordsRange);
         Task<PagedResult<AdminEmployee>> GetAdminMenuEmployees(RecordsRange recordsRange);
-        Task<AdminEmployeeDetail?> GetAdminEmployeeDetail(int employeeId);
     }
 }

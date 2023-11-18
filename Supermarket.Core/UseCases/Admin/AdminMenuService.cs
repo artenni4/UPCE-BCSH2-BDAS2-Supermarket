@@ -221,21 +221,6 @@ namespace Supermarket.Core.UseCases.Admin
             return await _employeeRepository.GetAdminMenuEmployees(recordsRange);
         }
 
-        public async Task<Employee?> GetEmployee(int employeeId)
-        {
-            return await _employeeRepository.GetByIdAsync(employeeId);
-        }
-
-        public async Task AddEmployee(Employee employee)
-        {
-            await _employeeRepository.AddAsync(employee);
-        }
-
-        public async Task EditEmployee(Employee employee)
-        {
-            await _employeeRepository.UpdateAsync(employee);
-        }
-
         public async Task DeleteEmployee(int employeeId)
         {
             try
@@ -265,13 +250,13 @@ namespace Supermarket.Core.UseCases.Admin
 
         public async Task<AdminEmployeeDetail> GetEmployeeToEdit(int employeeId)
         {
-            var employee = await _employeeRepository.GetAdminEmployeeDetail(employeeId);
+            var employee = await _employeeRepository.GetRoleByIdAsync(employeeId);
             if (employee == null)
             {
                 throw new ApplicationInconsistencyException("Employee was not found");
             }
 
-            return employee;
+            return AdminEmployeeDetail.FromEmployeeRole(employee);
         }
 
         public async Task EditEmployee(AdminEditEmployee editEmployee)
@@ -312,6 +297,7 @@ namespace Supermarket.Core.UseCases.Admin
                 Name = employee.Name,
                 Surname = employee.Surname,
                 HireDate = employee.HireDate,
+                PersonalNumber = employee.PersonalNumber,
                 RoleInfo = employee.RoleInfo,
                 PasswordHash = passwordHash,
                 PasswordHashSalt = salt

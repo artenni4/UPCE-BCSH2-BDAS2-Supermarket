@@ -11,7 +11,6 @@ public class ManagerMenuEmployeeModel : NotifyPropertyChangedBase
     private string? _surname;
     private string? _login;
     private DateTime? _hireDate;
-    private int? _managerId;
     private bool _isCashier;
     private bool _isGoodsKeeper;
     private bool _isManager;
@@ -40,12 +39,6 @@ public class ManagerMenuEmployeeModel : NotifyPropertyChangedBase
     {
         get => _hireDate;
         set => SetProperty(ref _hireDate, value);
-    }
-
-    public int? ManagerId
-    {
-        get => _managerId;
-        set => SetProperty(ref _managerId, value);
     }
 
     public bool IsCashier
@@ -90,7 +83,6 @@ public class ManagerMenuEmployeeModel : NotifyPropertyChangedBase
             model.IsCashier = supermarketEmployee.Roles.Contains(SupermarketEmployeeRole.Cashier);
             model.IsGoodsKeeper = supermarketEmployee.Roles.Contains(SupermarketEmployeeRole.GoodsKeeper);
             model.IsManager = supermarketEmployee.Roles.Contains(SupermarketEmployeeRole.Manager);
-            model.ManagerId = supermarketEmployee.ManagerId;
         }
         else
         {
@@ -100,9 +92,9 @@ public class ManagerMenuEmployeeModel : NotifyPropertyChangedBase
         return model;
     }
     
-    public IEmployeeRoleInfo GetEmployeeRoleInfo(int supermarketId)
+    public IEmployeeRoleInfo GetEmployeeRoleInfo(int supermarketId, int? managerId)
     {
-        return new SupermarketEmployee(supermarketId, ManagerId, GetRoles());
+        return new SupermarketEmployee(supermarketId, managerId, GetRoles());
     }
     
     private HashSet<SupermarketEmployeeRole> GetRoles()

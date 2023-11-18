@@ -10,38 +10,17 @@ using Supermarket.Core.UseCases.ManagerMenu;
 using Supermarket.Core.Domain.Common.Paging;
 using Supermarket.Core.Domain.Auth.LoggedEmployees;
 using Supermarket.Core.UseCases.Admin;
+using Supermarket.Core.UseCases.Login;
 
 namespace Supermarket.Infrastructure.Employees
 {
     internal class EmployeeRepository : CrudRepositoryBase<Employee, int, DbEmployee>, IEmployeeRepository
     {
-        private static readonly byte[] ReservedAdminHashSalt = new byte[16] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
-        private static readonly EmployeeRole ReservedAdmin = new EmployeeRole
-        {
-            Id = 999,
-            Login = "ADMIN",
-            Name = "ADMIN",
-            Surname = "BEJBA",
-            HireDate = DateTime.MinValue,
-            PasswordHash = PasswordHashing.GenerateSaltedHash("ADMIN", ReservedAdminHashSalt),
-            PasswordHashSalt = ReservedAdminHashSalt,
-            RoleInfo = new Admin()
-        };
-
         public EmployeeRepository(OracleConnection oracleConnection) : base(oracleConnection)
         {
         }
-
-        public async Task<EmployeeRole?> GetRoleByLoginAsync(string login)
-        {
-            if (login == ReservedAdmin.Login)
-            {
-                return (EmployeeRole?)ReservedAdmin;
-            }
-            var parameters = new DynamicParameters()
-            .AddParameter("login", login);
-
-            const string sql = @"SELECT
+        
+        const string employeeRoleSql = @"SELECT
                                     z.zamestnanec_id,
                                     z.jmeno,
                                     z.prijmeni,
@@ -57,153 +36,26 @@ namespace Supermarket.Infrastructure.Employees
                                     je_role_zamestnancu(z.zamestnanec_id, 'Admin') AS isAdmin
                                 FROM
                                     ZAMESTNANCI z
-                                LEFT JOIN
-                                    ROLE_ZAMESTNANCU rz ON z.zamestnanec_id = rz.zamestnanec_id
-                                LEFT JOIN
-                                    ROLE r ON rz.role_id = r.role_id
-                                WHERE
-                                    z.login = :login
+                                WHERE {0}
                                 GROUP BY
                                     z.zamestnanec_id, z.jmeno, z.prijmeni, z.datum_nastupu, z.login, z.manazer_id, z.supermarket_id, z.heslo_hash, z.heslo_salt";
 
-            var orderByColumns = DbEmployee.IdentityColumns.Select(ic => $"z.{ic}");
-
+        public async Task<EmployeeRole?> GetRoleByLoginAsync(string login)
+        {
+            var parameters = new DynamicParameters().AddParameter("login", login);
+            var sql = string.Format(employeeRoleSql, "z.login = :login");
+            
             var result = await _oracleConnection.QuerySingleOrDefaultAsync<DbLoggedEmployee>(sql, parameters);
-            var foundUser = result?.ToDomainEntity();
-
-            if (foundUser != null)
-            {
-                var roles = new HashSet<SupermarketEmployeeRole>();
-                if (foundUser.IsCashier)
-                {
-                    roles.Add(SupermarketEmployeeRole.Cashier);
-                }
-                if (foundUser.IsGoodsKeeper)
-                {
-                    roles.Add(SupermarketEmployeeRole.GoodsKeeper);
-                }
-                if (foundUser.IsManager)
-                {
-                    roles.Add(SupermarketEmployeeRole.Manager);
-                }
-
-                if (!foundUser.IsAdmin)
-                {
-                    var emp = new EmployeeRole
-                    {
-                        Id = foundUser.Id,
-                        Login = foundUser.Login,
-                        Name = foundUser.Name,
-                        Surname = foundUser.Surname,
-                        HireDate = foundUser.HireDate,
-                        RoleInfo = new SupermarketEmployee(foundUser.SupermarketId, foundUser.ManagerId, roles),
-                        PasswordHash = foundUser.PasswordHash,
-                        PasswordHashSalt = foundUser.PasswordSalt
-                    };
-                    return emp;
-                }
-                else
-                {
-                    var admin = new EmployeeRole
-                    {
-                        Id = foundUser.Id,
-                        Login = foundUser.Login,
-                        Name = foundUser.Name,
-                        Surname = foundUser.Surname,
-                        HireDate = foundUser.HireDate,
-                        RoleInfo = new Admin(),
-                        PasswordHash = foundUser.PasswordHash,
-                        PasswordHashSalt = foundUser.PasswordSalt
-                    };
-                    return admin;
-                }
-            }
-            return null;
+            return result?.ToDomainEntity();
         }
 
         public async Task<EmployeeRole?> GetRoleByIdAsync(int employeeId)
         {
-            var parameters = new DynamicParameters()
-                .AddParameter("zamestnanec_id", employeeId);
-
-            const string sql = @"SELECT
-                                    z.zamestnanec_id,
-                                    z.jmeno,
-                                    z.prijmeni,
-                                    z.datum_nastupu,
-                                    z.login,
-                                    z.manazer_id,
-                                    z.supermarket_id,
-                                    z.heslo_hash,
-                                    z.heslo_salt,
-                                    je_role_zamestnancu(z.zamestnanec_id, 'Pokladnik') AS isPokladnik,
-                                    je_role_zamestnancu(z.zamestnanec_id, 'Manazer') AS isManazer,
-                                    je_role_zamestnancu(z.zamestnanec_id, 'Nakladac') AS isNakladac,
-                                    je_role_zamestnancu(z.zamestnanec_id, 'Admin') AS isAdmin
-                                FROM
-                                    ZAMESTNANCI z
-                                LEFT JOIN
-                                    ROLE_ZAMESTNANCU rz ON z.zamestnanec_id = rz.zamestnanec_id
-                                LEFT JOIN
-                                    ROLE r ON rz.role_id = r.role_id
-                                WHERE
-                                    z.zamestnanec_id = :zamestnanec_id
-                                GROUP BY
-                                    z.zamestnanec_id, z.jmeno, z.prijmeni, z.datum_nastupu, z.login, z.manazer_id, z.supermarket_id, z.heslo_hash, z.heslo_salt";
-
-            var orderByColumns = DbEmployee.IdentityColumns.Select(ic => $"z.{ic}");
+            var parameters = new DynamicParameters().AddParameter("zamestnanec_id", employeeId);
+            var sql = string.Format(employeeRoleSql, "z.zamestnanec_id = :zamestnanec_id");
 
             var result = await _oracleConnection.QuerySingleOrDefaultAsync<DbLoggedEmployee>(sql, parameters);
-            var foundUser = result?.ToDomainEntity();
-
-            if (foundUser != null)
-            {
-                var roles = new HashSet<SupermarketEmployeeRole>();
-                if (foundUser.IsCashier)
-                {
-                    roles.Add(SupermarketEmployeeRole.Cashier);
-                }
-                if (foundUser.IsGoodsKeeper)
-                {
-                    roles.Add(SupermarketEmployeeRole.GoodsKeeper);
-                }
-                if (foundUser.IsManager)
-                {
-                    roles.Add(SupermarketEmployeeRole.Manager);
-                }
-
-                if (!foundUser.IsAdmin)
-                {
-                    var emp = new EmployeeRole
-                    {
-                        Id = foundUser.Id,
-                        Login = foundUser.Login,
-                        Name = foundUser.Name,
-                        Surname = foundUser.Surname,
-                        HireDate = foundUser.HireDate,
-                        RoleInfo = new SupermarketEmployee(foundUser.SupermarketId, foundUser.ManagerId, roles),
-                        PasswordHash = foundUser.PasswordHash,
-                        PasswordHashSalt = foundUser.PasswordSalt
-                    };
-                    return emp;
-                }
-                else
-                {
-                    var admin = new EmployeeRole
-                    {
-                        Id = foundUser.Id,
-                        Login = foundUser.Login,
-                        Name = foundUser.Name,
-                        Surname = foundUser.Surname,
-                        HireDate = foundUser.HireDate,
-                        RoleInfo = new Admin(),
-                        PasswordHash = foundUser.PasswordHash,
-                        PasswordHashSalt = foundUser.PasswordSalt
-                    };
-                    return admin;
-                }
-            }
-            return null;
+            return result?.ToDomainEntity();
         }
 
         public async Task AddAsync(EmployeeRole employeeRole)
@@ -427,42 +279,6 @@ namespace Supermarket.Infrastructure.Employees
             var result = await GetPagedResult<DbAdminMenuEmployee>(recordsRange, sql, orderByColumns, parameters);
 
             return result.Select(dbProduct => dbProduct.ToDomainEntity());
-        }
-
-        public async Task<AdminEmployeeDetail?> GetAdminEmployeeDetail(int employeeId)
-        {
-            var parameters = new DynamicParameters().AddParameter("zamestnanec_id", employeeId);
-
-            const string sql = @"SELECT
-                                    z.zamestnanec_id,
-                                    z.jmeno,
-                                    z.prijmeni,
-                                    z.datum_nastupu,
-                                    z.login,
-                                    z.manazer_id,
-                                    z.supermarket_id,
-                                    z.rodne_cislo,
-                                    je_role_zamestnancu(z.zamestnanec_id, 'Pokladnik') AS isPokladnik,
-                                    je_role_zamestnancu(z.zamestnanec_id, 'Manazer') AS isManazer,
-                                    je_role_zamestnancu(z.zamestnanec_id, 'Nakladac') AS isNakladac,
-                                    je_role_zamestnancu(z.zamestnanec_id, 'Admin') AS isAdmin
-                                FROM
-                                    ZAMESTNANCI z
-                                LEFT JOIN
-                                    ROLE_ZAMESTNANCU rz ON z.zamestnanec_id = rz.zamestnanec_id
-                                LEFT JOIN
-                                    ROLE r ON rz.role_id = r.role_id
-                                WHERE
-                                    z.zamestnanec_id = :zamestnanec_id
-                                GROUP BY
-                                    z.zamestnanec_id, z.jmeno, z.prijmeni, z.datum_nastupu, z.login, z.manazer_id, z.supermarket_id, z.rodne_cislo";
-
-            var orderByColumns = DbEmployee.IdentityColumns
-                .Select(ic => $"z.{ic}");
-
-            var result = await _oracleConnection.QuerySingleOrDefaultAsync<DbAdminMenuEmployeeDetail>(sql, parameters);
-
-            return result?.ToDomainEntity();
         }
     }
 }
