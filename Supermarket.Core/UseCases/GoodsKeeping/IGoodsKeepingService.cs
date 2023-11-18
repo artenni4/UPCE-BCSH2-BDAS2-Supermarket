@@ -23,11 +23,11 @@ public interface IGoodsKeepingService
     /// Gets list of products that is stored in one of the storage place in the given supermarket
     /// </summary>
     Task<PagedResult<GoodsKeepingStoredProduct>> GetStoredProducts(int supermarketId, RecordsRange recordsRange);
-    
+
     /// <summary>
     /// Adds products to specified warehouse in supermarket
     /// </summary>
-    Task SupplyProductsToWarehouseAsync(int warehouseId, IReadOnlyList<SuppliedProduct> suppliedProducts);
+    Task SupplyProductsToWarehouseAsync(int warehouseId, IReadOnlyList<SuppliedProduct> suppliedProducts, int supermarketId);
 
     /// <summary>
     /// Moves product from one storage place to another

@@ -18,15 +18,13 @@ internal class StoragePlaceRepository : CrudRepositoryBase<StoragePlace, int, Db
     public async Task MoveProduct(int storagePlaceId, MovingProduct movingProduct)
     {
         var parameters = new DynamicParameters().AddParameter("old_sklad_id", storagePlaceId).AddParameter("new_sklad_id", movingProduct.NewStoragePlaceId).AddParameter("var_zbozi_id", movingProduct.ProductId).AddParameter("var_kusy", movingProduct.Count);
-        //const string sql = @"BEGIN
-        //                        premistit_zbozi(
-        //                            old_sklad_id => :misto_ulozeni_id,
-        //                            new_sklad_id => :nove_misto_ulozeni_id,
-        //                            var_zbozi_id => :zbozi_id,
-        //                            var_kusy => :kusy);
-        //                    END";
-
         await _oracleConnection.ExecuteAsync("premistit_zbozi", parameters, commandType:System.Data.CommandType.StoredProcedure);
+    }
+
+    public async Task SupplyProductsToWarehouse(int warehouseId, int productId, int supermarketId, decimal count)
+    {
+        var parameters = new DynamicParameters().AddParameter("sklad_id", warehouseId).AddParameter("pr_zbozi_id", productId).AddParameter("pr_supermarket_id", supermarketId).AddParameter("pr_kusy", count);
+        await _oracleConnection.ExecuteAsync("prijezd_zbozi", parameters, commandType: System.Data.CommandType.StoredProcedure);
     }
 
     public async Task<PagedResult<StoragePlace>> GetSupermarketStoragePlaces(int supermarketId, RecordsRange recordsRange)
