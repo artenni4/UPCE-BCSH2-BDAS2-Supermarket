@@ -1,4 +1,5 @@
 ﻿using Supermarket.Core.Domain.CashBoxes;
+using Supermarket.Core.Domain.Common;
 using Supermarket.Core.UseCases.ManagerMenu;
 using Supermarket.Wpf.Dialog;
 using Supermarket.Wpf.LoggedUser;
@@ -96,7 +97,14 @@ namespace Supermarket.Wpf.Manager.SupermarketCashboxes
             if (result.IsOk())
             {
                 int selectedCashboxId = SelectedCashbox?.Id ?? 0;
-                await _managerMenuService.DeleteCashbox(selectedCashboxId);
+                try
+                {
+                    await _managerMenuService.DeleteCashbox(selectedCashboxId);
+                }
+                catch (RepositoryOperationFailedException e)
+                {
+                    throw new OperationCannotBeExecutedException(e);
+                }
                 await InitializeAsync();
             }
         }
