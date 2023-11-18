@@ -1,1 +1,15 @@
-﻿
+﻿CREATE OR REPLACE TRIGGER trg_before_insert_soubory
+BEFORE INSERT ON SOUBORY
+FOR EACH ROW
+BEGIN
+  :NEW.datum_nahrani := SYSTIMESTAMP;
+END;
+/
+
+CREATE OR REPLACE TRIGGER trg_set_null_supermarket_id
+BEFORE INSERT OR UPDATE ON ZAMESTNANCI
+FOR EACH ROW
+BEGIN
+    :NEW.supermarket_id := NULL;
+END;
+/
