@@ -137,8 +137,7 @@ namespace Supermarket.Wpf.Admin.Products.Dialog
                     Description = "",
                     MeasureUnit = MeasureUnit.Piece,
                     ProductCategoryId = 0,
-                    SupplierId = 0,
-                    Weight = 0
+                    SupplierId = 0
                 };
             }
 
@@ -258,7 +257,6 @@ namespace Supermarket.Wpf.Admin.Products.Dialog
                     Price = Product.Price,
                     ProductCategoryId = SelectedCategory.Id,
                     SupplierId = SelectedSupplier.Id,
-                    Weight = Product.Weight
                 };
                 if (ProductId != 0)
                 {

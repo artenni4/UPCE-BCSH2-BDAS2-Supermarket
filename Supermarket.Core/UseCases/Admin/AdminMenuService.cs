@@ -3,7 +3,6 @@ using Supermarket.Core.Domain.ChangeLogs;
 using Supermarket.Core.Domain.Common;
 using Supermarket.Core.Domain.Common.Paging;
 using Supermarket.Core.Domain.Employees;
-using Supermarket.Core.Domain.Employees.Roles;
 using Supermarket.Core.Domain.ProductCategories;
 using Supermarket.Core.Domain.Products;
 using Supermarket.Core.Domain.Regions;
