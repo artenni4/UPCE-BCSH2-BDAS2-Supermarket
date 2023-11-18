@@ -11,6 +11,7 @@ using Supermarket.Core.Domain.SellingProducts;
 using Supermarket.Core.Domain.SharedFiles;
 using Supermarket.Core.Domain.StoragePlaces;
 using Supermarket.Core.Domain.StoredProducts;
+using Supermarket.Core.UseCases.Common;
 using Cashbox = Supermarket.Core.Domain.CashBoxes.CashBox;
 
 namespace Supermarket.Core.UseCases.ManagerMenu
@@ -25,8 +26,17 @@ namespace Supermarket.Core.UseCases.ManagerMenu
         private readonly ISaleRepository _saleRepository;
         private readonly ICashBoxRepository _cashBoxRepository;
         private readonly ISharedFileRepository _sharedFileRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public ManagerMenuService(ISellingProductRepository sellingProductRepository, IStoredProductRepository storedProductRepository, IProductRepository productRepository, IEmployeeRepository employeeRepository, IStoragePlaceRepository storagePlaceRepository, ISaleRepository saleRepository, ICashBoxRepository cashBoxRepository, ISharedFileRepository sharedFileRepository)
+        public ManagerMenuService(ISellingProductRepository sellingProductRepository,
+            IStoredProductRepository storedProductRepository,
+            IProductRepository productRepository,
+            IEmployeeRepository employeeRepository,
+            IStoragePlaceRepository storagePlaceRepository,
+            ISaleRepository saleRepository,
+            ICashBoxRepository cashBoxRepository,
+            ISharedFileRepository sharedFileRepository,
+            IUnitOfWork unitOfWork)
         {
             _sellingProductRepository = sellingProductRepository;
             _productRepository = productRepository;
@@ -36,6 +46,7 @@ namespace Supermarket.Core.UseCases.ManagerMenu
             _saleRepository = saleRepository;
             _cashBoxRepository = cashBoxRepository;
             _sharedFileRepository = sharedFileRepository;
+            _unitOfWork = unitOfWork;
         }
 
         #region SupermarketProducts
@@ -61,11 +72,14 @@ namespace Supermarket.Core.UseCases.ManagerMenu
 
         public async Task RemoveProductFromSupermarket(StoredProductId id)
         {
+            await using var transaction = await _unitOfWork.BeginTransactionAsync();
             await _sellingProductRepository.UpdateAsync(new SellingProduct { Id = new SellingProductId { ProductId = id.ProductId, SupermarketId = id.SupermarketId }, IsActive = false });
+            await transaction.CommitAsync();
         }
 
         public async Task AddProductToSupermarket(SellingProductId id)
         {
+            await using var transaction = await _unitOfWork.BeginTransactionAsync();
             var product = await _sellingProductRepository.GetByIdAsync(id);
             if (product == null)
             {
@@ -75,6 +89,7 @@ namespace Supermarket.Core.UseCases.ManagerMenu
             {
                 await _sellingProductRepository.UpdateAsync(new SellingProduct { Id = id, IsActive = true });
             }
+            await transaction.CommitAsync();
         }
         #endregion
 
@@ -85,6 +100,7 @@ namespace Supermarket.Core.UseCases.ManagerMenu
             var salt = PasswordHashing.GenerateSalt();
             var passwordHash = PasswordHashing.GenerateSaltedHash(managerAddEmployee.Password, salt);
 
+            await using var transaction = await _unitOfWork.BeginTransactionAsync();
             await _employeeRepository.AddAsync(new EmployeeRole
             {
                 Id = managerAddEmployee.Id,
@@ -97,6 +113,7 @@ namespace Supermarket.Core.UseCases.ManagerMenu
                 PasswordHashSalt = salt,
                 PersonalNumber = null
             });
+            await transaction.CommitAsync();
         }
 
         public async Task<PagedResult<ManagerMenuEmployee>> GetSupermarketEmployees(int employeeId, int supermarketId, RecordsRange recordsRange)
@@ -142,6 +159,7 @@ namespace Supermarket.Core.UseCases.ManagerMenu
                 ? oldEmployee.PasswordHash
                 : PasswordHashing.GenerateSaltedHash(managerEditEmployee.NewPassword, oldEmployee.PasswordHashSalt);
             
+            await using var transaction = await _unitOfWork.BeginTransactionAsync();
             await _employeeRepository.UpdateAsync(new EmployeeRole
             {
                 Id = managerEditEmployee.Id,
@@ -154,6 +172,7 @@ namespace Supermarket.Core.UseCases.ManagerMenu
                 PasswordHashSalt = oldEmployee.PasswordHashSalt,
                 PersonalNumber = oldEmployee.PersonalNumber
             });
+            await transaction.CommitAsync();
         }
 
         public async Task<PagedResult<PossibleManagerForEmployee>> GetPossibleManagers(int employeeId, int supermarketId, RecordsRange recordsRange)
@@ -175,7 +194,9 @@ namespace Supermarket.Core.UseCases.ManagerMenu
         {
             try
             {
+                await using var transaction = await _unitOfWork.BeginTransactionAsync();
                 await _employeeRepository.DeleteAsync(employeeId);
+                await transaction.CommitAsync();
             }
             catch (RepositoryOperationFailedException e)
             {
@@ -203,19 +224,25 @@ namespace Supermarket.Core.UseCases.ManagerMenu
 
         public async Task AddStorage(StoragePlace storagePlace)
         {
+            await using var transaction = await _unitOfWork.BeginTransactionAsync();
             await _storagePlaceRepository.AddAsync(storagePlace);
+            await transaction.CommitAsync();
         }
 
         public async Task EditStorage(StoragePlace storagePlace)
         {
+            await using var transaction = await _unitOfWork.BeginTransactionAsync();
             await _storagePlaceRepository.UpdateAsync(storagePlace);
+            await transaction.CommitAsync();
         }
 
         public async Task DeleteStorage(int id)
         {
             try
             {
+                await using var transaction = await _unitOfWork.BeginTransactionAsync();
                 await _storagePlaceRepository.DeleteAsync(id);
+                await transaction.CommitAsync();
             }
             catch (RepositoryOperationFailedException e)
             {
@@ -244,17 +271,23 @@ namespace Supermarket.Core.UseCases.ManagerMenu
 
         public async Task DeleteCashbox(int cashboxId)
         {
+            await using var transaction = await _unitOfWork.BeginTransactionAsync();
             await _cashBoxRepository.DeleteAsync(cashboxId);
+            await transaction.CommitAsync();
         }
 
         public async Task AddCashbox(Cashbox cashbox)
         {
+            await using var transaction = await _unitOfWork.BeginTransactionAsync();
             await _cashBoxRepository.AddAsync(cashbox);
+            await transaction.CommitAsync();
         }
 
         public async Task EditCashbox(Cashbox cashbox)
         {
+            await using var transaction = await _unitOfWork.BeginTransactionAsync();
             await _cashBoxRepository.UpdateAsync(cashbox);
+            await transaction.CommitAsync();
         }
 
         #endregion
@@ -271,22 +304,30 @@ namespace Supermarket.Core.UseCases.ManagerMenu
 
         public async Task AddSharedFile(SharedFile file)
         {
+            await using var transaction = await _unitOfWork.BeginTransactionAsync();
             await _sharedFileRepository.AddAsync(file);
+            await transaction.CommitAsync();
         }
 
         public async Task EditSharedFile(SharedFile file)
         {
+            await using var transaction = await _unitOfWork.BeginTransactionAsync();
             await _sharedFileRepository.UpdateAsync(file);
+            await transaction.CommitAsync();
         }
 
         public async Task DeleteSharedFile(int fileId)
         {
+            await using var transaction = await _unitOfWork.BeginTransactionAsync();
             await _sharedFileRepository.DeleteAsync(fileId);
+            await transaction.CommitAsync();
         }
 
         public async Task SaveSharedFile(SharedFile file)
         {
+            await using var transaction = await _unitOfWork.BeginTransactionAsync();
             await _sharedFileRepository.SaveSharedFile(file);
+            await transaction.CommitAsync();
         }
     }
 }

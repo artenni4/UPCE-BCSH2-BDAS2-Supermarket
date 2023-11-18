@@ -172,7 +172,7 @@ namespace Supermarket.Wpf.GoodsKeeping.ArrivalRegistration
             }
 
             if (SelectedPlace != null)
-                await _goodsKeepingService.SupplyProductsToWarehouseAsync(SelectedPlace.Id, products, _loggedUserService.SupermarketId);
+                await _goodsKeepingService.SupplyProductsToWarehouseAsync(SelectedPlace.Id, products);
             SelectedProducts.Clear();
         }
 

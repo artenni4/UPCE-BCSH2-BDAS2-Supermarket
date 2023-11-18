@@ -28,7 +28,7 @@ public interface IGoodsKeepingService
     /// <summary>
     /// Adds products to specified warehouse in supermarket
     /// </summary>
-    Task SupplyProductsToWarehouseAsync(int warehouseId, IReadOnlyList<SuppliedProduct> suppliedProducts, int supermarketId);
+    Task SupplyProductsToWarehouseAsync(int warehouseId, IReadOnlyList<SuppliedProduct> suppliedProducts);
 
     /// <summary>
     /// Moves product from one storage place to another

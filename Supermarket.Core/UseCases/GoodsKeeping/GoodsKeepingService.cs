@@ -5,6 +5,7 @@ using Supermarket.Core.Domain.SellingProducts;
 using Supermarket.Core.Domain.StoragePlaces;
 using Supermarket.Core.Domain.StoredProducts;
 using Supermarket.Core.Domain.Supermarkets;
+using Supermarket.Core.UseCases.Common;
 
 namespace Supermarket.Core.UseCases.GoodsKeeping
 {
@@ -14,18 +15,26 @@ namespace Supermarket.Core.UseCases.GoodsKeeping
         private readonly ISellingProductRepository _sellingProductRepository;
         private readonly ISupermarketRepository _supermarketRepository;
         private readonly IStoredProductRepository _storedProductRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public GoodsKeepingService(IStoragePlaceRepository storagePlaceRepository, ISellingProductRepository sellingProductRepository, ISupermarketRepository supermarketRepository, IStoredProductRepository storedProductRepository)
+        public GoodsKeepingService(IStoragePlaceRepository storagePlaceRepository,
+            ISellingProductRepository sellingProductRepository,
+            ISupermarketRepository supermarketRepository,
+            IStoredProductRepository storedProductRepository,
+            IUnitOfWork unitOfWork)
         {
             _storagePlaceRepository = storagePlaceRepository;
             _sellingProductRepository = sellingProductRepository;
             _supermarketRepository = supermarketRepository;
             _storedProductRepository = storedProductRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task DeleteProductStorageAsync(int storagePlaceId, int productId, decimal count)
         {
+            await using var transaction = await _unitOfWork.BeginTransactionAsync();
             await _storedProductRepository.DeleteProductFormStorage(storagePlaceId, productId, count);
+            await transaction.CommitAsync();
         }
 
         public async Task<PagedResult<GoodsKeepingProductCategory>> GetCategoriesAsync(int supermarketId, RecordsRange recordsRange)
@@ -75,21 +84,27 @@ namespace Supermarket.Core.UseCases.GoodsKeeping
 
         public async Task MoveProductAsync(int storagePlaceId, MovingProduct movingProduct)
         {
+            await using var transaction = await _unitOfWork.BeginTransactionAsync();
             await _storagePlaceRepository.MoveProduct(storagePlaceId, movingProduct);
+            await transaction.CommitAsync();
         }
 
         public async Task MoveProductsAndDelete(int id, int newPlaceId)
         {
+            await using var transaction = await _unitOfWork.BeginTransactionAsync();
             await _storagePlaceRepository.MoveProductAndDelete(id, newPlaceId);
+            await transaction.CommitAsync();
         }
 
-        public async Task SupplyProductsToWarehouseAsync(int warehouseId, IReadOnlyList<SuppliedProduct> suppliedProducts, int supermarketId)
+        public async Task SupplyProductsToWarehouseAsync(int warehouseId, IReadOnlyList<SuppliedProduct> suppliedProducts)
         {
-            var warehouse = await _storagePlaceRepository.GetByIdAsync(warehouseId) ?? throw new Exception();
+            await using var transaction = await _unitOfWork.BeginTransactionAsync();
+            var warehouse = await _storagePlaceRepository.GetByIdAsync(warehouseId) ?? throw new ApplicationInconsistencyException("Warehouse not found");
             foreach(var product in suppliedProducts)
             {
-                await _storagePlaceRepository.SupplyProductsToWarehouse(warehouseId, product.ProductId, supermarketId, product.Count);
+                await _storagePlaceRepository.SupplyProductsToWarehouse(warehouseId, product.ProductId, warehouse.SupermarketId, product.Count);
             }
+            await transaction.CommitAsync();
         }
     }
 }
