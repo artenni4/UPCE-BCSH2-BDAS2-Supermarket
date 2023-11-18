@@ -43,6 +43,17 @@ DROP TABLE zamestnanci CASCADE CONSTRAINTS;
 
 DROP TABLE zbozi CASCADE CONSTRAINTS;
 
+DROP SEQUENCE dodavatele_dodavatel_id_seq;
+DROP SEQUENCE druhy_zbozi_druh_zbozi_id_seq;
+DROP SEQUENCE mista_ulozeni_misto_ulozeni_id;
+DROP SEQUENCE pokladny_pokladna_id_seq;
+DROP SEQUENCE prodeje_prodej_id_seq;
+DROP SEQUENCE regiony_region_id_seq;
+DROP SEQUENCE supermarkety_supermarket_id;
+DROP SEQUENCE zamestnanci_zamestnanec_id_seq;
+DROP SEQUENCE zbozi_zbozi_id_seq;
+DROP SEQUENCE soubory_soubor_id_seq;
+
 -- predefined type, no DDL - MDSYS.SDO_GEOMETRY
 
 -- predefined type, no DDL - XMLTYPE
