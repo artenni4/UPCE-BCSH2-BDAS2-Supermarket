@@ -8,6 +8,7 @@ using Supermarket.Core.Domain.Sales;
 using Supermarket.Core.Domain.SellingProducts;
 using Supermarket.Core.Domain.SoldProducts;
 using Supermarket.Core.Domain.StoredProducts;
+using Supermarket.Core.UseCases.Common;
 
 namespace Supermarket.Core.UseCases.CashBox
 {
@@ -20,6 +21,7 @@ namespace Supermarket.Core.UseCases.CashBox
         private readonly IAuthDomainService _authDomainService;
         private readonly ICashBoxRepository _cashBoxRepository;
         private readonly IStoredProductRepository _storedProductRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         private readonly IDictionary<string, Coupon> _coupons = new Dictionary<string, Coupon>()
         {
@@ -35,7 +37,9 @@ namespace Supermarket.Core.UseCases.CashBox
             ICashBoxRepository cashBoxRepository,
             ISaleRepository saleRepository,
             ISoldProductRepository soldProductRepository,
-            IPaymentRepository paymentRepository, IStoredProductRepository storedProductRepository)
+            IPaymentRepository paymentRepository,
+            IStoredProductRepository storedProductRepository,
+            IUnitOfWork unitOfWork)
         {
             _sellingProductRepository = sellingProductRepository;
             _authDomainService = authDomainService;
@@ -44,6 +48,7 @@ namespace Supermarket.Core.UseCases.CashBox
             _soldProductRepository = soldProductRepository;
             _paymentRepository = paymentRepository;
             _storedProductRepository = storedProductRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<PagedResult<CashBoxProductCategory>> GetCategoriesAsync(int supermarketId, RecordsRange recordsRange)
@@ -68,6 +73,7 @@ namespace Supermarket.Core.UseCases.CashBox
                 throw new ApplicationInconsistencyException("Cash box must exist when adding sale to it");
             }
             
+            await using var transaction = await _unitOfWork.BeginTransactionAsync();
             var saleId = await _saleRepository.AddAndGetIdAsync(new Sale
             {
                 Id = 0,
@@ -105,6 +111,7 @@ namespace Supermarket.Core.UseCases.CashBox
                 Id = new PaymentId(saleId, paymentType),
                 Amount = cashBoxPayment.Total
             });
+            await transaction.CommitAsync();
         }
 
         public async Task<LoggedSupermarketEmployee> AssistantLoginAsync(LoginData loginData, int cashBoxId)
