@@ -153,7 +153,7 @@ namespace Supermarket.Wpf.Manager.SupermarketSharedFiles
                 SharedFile newSharedFile = new SharedFile
                 {
                     Id = 0,
-                    CreatedDate = DateTime.Now,
+                    CreatedDate = DateTime.MinValue,
                     Name = Path.GetFileNameWithoutExtension(openFileDialog.SafeFileName),
                     Extenstion = Path.GetExtension(selectedFilePath),
                     Data = fileBytes,
