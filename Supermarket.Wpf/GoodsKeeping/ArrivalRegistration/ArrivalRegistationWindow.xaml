@@ -43,7 +43,7 @@
                                             </Grid.ColumnDefinitions>
 
                                             <TextBlock Grid.Column="0" Text="{Binding Name}" Foreground="#1B2060" FontSize="25" Margin="0 0 10 0" VerticalAlignment="Center" />
-                                            <TextBlock Grid.Column="1" Text="{Binding Weight}" Foreground="#1B2060" FontSize="25" VerticalAlignment="Center" />
+                                            <TextBlock Grid.Column="1" Text="{Binding Count}" Foreground="#1B2060" FontSize="25" VerticalAlignment="Center" />
                                             <TextBlock Grid.Column="2" Text="{Binding MeasureUnit}" Foreground="#1B2060" FontSize="25" Margin="0 0 10 0" VerticalAlignment="Center" />
                                             
                                             <Button Grid.Column="3" Content="X" Command="{Binding DataContext.RemoveProductCommand, RelativeSource={RelativeSource AncestorType=ListBox}}" CommandParameter="{Binding}" Background="Transparent" BorderBrush="Transparent" HorizontalAlignment="Right" Foreground="Red"/>

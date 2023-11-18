@@ -151,7 +151,7 @@ namespace Supermarket.Wpf.GoodsKeeping.ArrivalRegistration
             {
                 ProductId = selectedProduct.ProductId,
                 Name = selectedProduct.Name,
-                Weight = productCount,
+                Count = productCount,
                 MeasureUnit = selectedProduct.MeasureUnit,
                 IsByWeight = selectedProduct.IsByWeight,
                 Price = selectedProduct.Price
@@ -168,7 +168,7 @@ namespace Supermarket.Wpf.GoodsKeeping.ArrivalRegistration
             List<SuppliedProduct> products = new List<SuppliedProduct>();
             foreach(var product in SelectedProducts)
             {
-                products.Add(new SuppliedProduct { ProductId = product.ProductId, Count = product.Weight });
+                products.Add(new SuppliedProduct { ProductId = product.ProductId, Count = product.Count });
             }
 
             if (SelectedPlace != null)

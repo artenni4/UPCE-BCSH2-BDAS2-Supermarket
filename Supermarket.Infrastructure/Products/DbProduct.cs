@@ -12,7 +12,6 @@ internal class DbProduct : IDbEntity<Product, int, DbProduct>
     public required int naVahu { get; init; }
     public required string nazev { get; init; }
     public required decimal cena { get; init; }
-    public required decimal hmotnost { get; init; }
     public required string? carovyKod { get; init; }
     public required string? popis { get; init; }
     public required int dodavatel_id { get; init; }
@@ -32,7 +31,6 @@ internal class DbProduct : IDbEntity<Product, int, DbProduct>
         ByWeight = naVahu != 0,
         Name = nazev,
         Price = cena,
-        Weight = hmotnost,
         Barcode = carovyKod,
         Description = popis,
         SupplierId = dodavatel_id
@@ -45,7 +43,6 @@ internal class DbProduct : IDbEntity<Product, int, DbProduct>
         merna_jednotka_id = DbMeasureUnit.GetMeasureUnitId(entity.MeasureUnit),
         carovyKod = entity.Barcode,
         cena = entity.Price,
-        hmotnost = entity.Weight,
         naVahu = entity.ByWeight ? 1 : 0,
         nazev = entity.Name,
         popis = entity.Description,

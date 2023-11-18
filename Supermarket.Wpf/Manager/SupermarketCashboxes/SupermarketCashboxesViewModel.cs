@@ -1,5 +1,4 @@
-﻿using Supermarket.Core.Domain.CashBoxes;
-using Supermarket.Core.Domain.Common;
+﻿using Supermarket.Core.Domain.Common;
 using Supermarket.Core.UseCases.ManagerMenu;
 using Supermarket.Wpf.Dialog;
 using Supermarket.Wpf.LoggedUser;
