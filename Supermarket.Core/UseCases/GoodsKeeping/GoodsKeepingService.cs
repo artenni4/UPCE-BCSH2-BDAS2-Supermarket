@@ -67,20 +67,12 @@ namespace Supermarket.Core.UseCases.GoodsKeeping
             await _storagePlaceRepository.MoveProduct(storagePlaceId, movingProduct);
         }
 
-        public async Task SupplyProductsToWarehouseAsync(int warehouseId, IReadOnlyList<SuppliedProduct> suppliedProducts)
+        public async Task SupplyProductsToWarehouseAsync(int warehouseId, IReadOnlyList<SuppliedProduct> suppliedProducts, int supermarketId)
         {
             var warehouse = await _storagePlaceRepository.GetByIdAsync(warehouseId) ?? throw new Exception();
             foreach(var product in suppliedProducts)
             {
-                var id = new StoredProductId(warehouseId, warehouse.SupermarketId, product.ProductId);
-                var storedProduct = await _storedProductRepository.GetByIdAsync(id);
-                if (storedProduct != null)
-                {
-                    var newStoredProduct = new StoredProduct { Id = id, Count = storedProduct.Count + product.Count };
-                    await _storedProductRepository.UpdateAsync(newStoredProduct);
-                }
-                else
-                    await _storedProductRepository.AddAsync(new StoredProduct { Id = id, Count = product.Count });
+                await _storagePlaceRepository.SupplyProductsToWarehouse(warehouseId, product.ProductId, supermarketId, product.Count);
             }
         }
     }

@@ -43,4 +43,9 @@ public class GoodsKeepingServiceFake : IGoodsKeepingService
     {
         throw new System.NotImplementedException();
     }
+
+    public Task SupplyProductsToWarehouseAsync(int warehouseId, IReadOnlyList<SuppliedProduct> suppliedProducts, int supermarketId)
+    {
+        throw new NotImplementedException();
+    }
 }
