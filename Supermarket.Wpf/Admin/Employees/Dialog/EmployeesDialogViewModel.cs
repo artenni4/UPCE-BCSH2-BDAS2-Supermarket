@@ -110,15 +110,17 @@ namespace Supermarket.Wpf.Admin.Employees.Dialog
 
         private async void GetPossibleManagers()
         {
-            if (SelectedSupermarket!= null)
+            if (SelectedSupermarket == null)
             {
-                var managers = await _adminMenuService.GetPossibleManagers(SelectedSupermarket.Id, new RecordsRange { PageSize = 200, PageNumber = 1 });
-                Managers.Update(managers.Items);
+                return;
+            }
+            
+            var managers = await _adminMenuService.GetPossibleManagers(SelectedSupermarket.Id, new RecordsRange { PageSize = 200, PageNumber = 1 });
+            Managers.Update(managers.Items);
 
-                if (Employee != null && EmployeeId != 0)
-                {
-                    SelectedManager = Managers.FirstOrDefault(x => x.EmployeeId == Employee.ManagerId);
-                }
+            if (Employee != null && EmployeeId != 0)
+            {
+                SelectedManager = Managers.FirstOrDefault(x => x.EmployeeId == Employee.ManagerId);
             }
         }
 

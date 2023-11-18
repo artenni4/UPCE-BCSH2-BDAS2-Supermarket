@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using Oracle.ManagedDataAccess.Client;
 using Dapper;
+using Dapper.Oracle;
 using Supermarket.Core.Domain.Auth;
 using Supermarket.Core.Domain.Employees;
 using Supermarket.Core.Domain.Employees.Roles;
@@ -217,10 +218,10 @@ namespace Supermarket.Infrastructure.Employees
             await AddEmployeeRoles(employeeRole, employeeRole.Id);
         }
 
-        public async Task<PagedResult<ManagerMenuEmployee>> GetSupermarketEmployeesForManager(int employeeId, RecordsRange recordsRange)
+        public async Task<PagedResult<ManagerMenuEmployee>> GetSupermarketEmployeesForManager(int managerId, RecordsRange recordsRange)
         {
             var parameters = new DynamicParameters()
-                .AddParameter("zamestnanec_id", employeeId);
+                .AddParameter("zamestnanec_id", managerId);
 
             const string sql = @"WITH podrizene AS (
                                     SELECT z.zamestnanec_id FROM zamestnanci z
@@ -295,26 +296,20 @@ namespace Supermarket.Infrastructure.Employees
             return result?.ToDomainEntity();
         }
 
-        public async Task<PagedResult<PossibleManagerForEmployee>> GetPossibleManagersForManager(int employeeId, RecordsRange recordsRange)
+        public async Task<PagedResult<PossibleManagerForEmployee>> GetPossibleManagersForManager(int managerId, RecordsRange recordsRange)
         {
-            var parameters = new DynamicParameters()
-                .AddParameter("zamestnanec_id", employeeId);
+            var parameters = new OracleDynamicParameters();
+            parameters.Add("v_manazeri_rc", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.ReturnValue); 
+            parameters.Add("p_manazer_id", managerId);
 
-            const string sql = @"WITH manazeri AS (
-                                    SELECT DISTINCT z.zamestnanec_id FROM zamestnanci z
-                                    LEFT JOIN ROLE_ZAMESTNANCU rz ON z.zamestnanec_id = rz.zamestnanec_id
-                                    WHERE rz.role_id = 2)
+            var result = await _oracleConnection
+                .QueryAsync<DbPossibleManagerForEmployee>("DEJ_MOZNE_MANAZERY", parameters, commandType: CommandType.StoredProcedure);
 
-                                SELECT z.zamestnanec_id, z.jmeno, z.prijmeni FROM zamestnanci z
-                                WHERE z.zamestnanec_id IN (SELECT * FROM manazeri)
-                                CONNECT BY PRIOR z.zamestnanec_id = z.manazer_id
-                                START WITH z.zamestnanec_id = :zamestnanec_id";
+            var items = result
+                .Select(dbProduct => dbProduct.ToDomainEntity())
+                .ToArray();
 
-            var orderByColumns = DbEmployee.IdentityColumns.Select(ic => $"z.{ic}");
-
-            var result = await GetPagedResult<DbPossibleManagerForEmployee>(recordsRange, sql, orderByColumns, parameters);
-
-            return result.Select(dbProduct => dbProduct.ToDomainEntity());
+            return new PagedResult<PossibleManagerForEmployee>(items, recordsRange, items.Length);
         }
 
         public async Task<PagedResult<PossibleManagerForEmployee>> GetPossibleManagersForAdmin(int supermarketId, RecordsRange recordsRange)
@@ -322,9 +317,11 @@ namespace Supermarket.Infrastructure.Employees
             var parameters = new DynamicParameters()
                 .AddParameter("supermarket_id", supermarketId);
 
-            const string sql = @"SELECT z.zamestnanec_id, z.jmeno, z.prijmeni FROM zamestnanci z
-                                    LEFT JOIN ROLE_ZAMESTNANCU rz ON z.zamestnanec_id = rz.zamestnanec_id
-                                    WHERE rz.role_id = 2 AND z.supermarket_id = :supermarket_id";
+            const string sql = @"SELECT z.zamestnanec_id, z.jmeno, z.prijmeni FROM zamestnanci z 
+                                 WHERE
+                                     je_role_zamestnancu(z.zamestnanec_id, 'Manazer') = 1 AND
+                                     z.supermarket_id = :supermarket_id AND
+                                     z.zamestnanec_id != :zamestnanec_id";
 
             var orderByColumns = DbEmployee.IdentityColumns.Select(ic => $"z.{ic}");
 
