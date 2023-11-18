@@ -6,6 +6,7 @@ using Supermarket.Wpf.LoggedUser;
 using Supermarket.Wpf.Manager.SupermarketCashboxes.Dialog;
 using Supermarket.Wpf.ViewModelResolvers;
 using System.Collections.ObjectModel;
+using System.Windows;
 using System.Windows.Input;
 using Cashbox = Supermarket.Core.Domain.CashBoxes.CashBox;
 
@@ -101,9 +102,9 @@ namespace Supermarket.Wpf.Manager.SupermarketCashboxes
                 {
                     await _managerMenuService.DeleteCashbox(selectedCashboxId);
                 }
-                catch (RepositoryOperationFailedException e)
+                catch (OperationCannotBeExecutedException)
                 {
-                    throw new OperationCannotBeExecutedException(e);
+                    MessageBox.Show("Nelze odstranit pokladnu, která již se používá", "Chyba", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
                 await InitializeAsync();
             }
