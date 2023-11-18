@@ -12,8 +12,8 @@ namespace Supermarket.Infrastructure.Sales
         public required int prodej_id { get; init; }
         public required string zbozi { get; init; }
         public required DateTime datum { get; init; }
-        public required decimal cena { get; init; }
-        public required string typ_placeni_nazev { get; init; }
+        public required decimal? cena { get; init; }
+        public required string? typ_placeni_nazev { get; init; }
         public required int pokladna_id { get; init; }
         public required string pokladna_nazev { get; init; }
 

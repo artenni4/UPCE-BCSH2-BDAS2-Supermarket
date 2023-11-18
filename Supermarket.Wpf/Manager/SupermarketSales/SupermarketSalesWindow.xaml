@@ -4,8 +4,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Supermarket.Wpf.Manager.SupermarketSales"
+             xmlns:converters="clr-namespace:Supermarket.Wpf.Common.Converters"
              mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance Type=local:SupermarketSalesViewModel, IsDesignTimeCreatable=False}"
              d:DesignHeight="1080" d:DesignWidth="1920">
+    <UserControl.Resources>
+        <converters:CurrencyValueConverter x:Key="CurrencyConverter" />
+    </UserControl.Resources>
     <Border Grid.Column="0" Margin="10,10,10,0" Style="{StaticResource PanelBorderStyle}">
         <Grid>
             <Grid.ColumnDefinitions>
@@ -29,7 +34,7 @@
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
 
-                    <DataGridTextColumn Header="Cena" Binding="{Binding Price, StringFormat={}{0}Kč}" IsReadOnly="True" FontSize="25" />
+                    <DataGridTextColumn Header="Cena" Binding="{Binding Price, Converter={StaticResource CurrencyConverter}}" IsReadOnly="True" FontSize="25" />
                     <DataGridTextColumn Header="Typ placení" Binding="{Binding PaymentType}"  IsReadOnly="True" FontSize="25" />
                     <DataGridTemplateColumn Header="Pokladna" IsReadOnly="True" >
                         <DataGridTemplateColumn.CellTemplate>

@@ -31,9 +31,9 @@ FROM
     PRODEJE p
 JOIN
     POKLADNY pk ON pk.pokladna_id = p.pokladna_id
-JOIN
+LEFT JOIN
     PLATBA pl ON pl.prodej_id = p.prodej_id
-JOIN
+LEFT JOIN
     TYPY_PLACENI tp ON tp.typ_placeni_id = pl.typ_placeni_id
 JOIN
     AggregatedZbozi az ON az.prodej_id = p.prodej_id

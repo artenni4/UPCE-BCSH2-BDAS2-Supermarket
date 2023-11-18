@@ -11,8 +11,8 @@ namespace Supermarket.Core.UseCases.ManagerMenu
         public required int Id { get; set; }
         public required DateTime Date { get; set; }
         public required string Products { get; set; }
-        public required decimal Price { get; set; }
-        public required string PaymentType { get; set; }
+        public required decimal? Price { get; set; }
+        public required string? PaymentType { get; set; }
         public required int CashboxId { get; set; }
         public required string CashboxName { get; set; }
     }
