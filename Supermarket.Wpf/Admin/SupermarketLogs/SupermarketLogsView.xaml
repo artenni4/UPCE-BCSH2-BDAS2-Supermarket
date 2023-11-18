@@ -1,0 +1,23 @@
+﻿<UserControl x:Class="Supermarket.Wpf.Admin.SupermarketLogs.SupermarketLogsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Supermarket.Wpf.Admin.SupermarketLogs"
+             mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance Type=local:SupermarketLogsViewModel, IsDesignTimeCreatable=False}"
+             d:DesignHeight="1080" d:DesignWidth="1920">
+    <Border Margin="10,10,10,0" Style="{StaticResource PanelBorderStyle}">
+        <Grid>
+            <DataGrid ItemsSource="{Binding ChangeLogs}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False" ColumnWidth="*" HorizontalAlignment="Left" Height="Auto">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Tabulka" Binding="{Binding TableName}" Width="*" IsReadOnly="True" FontSize="25" />
+                    <DataGridTextColumn Header="Operace" Binding="{Binding Operation}" Width="*" IsReadOnly="True" FontSize="25" />
+                    <DataGridTextColumn Header="Čas" Binding="{Binding TimeOccured}" Width="*" IsReadOnly="True" FontSize="25" />
+                    <DataGridTextColumn Header="Uživatel" Binding="{Binding UserName}" Width="*" IsReadOnly="True" FontSize="25" />
+                </DataGrid.Columns>
+            </DataGrid>
+
+        </Grid>
+    </Border>
+</UserControl>

@@ -1,4 +1,5 @@
 ﻿using Supermarket.Core.Domain.Auth;
+using Supermarket.Core.Domain.ChangeLogs;
 using Supermarket.Core.Domain.Common;
 using Supermarket.Core.Domain.Common.Paging;
 using Supermarket.Core.Domain.Employees;
@@ -20,8 +21,9 @@ namespace Supermarket.Core.UseCases.Admin
         private readonly IProductCategoryRepository _productCategoryRepository;
         private readonly IProductRepository _productRepository;
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly IChangeLogRepository _changeLogRepository;
 
-        public AdminMenuService(ISupplierRepository supplierRepository, ISupermarketRepository supermarketRepository, IRegionRepository regionRepository, IProductCategoryRepository productCategoryRepository, IProductRepository productRepository, IEmployeeRepository employeeRepository)
+        public AdminMenuService(ISupplierRepository supplierRepository, ISupermarketRepository supermarketRepository, IRegionRepository regionRepository, IProductCategoryRepository productCategoryRepository, IProductRepository productRepository, IEmployeeRepository employeeRepository, IChangeLogRepository changeLogRepository)
         {
             _supplierRepository = supplierRepository;
             _supermarketRepository = supermarketRepository;
@@ -29,6 +31,7 @@ namespace Supermarket.Core.UseCases.Admin
             _productCategoryRepository = productCategoryRepository;
             _productRepository = productRepository;
             _employeeRepository = employeeRepository;
+            _changeLogRepository = changeLogRepository;
         }
 
         #region Suppliers
@@ -238,6 +241,11 @@ namespace Supermarket.Core.UseCases.Admin
         public async Task<PagedResult<PossibleManagerForEmployee>> GetPossibleManagers(int supermarketId, RecordsRange recordsRange)
         {
             return await _employeeRepository.GetPossibleManagersForAdmin(supermarketId, recordsRange);
+        }
+
+        public async Task<PagedResult<ChangeLog>> GetChangeLogs(RecordsRange recordsRange)
+        {
+            return await _changeLogRepository.GetChangeLogs(recordsRange);
         }
 
         public async Task<AdminEmployeeDetail> GetEmployeeToEdit(int employeeId)

@@ -6,6 +6,7 @@ using Supermarket.Wpf.Admin.Supermarkets;
 using Supermarket.Wpf.Admin.Suppliers;
 using Supermarket.Wpf.ViewModelResolvers;
 using System.Collections.ObjectModel;
+using Supermarket.Wpf.Admin.SupermarketLogs;
 
 namespace Supermarket.Wpf.Admin
 {
@@ -41,6 +42,7 @@ namespace Supermarket.Wpf.Admin
             var categoriesViewModel = await _viewModelResolver.Resolve<AdminMenuCategoriesViewModel>();
             var regionsViewModel = await _viewModelResolver.Resolve<AdminRegionsViewModel>();
             var employeesViewModel = await _viewModelResolver.Resolve<AdminEmployeesViewModel>();
+            var supermarketLogsViewModel = await _viewModelResolver.Resolve<SupermarketLogsViewModel>();
 
             TabViewModels.Add(suppliersViewModel);
             TabViewModels.Add(productsViewModel);
@@ -48,6 +50,7 @@ namespace Supermarket.Wpf.Admin
             TabViewModels.Add(categoriesViewModel);
             TabViewModels.Add(regionsViewModel);
             TabViewModels.Add(employeesViewModel);
+            TabViewModels.Add(supermarketLogsViewModel);
 
             SelectedTabViewModel = suppliersViewModel;
         }

@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace Supermarket.Wpf.Manager.SupermarketLogs
+namespace Supermarket.Wpf.Admin.SupermarketLogs
 {
     /// <summary>
     /// Interaction logic for SupermarketLogsView.xaml

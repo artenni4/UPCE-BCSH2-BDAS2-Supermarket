@@ -16,7 +16,6 @@
         xmlns:managerMenuProducts="clr-namespace:Supermarket.Wpf.Manager.SupermarketProducts"
         xmlns:managerEmployees="clr-namespace:Supermarket.Wpf.Manager.SupermarketEmployees"
         xmlns:managerStorages="clr-namespace:Supermarket.Wpf.Manager.SupermarketStorages"
-        xmlns:managerLogs="clr-namespace:Supermarket.Wpf.Manager.SupermarketLogs"
         xmlns:managerSales="clr-namespace:Supermarket.Wpf.Manager.SupermarketSales"
         xmlns:managerCashboxes="clr-namespace:Supermarket.Wpf.Manager.SupermarketCashboxes"
         xmlns:managerEmployeesDialogs="clr-namespace:Supermarket.Wpf.Manager.SupermarketEmployees.Dialog"

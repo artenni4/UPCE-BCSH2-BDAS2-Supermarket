@@ -2,7 +2,6 @@
 using Supermarket.Wpf.Manager.AddProducts;
 using Supermarket.Wpf.Manager.SupermarketCashboxes;
 using Supermarket.Wpf.Manager.SupermarketEmployees;
-using Supermarket.Wpf.Manager.SupermarketLogs;
 using Supermarket.Wpf.Manager.SupermarketProducts;
 using Supermarket.Wpf.Manager.SupermarketSales;
 using Supermarket.Wpf.Manager.SupermarketStorages;

@@ -1,4 +1,5 @@
-﻿using Supermarket.Core.Domain.Common.Paging;
+﻿using Supermarket.Core.Domain.ChangeLogs;
+using Supermarket.Core.Domain.Common.Paging;
 using Supermarket.Core.Domain.ProductCategories;
 using Supermarket.Core.Domain.Products;
 using Supermarket.Core.Domain.Regions;
@@ -40,5 +41,6 @@ namespace Supermarket.Core.UseCases.Admin
         Task AddEmployee(AdminAddEmployee employee);
         Task DeleteEmployee(int employeeId);
         Task<PagedResult<PossibleManagerForEmployee>> GetPossibleManagers(int supermarketId, RecordsRange recordsRange);
+        Task<PagedResult<ChangeLog>> GetChangeLogs(RecordsRange recordsRange);
     }
 }

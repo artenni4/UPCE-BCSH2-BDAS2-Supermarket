@@ -10,7 +10,8 @@
              xmlns:supermarkets="clr-namespace:Supermarket.Wpf.Admin.Supermarkets"
              xmlns:regions="clr-namespace:Supermarket.Wpf.Admin.Regions"
              xmlns:employees="clr-namespace:Supermarket.Wpf.Admin.Employees"
-             
+             xmlns:supermarketLogs="clr-namespace:Supermarket.Wpf.Admin.SupermarketLogs"
+
              mc:Ignorable="d" 
              d:DesignHeight="1080" d:DesignWidth="1920">
     <Grid>
@@ -34,6 +35,9 @@
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type employees:AdminEmployeesViewModel}">
                     <employees:AdminEmployeesWindow />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type supermarketLogs:SupermarketLogsViewModel}">
+                    <supermarketLogs:SupermarketLogsView />
                 </DataTemplate>
             </TabControl.Resources>
             <TabControl.ItemTemplate>
