@@ -8,6 +8,7 @@ using Supermarket.Core.Domain.Employees.Roles;
 using Supermarket.Core.Domain.Products;
 using Supermarket.Core.Domain.Sales;
 using Supermarket.Core.Domain.SellingProducts;
+using Supermarket.Core.Domain.SharedFiles;
 using Supermarket.Core.Domain.StoragePlaces;
 using Supermarket.Core.Domain.StoredProducts;
 using Cashbox = Supermarket.Core.Domain.CashBoxes.CashBox;
@@ -23,8 +24,9 @@ namespace Supermarket.Core.UseCases.ManagerMenu
         private readonly IStoragePlaceRepository _storagePlaceRepository;
         private readonly ISaleRepository _saleRepository;
         private readonly ICashBoxRepository _cashBoxRepository;
+        private readonly ISharedFileRepository _sharedFileRepository;
 
-        public ManagerMenuService(ISellingProductRepository sellingProductRepository, IStoredProductRepository storedProductRepository, IProductRepository productRepository, IEmployeeRepository employeeRepository, IStoragePlaceRepository storagePlaceRepository, ISaleRepository saleRepository, ICashBoxRepository cashBoxRepository)
+        public ManagerMenuService(ISellingProductRepository sellingProductRepository, IStoredProductRepository storedProductRepository, IProductRepository productRepository, IEmployeeRepository employeeRepository, IStoragePlaceRepository storagePlaceRepository, ISaleRepository saleRepository, ICashBoxRepository cashBoxRepository, ISharedFileRepository sharedFileRepository)
         {
             _sellingProductRepository = sellingProductRepository;
             _productRepository = productRepository;
@@ -33,6 +35,7 @@ namespace Supermarket.Core.UseCases.ManagerMenu
             _storagePlaceRepository = storagePlaceRepository;
             _saleRepository = saleRepository;
             _cashBoxRepository = cashBoxRepository;
+            _sharedFileRepository = sharedFileRepository;
         }
 
         #region SupermarketProducts
@@ -255,6 +258,36 @@ namespace Supermarket.Core.UseCases.ManagerMenu
         }
 
         #endregion
+
+        public async Task<PagedResult<ManagerMenuSharedFile>> GetSharedFiles(int supermarketId, RecordsRange recordsRange, string? search)
+        {
+            return await _sharedFileRepository.GetAllAsync(supermarketId, recordsRange, search);
+        }
+
+        public async Task<SharedFile?> GetSharedFile(int fileId)
+        {
+            return await _sharedFileRepository.GetByIdAsync(fileId);
+        }
+
+        public async Task AddSharedFile(SharedFile file)
+        {
+            await _sharedFileRepository.AddAsync(file);
+        }
+
+        public async Task EditSharedFile(SharedFile file)
+        {
+            await _sharedFileRepository.UpdateAsync(file);
+        }
+
+        public async Task DeleteSharedFile(int fileId)
+        {
+            await _sharedFileRepository.DeleteAsync(fileId);
+        }
+
+        public async Task SaveSharedFile(SharedFile file)
+        {
+            await _sharedFileRepository.SaveSharedFile(file);
+        }
     }
 }
 

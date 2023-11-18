@@ -1,4 +1,4 @@
-﻿insert into druhy_zbozi values (null, 'maso', null);
+insert into druhy_zbozi values (null, 'maso', null);
 insert into druhy_zbozi values (null, 'ryby', null);
 insert into druhy_zbozi values (null, 'ovoce', null);
 insert into druhy_zbozi values (null, 'zelenina', null);
@@ -783,9 +783,9 @@ insert into prodane_zbozi values(20, 2589, 3, 6, 7);
 insert into prodane_zbozi values(20, 2589, 3, 6, 15);
 insert into prodane_zbozi values(20, 2589, 3, 6, 6);
 
-insert into zamestnanci values(null, 'admin', 'F489922953333856F597BEC41A942FB6B4ECEF2CACE347D82D283683A5013F23', '0320CF7947EF694AF7EA2AFF919AF0A5', 'Admin', 'Admin', TO_DATE('22-07-2012', 'dd-MM-yyyy'), null, null);
-insert into zamestnanci values(null, 'viktor', '12345678912345671234567891234567', '1234567891234567', 'Viktor', 'Fibonacci', TO_DATE('01-05-2005', 'dd-MM-yyyy'), 1, null);
-insert into zamestnanci values(null, 'donald', '12345678912345671234567891234567', '1234567891234567', 'Donald', 'McGoogle', TO_DATE('22-07-2012', 'dd-MM-yyyy'), 1, null);
+insert into zamestnanci values(null, 'admin', 'F489922953333856F597BEC41A942FB6B4ECEF2CACE347D82D283683A5013F23', '0320CF7947EF694AF7EA2AFF919AF0A5', 'Admin', 'Admin', TO_DATE('22-07-2012', 'dd-MM-yyyy'), null, null, '850126/1158');
+insert into zamestnanci values(null, 'viktor', '12345678912345671234567891234567', '1234567891234567', 'Viktor', 'Fibonacci', TO_DATE('01-05-2005', 'dd-MM-yyyy'), 1, null, '921201/1238');
+insert into zamestnanci values(null, 'donald', '12345678912345671234567891234567', '1234567891234567', 'Donald', 'McGoogle', TO_DATE('22-07-2012', 'dd-MM-yyyy'), 1, null, '010212/2199');
 
 insert into role values(1, 'Pokladnik');
 insert into role values(2, 'Manazer');

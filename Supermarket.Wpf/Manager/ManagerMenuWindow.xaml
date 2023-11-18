@@ -10,6 +10,7 @@
              xmlns:storages="clr-namespace:Supermarket.Wpf.Manager.SupermarketStorages"
              xmlns:sales="clr-namespace:Supermarket.Wpf.Manager.SupermarketSales"
              xmlns:cashboxes="clr-namespace:Supermarket.Wpf.Manager.SupermarketCashboxes"
+             xmlns:files="clr-namespace:Supermarket.Wpf.Manager.SupermarketSharedFiles"
              d:DataContext="{d:DesignInstance Type=local:ManagerMenuViewModelFake, IsDesignTimeCreatable=True}"
              mc:Ignorable="d" 
              d:DesignHeight="1080" d:DesignWidth="1920">
@@ -34,6 +35,9 @@
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type cashboxes:SupermarketCashboxesViewModel}">
                     <cashboxes:SupermarketCashboxesWindow />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type files:SupermarketSharedFilesViewModel}">
+                    <files:SupermarketSharedFilesWindow />
                 </DataTemplate>
             </TabControl.Resources>
             <TabControl.ItemTemplate>

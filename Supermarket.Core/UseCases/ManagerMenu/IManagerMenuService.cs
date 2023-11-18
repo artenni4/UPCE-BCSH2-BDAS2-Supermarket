@@ -1,6 +1,7 @@
 ﻿using Supermarket.Core.Domain.Common;
 using Supermarket.Core.Domain.Common.Paging;
 using Supermarket.Core.Domain.SellingProducts;
+using Supermarket.Core.Domain.SharedFiles;
 using Supermarket.Core.Domain.StoragePlaces;
 using Supermarket.Core.Domain.StoredProducts;
 using Supermarket.Core.Domain.Suppliers;
@@ -38,5 +39,12 @@ namespace Supermarket.Core.UseCases.ManagerMenu
         Task DeleteCashbox(int cashboxId);
         Task AddCashbox(Cashbox cashbox);
         Task EditCashbox(Cashbox cashbox);
+
+        Task<PagedResult<ManagerMenuSharedFile>> GetSharedFiles(int supermarketId, RecordsRange recordsRange, string? search);
+        Task<SharedFile?> GetSharedFile(int fileId);
+        Task AddSharedFile(SharedFile file);
+        Task EditSharedFile(SharedFile file);
+        Task DeleteSharedFile(int fileId);
+
     }
 }

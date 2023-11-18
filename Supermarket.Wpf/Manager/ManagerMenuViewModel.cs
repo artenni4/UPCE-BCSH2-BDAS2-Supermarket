@@ -4,6 +4,7 @@ using Supermarket.Wpf.Manager.SupermarketCashboxes;
 using Supermarket.Wpf.Manager.SupermarketEmployees;
 using Supermarket.Wpf.Manager.SupermarketProducts;
 using Supermarket.Wpf.Manager.SupermarketSales;
+using Supermarket.Wpf.Manager.SupermarketSharedFiles;
 using Supermarket.Wpf.Manager.SupermarketStorages;
 using Supermarket.Wpf.ViewModelResolvers;
 
@@ -41,6 +42,7 @@ namespace Supermarket.Wpf.Manager
             var supermarketStoragesViewModel = await _viewModelResolver.Resolve<SupermarketStoragesViewModel>();
             var supermarketSalesViewModel = await _viewModelResolver.Resolve<SupermarketSalesViewModel>();
             var supermarketCashboxesViewModel = await _viewModelResolver.Resolve<SupermarketCashboxesViewModel>();
+            var supermarketSharedFilesViewModel = await _viewModelResolver.Resolve<SupermarketSharedFilesViewModel>();
             
             TabViewModels.Add(supermarketProductsViewModel);
             TabViewModels.Add(addProductsViewModel);
@@ -48,7 +50,8 @@ namespace Supermarket.Wpf.Manager
             TabViewModels.Add(supermarketStoragesViewModel);
             TabViewModels.Add(supermarketSalesViewModel);
             TabViewModels.Add(supermarketCashboxesViewModel);
-            
+            TabViewModels.Add(supermarketSharedFilesViewModel);
+
             SelectedTabViewModel = supermarketProductsViewModel;
         }
     }

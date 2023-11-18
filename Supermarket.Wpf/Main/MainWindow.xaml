@@ -30,7 +30,7 @@
         xmlns:adminMenuEmployeesDialogs="clr-namespace:Supermarket.Wpf.Admin.Employees.Dialog"
         
         xmlns:managerStoragesMoveDialog="clr-namespace:Supermarket.Wpf.Manager.SupermarketStorages.Dialog"
-        
+        xmlns:managerFilesDialog="clr-namespace:Supermarket.Wpf.Manager.SupermarketSharedFiles.Dialog"
         
         xmlns:confirmation="clr-namespace:Supermarket.Wpf.Common.Dialogs.Confirmation"
         xmlns:input="clr-namespace:Supermarket.Wpf.Common.Dialogs.Input"
@@ -121,6 +121,9 @@
 
         <DataTemplate DataType="{x:Type managerStoragesMoveDialog:SupermarketStoragesMoveDialogViewModel}" >
             <managerStoragesMoveDialog:SupermarketStoragesMoveDialogWindow/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type managerFilesDialog:SharedFilesDialogViewModel}" >
+            <managerFilesDialog:SharedFilesDialogWindow />
         </DataTemplate>
         
         <converter:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
