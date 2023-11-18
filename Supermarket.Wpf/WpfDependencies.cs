@@ -15,6 +15,7 @@ using Supermarket.Wpf.Admin.Supermarkets;
 using Supermarket.Wpf.Admin.Supermarkets.Dialog;
 using Supermarket.Wpf.Admin.Suppliers;
 using Supermarket.Wpf.Admin.Suppliers.Dialog;
+using Supermarket.Wpf.Admin.UsedDatabaseObjects;
 using Supermarket.Wpf.CashBox;
 using Supermarket.Wpf.CashBox.Dialogs;
 using Supermarket.Wpf.Common.Dialogs.Confirmation;
@@ -87,6 +88,7 @@ public static class WpfDependencies
         serviceCollection.AddTransient<SuppliersDialogViewModel>();
         serviceCollection.AddTransient<AdminProductsViewModel>();
         serviceCollection.AddTransient<SupermarketLogsViewModel>();
+        serviceCollection.AddTransient<UsedDatabaseObjectsViewModel>();
         serviceCollection.AddTransient<ProductsDialogViewModel>();
         serviceCollection.AddTransient<AdminSupermarketsViewModel>();
         serviceCollection.AddTransient<SupermarketsDialogViewModel>();

@@ -9,6 +9,7 @@ using Supermarket.Core.Domain.Products;
 using Supermarket.Core.Domain.Regions;
 using Supermarket.Core.Domain.Supermarkets;
 using Supermarket.Core.Domain.Suppliers;
+using Supermarket.Core.Domain.UsedDatabaseObjects;
 using Supermarket.Core.UseCases.ManagerMenu;
 
 namespace Supermarket.Core.UseCases.Admin
@@ -22,8 +23,16 @@ namespace Supermarket.Core.UseCases.Admin
         private readonly IProductRepository _productRepository;
         private readonly IEmployeeRepository _employeeRepository;
         private readonly IChangeLogRepository _changeLogRepository;
+        private readonly IUsedDatabaseObjectRepository _usedDatabaseObjectRepository;
 
-        public AdminMenuService(ISupplierRepository supplierRepository, ISupermarketRepository supermarketRepository, IRegionRepository regionRepository, IProductCategoryRepository productCategoryRepository, IProductRepository productRepository, IEmployeeRepository employeeRepository, IChangeLogRepository changeLogRepository)
+        public AdminMenuService(ISupplierRepository supplierRepository,
+            ISupermarketRepository supermarketRepository,
+            IRegionRepository regionRepository,
+            IProductCategoryRepository productCategoryRepository,
+            IProductRepository productRepository,
+            IEmployeeRepository employeeRepository,
+            IChangeLogRepository changeLogRepository,
+            IUsedDatabaseObjectRepository usedDatabaseObjectRepository)
         {
             _supplierRepository = supplierRepository;
             _supermarketRepository = supermarketRepository;
@@ -32,6 +41,7 @@ namespace Supermarket.Core.UseCases.Admin
             _productRepository = productRepository;
             _employeeRepository = employeeRepository;
             _changeLogRepository = changeLogRepository;
+            _usedDatabaseObjectRepository = usedDatabaseObjectRepository;
         }
 
         #region Suppliers
@@ -246,6 +256,11 @@ namespace Supermarket.Core.UseCases.Admin
         public async Task<PagedResult<ChangeLog>> GetChangeLogs(RecordsRange recordsRange)
         {
             return await _changeLogRepository.GetChangeLogs(recordsRange);
+        }
+
+        public async Task<PagedResult<UsedDatabaseObject>> GetUsedDatabaseObjects(RecordsRange recordsRange)
+        {
+            return await _usedDatabaseObjectRepository.GetUsedDatabaseObjects(recordsRange);
         }
 
         public async Task<AdminEmployeeDetail> GetEmployeeToEdit(int employeeId)

@@ -16,7 +16,7 @@ public class ChangeLogRepository : IChangeLogRepository
 
     public async Task<PagedResult<ChangeLog>> GetChangeLogs(RecordsRange recordsRange)
     {
-        var pagingParameters = GetPagingParameters(recordsRange);
+        var pagingParameters = recordsRange.GetPagingParameters();
         const string sql = "SELECT * FROM LOGY ORDER BY cas OFFSET :PagingOffset ROWS FETCH NEXT :PagingRowsCount ROWS ONLY";
         var changeLogs = await _oracleConnection.QueryAsync<DbChangeLog>(sql, pagingParameters);
         var items = changeLogs
@@ -24,17 +24,5 @@ public class ChangeLogRepository : IChangeLogRepository
             .ToArray();
         
         return new PagedResult<ChangeLog>(items, recordsRange, items.Length);
-    }
-    
-    private static DynamicParameters GetPagingParameters(RecordsRange recordsRange)
-    {
-        var startRow = (recordsRange.PageNumber - 1) * recordsRange.PageSize;
-        var rowsCount = recordsRange.PageSize;
-
-        return new DynamicParameters(new
-        {
-            PagingOffset = startRow,
-            PagingRowsCount = rowsCount
-        });
     }
 }
