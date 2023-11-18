@@ -2,9 +2,7 @@
 using Oracle.ManagedDataAccess.Client;
 using Supermarket.Core.Domain.Common.Paging;
 using Supermarket.Core.Domain.StoragePlaces;
-using Supermarket.Core.Domain.Supermarkets;
 using Supermarket.Core.UseCases.GoodsKeeping;
-using Supermarket.Infrastructure.ProductCategories;
 
 namespace Supermarket.Infrastructure.StoragePlaces;
 
@@ -25,6 +23,12 @@ internal class StoragePlaceRepository : CrudRepositoryBase<StoragePlace, int, Db
     {
         var parameters = new DynamicParameters().AddParameter("sklad_id", warehouseId).AddParameter("pr_zbozi_id", productId).AddParameter("pr_supermarket_id", supermarketId).AddParameter("pr_kusy", count);
         await _oracleConnection.ExecuteAsync("prijezd_zbozi", parameters, commandType: System.Data.CommandType.StoredProcedure);
+    }
+
+    public async Task MoveProductAndDelete(int id, int newPlaceId)
+    {
+        var parameters = new DynamicParameters().AddParameter("p_misto_ulozeni_id", id).AddParameter("p_new_misto_ulozeni_id", newPlaceId);
+        await _oracleConnection.ExecuteAsync("move_and_delete", parameters, commandType: System.Data.CommandType.StoredProcedure);
     }
 
     public async Task<PagedResult<StoragePlace>> GetSupermarketStoragePlaces(int supermarketId, RecordsRange recordsRange)

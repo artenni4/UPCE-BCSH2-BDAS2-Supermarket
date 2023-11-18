@@ -1,5 +1,6 @@
 ﻿using Supermarket.Core.Domain.Common;
 using Supermarket.Core.Domain.Common.Paging;
+using Supermarket.Core.Domain.Products;
 using Supermarket.Core.Domain.SellingProducts;
 using Supermarket.Core.Domain.StoragePlaces;
 using Supermarket.Core.Domain.StoredProducts;
@@ -41,11 +42,21 @@ namespace Supermarket.Core.UseCases.GoodsKeeping
             return result.Select(GoodsKeepingProduct.FromProduct);
         }
 
+        public async Task<StoragePlace?> GetStoragePlaceAsync(int id)
+        {
+            return await _storagePlaceRepository.GetByIdAsync(id);
+        }
+
         public async Task<PagedResult<GoodsKeepingStoragePlace>> GetStoragePlacesAsync(int supermarketId, RecordsRange recordsRange)
         {
             var result = await _storagePlaceRepository.GetSupermarketStoragePlaces(supermarketId, recordsRange);
 
             return result.Select(GoodsKeepingStoragePlace.FromStoragePlace);
+        }
+
+        public async Task<PagedResult<StoragePlace>> GetStoragePlacesToMoveAsync(int supermarketId, RecordsRange recordsRange)
+        {
+            return await _storagePlaceRepository.GetSupermarketStoragePlaces(supermarketId, recordsRange);
         }
 
         public async Task<PagedResult<GoodsKeepingStoredProduct>> GetStoredProducts(int supermarketId, RecordsRange recordsRange)
@@ -65,6 +76,11 @@ namespace Supermarket.Core.UseCases.GoodsKeeping
         public async Task MoveProductAsync(int storagePlaceId, MovingProduct movingProduct)
         {
             await _storagePlaceRepository.MoveProduct(storagePlaceId, movingProduct);
+        }
+
+        public async Task MoveProductsAndDelete(int id, int newPlaceId)
+        {
+            await _storagePlaceRepository.MoveProductAndDelete(id, newPlaceId);
         }
 
         public async Task SupplyProductsToWarehouseAsync(int warehouseId, IReadOnlyList<SuppliedProduct> suppliedProducts, int supermarketId)

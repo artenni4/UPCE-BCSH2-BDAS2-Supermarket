@@ -108,7 +108,12 @@ namespace Supermarket.Wpf.Manager.SupermarketStorages
             }
             catch (OperationCannotBeExecutedException)
             {
-                MessageBox.Show("Místo uložení nelze smazat protože již se používá", "Chyba", MessageBoxButton.OK, MessageBoxImage.Error);
+                var resultDelete = await _dialogService.ShowAsync<SupermarketStoragesMoveDialogViewModel, StoragePlace, int>(SelectedStorage.Id);
+                if (resultDelete.IsOk(out var a))
+                {
+                    await InitializeAsync();
+                }
+                //MessageBox.Show("Místo uložení nelze smazat protože již se používá", "Chyba", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             await InitializeAsync();
         }

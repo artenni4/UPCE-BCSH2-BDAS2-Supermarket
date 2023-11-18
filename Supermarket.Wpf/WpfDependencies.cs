@@ -69,6 +69,7 @@ public static class WpfDependencies
         serviceCollection.AddTransient<ArrivalRegistrationViewModel>();
         serviceCollection.AddTransient<GoodsManagementViewModel>();
         serviceCollection.AddTransient<MoveStoredProductViewModel>();
+        serviceCollection.AddTransient<SupermarketStoragesMoveDialogViewModel>();
 
         serviceCollection.AddTransient<ManagerMenuViewModel>();
         serviceCollection.AddTransient<SupermarketProductsViewModel>();

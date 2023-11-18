@@ -1,4 +1,5 @@
 ﻿using Supermarket.Core.Domain.Common.Paging;
+using Supermarket.Core.Domain.StoragePlaces;
 
 namespace Supermarket.Core.UseCases.GoodsKeeping;
 
@@ -38,6 +39,12 @@ public interface IGoodsKeepingService
     /// Gets list of all storage places 
     /// </summary>
     Task<PagedResult<GoodsKeepingStoragePlace>> GetStoragePlacesAsync(int supermarketId, RecordsRange recordsRange);
+
+    Task<PagedResult<StoragePlace>> GetStoragePlacesToMoveAsync(int supermarketId, RecordsRange recordsRange);
+
+    Task<StoragePlace?> GetStoragePlaceAsync(int id);
+
+    Task MoveProductsAndDelete(int id, int newPlaceId);
     
     /// <summary>
     /// Deletes product from storage place

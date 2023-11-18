@@ -7,6 +7,7 @@ CREATE OR REPLACE PROCEDURE premistit_zbozi(
 IS
     v_old_kusy NUMBER(6,3);
     v_supermarket_id NUMBER;
+    v_transfer_kusy NUMBER;
 BEGIN
     SELECT uz.kusy
     INTO v_old_kusy
@@ -15,29 +16,31 @@ BEGIN
     AND uz.zbozi_id = var_zbozi_id;
 
     IF v_old_kusy > var_kusy THEN
+        v_transfer_kusy := var_kusy;
         UPDATE ULOZENI_ZBOZI uz
         SET uz.kusy = v_old_kusy - var_kusy
         WHERE uz.misto_ulozeni_id = old_sklad_id
         AND uz.zbozi_id = var_zbozi_id;
-
-        SELECT DISTINCT(uz.supermarket_id)
-        INTO v_supermarket_id
-        FROM ULOZENI_ZBOZI uz
-        WHERE uz.misto_ulozeni_id = new_sklad_id;
-
-        UPDATE ULOZENI_ZBOZI uz
-        SET uz.kusy = uz.kusy + var_kusy
-        WHERE uz.misto_ulozeni_id = new_sklad_id
-        AND uz.zbozi_id = var_zbozi_id;
-
-        IF SQL%ROWCOUNT = 0 THEN
-            INSERT INTO ULOZENI_ZBOZI (kusy, misto_ulozeni_id, supermarket_id, zbozi_id)
-            VALUES (var_kusy, new_sklad_id, v_supermarket_id, var_zbozi_id);
-        END IF;
     ELSE
+        v_transfer_kusy := v_old_kusy;
         DELETE FROM ULOZENI_ZBOZI uz
         WHERE misto_ulozeni_id = old_sklad_id
         AND uz.zbozi_id = var_zbozi_id;
+    END IF;
+
+    SELECT DISTINCT(uz.supermarket_id)
+    INTO v_supermarket_id
+    FROM ULOZENI_ZBOZI uz
+    WHERE uz.misto_ulozeni_id = new_sklad_id;
+
+    UPDATE ULOZENI_ZBOZI uz
+    SET uz.kusy = uz.kusy + v_transfer_kusy
+    WHERE uz.misto_ulozeni_id = new_sklad_id
+    AND uz.zbozi_id = var_zbozi_id;
+
+    IF SQL%ROWCOUNT = 0 THEN
+        INSERT INTO ULOZENI_ZBOZI (kusy, misto_ulozeni_id, supermarket_id, zbozi_id)
+        VALUES (v_transfer_kusy, new_sklad_id, v_supermarket_id, var_zbozi_id);
     END IF;
 END premistit_zbozi;
 
@@ -69,3 +72,66 @@ BEGIN
         VALUES (pr_kusy, sklad_id, pr_supermarket_id, pr_zbozi_id);
     END IF;
 END prijezd_zbozi;
+/
+
+
+CREATE OR REPLACE PROCEDURE smazat_misto_ulozeni(
+  p_misto_ulozeni_id IN MISTA_ULOZENI.misto_ulozeni_id%TYPE,
+  p_supermarket_id IN NUMBER
+) IS
+  CURSOR c_ulozeni_zbozi IS
+    SELECT *
+    FROM ULOZENI_ZBOZI
+    WHERE misto_ulozeni_id = p_misto_ulozeni_id;
+  v_ulozeni_zbozi c_ulozeni_zbozi%ROWTYPE;
+BEGIN
+  OPEN c_ulozeni_zbozi;
+  LOOP
+    FETCH c_ulozeni_zbozi INTO v_ulozeni_zbozi;
+    EXIT WHEN c_ulozeni_zbozi%NOTFOUND;
+
+    BEGIN
+      UPDATE ULOZENI_ZBOZI
+      SET kusy = kusy + v_ulozeni_zbozi.kusy
+      WHERE zbozi_id = v_ulozeni_zbozi.zbozi_id AND supermarket_id = p_supermarket_id;
+    EXCEPTION
+      WHEN NO_DATA_FOUND THEN
+        INSERT INTO ULOZENI_ZBOZI (kusy, misto_ulozeni_id, supermarket_id, zbozi_id)
+        VALUES (v_ulozeni_zbozi.kusy, p_misto_ulozeni_id, p_supermarket_id, v_ulozeni_zbozi.zbozi_id);
+    END;
+
+    DELETE FROM ULOZENI_ZBOZI
+    WHERE misto_ulozeni_id = v_ulozeni_zbozi.misto_ulozeni_id
+      AND zbozi_id = v_ulozeni_zbozi.zbozi_id AND supermarket_id = p_supermarket_id;
+  END LOOP;
+  CLOSE c_ulozeni_zbozi;
+
+  DELETE FROM MISTA_ULOZENI
+  WHERE misto_ulozeni_id = p_misto_ulozeni_id;
+END smazat_misto_ulozeni;
+/
+
+CREATE OR REPLACE PROCEDURE move_and_delete(
+  p_misto_ulozeni_id IN MISTA_ULOZENI.misto_ulozeni_id%TYPE,
+  p_new_misto_ulozeni_id IN MISTA_ULOZENI.misto_ulozeni_id%TYPE
+) IS
+  CURSOR c_ulozeni_zbozi IS
+    SELECT *
+    FROM ULOZENI_ZBOZI
+    WHERE misto_ulozeni_id = p_misto_ulozeni_id;
+  v_ulozeni_zbozi c_ulozeni_zbozi%ROWTYPE;
+BEGIN
+  OPEN c_ulozeni_zbozi;
+  LOOP
+    FETCH c_ulozeni_zbozi INTO v_ulozeni_zbozi;
+    EXIT WHEN c_ulozeni_zbozi%NOTFOUND;
+
+    premistit_zbozi(v_ulozeni_zbozi.misto_ulozeni_id, p_new_misto_ulozeni_id, v_ulozeni_zbozi.zbozi_id, v_ulozeni_zbozi.kusy);
+  END LOOP;
+  CLOSE c_ulozeni_zbozi;
+
+  DELETE FROM MISTA_ULOZENI
+  WHERE misto_ulozeni_id = p_misto_ulozeni_id;
+END move_and_delete;
+
+
