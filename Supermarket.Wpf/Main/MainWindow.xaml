@@ -29,6 +29,9 @@
         xmlns:adminMenRegionsDialogs="clr-namespace:Supermarket.Wpf.Admin.Regions.Dialog"
         xmlns:adminMenuEmployeesDialogs="clr-namespace:Supermarket.Wpf.Admin.Employees.Dialog"
         
+        xmlns:managerStoragesMoveDialog="clr-namespace:Supermarket.Wpf.Manager.SupermarketStorages.Dialog"
+        
+        
         xmlns:confirmation="clr-namespace:Supermarket.Wpf.Common.Dialogs.Confirmation"
         xmlns:input="clr-namespace:Supermarket.Wpf.Common.Dialogs.Input"
         xmlns:dropdown="clr-namespace:Supermarket.Wpf.Common.Dialogs.DropDown"
@@ -115,6 +118,11 @@
             <adminMenuEmployeesDialogs:EmployeesDialogWindow/>
         </DataTemplate>
 
+
+        <DataTemplate DataType="{x:Type managerStoragesMoveDialog:SupermarketStoragesMoveDialogViewModel}" >
+            <managerStoragesMoveDialog:SupermarketStoragesMoveDialogWindow/>
+        </DataTemplate>
+        
         <converter:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
         <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </Window.Resources>

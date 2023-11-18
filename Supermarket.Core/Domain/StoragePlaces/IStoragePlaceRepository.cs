@@ -9,5 +9,6 @@ namespace Supermarket.Core.Domain.StoragePlaces
         Task<PagedResult<StoragePlace>> GetSupermarketStoragePlaces(int supermarketId, RecordsRange recordsRange);
         Task MoveProduct(int storagePlaceId, MovingProduct movingProduct);
         Task SupplyProductsToWarehouse(int warehouseId, int productId, int supermarketId, decimal count);
+        Task MoveProductAndDelete(int id, int newPlaceId);
     }
 }
