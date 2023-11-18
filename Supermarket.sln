@@ -17,6 +17,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{78AF
 		Scripts\script.ddl = Scripts\script.ddl
 		Scripts\truncates.sql = Scripts\truncates.sql
 		Scripts\Views.sql = Scripts\Views.sql
+		Scripts\triggers.sql = Scripts\triggers.sql
+		Scripts\generate_log_triggers.py = Scripts\generate_log_triggers.py
+		Scripts\log_triggers.sql = Scripts\log_triggers.sql
 	EndProjectSection
 EndProject
 Global
