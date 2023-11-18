@@ -6,6 +6,8 @@ using Supermarket.Wpf.ViewModelResolvers;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using Supermarket.Wpf.Manager.SupermarketEmployees.Dialog;
+using Supermarket.Core.Domain.Common;
+using System.Windows;
 
 namespace Supermarket.Wpf.Manager.SupermarketEmployees
 {
@@ -94,7 +96,14 @@ namespace Supermarket.Wpf.Manager.SupermarketEmployees
             if (result.IsOk())
             {
                 int selectedEmployeeId = SelectedEmployee?.EmployeeId ?? 0;
-                await _managerMenuService.DeleteEmployee(selectedEmployeeId);
+                try
+                {
+                    await _managerMenuService.DeleteEmployee(selectedEmployeeId);
+                }
+                catch (OperationCannotBeExecutedException)
+                {
+                    MessageBox.Show("Nelze smazat zaměstnance protože již se používá", "Chyba", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
                 await InitializeAsync();
             }
         }

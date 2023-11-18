@@ -271,9 +271,16 @@ namespace Supermarket.Core.UseCases.ManagerMenu
 
         public async Task DeleteCashbox(int cashboxId)
         {
-            await using var transaction = await _unitOfWork.BeginTransactionAsync();
-            await _cashBoxRepository.DeleteAsync(cashboxId);
-            await transaction.CommitAsync();
+            try
+            {
+                await using var transaction = await _unitOfWork.BeginTransactionAsync();
+                await _cashBoxRepository.DeleteAsync(cashboxId);
+                await transaction.CommitAsync();
+            }
+            catch (RepositoryOperationFailedException e)
+            {
+                throw new OperationCannotBeExecutedException(e);
+            }
         }
 
         public async Task AddCashbox(Cashbox cashbox)
@@ -318,9 +325,16 @@ namespace Supermarket.Core.UseCases.ManagerMenu
 
         public async Task DeleteSharedFile(int fileId)
         {
-            await using var transaction = await _unitOfWork.BeginTransactionAsync();
-            await _sharedFileRepository.DeleteAsync(fileId);
-            await transaction.CommitAsync();
+            try
+            {
+                await using var transaction = await _unitOfWork.BeginTransactionAsync();
+                await _sharedFileRepository.DeleteAsync(fileId);
+                await transaction.CommitAsync();
+            }
+            catch (RepositoryOperationFailedException e)
+            {
+                throw new OperationCannotBeExecutedException(e);
+            }
         }
 
         public async Task SaveSharedFile(SharedFile file)
