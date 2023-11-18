@@ -45,19 +45,21 @@ namespace Supermarket.Wpf.Admin.Employees.Dialog
             set
             {
                 SetProperty(ref _selectedSupermarket, value);
+                UpdateManagers();
+            }
+        }
 
-                _ = Task.Run(async () =>
-                {
-                    if (value is not null)
-                    {
-                        var managers = await _adminMenuService.GetPossibleManagers(value.Id, new RecordsRange { PageSize = 200, PageNumber = 1 });
-                        Managers.Update(managers.Items);
-                    }
-                    else
-                    {
-                        Managers.Clear();
-                    }
-                });
+        private async void UpdateManagers()
+        {
+            if (SelectedSupermarket is not null)
+            {
+                var managers =
+                    await _adminMenuService.GetPossibleManagers(SelectedSupermarket.Id, new RecordsRange { PageSize = 200, PageNumber = 1 });
+                Managers.Update(managers.Items);
+            }
+            else
+            {
+                Managers.Clear();
             }
         }
 
