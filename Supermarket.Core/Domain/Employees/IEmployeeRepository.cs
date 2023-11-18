@@ -12,9 +12,9 @@ namespace Supermarket.Core.Domain.Employees
         Task AddAsync(EmployeeRole employeeRole);
         Task UpdateAsync(EmployeeRole employeeRole);
         Task<ManagerMenuEmployeeDetail?> GetEmployeeDetail(int employeeId);
-        Task<PagedResult<PossibleManagerForEmployee>> GetPossibleManagersForManager(int employeeId, RecordsRange recordsRange);
+        Task<PagedResult<PossibleManagerForEmployee>> GetPossibleManagersForManager(int managerId, RecordsRange recordsRange);
         Task<PagedResult<PossibleManagerForEmployee>> GetPossibleManagersForAdmin(int supermarketId, RecordsRange recordsRange);
-        Task<PagedResult<ManagerMenuEmployee>> GetSupermarketEmployeesForManager(int employeeId, RecordsRange recordsRange);
+        Task<PagedResult<ManagerMenuEmployee>> GetSupermarketEmployeesForManager(int managerId, RecordsRange recordsRange);
         Task<PagedResult<ManagerMenuEmployee>> GetSupermarketEmployeesForAdmin(int supermarketId, RecordsRange recordsRange);
         Task<PagedResult<AdminEmployee>> GetAdminMenuEmployees(RecordsRange recordsRange);
         Task<AdminEmployeeDetail?> GetAdminEmployeeDetail(int employeeId);

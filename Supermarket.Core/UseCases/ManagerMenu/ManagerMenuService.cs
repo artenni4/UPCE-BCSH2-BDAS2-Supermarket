@@ -155,13 +155,13 @@ namespace Supermarket.Core.UseCases.ManagerMenu
 
         public async Task<PagedResult<PossibleManagerForEmployee>> GetPossibleManagers(int employeeId, int supermarketId, RecordsRange recordsRange)
         {
-            var employee = await _employeeRepository.GetRoleByIdAsync(employeeId);
-            if (employee is null)
+            var assigner = await _employeeRepository.GetRoleByIdAsync(employeeId);
+            if (assigner is null)
             {
                 throw new ApplicationInconsistencyException($"Employee {employeeId} was not found");
             }
             
-            if (employee.RoleInfo is Domain.Employees.Roles.Admin)
+            if (assigner.RoleInfo is Domain.Employees.Roles.Admin)
             {
                 return await _employeeRepository.GetPossibleManagersForAdmin(supermarketId, recordsRange);
             }

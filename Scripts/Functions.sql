@@ -1,5 +1,5 @@
 -- hledani role zamestnancu
-CREATE OR REPLACE FUNCTION je_role_zamestnancu(p_zamestnanec_id INT, p_role_nazev VARCHAR2)
+CREATE OR REPLACE FUNCTION je_role_zamestnancu(p_zamestnanec_id zamestnanci.zamestnanec_id%TYPE, p_role_nazev VARCHAR2)
 RETURN INT AS
     v_role_id INT;
     v_count INT;
@@ -38,4 +38,18 @@ BEGIN
 EXCEPTION
     WHEN NO_DATA_FOUND THEN
         RETURN NULL;
-END;
+END DEJ_NEJPRODAVANEJSI_ZBOZI;
+
+-- možné role zaměstnanců EmployeeRepository
+CREATE OR REPLACE FUNCTION DEJ_MOZNE_MANAZERY(p_manazer_id IN zamestnanci.zamestnanec_id%TYPE)
+    RETURN SYS_REFCURSOR IS
+    v_manazeri_rc SYS_REFCURSOR;
+BEGIN
+    OPEN v_manazeri_rc FOR
+        SELECT z.zamestnanec_id, z.jmeno, z.prijmeni FROM zamestnanci z
+        WHERE je_role_zamestnancu(z.zamestnanec_id, 'Manazer') = 1
+        CONNECT BY PRIOR z.zamestnanec_id = z.manazer_id
+        START WITH z.zamestnanec_id = p_manazer_id;
+
+    RETURN v_manazeri_rc;
+END DEJ_MOZNE_MANAZERY;
