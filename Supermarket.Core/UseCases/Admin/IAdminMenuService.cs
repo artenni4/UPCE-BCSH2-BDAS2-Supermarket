@@ -4,6 +4,7 @@ using Supermarket.Core.Domain.ProductCategories;
 using Supermarket.Core.Domain.Products;
 using Supermarket.Core.Domain.Regions;
 using Supermarket.Core.Domain.Suppliers;
+using Supermarket.Core.Domain.UsedDatabaseObjects;
 using Supermarket.Core.UseCases.ManagerMenu;
 
 namespace Supermarket.Core.UseCases.Admin
@@ -42,5 +43,6 @@ namespace Supermarket.Core.UseCases.Admin
         Task DeleteEmployee(int employeeId);
         Task<PagedResult<PossibleManagerForEmployee>> GetPossibleManagers(int supermarketId, RecordsRange recordsRange);
         Task<PagedResult<ChangeLog>> GetChangeLogs(RecordsRange recordsRange);
+        Task<PagedResult<UsedDatabaseObject>> GetUsedDatabaseObjects(RecordsRange recordsRange);
     }
 }

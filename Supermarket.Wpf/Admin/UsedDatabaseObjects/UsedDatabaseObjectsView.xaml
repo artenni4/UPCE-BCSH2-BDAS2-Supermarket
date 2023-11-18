@@ -1,0 +1,21 @@
+﻿<UserControl x:Class="Supermarket.Wpf.Admin.UsedDatabaseObjects.UsedDatabaseObjectsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Supermarket.Wpf.Admin.UsedDatabaseObjects"
+             mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance Type=local:UsedDatabaseObjectsViewModel, IsDesignTimeCreatable=False}"
+             d:DesignHeight="1080" d:DesignWidth="1920">
+    <Border Margin="10,10,10,0" Style="{StaticResource PanelBorderStyle}">
+        <Grid>
+            <DataGrid ItemsSource="{Binding UsedDatabaseObjects}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False" ColumnWidth="*" HorizontalAlignment="Left" Height="Auto">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Název" Binding="{Binding ObjectName}" Width="*" IsReadOnly="True" FontSize="25" />
+                    <DataGridTextColumn Header="Typ" Binding="{Binding ObjectType}" Width="*" IsReadOnly="True" FontSize="25" />
+                </DataGrid.Columns>
+            </DataGrid>
+
+        </Grid>
+    </Border>
+</UserControl>

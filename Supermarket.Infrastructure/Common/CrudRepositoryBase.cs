@@ -35,7 +35,7 @@ namespace Supermarket.Infrastructure.Common
             var orderBy = string.Join(", ", orderByColumns);
             var pagingSql = $"{innerSql} ORDER BY {orderBy} OFFSET :PagingOffset ROWS FETCH NEXT :PagingRowsCount ROWS ONLY";
 
-            var pagingParameters = GetPagingParameters(recordsRange);
+            var pagingParameters = recordsRange.GetPagingParameters();
             pagingParameters.AddDynamicParams(parameters);
             
             var pagedItems = await _oracleConnection.QueryAsync<TResult>(pagingSql, pagingParameters);
@@ -104,18 +104,6 @@ namespace Supermarket.Infrastructure.Common
             {
                 throw new RepositoryOperationFailedException("Delete", sql, e);
             }
-        }
-
-        private static DynamicParameters GetPagingParameters(RecordsRange recordsRange)
-        {
-            var startRow = (recordsRange.PageNumber - 1) * recordsRange.PageSize;
-            var rowsCount = recordsRange.PageSize;
-
-            return new DynamicParameters(new
-            {
-                PagingOffset = startRow,
-                PagingRowsCount = rowsCount
-            });
         }
 
         protected string GetIdentityCondition(DynamicParameters identity)

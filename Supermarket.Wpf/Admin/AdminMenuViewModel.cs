@@ -7,6 +7,7 @@ using Supermarket.Wpf.Admin.Suppliers;
 using Supermarket.Wpf.ViewModelResolvers;
 using System.Collections.ObjectModel;
 using Supermarket.Wpf.Admin.SupermarketLogs;
+using Supermarket.Wpf.Admin.UsedDatabaseObjects;
 
 namespace Supermarket.Wpf.Admin
 {
@@ -43,6 +44,7 @@ namespace Supermarket.Wpf.Admin
             var regionsViewModel = await _viewModelResolver.Resolve<AdminRegionsViewModel>();
             var employeesViewModel = await _viewModelResolver.Resolve<AdminEmployeesViewModel>();
             var supermarketLogsViewModel = await _viewModelResolver.Resolve<SupermarketLogsViewModel>();
+            var usedDatabaseObjectsViewModel = await _viewModelResolver.Resolve<UsedDatabaseObjectsViewModel>();
 
             TabViewModels.Add(suppliersViewModel);
             TabViewModels.Add(productsViewModel);
@@ -51,7 +53,8 @@ namespace Supermarket.Wpf.Admin
             TabViewModels.Add(regionsViewModel);
             TabViewModels.Add(employeesViewModel);
             TabViewModels.Add(supermarketLogsViewModel);
-
+            TabViewModels.Add(usedDatabaseObjectsViewModel);
+            
             SelectedTabViewModel = suppliersViewModel;
         }
     }

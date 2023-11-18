@@ -11,6 +11,7 @@
              xmlns:regions="clr-namespace:Supermarket.Wpf.Admin.Regions"
              xmlns:employees="clr-namespace:Supermarket.Wpf.Admin.Employees"
              xmlns:supermarketLogs="clr-namespace:Supermarket.Wpf.Admin.SupermarketLogs"
+             xmlns:usedDatabaseObjects="clr-namespace:Supermarket.Wpf.Admin.UsedDatabaseObjects"
 
              mc:Ignorable="d" 
              d:DesignHeight="1080" d:DesignWidth="1920">
@@ -38,6 +39,9 @@
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type supermarketLogs:SupermarketLogsViewModel}">
                     <supermarketLogs:SupermarketLogsView />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type usedDatabaseObjects:UsedDatabaseObjectsViewModel}">
+                    <usedDatabaseObjects:UsedDatabaseObjectsView />
                 </DataTemplate>
             </TabControl.Resources>
             <TabControl.ItemTemplate>
