@@ -1,4 +1,6 @@
-﻿using Dapper;
+﻿using System.Data;
+using Dapper;
+using Dapper.Oracle;
 using Oracle.ManagedDataAccess.Client;
 using Supermarket.Core.Domain.Common.Paging;
 using Supermarket.Core.Domain.Products;
@@ -49,7 +51,7 @@ internal class ProductRepository : CrudRepositoryBase<Product, int, DbProduct>, 
     {
         var parameters = new DynamicParameters();
 
-        var sql = @"SELECT * FROM ADMINPRODUCTSVIEW";
+        const string sql = @"SELECT * FROM ADMINPRODUCTSVIEW";
 
         var orderByColumns = DbProduct.IdentityColumns
             .Select(ic => $"ADMINPRODUCTSVIEW.{ic}");
@@ -59,4 +61,15 @@ internal class ProductRepository : CrudRepositoryBase<Product, int, DbProduct>, 
         return result.Select(dbProduct => dbProduct.ToDomainEntity());
     }
 
+    public async Task<BestSellingProduct?> GetBestSellingProduct(int supermarketId)
+    {
+        var parameters = new OracleDynamicParameters();
+        parameters.Add("p_supermarket_id", supermarketId, direction: ParameterDirection.Input);
+        parameters.Add("zbozi_rc", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
+
+        var sellingProduct = await _oracleConnection
+            .QuerySingleOrDefaultAsync<DbBestSellingProduct>("DEJ_NEJPRODAVANEJSI_ZBOZI", parameters, commandType: CommandType.StoredProcedure);
+        
+        return sellingProduct?.ToDomainEntity();
+    }
 }

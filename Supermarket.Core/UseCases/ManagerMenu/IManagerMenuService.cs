@@ -10,6 +10,7 @@ namespace Supermarket.Core.UseCases.ManagerMenu
 {
     public interface IManagerMenuService
     {
+        Task<BestSellingProduct?> GetBestSellingProduct(int supermarketId);
         Task<PagedResult<ManagerMenuProduct>> GetSupermarketProducts(int supermarketId, RecordsRange recordsRange);
         Task<PagedResult<ManagerMenuAddProduct>> GetManagerProductsToAdd(int supermarketId, RecordsRange recordsRange);
         Task RemoveProductFromSupermarket(StoredProductId id);

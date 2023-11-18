@@ -36,6 +36,12 @@ namespace Supermarket.Core.UseCases.ManagerMenu
         }
 
         #region SupermarketProducts
+
+        public async Task<BestSellingProduct?> GetBestSellingProduct(int supermarketId)
+        {
+            return await _productRepository.GetBestSellingProduct(supermarketId);
+        }
+
         public async Task<PagedResult<ManagerMenuProduct>> GetSupermarketProducts(int supermarketId, RecordsRange recordsRange)
         {
             return await _sellingProductRepository.GetAllSupermarketProducts(supermarketId, recordsRange);

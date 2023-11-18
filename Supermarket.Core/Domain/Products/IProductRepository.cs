@@ -9,5 +9,6 @@ namespace Supermarket.Core.Domain.Products
     {
         Task<PagedResult<ManagerMenuAddProduct>> GetManagerProductsToAdd(int supermarketId, RecordsRange recordsRange);
         Task<PagedResult<AdminProduct>> GetAdminProducts(RecordsRange recordsRange);
+        Task<BestSellingProduct?> GetBestSellingProduct(int supermarketId);
     }
 }
