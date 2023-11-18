@@ -318,7 +318,7 @@ namespace Supermarket.Core.UseCases.Admin
                 RoleInfo = editEmployee.RoleInfo,
                 PasswordHash = password,
                 PasswordHashSalt = oldEmployee.PasswordHashSalt,
-                PersonalNumber = oldEmployee.PersonalNumber
+                PersonalNumber = editEmployee.PersonalNumber
             });
             await transaction.CommitAsync();
         }
