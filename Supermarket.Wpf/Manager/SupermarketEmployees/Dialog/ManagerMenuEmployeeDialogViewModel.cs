@@ -1,17 +1,8 @@
-﻿using Supermarket.Core.Domain.Common.Paging;
-using Supermarket.Core.Domain.Employees;
-using Supermarket.Core.Domain.StoragePlaces;
-using Supermarket.Core.UseCases.ManagerMenu;
+﻿using Supermarket.Core.UseCases.ManagerMenu;
 using Supermarket.Wpf.Dialog;
-using Supermarket.Wpf.GoodsKeeping.GoodsManagement.Dialogs;
 using Supermarket.Wpf.LoggedUser;
 using Supermarket.Wpf.ViewModelResolvers;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using Supermarket.Core.Domain.Auth.LoggedEmployees;
 
@@ -29,8 +20,13 @@ namespace Supermarket.Wpf.Manager.SupermarketEmployees.Dialog
         public event EventHandler? LoadingStarted;
         public event EventHandler? LoadingFinished;
 
-        public ManagerMenuEmployeeDetail? Employee { get; set; }
-        
+        private ManagerMenuEmployeeModel _employee = new();
+        public ManagerMenuEmployeeModel Employee
+        {
+            get => _employee;
+            set => SetProperty(ref _employee, value);
+        }
+
         private string? _employeePassword;
         public string? EmployeePassword
         {
@@ -43,8 +39,13 @@ namespace Supermarket.Wpf.Manager.SupermarketEmployees.Dialog
         public PossibleManagerForEmployee? SelectedManager
         {
             get => _selectedManager;
-            set => SetProperty(ref _selectedManager, value);
+            set
+            {
+                SetProperty(ref _selectedManager, value);
+                Employee.ManagerId = value?.EmployeeId;
+            }
         }
+
         public ObservableCollection<PossibleManagerForEmployee> PossibleManagersForEmployee { get; } = new();
 
         public ManagerMenuEmployeeDialogViewModel(IManagerMenuService managerMenuService, ILoggedUserService loggedUserService)
@@ -63,13 +64,11 @@ namespace Supermarket.Wpf.Manager.SupermarketEmployees.Dialog
 
         private async void ConfirmEdit(object? obj)
         {
-            if (Employee is null)
+            if (Employee?.Name is null || Employee.Surname is null || Employee.Login is null || Employee.HireDate is null)
             {
                 return;
             }
             
-            var roles = GetRoles(Employee);
-
             if (Employee.Id == 0)
             {
                 if (EmployeePassword is null)
@@ -84,10 +83,8 @@ namespace Supermarket.Wpf.Manager.SupermarketEmployees.Dialog
                     Surname = Employee.Surname,
                     Login = Employee.Login,
                     Password = EmployeePassword,
-                    HireDate = Employee.HireDate,
-                    SupermarketId = Employee.SupermarketId,
-                    ManagerId = SelectedManager?.EmployeeId,
-                    Roles = roles
+                    HireDate = Employee.HireDate.Value,
+                    RoleInfo = Employee.GetEmployeeRoleInfo(_loggedUserService.SupermarketId)
                 });
             }
             else
@@ -99,9 +96,8 @@ namespace Supermarket.Wpf.Manager.SupermarketEmployees.Dialog
                     Surname = Employee.Surname,
                     Login = Employee.Login,
                     NewPassword = EmployeePassword,
-                    HireDate = Employee.HireDate,
-                    ManagerId = SelectedManager?.EmployeeId,
-                    Roles = roles
+                    HireDate = Employee.HireDate.Value,
+                    RoleInfo = Employee.GetEmployeeRoleInfo(_loggedUserService.SupermarketId)
                 });
             }
 
@@ -109,30 +105,14 @@ namespace Supermarket.Wpf.Manager.SupermarketEmployees.Dialog
 
         }
 
-        private static HashSet<SupermarketEmployeeRole> GetRoles(ManagerMenuEmployeeDetail employeeDetail)
-        {
-            var roles = new HashSet<SupermarketEmployeeRole>();
-            if (employeeDetail.IsCashier)
-            {
-                roles.Add(SupermarketEmployeeRole.Cashier);
-            }
-
-            if (employeeDetail.IsGoodsKeeper)
-            {
-                roles.Add(SupermarketEmployeeRole.GoodsKeeper);
-            }
-
-            if (employeeDetail.IsManager)
-            {
-                roles.Add(SupermarketEmployeeRole.Manager);
-            }
-
-            return roles;
-        }
-
         private bool CanConfirmEdit(object? arg)
         {
-            if (Employee == null || (_loggedUserService.IsAdmin(out _) == false && SelectedManager == null))
+            if ((_loggedUserService.IsAdmin(out _) == false && SelectedManager == null))
+            {
+                return false;
+            }
+            
+            if (Employee.Name is null || Employee.Surname is null || Employee.Login is null || Employee.HireDate is null)
             {
                 return false;
             }
@@ -151,25 +131,14 @@ namespace Supermarket.Wpf.Manager.SupermarketEmployees.Dialog
             
             if (parameters != 0)
             {
-                Employee = await _managerMenuService.GetEmployeeToEdit(parameters);
+                var employeeToEdit = await _managerMenuService.GetEmployeeToEdit(parameters);
+                Employee = ManagerMenuEmployeeModel.FromManagerMenuEmployeeDetail(employeeToEdit);
                 SelectedManager = PossibleManagersForEmployee
                     .FirstOrDefault(x => x.EmployeeId == Employee.ManagerId);
             }
             else
             {
-                Employee = new ManagerMenuEmployeeDetail
-                {
-                    Id = 0,
-                    Login = "",
-                    Name = "",
-                    Surname = "",
-                    HireDate = DateTime.Now,
-                    SupermarketId = _loggedUserService.SupermarketId,
-                    ManagerId = 0,
-                    IsCashier = false,
-                    IsManager = false,
-                    IsGoodsKeeper = false
-                };
+                Employee = new ManagerMenuEmployeeModel();
             }
         }
 

@@ -7,6 +7,7 @@ using Supermarket.Core.Domain.Payments;
 using Supermarket.Core.Domain.Sales;
 using Supermarket.Core.Domain.SellingProducts;
 using Supermarket.Core.Domain.SoldProducts;
+using Supermarket.Core.Domain.StoredProducts;
 
 namespace Supermarket.Core.UseCases.CashBox
 {
@@ -18,6 +19,7 @@ namespace Supermarket.Core.UseCases.CashBox
         private readonly IPaymentRepository _paymentRepository;
         private readonly IAuthDomainService _authDomainService;
         private readonly ICashBoxRepository _cashBoxRepository;
+        private readonly IStoredProductRepository _storedProductRepository;
 
         private readonly IDictionary<string, Coupon> _coupons = new Dictionary<string, Coupon>()
         {
@@ -33,7 +35,7 @@ namespace Supermarket.Core.UseCases.CashBox
             ICashBoxRepository cashBoxRepository,
             ISaleRepository saleRepository,
             ISoldProductRepository soldProductRepository,
-            IPaymentRepository paymentRepository)
+            IPaymentRepository paymentRepository, IStoredProductRepository storedProductRepository)
         {
             _sellingProductRepository = sellingProductRepository;
             _authDomainService = authDomainService;
@@ -41,6 +43,7 @@ namespace Supermarket.Core.UseCases.CashBox
             _saleRepository = saleRepository;
             _soldProductRepository = soldProductRepository;
             _paymentRepository = paymentRepository;
+            _storedProductRepository = storedProductRepository;
         }
 
         public async Task<PagedResult<CashBoxProductCategory>> GetCategoriesAsync(int supermarketId, RecordsRange recordsRange)

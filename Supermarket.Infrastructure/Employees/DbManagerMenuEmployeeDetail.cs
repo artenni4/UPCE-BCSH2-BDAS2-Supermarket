@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Supermarket.Core.Domain.Auth.LoggedEmployees;
+using Supermarket.Core.Domain.Common;
 
 namespace Supermarket.Infrastructure.Employees 
 {
@@ -17,7 +19,7 @@ namespace Supermarket.Infrastructure.Employees
         public required string jmeno { get; init; }
         public required string prijmeni { get; init; }
         public required DateTime datum_nastupu { get; init; }
-        public required int manazer_id { get; init; }
+        public required int? manazer_id { get; init; }
         public required int supermarket_id { get; init; }
         public required bool isPokladnik { get; init; }
         public required bool isNakladac { get; init; }
@@ -36,30 +38,55 @@ namespace Supermarket.Infrastructure.Employees
             Name = jmeno,
             Surname = prijmeni,
             HireDate = datum_nastupu,
-            ManagerId = manazer_id,
-            SupermarketId = supermarket_id,
-            IsCashier = isPokladnik,
-            IsGoodsKeeper = isNakladac,
-            IsManager = isManazer,
+            RoleInfo = new SupermarketEmployee(supermarket_id, manazer_id, GetRoles())
         };
 
-        public static DbManagerMenuEmployeeDetail ToDbEntity(ManagerMenuEmployeeDetail entity) => new()
+        public static DbManagerMenuEmployeeDetail ToDbEntity(ManagerMenuEmployeeDetail entity)
         {
-            zamestnanec_id = entity.Id,
-            login = entity.Login,
-            jmeno = entity.Name,
-            prijmeni = entity.Surname,
-            datum_nastupu = entity.HireDate,
-            isPokladnik = entity.IsCashier,
-            isNakladac = entity.IsGoodsKeeper,
-            isManazer = entity.IsManager,
-            manazer_id = entity.ManagerId,
-            supermarket_id = entity.SupermarketId
-        };
+            if (entity.RoleInfo is not SupermarketEmployee supermarketEmployee)
+            {
+                throw new RepositoryInconsistencyException("Employee is not supermarket employee.");
+            }
+            
+            return new DbManagerMenuEmployeeDetail
+            {
+                zamestnanec_id = entity.Id,
+                login = entity.Login,
+                jmeno = entity.Name,
+                prijmeni = entity.Surname,
+                datum_nastupu = entity.HireDate,
+                manazer_id = supermarketEmployee.ManagerId,
+                supermarket_id = supermarketEmployee.SupermarketId,
+                isPokladnik = supermarketEmployee.Roles.Contains(SupermarketEmployeeRole.Cashier),
+                isNakladac = supermarketEmployee.Roles.Contains(SupermarketEmployeeRole.GoodsKeeper),
+                isManazer = supermarketEmployee.Roles.Contains(SupermarketEmployeeRole.Manager)
+            };
+        }
 
         public static DynamicParameters GetEntityIdParameters(int id) =>
             new DynamicParameters().AddParameter(nameof(zamestnanec_id), id);
 
         public DynamicParameters GetInsertingValues() => this.GetPropertiesExceptIdentity();
+        
+        private HashSet<SupermarketEmployeeRole> GetRoles()
+        {
+            var roles = new HashSet<SupermarketEmployeeRole>();
+            if (isPokladnik)
+            {
+                roles.Add(SupermarketEmployeeRole.Cashier);
+            }
+
+            if (isNakladac)
+            {
+                roles.Add(SupermarketEmployeeRole.GoodsKeeper);
+            }
+
+            if (isManazer)
+            {
+                roles.Add(SupermarketEmployeeRole.Manager);
+            }
+
+            return roles;
+        }
     }
 }

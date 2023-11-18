@@ -9,7 +9,17 @@ namespace Supermarket.Wpf.Common.Converters
     {
         public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
-            if (value is ILoggedUserService loggedUserService && parameter is string parameterString)
+            if (value is not ILoggedUserService loggedUserService)
+            {
+                throw new ArgumentException("Value is not ILoggedUserService.");
+            }
+            
+            if (loggedUserService.IsSupermarketEmployee(out _, out var roles) && !roles.Any() && parameter is null)
+            {
+                return Visibility.Visible;
+            }
+            
+            if (parameter is string parameterString)
             {
                 var parameters = parameterString
                     .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)

@@ -19,14 +19,25 @@ namespace Supermarket.Wpf.Admin.Employees.Dialog
         public ICommand Confirm { get; }
         public ICommand Cancel { get; }
 
-        public AdminEmployeeDetail? Employee { get; set; }
+        private AdminMenuEmployeeModel _employee = new();
+        public AdminMenuEmployeeModel Employee
+        {
+            get => _employee;
+            set => SetProperty(ref _employee, value);
+        }
+
         public int EmployeeId { get; set; }
-        public ObservableCollection<PossibleManagerForEmployee> Managers { get; } = new ObservableCollection<PossibleManagerForEmployee>();
+        public ObservableCollection<PossibleManagerForEmployee> Managers { get; } = new();
+        
         private PossibleManagerForEmployee? _selectedManager;
         public PossibleManagerForEmployee? SelectedManager
         {
             get => _selectedManager;
-            set => SetProperty(ref _selectedManager, value);
+            set
+            {
+                SetProperty(ref _selectedManager, value);
+                Employee.ManagerId = value?.EmployeeId;
+            }
         }
 
         public ObservableCollection<AdminMenuSupermarket> Supermarkets { get; } = new ObservableCollection<AdminMenuSupermarket>();
@@ -37,6 +48,7 @@ namespace Supermarket.Wpf.Admin.Employees.Dialog
             set
             {
                 SetProperty(ref _selectedSupermarket, value);
+                Employee.SupermarketId = value?.Id;
                 GetPossibleManagers();
             }
         }
@@ -55,6 +67,7 @@ namespace Supermarket.Wpf.Admin.Employees.Dialog
         }
 
         private string? _employeePassword;
+
         public string? EmployeePassword
         {
             get => _employeePassword;
@@ -65,47 +78,24 @@ namespace Supermarket.Wpf.Admin.Employees.Dialog
         {
             using var _ = new DelegateLoading(this);
 
+            var supermarkets = await _adminMenuService.GetAllSupermarkets(new RecordsRange { PageSize = 250, PageNumber = 1 });
+            Supermarkets.Update(supermarkets.Items);
             if (EmployeeId != 0)
             {
-                Employee = await _adminMenuService.GetEmployeeToEdit(EmployeeId);
+                var employeeToEdit = await _adminMenuService.GetEmployeeToEdit(EmployeeId);
+                Employee = AdminMenuEmployeeModel.FromAdminEmployeeDetail(employeeToEdit);
+                SelectedSupermarket = Supermarkets.FirstOrDefault(x => x.Id == employeeToEdit.SupermarketId);
             }
             else
             {
-                Employee = new AdminEmployeeDetail
-                {
-                    Id = 0,
-                    Login = "",
-                    ManagerId = 0,
-                    Name = "",
-                    SupermarketId = 0,
-                    Surname = "",
-                    HireDate = DateTime.Now,
-                    IsAdmin = false,
-                    IsCashier = false,
-                    IsGoodsKeeper = false,
-                    IsManager = false,
-                    PersonalNumber = ""
-                };
+                Employee = new AdminMenuEmployeeModel();
             }
-
-            GetSupermarkets();
         }
 
         public async void SetParameters(int parameters)
         {
             EmployeeId = parameters;
             await InitializeAsync();
-        }
-
-        private async void GetSupermarkets()
-        {
-            var supermarkets = await _adminMenuService.GetAllSupermarkets(new RecordsRange { PageSize = 250, PageNumber = 1 });
-            Supermarkets.Update(supermarkets.Items);
-
-            if (Employee != null && EmployeeId != 0) 
-            {
-                SelectedSupermarket = Supermarkets.FirstOrDefault(x => x.Id == Employee.SupermarketId);
-            }
         }
 
         private async void GetPossibleManagers()
@@ -118,7 +108,7 @@ namespace Supermarket.Wpf.Admin.Employees.Dialog
             var managers = await _adminMenuService.GetPossibleManagers(SelectedSupermarket.Id, new RecordsRange { PageSize = 200, PageNumber = 1 });
             Managers.Update(managers.Items);
 
-            if (Employee != null && EmployeeId != 0)
+            if (EmployeeId != 0)
             {
                 SelectedManager = Managers.FirstOrDefault(x => x.EmployeeId == Employee.ManagerId);
             }
@@ -131,12 +121,10 @@ namespace Supermarket.Wpf.Admin.Employees.Dialog
 
         private async void ConfirmEdit(object? obj)
         {
-            if (Employee is null)
+            if (Employee.Name is null || Employee.Surname is null || Employee.Login is null || Employee.HireDate is null || Employee.PersonalNumber is null)
             {
                 return;
             }
-
-            var roles = GetRoles(Employee);
 
             if (Employee.Id == 0)
             {
@@ -151,10 +139,8 @@ namespace Supermarket.Wpf.Admin.Employees.Dialog
                     Surname = Employee.Surname,
                     Login = Employee.Login,
                     Password = EmployeePassword,
-                    HireDate = Employee.HireDate,
-                    SupermarketId = SelectedSupermarket?.Id,
-                    ManagerId = SelectedManager?.EmployeeId,
-                    Roles = roles,
+                    HireDate = Employee.HireDate.Value,
+                    RoleInfo = Employee.GetEmployeeRoleInfo(),
                     PersonalNumber = Employee.PersonalNumber
                 };
 
@@ -169,10 +155,8 @@ namespace Supermarket.Wpf.Admin.Employees.Dialog
                     Surname = Employee.Surname,
                     Login = Employee.Login,
                     NewPassword = EmployeePassword,
-                    HireDate = Employee.HireDate,
-                    ManagerId = SelectedManager?.EmployeeId,
-                    Roles = roles,
-                    SupermarketId = SelectedSupermarket?.Id,
+                    HireDate = Employee.HireDate.Value,
+                    RoleInfo = Employee.GetEmployeeRoleInfo(),
                     PersonalNumber = Employee.PersonalNumber
                 };
 
@@ -183,35 +167,14 @@ namespace Supermarket.Wpf.Admin.Employees.Dialog
             ResultReceived?.Invoke(this, DialogResult<EmptyResult>.Ok(EmptyResult.Value));
         }
 
-        private static HashSet<SupermarketEmployeeRole> GetRoles(AdminEmployeeDetail employeeDetail)
-        {
-            var roles = new HashSet<SupermarketEmployeeRole>();
-            if (employeeDetail.IsCashier)
-            {
-                roles.Add(SupermarketEmployeeRole.Cashier);
-            }
-
-            if (employeeDetail.IsGoodsKeeper)
-            {
-                roles.Add(SupermarketEmployeeRole.GoodsKeeper);
-            }
-
-            if (employeeDetail.IsManager)
-            {
-                roles.Add(SupermarketEmployeeRole.Manager);
-            }
-
-            if (employeeDetail.IsAdmin)
-            {
-                roles.Add(SupermarketEmployeeRole.Admin);
-            }
-
-            return roles;
-        }
-
         private bool CanConfirmEdit(object? arg)
         {
-            if (Employee == null)
+            if (Employee.Name is null || Employee.Surname is null || Employee.Login is null || Employee.HireDate is null || Employee.PersonalNumber is null)
+            {
+                return false;
+            }
+            
+            if (!Employee.IsAdmin && SelectedSupermarket is null)
             {
                 return false;
             }

@@ -286,41 +286,18 @@ namespace Supermarket.Core.UseCases.Admin
                 ? oldEmployee.PasswordHash
                 : PasswordHashing.GenerateSaltedHash(editEmployee.NewPassword, oldEmployee.PasswordHashSalt);
 
-            if (editEmployee.Roles.Contains(Domain.Auth.LoggedEmployees.SupermarketEmployeeRole.Admin))
+            await _employeeRepository.UpdateAsync(new EmployeeRole
             {
-                await _employeeRepository.UpdateAsync(new EmployeeRole
-                {
-                    Id = editEmployee.Id,
-                    Login = editEmployee.Login,
-                    Name = editEmployee.Name,
-                    Surname = editEmployee.Surname,
-                    HireDate = editEmployee.HireDate,
-                    RoleInfo = new Domain.Employees.Roles.Admin(),
-                    PasswordHash = password,
-                    PasswordHashSalt = oldEmployee.PasswordHashSalt,
-                    PersonalNumber = oldEmployee.PersonalNumber
-                });
-            }
-            else
-            {
-                if (oldEmployee.SupermarketId.HasValue is false)
-                {
-                    throw new ApplicationInconsistencyException("Edited employee by admin must have supermarket id");
-                }
-                await _employeeRepository.UpdateAsync(new EmployeeRole
-                {
-                    Id = editEmployee.Id,
-                    Login = editEmployee.Login,
-                    Name = editEmployee.Name,
-                    Surname = editEmployee.Surname,
-                    HireDate = editEmployee.HireDate,
-                    RoleInfo = new SupermarketEmployee(oldEmployee.SupermarketId.Value, editEmployee.ManagerId, editEmployee.Roles),
-                    PasswordHash = password,
-                    PasswordHashSalt = oldEmployee.PasswordHashSalt,
-                    PersonalNumber = editEmployee.PersonalNumber
-                });
-            }
-            
+                Id = editEmployee.Id,
+                Login = editEmployee.Login,
+                Name = editEmployee.Name,
+                Surname = editEmployee.Surname,
+                HireDate = editEmployee.HireDate,
+                RoleInfo = editEmployee.RoleInfo,
+                PasswordHash = password,
+                PasswordHashSalt = oldEmployee.PasswordHashSalt,
+                PersonalNumber = oldEmployee.PersonalNumber
+            });
         }
 
         public async Task AddEmployee(AdminAddEmployee employee)
@@ -328,41 +305,17 @@ namespace Supermarket.Core.UseCases.Admin
             var salt = PasswordHashing.GenerateSalt();
             var passwordHash = PasswordHashing.GenerateSaltedHash(employee.Password, salt);
 
-            if (employee.Roles.Contains(Domain.Auth.LoggedEmployees.SupermarketEmployeeRole.Admin))
+            await _employeeRepository.AddAsync(new EmployeeRole
             {
-                await _employeeRepository.AddAsync(new EmployeeRole
-                {
-                    Id = employee.Id,
-                    Login = employee.Login,
-                    Name = employee.Name,
-                    Surname = employee.Surname,
-                    HireDate = employee.HireDate,
-                    RoleInfo = new Domain.Employees.Roles.Admin(),
-                    PasswordHash = passwordHash,
-                    PasswordHashSalt = salt
-                });
-            }
-            else
-            {
-                if (employee.SupermarketId.HasValue is false)
-                {
-                    throw new ApplicationInconsistencyException("Edited employee by admin must have supermarket id");
-                }
-                await _employeeRepository.AddAsync(new EmployeeRole
-                {
-                    Id = employee.Id,
-                    Login = employee.Login,
-                    Name = employee.Name,
-                    Surname = employee.Surname,
-                    HireDate = employee.HireDate,
-                    RoleInfo = new SupermarketEmployee(employee.SupermarketId.Value, employee.ManagerId, employee.Roles),
-                    PasswordHash = passwordHash,
-                    PasswordHashSalt = salt,
-                    PersonalNumber = employee.PersonalNumber
-                });
-            }
-
-            
+                Id = employee.Id,
+                Login = employee.Login,
+                Name = employee.Name,
+                Surname = employee.Surname,
+                HireDate = employee.HireDate,
+                RoleInfo = employee.RoleInfo,
+                PasswordHash = passwordHash,
+                PasswordHashSalt = salt
+            });
         }
 
         #endregion

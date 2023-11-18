@@ -2,6 +2,7 @@
 using Oracle.ManagedDataAccess.Client;
 using Dapper;
 using Dapper.Oracle;
+using Oracle.ManagedDataAccess.Types;
 using Supermarket.Core.Domain.Auth;
 using Supermarket.Core.Domain.Employees;
 using Supermarket.Core.Domain.Employees.Roles;
@@ -213,9 +214,41 @@ namespace Supermarket.Infrastructure.Employees
 
         public async Task UpdateAsync(EmployeeRole employeeRole)
         {
-            await UpdateAsync(employeeRole.ToEmployee());
-            await DeleteEmployeeRoles(employeeRole);
-            await AddEmployeeRoles(employeeRole, employeeRole.Id);
+            var parameters = new DynamicParameters()
+                .AddParameter("p_zamestnanec_id", employeeRole.Id)
+                .AddParameter("p_jmeno", employeeRole.Name)
+                .AddParameter("p_prijmeni", employeeRole.Surname)
+                .AddParameter("p_login", employeeRole.Login)
+                .AddParameter("p_datum_nastupu", employeeRole.HireDate)
+                .AddParameter("p_heslo_hash", employeeRole.PasswordHash)
+                .AddParameter("p_heslo_salt", employeeRole.PasswordHashSalt)
+                .AddParameter("p_rodne_cislo", employeeRole.PersonalNumber);
+            
+            if (employeeRole.RoleInfo is Admin)
+            {
+                parameters.AddParameter("p_je_admin", 1);
+                parameters.AddParameter("p_je_pokladnik", 0);
+                parameters.AddParameter("p_je_nakladac", 0);
+                parameters.AddParameter("p_je_manazer", 0);
+            }
+            else if (employeeRole.RoleInfo is SupermarketEmployee supermarketEmployee)
+            {
+                parameters.AddParameter("p_je_admin", 0);
+                parameters.AddParameter("p_je_pokladnik", 
+                    supermarketEmployee.Roles.Contains(SupermarketEmployeeRole.Cashier) ? 1 : 0);
+                
+                parameters.AddParameter("p_je_nakladac",
+                    supermarketEmployee.Roles.Contains(SupermarketEmployeeRole.GoodsKeeper) ? 1 : 0);
+                
+                parameters.AddParameter("p_je_manazer", 
+                    supermarketEmployee.Roles.Contains(SupermarketEmployeeRole.Manager) ? 1 : 0);
+            }
+            else
+            {
+                throw new NotSupportedException($"{employeeRole.RoleInfo} is not supported.");
+            }
+            
+            await _oracleConnection.ExecuteAsync("EDIT_ZAMESTNANCE", parameters, commandType: CommandType.StoredProcedure);
         }
 
         public async Task<PagedResult<ManagerMenuEmployee>> GetSupermarketEmployeesForManager(int managerId, RecordsRange recordsRange)
@@ -320,8 +353,7 @@ namespace Supermarket.Infrastructure.Employees
             const string sql = @"SELECT z.zamestnanec_id, z.jmeno, z.prijmeni FROM zamestnanci z 
                                  WHERE
                                      je_role_zamestnancu(z.zamestnanec_id, 'Manazer') = 1 AND
-                                     z.supermarket_id = :supermarket_id AND
-                                     z.zamestnanec_id != :zamestnanec_id";
+                                     z.supermarket_id = :supermarket_id";
 
             var orderByColumns = DbEmployee.IdentityColumns.Select(ic => $"z.{ic}");
 

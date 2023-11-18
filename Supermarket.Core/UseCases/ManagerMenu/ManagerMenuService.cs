@@ -89,7 +89,7 @@ namespace Supermarket.Core.UseCases.ManagerMenu
                 Name = managerAddEmployee.Name,
                 Surname = managerAddEmployee.Surname,
                 HireDate = managerAddEmployee.HireDate,
-                RoleInfo = new SupermarketEmployee(managerAddEmployee.SupermarketId, managerAddEmployee.ManagerId, managerAddEmployee.Roles),
+                RoleInfo = managerAddEmployee.RoleInfo,
                 PasswordHash = passwordHash,
                 PasswordHashSalt = salt,
                 PersonalNumber = null
@@ -146,7 +146,7 @@ namespace Supermarket.Core.UseCases.ManagerMenu
                 Name = managerEditEmployee.Name,
                 Surname = managerEditEmployee.Surname,
                 HireDate = managerEditEmployee.HireDate,
-                RoleInfo = new SupermarketEmployee(oldEmployee.SupermarketId.Value, managerEditEmployee.ManagerId, managerEditEmployee.Roles),
+                RoleInfo = managerEditEmployee.RoleInfo,
                 PasswordHash = password,
                 PasswordHashSalt = oldEmployee.PasswordHashSalt,
                 PersonalNumber = oldEmployee.PersonalNumber

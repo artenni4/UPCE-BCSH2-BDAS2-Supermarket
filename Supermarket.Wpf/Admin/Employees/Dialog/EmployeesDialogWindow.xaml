@@ -5,7 +5,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Supermarket.Wpf.Admin.Employees.Dialog"
              xmlns:components="clr-namespace:Supermarket.Wpf.Common.Components"
+             xmlns:converters="clr-namespace:Supermarket.Wpf.Common.Converters"
+             xmlns:system="clr-namespace:System;assembly=System.Runtime"
              mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance Type=local:EmployeesDialogViewModel, IsDesignTimeCreatable=False}"
              d:DesignHeight="1080" d:DesignWidth="1920">
     <Border BorderBrush="Transparent" Background="White" Width="600" Height="700" Padding="10">
         <Border.Effect>
@@ -51,9 +54,12 @@
                 </StackPanel>
 
                 <StackPanel Grid.Row="0" Grid.Column="1" Margin="10,0">
-                    <CheckBox Margin="0,10,0,10" IsChecked="{Binding Employee.IsCashier}" Content="Pokladnik" />
-                    <CheckBox Margin="0,0,0,10" IsChecked="{Binding Employee.IsGoodsKeeper}" Content="Nakladac" />
-                    <CheckBox Margin="0,0,0,10" IsChecked="{Binding Employee.IsManager}" Content="Manazer" />
+                    <CheckBox Margin="0,10,0,10" IsChecked="{Binding Employee.IsCashier}" Content="Pokladnik" 
+                              IsEnabled="{Binding Employee.IsNotManagerRoleAllowed}"/>
+                    <CheckBox Margin="0,0,0,10" IsChecked="{Binding Employee.IsGoodsKeeper}" Content="Nakladac" 
+                              IsEnabled="{Binding Employee.IsNotManagerRoleAllowed}"/>
+                    <CheckBox Margin="0,0,0,10" IsChecked="{Binding Employee.IsManager}" Content="Manazer"
+                              IsEnabled="{Binding Employee.IsAdmin, Converter={StaticResource InverseBooleanConverter}}"/>
                     <CheckBox Margin="0,0,0,10" IsChecked="{Binding Employee.IsAdmin}" Content="Admin" />
                 </StackPanel>
 

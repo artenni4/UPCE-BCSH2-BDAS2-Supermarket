@@ -5,5 +5,4 @@ public enum SupermarketEmployeeRole
     Cashier,
     GoodsKeeper,
     Manager,
-    Admin
 }

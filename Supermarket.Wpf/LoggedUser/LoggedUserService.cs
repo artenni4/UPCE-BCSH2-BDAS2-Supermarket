@@ -119,6 +119,9 @@ namespace Supermarket.Wpf.LoggedUser
 
         public void UnsetUser()
         {
+            _employeeData = null;
+            _roles = null;
+            _adminHasSupermarketId = false;
             IsUserSet = false;
             UserLoggedOut?.Invoke(this, EventArgs.Empty);
         }

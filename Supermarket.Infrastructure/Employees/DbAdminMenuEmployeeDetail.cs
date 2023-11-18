@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Supermarket.Core.Domain.Auth.LoggedEmployees;
+using Supermarket.Core.Domain.Common;
+using Supermarket.Core.Domain.Employees.Roles;
 
 namespace Supermarket.Infrastructure.Employees
 {
@@ -28,20 +31,51 @@ namespace Supermarket.Infrastructure.Employees
             nameof(zamestnanec_id)
         };
 
-        public AdminEmployeeDetail ToDomainEntity() => new()
+        public AdminEmployeeDetail ToDomainEntity() => new AdminEmployeeDetail
         {
             Id = zamestnanec_id,
             Name = jmeno,
             Surname = prijmeni,
             HireDate = datum_nastupu,
             SupermarketId = supermarket_id,
-            IsAdmin = isAdmin,
-            IsCashier = isPokladnik,
-            IsGoodsKeeper = isNakladac,
-            IsManager = isManazer,
             Login = login,
-            ManagerId = manazer_id,
-            PersonalNumber = rodne_cislo
+            PersonalNumber = rodne_cislo,
+            RoleInfo = GetRoleInfo()
         };
+
+        private IEmployeeRoleInfo GetRoleInfo()
+        {
+            if (isAdmin)
+            {
+                return new Admin();
+            }
+
+            if (supermarket_id.HasValue == false)
+            {
+                throw new RepositoryInconsistencyException("Supermarket id is null, but employee is not admin.");
+            }
+            return new SupermarketEmployee(supermarket_id.Value, manazer_id, GetRoles());
+        }
+        
+        private HashSet<SupermarketEmployeeRole> GetRoles()
+        {
+            var roles = new HashSet<SupermarketEmployeeRole>();
+            if (isPokladnik)
+            {
+                roles.Add(SupermarketEmployeeRole.Cashier);
+            }
+
+            if (isNakladac)
+            {
+                roles.Add(SupermarketEmployeeRole.GoodsKeeper);
+            }
+
+            if (isManazer)
+            {
+                roles.Add(SupermarketEmployeeRole.Manager);
+            }
+
+            return roles;
+        }
     }
 }
