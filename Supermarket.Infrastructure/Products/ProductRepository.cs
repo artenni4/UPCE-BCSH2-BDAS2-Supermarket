@@ -64,8 +64,8 @@ internal class ProductRepository : CrudRepositoryBase<Product, int, DbProduct>, 
     public async Task<BestSellingProduct?> GetBestSellingProduct(int supermarketId)
     {
         var parameters = new OracleDynamicParameters();
+        parameters.Add("zbozi_rc", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.ReturnValue);
         parameters.Add("p_supermarket_id", supermarketId, direction: ParameterDirection.Input);
-        parameters.Add("zbozi_rc", dbType: OracleMappingType.RefCursor, direction: ParameterDirection.Output);
 
         var sellingProduct = await _oracleConnection
             .QuerySingleOrDefaultAsync<DbBestSellingProduct>("DEJ_NEJPRODAVANEJSI_ZBOZI", parameters, commandType: CommandType.StoredProcedure);
