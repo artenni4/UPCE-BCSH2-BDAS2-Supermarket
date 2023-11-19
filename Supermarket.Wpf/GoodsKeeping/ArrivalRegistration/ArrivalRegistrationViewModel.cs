@@ -27,7 +27,7 @@ namespace Supermarket.Wpf.GoodsKeeping.ArrivalRegistration
 
         public ObservableCollection<GoodsKeepingProduct> DisplayedProducts { get; set; }
         public ObservableCollection<GoodsKeepingProductCategory> Categories { get; set; }
-        public ObservableCollection<GoodsKeepingProduct> SelectedProducts { get; set; }
+        public ObservableCollection<SuppliedProductModel> SelectedProducts { get; set; }
         public ObservableCollection<SupplyWarehouse> StoragePlaces { get; set; }
 
         public ICommand NextPageCommand { get; }
@@ -147,14 +147,13 @@ namespace Supermarket.Wpf.GoodsKeeping.ArrivalRegistration
                 return;
             }
             
-            SelectedProducts.Add(new GoodsKeepingProduct
+            SelectedProducts.Add(new SuppliedProductModel()
             {
                 ProductId = selectedProduct.ProductId,
                 Name = selectedProduct.Name,
                 Count = productCount,
                 MeasureUnit = selectedProduct.MeasureUnit,
                 IsByWeight = selectedProduct.IsByWeight,
-                Price = selectedProduct.Price
             });
         }
 
@@ -183,7 +182,7 @@ namespace Supermarket.Wpf.GoodsKeeping.ArrivalRegistration
 
         private void RemoveProduct(object? parameter)
         {
-            if (parameter is GoodsKeepingProduct item)
+            if (parameter is SuppliedProductModel item)
             {
                 SelectedProducts.Remove(item);
             }

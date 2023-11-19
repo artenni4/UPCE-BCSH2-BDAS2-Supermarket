@@ -10,7 +10,6 @@ namespace Supermarket.Core.Domain.Products
         public required MeasureUnit MeasureUnit { get; init; }
         public required bool ByWeight { get; init; }
         public required decimal Price { get; init; }
-        public decimal? Weight { get; init; }
         public required string? Barcode {  get; init; }
         public required string? Description { get; init;}
         public required int SupplierId { get; set; }
