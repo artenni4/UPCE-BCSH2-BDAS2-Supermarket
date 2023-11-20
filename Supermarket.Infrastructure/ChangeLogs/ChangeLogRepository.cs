@@ -17,7 +17,7 @@ public class ChangeLogRepository : IChangeLogRepository
     public async Task<PagedResult<ChangeLog>> GetChangeLogs(RecordsRange recordsRange)
     {
         var pagingParameters = recordsRange.GetPagingParameters();
-        const string sql = "SELECT * FROM LOGY ORDER BY cas OFFSET :PagingOffset ROWS FETCH NEXT :PagingRowsCount ROWS ONLY";
+        const string sql = "SELECT * FROM LOGY ORDER BY cas DESC OFFSET :PagingOffset ROWS FETCH NEXT :PagingRowsCount ROWS ONLY";
         var changeLogs = await _oracleConnection.QueryAsync<DbChangeLog>(sql, pagingParameters);
         var items = changeLogs
             .Select(cl => cl.ToDomainEntity())

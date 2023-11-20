@@ -6,7 +6,7 @@ using Supermarket.Wpf.ViewModelResolvers;
 
 namespace Supermarket.Wpf.Admin.SupermarketLogs
 {
-    public class SupermarketLogsViewModel : NotifyPropertyChangedBase, ITabViewModel, IAsyncViewModel, IAsyncInitialized
+    public class SupermarketLogsViewModel : NotifyPropertyChangedBase, ITabViewModel, IAsyncViewModel, IAsyncActivated
     {
         private readonly IAdminMenuService _adminMenuService;
 
@@ -21,7 +21,7 @@ namespace Supermarket.Wpf.Admin.SupermarketLogs
 
         public ObservableCollection<ChangeLog> ChangeLogs { get; } = new();
 
-        public async Task InitializeAsync()
+        public async Task ActivateAsync()
         {
             using var _ = new DelegateLoading(this);
             var changeLogs = await _adminMenuService.GetChangeLogs(new RecordsRange { PageNumber = 1, PageSize = 10000 });
