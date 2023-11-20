@@ -64,11 +64,21 @@ namespace Supermarket.Wpf.GoodsKeeping.ArrivalRegistration
 
             NextPageCommand = new RelayCommand(NextPage, _ => products?.HasNext == true);
             PreviousPageCommand = new RelayCommand(PreviousPage, _ => products?.HasPrevious == true);
-            CategoryButtonClickCommand = new RelayCommand(CategoryButtonClick);
+            CategoryButtonClickCommand = new RelayCommand(CategoryButtonClick, CanSelectCategory);
             ProductClickCommand = new RelayCommand(ProductClick);
             AcceptCommand = new RelayCommand(AcceptClick);
             CancelCommand = new RelayCommand(CancelClick);
             RemoveProductCommand = new RelayCommand(RemoveProduct);
+        }
+
+        private bool CanSelectCategory(object? arg)
+        {
+            if (arg is not GoodsKeepingProductCategory productCategory)
+            {
+                return false;
+            }
+
+            return productCategory.CategoryId != categoryId;
         }
 
         public async Task InitializeAsync()

@@ -84,11 +84,11 @@
                             </ItemsControl.ItemContainerStyle>
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <Border BorderBrush="Black" BorderThickness="1" Width="200" Height="200" Margin="5">
+                                    <Border BorderBrush="Black" BorderThickness="1" Margin="10">
                                         <Button Command="{Binding DataContext.ProductClickCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}" Background="Transparent" BorderBrush="Transparent">
                                             <StackPanel VerticalAlignment="Center">
                                                 <TextBlock TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center"
-                                                           Text="{Binding Name}" Foreground="#1B2060" 
+                                                           Text="{Binding Name}" Foreground="{StaticResource TextColor}" 
                                                            FontWeight="DemiBold" />
                                             </StackPanel>
                                         </Button>
