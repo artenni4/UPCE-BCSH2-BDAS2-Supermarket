@@ -95,7 +95,7 @@ namespace Supermarket.Wpf.Admin.ProductCategories
                 {
                     await _adminMenuService.DeleteCategory(selectedCategoryId);
                 }
-                catch (OperationCannotBeExecutedException)
+                catch (ConstraintViolatedException)
                 {
                     MessageBox.Show("Nelze smazat druh zboží protože již se používá", "Chyba", MessageBoxButton.OK, MessageBoxImage.Error);
                 }

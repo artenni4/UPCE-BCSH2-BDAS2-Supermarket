@@ -102,7 +102,7 @@ namespace Supermarket.Wpf.Admin.Suppliers
                 {
                     await _adminMenuService.DeleteSupplier(selectedSupplierId);
                 }
-                catch (OperationCannotBeExecutedException) 
+                catch (ConstraintViolatedException) 
                 {
                     MessageBox.Show("Nelze smazat dodavatele protože již se používá", "Chyba", MessageBoxButton.OK, MessageBoxImage.Error);
                 }

@@ -87,7 +87,7 @@ namespace Supermarket.Core.UseCases.CashBox
                 {
                     Id = new SoldProductId(saleId, cashBox.SupermarketId, soldProduct.ProductId),
                     Pieces = soldProduct.Count,
-                    Price = soldProduct.Price
+                    Price = soldProduct.OverallPrice
                 });
             }
 
@@ -125,14 +125,27 @@ namespace Supermarket.Core.UseCases.CashBox
             throw new PermissionDeniedException();
         }
 
-        public Task<Coupon> CheckCouponAsync(string couponCode)
+        public async Task<Coupon> CheckCouponAsync(string couponCode, IReadOnlyList<CashBoxSoldProduct> soldProducts, IReadOnlyList<Coupon> usedCoupons)
         {
-            if (_coupons.TryGetValue(couponCode, out var coupon))
+            await Task.Yield();
+            if (!_coupons.TryGetValue(couponCode, out var coupon))
             {
-                return Task.FromResult(coupon);
+                throw new InvalidCouponException();
             }
 
-            throw new InvalidCouponException();
+            if (usedCoupons.Contains(coupon))
+            {
+                throw new CouponAlreadyUsedException(coupon);
+            }
+            
+            var cost = soldProducts.Sum(p => p.OverallPrice);
+            var coupons = usedCoupons.Sum(c => c.Discount);
+            if (cost - coupons < coupon.Discount)
+            {
+                throw new CouponExceedsCostException(coupon);
+            }
+            
+            return coupon;
         }
 
         public async Task<PagedResult<SupermarketCashBox>> GetCashBoxesAsync(int supermarketId, RecordsRange recordsRange)

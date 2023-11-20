@@ -101,7 +101,7 @@ namespace Supermarket.Wpf.Manager.SupermarketCashboxes
                 {
                     await _managerMenuService.DeleteCashbox(selectedCashboxId);
                 }
-                catch (OperationCannotBeExecutedException)
+                catch (ConstraintViolatedException)
                 {
                     MessageBox.Show("Nelze odstranit pokladnu, která již se používá", "Chyba", MessageBoxButton.OK, MessageBoxImage.Error);
                 }

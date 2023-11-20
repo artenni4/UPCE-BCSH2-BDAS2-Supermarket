@@ -8,10 +8,12 @@ using Supermarket.Wpf.Dialog;
 
 namespace Supermarket.Wpf.CashBox.Dialogs;
 
-public class PaymentDialogViewModel : NotifyPropertyChangedBase, IDialogViewModel<PaymentDialogResult, decimal>
+public class PaymentDialogViewModel : NotifyPropertyChangedBase, IDialogViewModel<PaymentDialogResult, IReadOnlyList<CashBoxSoldProduct>>
 {
     private readonly IDialogService _dialogService;
     private readonly ICashBoxService _cashBoxService;
+
+    private IReadOnlyList<CashBoxSoldProduct>? _soldProducts;
     
     public ObservableCollection<Coupon> Coupons { get; } = new();
     
@@ -25,7 +27,7 @@ public class PaymentDialogViewModel : NotifyPropertyChangedBase, IDialogViewMode
         _cashBoxService = cashBoxService;
         PayByCardCommand = new RelayCommand(PayByCard);
         PayWithCashCommand = new RelayCommand(PayWithCash);
-        PayWithCouponCommand = new RelayCommand(PayWithCoupon);
+        PayWithCouponCommand = new RelayCommand(PayWithCoupon, _ => _soldProducts is not null);
 
         Coupons.CollectionChanged += OnCouponsOnCollectionChanged;
     }
@@ -44,6 +46,11 @@ public class PaymentDialogViewModel : NotifyPropertyChangedBase, IDialogViewMode
 
     private async void PayWithCoupon(object? obj)
     {
+        if (_soldProducts is null)
+        {
+            return;
+        }
+        
         var dialogResult = await _dialogService.ShowInputDialogAsync("Zadejte kupon", inputLabel: null);
         if (!dialogResult.IsOk(out var coupon))
         {
@@ -52,12 +59,20 @@ public class PaymentDialogViewModel : NotifyPropertyChangedBase, IDialogViewMode
 
         try
         {
-            var validCoupon = await _cashBoxService.CheckCouponAsync(coupon);
+            var validCoupon = await _cashBoxService.CheckCouponAsync(coupon, _soldProducts, Coupons);
             Coupons.Add(validCoupon);
+        }
+        catch (CouponExceedsCostException)
+        {
+            MessageBox.Show("Kupon převyšuje cenu produktů", "Chyba", MessageBoxButton.OK, MessageBoxImage.Error);
         }
         catch (InvalidCouponException)
         {
             MessageBox.Show("Kupon je neplatný", "Chyba", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        catch (CouponAlreadyUsedException)
+        {
+            MessageBox.Show("Kupon již byl použit", "Chyba", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 
@@ -97,9 +112,10 @@ public class PaymentDialogViewModel : NotifyPropertyChangedBase, IDialogViewMode
         ResultReceived?.Invoke(this, DialogResult<PaymentDialogResult>.Ok(paymentResult));
     }
 
-    public void SetParameters(decimal parameters)
+    public void SetParameters(IReadOnlyList<CashBoxSoldProduct> products)
     {
-        Price = parameters;
+        Price = products.Sum(p => p.OverallPrice);
+        _soldProducts = products;
     }
 
     private decimal? _price;
@@ -110,6 +126,7 @@ public class PaymentDialogViewModel : NotifyPropertyChangedBase, IDialogViewMode
     }
     
     private decimal? _total;
+
     public decimal? Total
     {
         get => _total;

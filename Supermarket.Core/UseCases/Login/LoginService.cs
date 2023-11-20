@@ -18,7 +18,6 @@ namespace Supermarket.Core.UseCases.Login
 
         public async Task<ILoggedEmployee> LoginEmployeeAsync(LoginData loginData)
         {
-            // TODO add logs
             return await _authDomainService.AuthEmployeeAsync(loginData);
         }
 

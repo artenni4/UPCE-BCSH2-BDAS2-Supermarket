@@ -77,21 +77,22 @@ namespace Supermarket.Wpf.CashBox
                 return;
             }
             
-            var price = SelectedProducts.Sum(p => p.OverallPrice);
-            var dialogResult = await _dialogService.ShowAsync<PaymentDialogViewModel, PaymentDialogResult, decimal>(price);
-            if (dialogResult.IsOk(out var paymentDialogResult))
+            var soldProducts = SelectedProducts.Select(p => new CashBoxSoldProduct
             {
-                var soldProducts = SelectedProducts.Select(p => new CashBoxSoldProduct
-                {
-                    ProductId = p.ProductId,
-                    Count = p.Count,
-                    Price = p.OverallPrice,
-                }).ToArray();
-
-                var cashBoxPayment = paymentDialogResult.ToCashBoxPayment();
-                await _cashBoxService.AddSaleAsync(_cashBoxId.Value, cashBoxPayment, soldProducts);
-                SelectedProducts.Clear();
+                ProductId = p.ProductId,
+                Count = p.Count,
+                OverallPrice = p.OverallPrice,
+            }).ToArray();
+            
+            var dialogResult = await _dialogService.ShowAsync<PaymentDialogViewModel, PaymentDialogResult, IReadOnlyList<CashBoxSoldProduct>>(soldProducts);
+            if (!dialogResult.IsOk(out var paymentDialogResult))
+            {
+                return;
             }
+            
+            var cashBoxPayment = paymentDialogResult.ToCashBoxPayment();
+            await _cashBoxService.AddSaleAsync(_cashBoxId.Value, cashBoxPayment, soldProducts);
+            SelectedProducts.Clear();
         }
 
         public async Task InitializeAsync()

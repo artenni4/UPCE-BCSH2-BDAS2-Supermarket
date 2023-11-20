@@ -92,7 +92,7 @@ namespace Supermarket.Wpf.Admin.Supermarkets
                 {
                     await _adminMenuService.DeleteSupermarket(selectedSupermarketId);
                 }
-                catch (OperationCannotBeExecutedException)
+                catch (ConstraintViolatedException)
                 {
                     MessageBox.Show("Nelze smazat supermarket protože již se používá", "Chyba", MessageBoxButton.OK, MessageBoxImage.Error);
                 }

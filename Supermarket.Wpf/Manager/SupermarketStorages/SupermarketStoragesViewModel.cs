@@ -106,7 +106,7 @@ namespace Supermarket.Wpf.Manager.SupermarketStorages
             {
                 await _managerMenuService.DeleteStorage(SelectedStorage.Id);
             }
-            catch (OperationCannotBeExecutedException)
+            catch (ConstraintViolatedException)
             {
                 var resultDelete = await _dialogService.ShowAsync<SupermarketStoragesMoveDialogViewModel, StoragePlace, int>(SelectedStorage.Id);
                 if (resultDelete.IsOk(out var a))

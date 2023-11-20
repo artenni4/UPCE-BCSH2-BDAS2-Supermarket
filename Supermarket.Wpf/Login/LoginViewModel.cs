@@ -66,6 +66,7 @@ namespace Supermarket.Wpf.Login
 
             try
             {
+                using var _ = new DelegateLoading(this);
                 var loggedEmployee = await _loginService.LoginEmployeeAsync(loginData);
                 if (loggedEmployee is LoggedSupermarketEmployee loggedSupermarketEmployee)
                 {

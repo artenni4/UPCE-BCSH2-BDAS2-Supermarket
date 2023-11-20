@@ -26,10 +26,20 @@ namespace Supermarket.Core.UseCases.Common
             ArgumentNullException.ThrowIfNull(_serviceProvider, nameof(_serviceProvider));
             ArgumentNullException.ThrowIfNull(targetMethod, nameof(targetMethod));
 
-            using var scope = _serviceProvider.CreateScope();
+            var scope = _serviceProvider.CreateScope();
             var scopedObject = scope.ServiceProvider.GetRequiredService<TService>();
             
-            return targetMethod.Invoke(scopedObject, args);
+            var result = targetMethod.Invoke(scopedObject, args);
+            if (result is Task task)
+            {
+                task.ContinueWith(_ => scope.Dispose());
+            }
+            else
+            {
+                scope.Dispose();
+            }
+
+            return result;
         }
 
         public static TInterface Create(IServiceProvider serviceProvider)

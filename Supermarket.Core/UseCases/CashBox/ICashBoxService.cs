@@ -34,9 +34,12 @@ namespace Supermarket.Core.UseCases.CashBox
         /// <summary>
         /// Checks whether coupon is valid
         /// </summary>
+        /// <param name="soldProducts">sold products</param>
         /// <param name="couponCode">code of the coupon</param>
-        /// <exception cref="InvalidCouponException">in case when coupon is not valid</exception>
-        Task<Coupon> CheckCouponAsync(string couponCode);
+        /// <param name="usedCoupons">coupons that are already used</param>
+        /// <exception cref="InvalidCouponException">coupon is not valid</exception>
+        /// <exception cref="CouponExceedsCostException">coupon exceeds cost of products</exception>
+        Task<Coupon> CheckCouponAsync(string couponCode, IReadOnlyList<CashBoxSoldProduct> soldProducts, IReadOnlyList<Coupon> usedCoupons);
         
         /// <summary>
         /// Gets list of cash boxes in given supermarket

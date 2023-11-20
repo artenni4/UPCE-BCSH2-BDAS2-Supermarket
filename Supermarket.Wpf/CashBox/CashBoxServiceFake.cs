@@ -26,7 +26,7 @@ public class CashBoxServiceFake : ICashBoxService
         throw new NotImplementedException();
     }
 
-    public Task<Coupon> CheckCouponAsync(string couponCode)
+    public Task<Coupon> CheckCouponAsync(string couponCode, IReadOnlyList<CashBoxSoldProduct> soldProducts, IReadOnlyList<Coupon> usedCoupons)
     {
         throw new NotImplementedException();
     }

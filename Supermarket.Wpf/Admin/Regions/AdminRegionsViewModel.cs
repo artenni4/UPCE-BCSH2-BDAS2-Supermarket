@@ -93,7 +93,7 @@ namespace Supermarket.Wpf.Admin.Regions
                 {
                     await _adminMenuService.DeleteRegion(selectedRegionId);
                 }
-                catch (OperationCannotBeExecutedException)
+                catch (ConstraintViolatedException)
                 {
                     MessageBox.Show("Nelze smazat region protože již se používá", "Chyba", MessageBoxButton.OK, MessageBoxImage.Error);
                 }

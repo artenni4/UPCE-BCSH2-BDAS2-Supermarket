@@ -82,7 +82,7 @@ namespace Supermarket.Core.UseCases.Admin
             }
             catch (RepositoryOperationFailedException e)
             {
-                throw new OperationCannotBeExecutedException(e);
+                throw new ConstraintViolatedException(e);
             }
         }
         #endregion
@@ -123,7 +123,7 @@ namespace Supermarket.Core.UseCases.Admin
             }
             catch (RepositoryOperationFailedException e)
             {
-                throw new OperationCannotBeExecutedException(e);
+                throw new ConstraintViolatedException(e);
             }
         }
         #endregion
@@ -163,7 +163,7 @@ namespace Supermarket.Core.UseCases.Admin
             }
             catch (RepositoryOperationFailedException e)
             {
-                throw new OperationCannotBeExecutedException(e);
+                throw new ConstraintViolatedException(e);
             }
         }
         #endregion
@@ -203,7 +203,7 @@ namespace Supermarket.Core.UseCases.Admin
             }
             catch (RepositoryOperationFailedException e)
             {
-                throw new OperationCannotBeExecutedException(e);
+                throw new ConstraintViolatedException(e);
             }
         }
         #endregion
@@ -243,7 +243,7 @@ namespace Supermarket.Core.UseCases.Admin
             }
             catch (RepositoryOperationFailedException e)
             {
-                throw new OperationCannotBeExecutedException(e);
+                throw new ConstraintViolatedException(e);
             }
         }
         #endregion
@@ -264,7 +264,7 @@ namespace Supermarket.Core.UseCases.Admin
             }
             catch (RepositoryOperationFailedException e)
             {
-                throw new OperationCannotBeExecutedException(e);
+                throw new ConstraintViolatedException(e);
             }
         }
 

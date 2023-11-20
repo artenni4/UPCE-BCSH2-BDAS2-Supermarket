@@ -100,7 +100,7 @@ namespace Supermarket.Wpf.Manager.SupermarketEmployees
                 {
                     await _managerMenuService.DeleteEmployee(selectedEmployeeId);
                 }
-                catch (OperationCannotBeExecutedException)
+                catch (ConstraintViolatedException)
                 {
                     MessageBox.Show("Nelze smazat zaměstnance protože již se používá", "Chyba", MessageBoxButton.OK, MessageBoxImage.Error);
                 }

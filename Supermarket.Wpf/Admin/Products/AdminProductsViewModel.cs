@@ -94,7 +94,7 @@ namespace Supermarket.Wpf.Admin.Products
                 {
                     await _adminMenuService.DeleteProduct(selectedRegionId);
                 }
-                catch (OperationCannotBeExecutedException)
+                catch (ConstraintViolatedException)
                 {
                     MessageBox.Show("Nelze smazat zboží protože již se používá", "Chyba", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
