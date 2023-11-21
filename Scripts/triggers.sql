@@ -16,7 +16,6 @@ BEGIN
         SELECT role_id INTO v_role_id FROM ROLE_ZAMESTNANCU WHERE zamestnanec_id = :NEW.zamestnanec_id AND role_id = 1;
     EXCEPTION
         WHEN NO_DATA_FOUND THEN
-            -- Обработка случая, когда не найдено ни одной записи
             v_role_id := NULL;
     END;
 
