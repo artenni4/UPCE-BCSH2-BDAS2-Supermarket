@@ -167,6 +167,11 @@ namespace Supermarket.Wpf.Admin.Employees.Dialog
 
         private bool CanConfirmEdit(object? arg)
         {
+            if (!ValidateInput.IsValidPersonalNumber(Employee.PersonalNumber))
+            {
+                return false;
+            }
+
             if (Employee.Name is null || Employee.Surname is null || Employee.Login is null || Employee.HireDate is null)
             {
                 return false;

@@ -38,19 +38,19 @@
 
                 <StackPanel Grid.Row="0" Grid.Column="0" Margin="10,0">
                     <TextBlock Text="Jméno:"/>
-                    <TextBox  Text="{Binding Employee.Name}"/>
+                    <TextBox  Text="{Binding Employee.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                     <TextBlock Text="Příjmení:"/>
-                    <TextBox Text="{Binding Employee.Surname}"/>
+                    <TextBox Text="{Binding Employee.Surname, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
 
                 <StackPanel Grid.Row="1" Grid.Column="0" Margin="10,0">
                     <TextBlock Text="Rodné číslo:"/>
-                    <TextBox Text="{Binding Employee.PersonalNumber}"/>
+                    <TextBox Text="{Binding Employee.PersonalNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
 
                 <StackPanel Grid.Row="2" Grid.Column="0" Margin="10,0">
                     <TextBlock Text="Datum nastupu:"/>
-                    <DatePicker SelectedDate="{Binding Employee.HireDate}" FontSize="40" />
+                    <DatePicker SelectedDate="{Binding Employee.HireDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="40" />
                 </StackPanel>
 
                 <StackPanel Grid.Row="0" Grid.Column="1" Margin="10,0">
@@ -65,7 +65,7 @@
 
                 <StackPanel Grid.Row="1" Grid.Column="1" Margin="10,0">
                     <TextBlock Text="Login:" Margin="0 0 0 0"/>
-                    <TextBox Text="{Binding Employee.Login}"/>
+                    <TextBox Text="{Binding Employee.Login, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
                 <StackPanel Grid.Row="2" Grid.Column="1" Margin="10,0">
                     <TextBlock Text="Heslo:"/>
