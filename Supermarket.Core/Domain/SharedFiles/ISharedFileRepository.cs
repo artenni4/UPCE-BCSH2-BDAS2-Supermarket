@@ -7,6 +7,7 @@ namespace Supermarket.Core.Domain.SharedFiles
     public interface ISharedFileRepository : ICrudRepository<SharedFile, int>
     {
         Task<PagedResult<ManagerMenuSharedFile>> GetAllAsync(int supermarketId, RecordsRange recordsRange, string? search);
-        Task SaveSharedFile(SharedFile file);
+        Task SaveSharedFile(SharedFile file, byte[] data);
+        Task<byte[]?> DownloadSharedFile(int fileId);
     }
 }

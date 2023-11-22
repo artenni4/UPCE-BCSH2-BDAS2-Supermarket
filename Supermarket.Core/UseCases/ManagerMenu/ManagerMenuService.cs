@@ -304,15 +304,32 @@ namespace Supermarket.Core.UseCases.ManagerMenu
             return await _sharedFileRepository.GetAllAsync(supermarketId, recordsRange, search);
         }
 
-        public async Task<SharedFile?> GetSharedFile(int fileId)
+        public async Task<SharedFile> GetSharedFile(int fileId)
         {
-            return await _sharedFileRepository.GetByIdAsync(fileId);
+            var sharedFile = await _sharedFileRepository.GetByIdAsync(fileId);
+            if (sharedFile is null)
+            {
+                throw new ApplicationInconsistencyException("Shared file was not found");
+            }
+
+            return sharedFile;
         }
 
-        public async Task AddSharedFile(SharedFile file)
+        public async Task<byte[]> DownloadSharedFile(int fileId)
+        {
+            var data = await _sharedFileRepository.DownloadSharedFile(fileId);
+            if (data is null)
+            {
+                throw new ApplicationInconsistencyException("Shared file was not found");
+            }
+
+            return data;
+        }
+
+        public async Task AddSharedFile(SharedFile file, byte[] data)
         {
             await using var transaction = await _unitOfWork.BeginTransactionAsync();
-            await _sharedFileRepository.AddAsync(file);
+            await _sharedFileRepository.SaveSharedFile(file, data);
             await transaction.CommitAsync();
         }
 
@@ -335,13 +352,6 @@ namespace Supermarket.Core.UseCases.ManagerMenu
             {
                 throw new ConstraintViolatedException(e);
             }
-        }
-
-        public async Task SaveSharedFile(SharedFile file)
-        {
-            await using var transaction = await _unitOfWork.BeginTransactionAsync();
-            await _sharedFileRepository.SaveSharedFile(file);
-            await transaction.CommitAsync();
         }
     }
 }

@@ -41,8 +41,9 @@ namespace Supermarket.Core.UseCases.ManagerMenu
         Task EditCashbox(Cashbox cashbox);
 
         Task<PagedResult<ManagerMenuSharedFile>> GetSharedFiles(int supermarketId, RecordsRange recordsRange, string? search);
-        Task<SharedFile?> GetSharedFile(int fileId);
-        Task AddSharedFile(SharedFile file);
+        Task<SharedFile> GetSharedFile(int fileId);
+        Task<byte[]> DownloadSharedFile(int fileId);
+        Task AddSharedFile(SharedFile file, byte[] data);
         Task EditSharedFile(SharedFile file);
         Task DeleteSharedFile(int fileId);
 

@@ -15,11 +15,10 @@ namespace Supermarket.Infrastructure.SharedFiles
         public required string nazev_souboru { get; init; }
         public required string pripona { get; init; }
         public required DateTime datum_nahrani { get; init; }
-        public required DateTime datum_modifikace { get; init; }
+        public required DateTime? datum_modifikace { get; init; }
         public required int supermarket_id { get; init; }
         public required int zamestnanec_id { get; init; }
         public required string zamestnanec_nazev { get; init; }
-        public required byte[] data { get; set; }
 
         public static string TableName => "SOUBORY";
 
@@ -38,20 +37,18 @@ namespace Supermarket.Infrastructure.SharedFiles
             ModifiedDate = datum_modifikace,
             Name = nazev_souboru,
             SupermarketId = supermarket_id,
-            Data = data
         };
 
         public static DbManagerMenuSharedFile ToDbEntity(ManagerMenuSharedFile entity) => new()
         {
             soubor_id = entity.Id,
-            data = entity.Data,
             datum_modifikace = entity.ModifiedDate,
             datum_nahrani = entity.CreatedDate,
             nazev_souboru = entity.Name,
             pripona = entity.Extenstion,
             supermarket_id = entity.SupermarketId,
             zamestnanec_id = entity.EmployeeId,
-            zamestnanec_nazev = entity.EmployeeName
+            zamestnanec_nazev = entity.EmployeeName,
         };
 
         public static DynamicParameters GetEntityIdParameters(int id) =>

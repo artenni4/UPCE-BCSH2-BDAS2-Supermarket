@@ -9,8 +9,7 @@ namespace Supermarket.Infrastructure.SharedFiles
         public required string nazev_souboru { get; init; }
         public required string pripona { get; init; }
         public required DateTime datum_nahrani { get; init; }
-        public required DateTime datum_modifikace { get; init; }
-        public required byte[] data { get; init; }
+        public required DateTime? datum_modifikace { get; init; }
         public required int supermarket_id { get; init; }
         public required int zamestnanec_id { get; init; }
 
@@ -26,9 +25,7 @@ namespace Supermarket.Infrastructure.SharedFiles
         {
             Id = soubor_id,
             CreatedDate = datum_nahrani,
-            Data = data,
             EmployeeId = zamestnanec_id,
-            EmployeeName = "AA",
             Extenstion = pripona,
             ModifiedDate = datum_modifikace,
             Name = nazev_souboru,
@@ -38,7 +35,6 @@ namespace Supermarket.Infrastructure.SharedFiles
         public static DbSharedFile ToDbEntity(SharedFile entity) => new()
         {
             soubor_id = entity.Id,
-            data = entity.Data,
             datum_modifikace = entity.ModifiedDate,
             datum_nahrani = entity.CreatedDate,
             nazev_souboru = entity.Name,

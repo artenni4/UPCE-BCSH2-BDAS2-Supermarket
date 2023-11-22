@@ -49,9 +49,7 @@ namespace Supermarket.Wpf.Manager.SupermarketSharedFiles.Dialog
                     Id = 0,
                     Name = "",
                     CreatedDate = DateTime.Now,
-                    Data = Array.Empty<byte>(),
                     EmployeeId = UserId,
-                    EmployeeName = UserName,
                     Extenstion = "",
                     ModifiedDate = DateTime.Now,
                     SupermarketId = _loggedUserService.SupermarketId
@@ -66,27 +64,24 @@ namespace Supermarket.Wpf.Manager.SupermarketSharedFiles.Dialog
 
         private async void ConfirmEdit(object? obj)
         {
-            if (SharedFile != null)
+            if (SharedFile == null || SharedFileId != 0)
             {
-                if (SharedFileId != 0)
-                {
-                    var fileToSave = SharedFile = new SharedFile
-                    {
-                        Id = SharedFile.Id,
-                        Name = SharedFile.Name,
-                        CreatedDate = SharedFile.CreatedDate,
-                        Data = SharedFile.Data,
-                        EmployeeId = SharedFile.EmployeeId,
-                        EmployeeName = SharedFile.EmployeeName,
-                        Extenstion = SharedFile.Extenstion,
-                        ModifiedDate = DateTime.Now,
-                        SupermarketId = SharedFile.SupermarketId
-                    };
-                    await _managerMenuService.EditSharedFile(fileToSave);
-                }
-
-                ResultReceived?.Invoke(this, DialogResult<SharedFile>.Ok(SharedFile));
+                return;
             }
+            
+            var fileToSave = SharedFile = new SharedFile
+            {
+                Id = SharedFile.Id,
+                Name = SharedFile.Name,
+                CreatedDate = SharedFile.CreatedDate,
+                EmployeeId = SharedFile.EmployeeId,
+                Extenstion = SharedFile.Extenstion,
+                ModifiedDate = DateTime.Now,
+                SupermarketId = SharedFile.SupermarketId
+            };
+            await _managerMenuService.EditSharedFile(fileToSave);
+
+            ResultReceived?.Invoke(this, DialogResult<SharedFile>.Ok(SharedFile));
         }
 
         private bool CanConfirmEdit(object? arg)

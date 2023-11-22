@@ -20,7 +20,7 @@ using System.Windows.Input;
 
 namespace Supermarket.Wpf.Manager.SupermarketSharedFiles
 {
-    public class SupermarketSharedFilesViewModel : NotifyPropertyChangedBase, ITabViewModel, IAsyncViewModel, IAsyncInitialized
+    public class SupermarketSharedFilesViewModel : NotifyPropertyChangedBase, ITabViewModel, IAsyncViewModel, IAsyncActivated
     {
         private readonly IManagerMenuService _managerMenuService;
         private readonly ILoggedUserService _loggedUserService;
@@ -76,7 +76,7 @@ namespace Supermarket.Wpf.Manager.SupermarketSharedFiles
             Files = new();
         }
 
-        public async Task InitializeAsync()
+        public async Task ActivateAsync()
         {
             using var _ = new DelegateLoading(this);
 
@@ -92,31 +92,37 @@ namespace Supermarket.Wpf.Manager.SupermarketSharedFiles
 
         public async void Search(object? obj)
         {
-            await InitializeAsync();
+            await ActivateAsync();
         }
 
-        public void DownloadFile(object? obj)
+        private async void DownloadFile(object? obj)
         {
-            if (SelectedFile != null)
+            if (SelectedFile == null)
             {
-                byte[] fileBytes = SelectedFile.Data;
+                return;
+            }
 
-                SaveFileDialog saveFileDialog = new SaveFileDialog();
-                saveFileDialog.FileName = SelectedFile.Name + SelectedFile.Extenstion;
+            byte[] fileBytes;
+            using (var _ = new DelegateLoading(this))
+            {
+                fileBytes = await _managerMenuService.DownloadSharedFile(SelectedFile.Id);
+            }
 
-                if (saveFileDialog.ShowDialog() == true)
+            var saveFileDialog = new SaveFileDialog();
+            saveFileDialog.FileName = SelectedFile.FullName;
+
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                var filePath = saveFileDialog.FileName;
+
+                try
                 {
-                    string filePath = saveFileDialog.FileName;
-
-                    try
-                    {
-                        File.WriteAllBytes(filePath, fileBytes);
-                        MessageBox.Show("Soubor byl stahnout", "Probíhá uložení...", MessageBoxButton.OK, MessageBoxImage.Information);
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show($"Chyba během stážení: {ex.Message}", "Chyba", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
+                    await File.WriteAllBytesAsync(filePath, fileBytes);
+                    MessageBox.Show("Soubor byl stahnout", "Probíhá uložení...", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Chyba během stážení: {ex.Message}", "Chyba", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
@@ -130,56 +136,41 @@ namespace Supermarket.Wpf.Manager.SupermarketSharedFiles
             if (openFileDialog.ShowDialog() == true)
             {
                 string selectedFilePath = openFileDialog.FileName;
-                int userId = 0;
-                string userName = "";
-                _loggedUserService.IsEmployee(out var emp);
-                if (emp == null)
+                if (!_loggedUserService.HasEmployeeId(out var employeeId))
                 {
-                    _loggedUserService.IsAdmin(out var admin);
-                    if (admin != null)
-                    {
-                        userId = admin.Id;
-                        userName = admin.Name + " " + admin.Surname;
-                    }
-                }
-                else
-                {
-                    userId = emp.Id;
-                    userName = emp.Name + " " + emp.Surname;
+                    throw new UiInconsistencyException("Unauthorized user is not allowed on this view");
                 }
 
-                byte[] fileBytes = File.ReadAllBytes(selectedFilePath);
+                var fileBytes = await File.ReadAllBytesAsync(selectedFilePath);
 
-                SharedFile newSharedFile = new SharedFile
+                var newSharedFile = new SharedFile
                 {
                     Id = 0,
                     CreatedDate = DateTime.MinValue,
                     Name = Path.GetFileNameWithoutExtension(openFileDialog.SafeFileName),
                     Extenstion = Path.GetExtension(selectedFilePath),
-                    Data = fileBytes,
-                    EmployeeId = userId,
-                    EmployeeName = userName,
+                    EmployeeId = employeeId.Value,
                     ModifiedDate = DateTime.Now,
                     SupermarketId = _loggedUserService.SupermarketId
                 };
 
                 using var _ = new DelegateLoading(this);
-                await _managerMenuService.AddSharedFile(newSharedFile);
+                await _managerMenuService.AddSharedFile(newSharedFile, fileBytes);
             }
-            await InitializeAsync();
+            await ActivateAsync();
         }
 
-        public async void Edit(object? obj)
+        private async void Edit(object? obj)
         {
             int selectedFileId = SelectedFile?.Id ?? 0;
             var result = await _dialogService.ShowAsync<SharedFilesDialogViewModel, SharedFile, int>(selectedFileId);
             if (result.IsOk(out var _))
             {
-                await InitializeAsync();
+                await ActivateAsync();
             }
         }
 
-        public async void Delete(object? obj)
+        private async void Delete(object? obj)
         {
             var result = await _dialogService.ShowConfirmationDialogAsync($"Provedením této akce odstraníte {SelectedFile?.Name}");
 
@@ -187,11 +178,11 @@ namespace Supermarket.Wpf.Manager.SupermarketSharedFiles
             {
                 int selectedFileId = SelectedFile?.Id ?? 0;
                 await _managerMenuService.DeleteSharedFile(selectedFileId);
-                await InitializeAsync();
+                await ActivateAsync();
             }
         }
 
-        public bool CanCallDialog(object? obj)
+        private bool CanCallDialog(object? obj)
         {
             return SelectedFile != null;
         }

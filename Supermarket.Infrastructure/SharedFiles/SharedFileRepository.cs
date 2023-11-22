@@ -6,6 +6,7 @@ using Supermarket.Core.UseCases.ManagerMenu;
 using Supermarket.Infrastructure.Products;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -49,38 +50,33 @@ namespace Supermarket.Infrastructure.SharedFiles
                         s.zamestnanec_id,
                         s.datum_modifikace";
 
-
-            const string blobSql = @"SELECT s.data FROM SOUBORY s WHERE s.soubor_id = :soubor_id";
-
-
-            var orderByColumns = DbSharedFile.IdentityColumns
-            .Select(ic => $"s.{ic}");
-
+            var orderByColumns = DbSharedFile.IdentityColumns.Select(ic => $"s.{ic}");
 
             var result = await GetPagedResult<DbManagerMenuSharedFile>(recordsRange, sql, orderByColumns, parameters);
-
-            foreach (var dbFile in result.Items)
-            {
-                var blobParameters = new DynamicParameters().AddParameter("soubor_id", dbFile.soubor_id);
-                var blobData = await _oracleConnection.QuerySingleOrDefaultAsync<byte[]>(blobSql, blobParameters);
-                if (blobData != null)
-                {
-                dbFile.data = blobData;
-
-                }
-            }
-
             return result.Select(dbFile => dbFile.ToDomainEntity());
-
-
-            //var result = await GetPagedResult<DbManagerMenuSharedFile>(recordsRange, sql, orderByColumns, parameters);
-
-            //return result.Select(dbFile => dbFile.ToDomainEntity());
         }
 
-        public Task SaveSharedFile(SharedFile file)
+        public async Task SaveSharedFile(SharedFile file, byte[] data)
         {
-            throw new NotImplementedException();
+            var dbEntity = DbSharedFile.ToDbEntity(file);
+            var insertingValues = dbEntity.GetInsertingValues();
+            insertingValues.Add("data", data, DbType.Binary);
+            
+            var selector = string.Join(", ", insertingValues.ParameterNames);
+            var parameters = string.Join(", ", insertingValues.ParameterNames.Select(v => ":" + v));
+            
+            var sql = $"INSERT INTO {DbSharedFile.TableName} ({selector}) VALUES ({parameters})";
+
+            await _oracleConnection.ExecuteAsync(sql, insertingValues);
+        }
+
+        public async Task<byte[]?> DownloadSharedFile(int fileId)
+        {
+            const string blobSql = @"SELECT s.data FROM SOUBORY s WHERE s.soubor_id = :soubor_id";
+            var blobParameters = new DynamicParameters().AddParameter("soubor_id", fileId);
+            var blobData = await _oracleConnection.QuerySingleOrDefaultAsync<byte[]>(blobSql, blobParameters);
+
+            return blobData;
         }
     }
 }
