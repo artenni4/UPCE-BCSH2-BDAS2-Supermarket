@@ -23,3 +23,4 @@ BEGIN
         :NEW.supermarket_id := NULL;
     END IF;
 END;
+/

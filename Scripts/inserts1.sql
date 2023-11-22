@@ -803,3 +803,7 @@ insert into role_zamestnancu values(1, 3);
 
 insert into platba values(5000, 1, 1);
 insert into platba values(50, 1, 3);
+/
+
+COMMIT;
+/

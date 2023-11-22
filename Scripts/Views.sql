@@ -44,7 +44,7 @@ GROUP BY
     pk.nazev,
     az.zbozi,
     pk.supermarket_id;
-
+/
 
 --#2 ProductRepository
 CREATE OR REPLACE VIEW AdminProductsView AS
@@ -69,6 +69,7 @@ SELECT
                         MERNE_JEDNOTKY mj on mj.merna_jednotka_id = z.merna_jednotka_id
                     JOIN
                         DRUHY_ZBOZI dz on dz.druh_zbozi_id = z.druh_zbozi_id;
+/
 
 --#3  EmployeeRepository                      
 CREATE OR REPLACE VIEW ManagerEmployeeDetail AS
@@ -91,3 +92,4 @@ LEFT JOIN
     ROLE r ON rz.role_id = r.role_id
 GROUP BY
     z.zamestnanec_id, z.jmeno, z.prijmeni, z.datum_nastupu, z.login, z.manazer_id, z.supermarket_id;
+/

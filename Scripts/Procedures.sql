@@ -43,7 +43,7 @@ BEGIN
         VALUES (v_transfer_kusy, new_sklad_id, v_supermarket_id, var_zbozi_id);
     END IF;
 END premistit_zbozi;
-
+/
 
 CREATE OR REPLACE PROCEDURE prijezd_zbozi(
     sklad_id IN NUMBER,
@@ -96,6 +96,7 @@ BEGIN
   DELETE FROM MISTA_ULOZENI
   WHERE misto_ulozeni_id = p_misto_ulozeni_id;
 END move_and_delete;
+/
 
 -- edit zamestnance EmployeesRepository
 CREATE OR REPLACE PROCEDURE EDIT_ZAMESTNANCE(
@@ -153,4 +154,4 @@ BEGIN
         END IF;
     END IF;
 END;
-
+/
