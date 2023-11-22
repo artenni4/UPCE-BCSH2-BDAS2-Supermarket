@@ -43,7 +43,7 @@ BEGIN
         VALUES (v_transfer_kusy, new_sklad_id, v_supermarket_id, var_zbozi_id);
     END IF;
 END premistit_zbozi;
-
+/
 
 CREATE OR REPLACE PROCEDURE prijezd_zbozi(
     sklad_id IN NUMBER,
@@ -96,16 +96,19 @@ BEGIN
   DELETE FROM MISTA_ULOZENI
   WHERE misto_ulozeni_id = p_misto_ulozeni_id;
 END move_and_delete;
+/
 
 -- edit zamestnance EmployeesRepository
 CREATE OR REPLACE PROCEDURE EDIT_ZAMESTNANCE(
     p_zamestnanec_id ZAMESTNANCI.zamestnanec_id%TYPE,
-    p_jmeno ZAMESTNANCI.jmeno%TYPE,
-    p_prijmeni ZAMESTNANCI.prijmeni%TYPE,
     p_login ZAMESTNANCI.login%TYPE,
-    p_datum_nastupu ZAMESTNANCI.datum_nastupu%TYPE,
     p_heslo_hash ZAMESTNANCI.heslo_hash%TYPE,
     p_heslo_salt ZAMESTNANCI.heslo_salt%TYPE,
+    p_jmeno ZAMESTNANCI.jmeno%TYPE,
+    p_prijmeni ZAMESTNANCI.prijmeni%TYPE,
+    p_datum_nastupu ZAMESTNANCI.datum_nastupu%TYPE,
+    p_supermarket_id ZAMESTNANCI.supermarket_id%TYPE,
+    p_manazer_id ZAMESTNANCI.manazer_id%TYPE,
     p_rodne_cislo ZAMESTNANCI.rodne_cislo%TYPE,
     p_je_pokladnik NUMBER,
     p_je_nakladac NUMBER,
@@ -119,12 +122,14 @@ CREATE OR REPLACE PROCEDURE EDIT_ZAMESTNANCE(
 BEGIN
     UPDATE ZAMESTNANCI
     SET
-        jmeno = p_jmeno,
-        prijmeni = p_prijmeni,
         login = p_login,
-        datum_nastupu = p_datum_nastupu,
         heslo_hash = p_heslo_hash,
         heslo_salt = p_heslo_salt,
+        jmeno = p_jmeno,
+        prijmeni = p_prijmeni,
+        datum_nastupu = p_datum_nastupu,
+        supermarket_id = p_supermarket_id,
+        manazer_id = p_manazer_id,
         rodne_cislo = p_rodne_cislo
     WHERE zamestnanec_id = p_zamestnanec_id;
 
@@ -153,4 +158,4 @@ BEGIN
         END IF;
     END IF;
 END;
-
+/

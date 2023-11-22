@@ -171,6 +171,8 @@ namespace Supermarket.Wpf.Manager.SupermarketSharedFiles
                     ModifiedDate = DateTime.Now,
                     SupermarketId = _loggedUserService.SupermarketId
                 };
+
+                using var _ = new DelegateLoading(this);
                 await _managerMenuService.AddSharedFile(newSharedFile);
             }
             await ActivateAsync();

@@ -17,6 +17,7 @@ EXCEPTION
     WHEN NO_DATA_FOUND THEN
         RETURN 0;
 END je_role_zamestnancu;
+/
 
 -- nejprodavanější zboží ProductRepository
 CREATE OR REPLACE FUNCTION DEJ_NEJPRODAVANEJSI_ZBOZI(p_supermarket_id IN SUPERMARKETY.supermarket_id%TYPE)
@@ -39,6 +40,7 @@ EXCEPTION
     WHEN NO_DATA_FOUND THEN
         RETURN NULL;
 END DEJ_NEJPRODAVANEJSI_ZBOZI;
+/
 
 -- možné role zaměstnanců EmployeeRepository
 CREATE OR REPLACE FUNCTION DEJ_MOZNE_MANAZERY(p_manazer_id IN zamestnanci.zamestnanec_id%TYPE)
@@ -53,3 +55,4 @@ BEGIN
 
     RETURN v_manazeri_rc;
 END DEJ_MOZNE_MANAZERY;
+/
