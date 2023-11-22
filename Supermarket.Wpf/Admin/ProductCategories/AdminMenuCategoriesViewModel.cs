@@ -12,7 +12,7 @@ using Supermarket.Wpf.Admin.ProductCategories.Dialog;
 
 namespace Supermarket.Wpf.Admin.ProductCategories
 {
-    public class AdminMenuCategoriesViewModel : NotifyPropertyChangedBase, ITabViewModel, IAsyncViewModel, IAsyncInitialized
+    public class AdminMenuCategoriesViewModel : NotifyPropertyChangedBase, ITabViewModel, IAsyncViewModel, IAsyncActivated
     {
         private readonly IAdminMenuService _adminMenuService;
         private readonly IDialogService _dialogService;
@@ -51,7 +51,7 @@ namespace Supermarket.Wpf.Admin.ProductCategories
             Categories = new();
         }
 
-        public async Task InitializeAsync()
+        public async Task ActivateAsync()
         {
             using var _ = new DelegateLoading(this);
 
@@ -70,7 +70,7 @@ namespace Supermarket.Wpf.Admin.ProductCategories
             var result = await _dialogService.ShowAsync<CategoriesDialogViewModel, ProductCategory, int>(selectedCategoryId);
             if (result.IsOk(out var _))
             {
-                await InitializeAsync();
+                await ActivateAsync();
             }
         }
 
@@ -80,7 +80,7 @@ namespace Supermarket.Wpf.Admin.ProductCategories
             var result = await _dialogService.ShowAsync<CategoriesDialogViewModel, ProductCategory, int>(selectedCategoryId);
             if (result.IsOk(out var _))
             {
-                await InitializeAsync();
+                await ActivateAsync();
             }
         }
 
@@ -99,7 +99,7 @@ namespace Supermarket.Wpf.Admin.ProductCategories
                 {
                     MessageBox.Show("Nelze smazat druh zboží protože již se používá", "Chyba", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
-                await InitializeAsync();
+                await ActivateAsync();
             }
         }
 

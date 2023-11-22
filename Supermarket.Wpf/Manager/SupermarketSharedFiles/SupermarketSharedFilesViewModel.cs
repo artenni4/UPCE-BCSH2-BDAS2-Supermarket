@@ -20,7 +20,7 @@ using System.Windows.Input;
 
 namespace Supermarket.Wpf.Manager.SupermarketSharedFiles
 {
-    public class SupermarketSharedFilesViewModel : NotifyPropertyChangedBase, ITabViewModel, IAsyncViewModel, IAsyncInitialized
+    public class SupermarketSharedFilesViewModel : NotifyPropertyChangedBase, ITabViewModel, IAsyncViewModel, IAsyncActivated
     {
         private readonly IManagerMenuService _managerMenuService;
         private readonly ILoggedUserService _loggedUserService;
@@ -76,7 +76,7 @@ namespace Supermarket.Wpf.Manager.SupermarketSharedFiles
             Files = new();
         }
 
-        public async Task InitializeAsync()
+        public async Task ActivateAsync()
         {
             using var _ = new DelegateLoading(this);
 
@@ -92,7 +92,7 @@ namespace Supermarket.Wpf.Manager.SupermarketSharedFiles
 
         public async void Search(object? obj)
         {
-            await InitializeAsync();
+            await ActivateAsync();
         }
 
         public void DownloadFile(object? obj)
@@ -130,6 +130,15 @@ namespace Supermarket.Wpf.Manager.SupermarketSharedFiles
             if (openFileDialog.ShowDialog() == true)
             {
                 string selectedFilePath = openFileDialog.FileName;
+
+                const long maxFileSize = 1 * 1024 * 1024;
+
+                if (new FileInfo(selectedFilePath).Length > maxFileSize)
+                {
+                    MessageBox.Show("Vybraný soubor je příliš velký. Vyberte prosím soubor o velikosti do " + (maxFileSize / (1024 * 1024)) + " MB.", "Chyba", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
                 int userId = 0;
                 string userName = "";
                 _loggedUserService.IsEmployee(out var emp);
@@ -164,7 +173,7 @@ namespace Supermarket.Wpf.Manager.SupermarketSharedFiles
                 };
                 await _managerMenuService.AddSharedFile(newSharedFile);
             }
-            await InitializeAsync();
+            await ActivateAsync();
         }
 
         public async void Edit(object? obj)
@@ -173,7 +182,7 @@ namespace Supermarket.Wpf.Manager.SupermarketSharedFiles
             var result = await _dialogService.ShowAsync<SharedFilesDialogViewModel, SharedFile, int>(selectedFileId);
             if (result.IsOk(out var _))
             {
-                await InitializeAsync();
+                await ActivateAsync();
             }
         }
 
@@ -185,7 +194,7 @@ namespace Supermarket.Wpf.Manager.SupermarketSharedFiles
             {
                 int selectedFileId = SelectedFile?.Id ?? 0;
                 await _managerMenuService.DeleteSharedFile(selectedFileId);
-                await InitializeAsync();
+                await ActivateAsync();
             }
         }
 
@@ -193,6 +202,5 @@ namespace Supermarket.Wpf.Manager.SupermarketSharedFiles
         {
             return SelectedFile != null;
         }
-
     }
 }

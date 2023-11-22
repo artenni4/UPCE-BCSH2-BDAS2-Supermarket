@@ -3,6 +3,7 @@ BEFORE INSERT ON SOUBORY
 FOR EACH ROW
 BEGIN
   :NEW.datum_nahrani := SYSTIMESTAMP;
+  :NEW.datum_modifikace := SYSTIMESTAMP;
 END;
 /
 
@@ -13,7 +14,7 @@ DECLARE
     v_role_id NUMBER;
 BEGIN
     BEGIN
-        SELECT role_id INTO v_role_id FROM ROLE_ZAMESTNANCU WHERE zamestnanec_id = :NEW.zamestnanec_id AND role_id = 1;
+        SELECT role_id INTO v_role_id FROM ROLE_ZAMESTNANCU WHERE zamestnanec_id = :NEW.zamestnanec_id AND role_id = 4;
     EXCEPTION
         WHEN NO_DATA_FOUND THEN
             v_role_id := NULL;

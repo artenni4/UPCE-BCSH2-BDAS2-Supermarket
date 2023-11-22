@@ -11,7 +11,7 @@ using Supermarket.Core.Domain.Products;
 
 namespace Supermarket.Wpf.Admin.Products
 {
-    public class AdminProductsViewModel : NotifyPropertyChangedBase, ITabViewModel, IAsyncViewModel, IAsyncInitialized
+    public class AdminProductsViewModel : NotifyPropertyChangedBase, ITabViewModel, IAsyncViewModel, IAsyncActivated
     {
         private readonly IAdminMenuService _adminMenuService;
         private readonly IDialogService _dialogService;
@@ -50,7 +50,7 @@ namespace Supermarket.Wpf.Admin.Products
             Products = new();
         }
 
-        public async Task InitializeAsync()
+        public async Task ActivateAsync()
         {
             using var _ = new DelegateLoading(this);
 
@@ -69,7 +69,7 @@ namespace Supermarket.Wpf.Admin.Products
             var result = await _dialogService.ShowAsync<ProductsDialogViewModel, Product, int>(selectedRegionId);
             if (result.IsOk(out var _))
             {
-                await InitializeAsync();
+                await ActivateAsync();
             }
         }
 
@@ -79,7 +79,7 @@ namespace Supermarket.Wpf.Admin.Products
             var result = await _dialogService.ShowAsync<ProductsDialogViewModel, Product, int>(selectedRegionId);
             if (result.IsOk(out var _))
             {
-                await InitializeAsync();
+                await ActivateAsync();
             }
         }
 
@@ -98,7 +98,7 @@ namespace Supermarket.Wpf.Admin.Products
                 {
                     MessageBox.Show("Nelze smazat zboží protože již se používá", "Chyba", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
-                await InitializeAsync();
+                await ActivateAsync();
             }
         }
 

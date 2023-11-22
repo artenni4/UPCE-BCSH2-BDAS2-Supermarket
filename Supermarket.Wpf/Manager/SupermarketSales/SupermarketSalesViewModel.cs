@@ -6,7 +6,7 @@ using System.Windows.Input;
 
 namespace Supermarket.Wpf.Manager.SupermarketSales
 {
-    public class SupermarketSalesViewModel : NotifyPropertyChangedBase, ITabViewModel, IAsyncViewModel, IAsyncInitialized
+    public class SupermarketSalesViewModel : NotifyPropertyChangedBase, ITabViewModel, IAsyncViewModel, IAsyncActivated
     {
         private readonly IManagerMenuService _managerMenuService;
         private readonly ILoggedUserService _loggedUserService;
@@ -32,7 +32,7 @@ namespace Supermarket.Wpf.Manager.SupermarketSales
             Sales = new();
         }
 
-        public async Task InitializeAsync()
+        public async Task ActivateAsync()
         {
             using var _ = new DelegateLoading(this);
 
