@@ -66,39 +66,41 @@ namespace Supermarket.Infrastructure.Employees
 
         public async Task UpdateAsync(EmployeeRole employeeRole)
         {
-            var parameters = new DynamicParameters()
-                .AddParameter("p_zamestnanec_id", employeeRole.Id)
-                .AddParameter("p_jmeno", employeeRole.Name)
-                .AddParameter("p_prijmeni", employeeRole.Surname)
-                .AddParameter("p_login", employeeRole.Login)
-                .AddParameter("p_datum_nastupu", employeeRole.HireDate)
-                .AddParameter("p_heslo_hash", employeeRole.PasswordHash)
-                .AddParameter("p_heslo_salt", employeeRole.PasswordHashSalt)
-                .AddParameter("p_rodne_cislo", employeeRole.PersonalNumber);
-            
+            var parameters = new DynamicParameters();
+
             if (employeeRole.RoleInfo is Admin)
             {
-                parameters.AddParameter("p_je_admin", 1);
-                parameters.AddParameter("p_je_pokladnik", 0);
-                parameters.AddParameter("p_je_nakladac", 0);
-                parameters.AddParameter("p_je_manazer", 0);
+                parameters.AddParameter("p_je_admin", 1)
+                    .AddParameter("p_je_pokladnik", 0)
+                    .AddParameter("p_je_nakladac", 0)
+                    .AddParameter("p_je_manazer", 0)
+                    .AddParameter("p_supermarket_id", null)
+                    .AddParameter("p_manazer_id", null);
             }
             else if (employeeRole.RoleInfo is SupermarketEmployee supermarketEmployee)
             {
-                parameters.AddParameter("p_je_admin", 0);
-                parameters.AddParameter("p_je_pokladnik", 
-                    supermarketEmployee.Roles.Contains(SupermarketEmployeeRole.Cashier) ? 1 : 0);
-                
-                parameters.AddParameter("p_je_nakladac",
-                    supermarketEmployee.Roles.Contains(SupermarketEmployeeRole.GoodsKeeper) ? 1 : 0);
-                
-                parameters.AddParameter("p_je_manazer", 
-                    supermarketEmployee.Roles.Contains(SupermarketEmployeeRole.Manager) ? 1 : 0);
+                parameters
+                    .AddParameter("p_je_admin", 0)
+                    .AddParameter("p_je_pokladnik", supermarketEmployee.Roles.Contains(SupermarketEmployeeRole.Cashier) ? 1 : 0)
+                    .AddParameter("p_je_nakladac", supermarketEmployee.Roles.Contains(SupermarketEmployeeRole.GoodsKeeper) ? 1 : 0)
+                    .AddParameter("p_je_manazer", supermarketEmployee.Roles.Contains(SupermarketEmployeeRole.Manager) ? 1 : 0)
+                    .AddParameter("p_supermarket_id", supermarketEmployee.SupermarketId)
+                    .AddParameter("p_manazer_id", supermarketEmployee.ManagerId);
             }
             else
             {
                 throw new NotSupportedException($"{employeeRole.RoleInfo} is not supported.");
             }
+            
+            parameters
+                .AddParameter("p_zamestnanec_id", employeeRole.Id)
+                .AddParameter("p_login", employeeRole.Login)
+                .AddParameter("p_heslo_hash", employeeRole.PasswordHash)
+                .AddParameter("p_heslo_salt", employeeRole.PasswordHashSalt)
+                .AddParameter("p_jmeno", employeeRole.Name)
+                .AddParameter("p_prijmeni", employeeRole.Surname)
+                .AddParameter("p_datum_nastupu", employeeRole.HireDate)
+                .AddParameter("p_rodne_cislo", employeeRole.PersonalNumber);
             
             await _oracleConnection.ExecuteAsync("EDIT_ZAMESTNANCE", parameters, commandType: CommandType.StoredProcedure);
         }
