@@ -13,7 +13,7 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Tabulka" Binding="{Binding TableName}" Width="*" IsReadOnly="True" FontSize="25" />
                     <DataGridTextColumn Header="Operace" Binding="{Binding Operation}" Width="*" IsReadOnly="True" FontSize="25" />
-                    <DataGridTextColumn Header="Čas" Binding="{Binding TimeOccured}" Width="*" IsReadOnly="True" FontSize="25" />
+                    <DataGridTextColumn Header="Čas" Binding="{Binding TimeOccured, StringFormat='yyyy-MM-dd HH:mm:ss'}" Width="*" IsReadOnly="True" FontSize="25" />
                     <DataGridTextColumn Header="Uživatel" Binding="{Binding UserName}" Width="*" IsReadOnly="True" FontSize="25" />
                 </DataGrid.Columns>
             </DataGrid>

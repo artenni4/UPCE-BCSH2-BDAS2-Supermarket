@@ -10,7 +10,7 @@ using Supermarket.Wpf.Admin.Regions.Dialog;
 
 namespace Supermarket.Wpf.Admin.Regions
 {
-    public class AdminRegionsViewModel : NotifyPropertyChangedBase, ITabViewModel, IAsyncViewModel, IAsyncInitialized
+    public class AdminRegionsViewModel : NotifyPropertyChangedBase, ITabViewModel, IAsyncViewModel, IAsyncActivated
     {
         private readonly IAdminMenuService _adminMenuService;
         private readonly IDialogService _dialogService;
@@ -49,7 +49,7 @@ namespace Supermarket.Wpf.Admin.Regions
             Regions = new();
         }
 
-        public async Task InitializeAsync()
+        public async Task ActivateAsync()
         {
             using var _ = new DelegateLoading(this);
 
@@ -68,7 +68,7 @@ namespace Supermarket.Wpf.Admin.Regions
             var result = await _dialogService.ShowAsync<RegionsDialogViewModel, Region, int>(selectedRegionId);
             if (result.IsOk(out var _))
             {
-                await InitializeAsync();
+                await ActivateAsync();
             }
         }
 
@@ -78,7 +78,7 @@ namespace Supermarket.Wpf.Admin.Regions
             var result = await _dialogService.ShowAsync<RegionsDialogViewModel, Region, int>(selectedRegionId);
             if (result.IsOk(out var _))
             {
-                await InitializeAsync();
+                await ActivateAsync();
             }
         }
 
@@ -97,7 +97,7 @@ namespace Supermarket.Wpf.Admin.Regions
                 {
                     MessageBox.Show("Nelze smazat region protože již se používá", "Chyba", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
-                await InitializeAsync();
+                await ActivateAsync();
             }
         }
 

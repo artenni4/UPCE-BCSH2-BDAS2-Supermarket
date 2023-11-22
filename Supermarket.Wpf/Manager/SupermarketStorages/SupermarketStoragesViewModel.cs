@@ -12,7 +12,7 @@ using Supermarket.Core.Domain.Common;
 
 namespace Supermarket.Wpf.Manager.SupermarketStorages
 {
-    public class SupermarketStoragesViewModel : NotifyPropertyChangedBase, ITabViewModel, IAsyncViewModel, IAsyncInitialized
+    public class SupermarketStoragesViewModel : NotifyPropertyChangedBase, ITabViewModel, IAsyncViewModel, IAsyncActivated
     {
         private readonly IManagerMenuService _managerMenuService;
         private readonly ILoggedUserService _loggedUserService;
@@ -53,7 +53,7 @@ namespace Supermarket.Wpf.Manager.SupermarketStorages
             StoragePlaces = new();
         }
 
-        public async Task InitializeAsync()
+        public async Task ActivateAsync()
         {
             using var _ = new DelegateLoading(this);
 
@@ -77,7 +77,7 @@ namespace Supermarket.Wpf.Manager.SupermarketStorages
             var result = await _dialogService.ShowAsync<SupermarketStoragesDialogViewModel, StoragePlace, int> (selectedStorageId);
             if (result.IsOk(out var a))
             {
-                await InitializeAsync();
+                await ActivateAsync();
             }
         }
 
@@ -88,7 +88,7 @@ namespace Supermarket.Wpf.Manager.SupermarketStorages
             var result = await _dialogService.ShowAsync<SupermarketStoragesDialogViewModel, StoragePlace, int>(selectedStorageId);
             if (result.IsOk(out var a))
             {
-                await InitializeAsync();
+                await ActivateAsync();
             }
         }
 
@@ -111,11 +111,11 @@ namespace Supermarket.Wpf.Manager.SupermarketStorages
                 var resultDelete = await _dialogService.ShowAsync<SupermarketStoragesMoveDialogViewModel, StoragePlace, int>(SelectedStorage.Id);
                 if (resultDelete.IsOk(out var a))
                 {
-                    await InitializeAsync();
+                    await ActivateAsync();
                 }
                 //MessageBox.Show("Místo uložení nelze smazat protože již se používá", "Chyba", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-            await InitializeAsync();
+            await ActivateAsync();
         }
 
         public bool CanCallDialog(object? obj)

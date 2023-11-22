@@ -9,7 +9,7 @@ using Supermarket.Wpf.Admin.Supermarkets.Dialog;
 
 namespace Supermarket.Wpf.Admin.Supermarkets
 {
-    public class AdminSupermarketsViewModel : NotifyPropertyChangedBase, ITabViewModel, IAsyncViewModel, IAsyncInitialized
+    public class AdminSupermarketsViewModel : NotifyPropertyChangedBase, ITabViewModel, IAsyncViewModel, IAsyncActivated
     {
         private readonly IAdminMenuService _adminMenuService;
         private readonly IDialogService _dialogService;
@@ -48,7 +48,7 @@ namespace Supermarket.Wpf.Admin.Supermarkets
             Supermarkets = new();
         }
 
-        public async Task InitializeAsync()
+        public async Task ActivateAsync()
         {
             using var _ = new DelegateLoading(this);
 
@@ -67,7 +67,7 @@ namespace Supermarket.Wpf.Admin.Supermarkets
             var result = await _dialogService.ShowAsync<SupermarketsDialogViewModel, Core.Domain.Supermarkets.Supermarket, int>(selectedSupermarketId);
             if (result.IsOk(out var _))
             {
-                await InitializeAsync();
+                await ActivateAsync();
             }
         }
 
@@ -77,7 +77,7 @@ namespace Supermarket.Wpf.Admin.Supermarkets
             var result = await _dialogService.ShowAsync<SupermarketsDialogViewModel, Core.Domain.Supermarkets.Supermarket, int>(selectedSupermarketId);
             if (result.IsOk(out var _))
             {
-                await InitializeAsync();
+                await ActivateAsync();
             }
         }
 
@@ -96,7 +96,7 @@ namespace Supermarket.Wpf.Admin.Supermarkets
                 {
                     MessageBox.Show("Nelze smazat supermarket protože již se používá", "Chyba", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
-                await InitializeAsync();
+                await ActivateAsync();
             }
         }
 

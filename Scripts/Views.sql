@@ -1,4 +1,4 @@
-DROP VIEW SalesView;
+﻿DROP VIEW SalesView;
 DROP VIEW AdminProductsView;
 DROP VIEW ManagerEmployeeDetail;
 
@@ -7,7 +7,7 @@ CREATE OR REPLACE VIEW SalesView AS
 WITH AggregatedZbozi AS (
     SELECT
         prodej_id,
-        LISTAGG(DISTINCT z.nazev || ' ' || pz.kusy || mj.zkratka || ' ' || pz.celkova_cena || 'K?', ', ') WITHIN GROUP (ORDER BY z.nazev) AS zbozi
+        LISTAGG(DISTINCT z.nazev || ' ' || pz.kusy || mj.zkratka || ' ' || pz.celkova_cena || 'Kč', ', ') WITHIN GROUP (ORDER BY z.nazev) AS zbozi
     FROM
         PRODANE_ZBOZI pz
     JOIN

@@ -273,7 +273,7 @@ namespace Supermarket.Wpf.Admin.Products.Dialog
 
         private bool CanConfirmEdit(object? arg)
         {
-            if (ValidateInput.IsValidStringInput(Product?.Name))
+            if (ValidateInput.IsValidStringInput(Product?.Name) && Product != null && SelectedMeasureUnit != null && SelectedSupplier != null && SelectedCategory != null && Product.Price > 0)
             {
                 return true;
             }

@@ -11,7 +11,7 @@ using System.Windows;
 
 namespace Supermarket.Wpf.Manager.SupermarketEmployees
 {
-    public class SupermarketEmployeesViewModel : NotifyPropertyChangedBase, ITabViewModel, IAsyncViewModel, IAsyncInitialized
+    public class SupermarketEmployeesViewModel : NotifyPropertyChangedBase, ITabViewModel, IAsyncViewModel, IAsyncActivated
     {
         private readonly IManagerMenuService _managerMenuService;
         private readonly ILoggedUserService _loggedUserService;
@@ -51,7 +51,7 @@ namespace Supermarket.Wpf.Manager.SupermarketEmployees
             Employees = new();
         }
 
-        public async Task InitializeAsync()
+        public async Task ActivateAsync()
         {
             using var _ = new DelegateLoading(this);
 
@@ -75,7 +75,7 @@ namespace Supermarket.Wpf.Manager.SupermarketEmployees
             var result = await _dialogService.ShowAsync<ManagerMenuEmployeeDialogViewModel, int>(selectedEmployeeId);
             if (result.IsOk())
             {
-                await InitializeAsync();
+                await ActivateAsync();
             }
         }
 
@@ -85,7 +85,7 @@ namespace Supermarket.Wpf.Manager.SupermarketEmployees
             var result = await _dialogService.ShowAsync<ManagerMenuEmployeeDialogViewModel, int>(selectedEmployeeId);
             if (result.IsOk())
             {
-                await InitializeAsync();
+                await ActivateAsync();
             }
         }
 
@@ -104,7 +104,7 @@ namespace Supermarket.Wpf.Manager.SupermarketEmployees
                 {
                     MessageBox.Show("Nelze smazat zaměstnance protože již se používá", "Chyba", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
-                await InitializeAsync();
+                await ActivateAsync();
             }
         }
 

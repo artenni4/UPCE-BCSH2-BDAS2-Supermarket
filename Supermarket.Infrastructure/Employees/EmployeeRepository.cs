@@ -30,6 +30,7 @@ namespace Supermarket.Infrastructure.Employees
                                     z.supermarket_id,
                                     z.heslo_hash,
                                     z.heslo_salt,
+                                    z.rodne_cislo,
                                     je_role_zamestnancu(z.zamestnanec_id, 'Pokladnik') AS isPokladnik,
                                     je_role_zamestnancu(z.zamestnanec_id, 'Manazer') AS isManazer,
                                     je_role_zamestnancu(z.zamestnanec_id, 'Nakladac') AS isNakladac,
@@ -38,7 +39,7 @@ namespace Supermarket.Infrastructure.Employees
                                     ZAMESTNANCI z
                                 WHERE {0}
                                 GROUP BY
-                                    z.zamestnanec_id, z.jmeno, z.prijmeni, z.datum_nastupu, z.login, z.manazer_id, z.supermarket_id, z.heslo_hash, z.heslo_salt";
+                                    z.zamestnanec_id, z.jmeno, z.prijmeni, z.datum_nastupu, z.login, z.manazer_id, z.supermarket_id, z.heslo_hash, z.heslo_salt, z.rodne_cislo";
 
         public async Task<EmployeeRole?> GetRoleByLoginAsync(string login)
         {

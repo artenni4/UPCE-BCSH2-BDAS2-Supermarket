@@ -119,6 +119,11 @@ namespace Supermarket.Wpf.Manager.SupermarketEmployees.Dialog
                 return false;
             }
 
+            if (!Employee.IsManager && !Employee.IsGoodsKeeper && !Employee.IsCashier)
+            {
+                return false;
+            }
+
             return true;
         }
 

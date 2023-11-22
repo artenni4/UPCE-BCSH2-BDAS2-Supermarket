@@ -18,7 +18,7 @@ using System.Windows.Input;
 
 namespace Supermarket.Wpf.Admin.Suppliers
 {
-    public class AdminSuppliersViewModel : NotifyPropertyChangedBase, ITabViewModel, IAsyncViewModel, IAsyncInitialized
+    public class AdminSuppliersViewModel : NotifyPropertyChangedBase, ITabViewModel, IAsyncViewModel, IAsyncActivated
     {
         private readonly IAdminMenuService _adminMenuService;
         private readonly IDialogService _dialogService;
@@ -57,7 +57,7 @@ namespace Supermarket.Wpf.Admin.Suppliers
             Suppliers = new();
         }
 
-        public async Task InitializeAsync()
+        public async Task ActivateAsync()
         {
             using var _ = new DelegateLoading(this);
 
@@ -77,7 +77,7 @@ namespace Supermarket.Wpf.Admin.Suppliers
             var result = await _dialogService.ShowAsync<SuppliersDialogViewModel, Supplier, int>(selectedSupplierId);
             if (result.IsOk(out var _))
             {
-                await InitializeAsync();
+                await ActivateAsync();
             }
         }
 
@@ -87,7 +87,7 @@ namespace Supermarket.Wpf.Admin.Suppliers
             var result = await _dialogService.ShowAsync<SuppliersDialogViewModel, Supplier, int>(selectedSupplierId);
             if (result.IsOk(out var _))
             {
-                await InitializeAsync();
+                await ActivateAsync();
             }
         }
 
@@ -106,7 +106,7 @@ namespace Supermarket.Wpf.Admin.Suppliers
                 {
                     MessageBox.Show("Nelze smazat dodavatele protože již se používá", "Chyba", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
-                await InitializeAsync();
+                await ActivateAsync();
             }
         }
 

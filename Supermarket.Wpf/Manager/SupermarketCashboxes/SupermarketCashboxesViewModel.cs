@@ -11,7 +11,7 @@ using Cashbox = Supermarket.Core.Domain.CashBoxes.CashBox;
 
 namespace Supermarket.Wpf.Manager.SupermarketCashboxes
 {
-    public class SupermarketCashboxesViewModel : NotifyPropertyChangedBase, ITabViewModel, IAsyncViewModel, IAsyncInitialized
+    public class SupermarketCashboxesViewModel : NotifyPropertyChangedBase, ITabViewModel, IAsyncViewModel, IAsyncActivated
     {
         private readonly IManagerMenuService _managerMenuService;
         private readonly ILoggedUserService _loggedUserService;
@@ -52,7 +52,7 @@ namespace Supermarket.Wpf.Manager.SupermarketCashboxes
             Cashboxes = new();
         }
 
-        public async Task InitializeAsync()
+        public async Task ActivateAsync()
         {
             using var _ = new DelegateLoading(this);
 
@@ -76,7 +76,7 @@ namespace Supermarket.Wpf.Manager.SupermarketCashboxes
             var result = await _dialogService.ShowAsync<SupermarketCashboxesDialogViewModel, Cashbox, int>(selectedCashboxId);
             if (result.IsOk(out var cashBox))
             {
-                await InitializeAsync();
+                await ActivateAsync();
             }
         }
 
@@ -86,7 +86,7 @@ namespace Supermarket.Wpf.Manager.SupermarketCashboxes
             var result = await _dialogService.ShowAsync<SupermarketCashboxesDialogViewModel, Cashbox, int>(selectedCashboxId);
             if (result.IsOk(out var cashBox))
             {
-                await InitializeAsync();
+                await ActivateAsync();
             }
         }
 
@@ -105,7 +105,7 @@ namespace Supermarket.Wpf.Manager.SupermarketCashboxes
                 {
                     MessageBox.Show("Nelze odstranit pokladnu, která již se používá", "Chyba", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
-                await InitializeAsync();
+                await ActivateAsync();
             }
         }
 

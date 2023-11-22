@@ -38,7 +38,7 @@
                     <DataGridTemplateColumn Header="Datum nastoupeni"  IsReadOnly="True" >
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding HireDate}" TextWrapping="Wrap" FontSize="25"/>
+                                <TextBlock Text="{Binding HireDate, StringFormat={}{0:d}}" TextWrapping="Wrap" FontSize="25"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>

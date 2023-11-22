@@ -86,7 +86,7 @@ namespace Supermarket.Wpf.Manager.SupermarketSharedFiles.Dialog
 
         private bool CanConfirmEdit(object? arg)
         {
-            if (ValidateInput.IsValidStringInput(SharedFile?.Name) && ValidateInput.IsValidStringInput(SharedFile?.Name))
+            if (SharedFile?.Name != string.Empty)
                 return true;
 
             return false;

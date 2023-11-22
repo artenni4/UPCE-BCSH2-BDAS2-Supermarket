@@ -136,6 +136,12 @@ namespace Supermarket.Wpf.Manager.SupermarketSharedFiles
             if (openFileDialog.ShowDialog() == true)
             {
                 string selectedFilePath = openFileDialog.FileName;
+                const long maxFileSize = 1 * 1024 * 1024;
+                if (new FileInfo(selectedFilePath).Length > maxFileSize)
+                {
+                    MessageBox.Show("Vybraný soubor je příliš velký. Vyberte prosím soubor o velikosti do " + (maxFileSize / (1024 * 1024)) + " MB.", "Chyba", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
                 if (!_loggedUserService.HasEmployeeId(out var employeeId))
                 {
                     throw new UiInconsistencyException("Unauthorized user is not allowed on this view");
@@ -186,6 +192,5 @@ namespace Supermarket.Wpf.Manager.SupermarketSharedFiles
         {
             return SelectedFile != null;
         }
-
     }
 }
