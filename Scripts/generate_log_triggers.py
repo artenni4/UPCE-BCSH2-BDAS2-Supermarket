@@ -18,6 +18,7 @@ tables = [
     'ulozeni_zbozi',
     'zamestnanci',
     'zbozi',
+    'soubory',
 ]
 
 
