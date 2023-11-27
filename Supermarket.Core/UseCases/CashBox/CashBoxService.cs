@@ -91,14 +91,11 @@ namespace Supermarket.Core.UseCases.CashBox
                 });
             }
 
-            foreach (var coupon in cashBoxPayment.Coupons)
+            await _paymentRepository.AddAsync(new Payment
             {
-                await _paymentRepository.AddAsync(new Payment
-                {
-                    Id = new PaymentId(saleId, PaymentType.Kupon),
-                    Amount = coupon.Discount
-                });
-            }
+                Id = new PaymentId(saleId, PaymentType.Kupon),
+                Amount = cashBoxPayment.Coupons.Sum(c => c.Discount)
+            });
 
             var paymentType = cashBoxPayment.PaymentType switch
             {
