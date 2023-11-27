@@ -64,7 +64,7 @@ namespace Supermarket.Wpf.Manager.SupermarketSharedFiles.Dialog
 
         private async void ConfirmEdit(object? obj)
         {
-            if (SharedFile == null || SharedFileId != 0)
+            if (SharedFile == null || SharedFileId == 0)
             {
                 return;
             }

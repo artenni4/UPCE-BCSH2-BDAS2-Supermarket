@@ -28,9 +28,21 @@ namespace Supermarket.Wpf.Admin.Employees
             }
         }
 
+        private string? _searchText;
+        public string? SearchText
+        {
+            get => _searchText;
+            set
+            {
+                _searchText = value;
+                OnPropertyChanged(nameof(Search));
+            }
+        }
+
         public ICommand AddCommand { get; }
         public ICommand EditCommand { get; }
         public ICommand DeleteCommand { get; }
+        public ICommand SearchCommand { get; }
 
         public string TabHeader => "Zaměstnanci";
         public event EventHandler? LoadingStarted;
@@ -44,6 +56,7 @@ namespace Supermarket.Wpf.Admin.Employees
             AddCommand = new RelayCommand(Add);
             EditCommand = new RelayCommand(Edit, CanCallDialog);
             DeleteCommand = new RelayCommand(Delete, CanCallDialog);
+            SearchCommand = new RelayCommand(Search);
 
             Employees = new();
         }
@@ -55,11 +68,20 @@ namespace Supermarket.Wpf.Admin.Employees
             _employees = await _adminMenuService.GetAllEmployees(new RecordsRange { PageSize = 500, PageNumber = 1 });
 
             Employees.Clear();
-            foreach (var supplier in _employees.Items)
+            if (string.IsNullOrEmpty(SearchText))
             {
-                Employees.Add(supplier);
+                foreach (var supplier in _employees.Items)
+                {
+                    Employees.Add(supplier);
+                }
             }
-
+            else
+            {
+                foreach (var supplier in _employees.Items.Where(x => (x.Name.ToLower() + " " + x.Surname.ToLower()).Contains(SearchText.ToLower())))
+                {
+                    Employees.Add(supplier);
+                }
+            }
         }
 
         public async void Add(object? obj)
@@ -104,6 +126,11 @@ namespace Supermarket.Wpf.Admin.Employees
         public bool CanCallDialog(object? obj)
         {
             return SelectedEmployee != null;
+        }
+
+        public async void Search(object? obj)
+        {
+            await ActivateAsync();
         }
     }
 }

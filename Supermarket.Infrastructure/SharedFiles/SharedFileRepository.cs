@@ -3,14 +3,7 @@ using Oracle.ManagedDataAccess.Client;
 using Supermarket.Core.Domain.Common.Paging;
 using Supermarket.Core.Domain.SharedFiles;
 using Supermarket.Core.UseCases.ManagerMenu;
-using Supermarket.Infrastructure.Products;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Reflection.Metadata.BlobBuilder;
 
 namespace Supermarket.Infrastructure.SharedFiles
 {

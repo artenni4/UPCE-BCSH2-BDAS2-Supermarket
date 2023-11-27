@@ -30,9 +30,21 @@ namespace Supermarket.Wpf.Admin.Products
             }
         }
 
+        private string? _searchText;
+        public string? SearchText
+        {
+            get => _searchText;
+            set
+            {
+                _searchText = value;
+                OnPropertyChanged(nameof(Search));
+            }
+        }
+
         public ICommand AddCommand { get; }
         public ICommand EditCommand { get; }
         public ICommand DeleteCommand { get; }
+        public ICommand SearchCommand { get; }
 
         public string TabHeader => "Zboží";
         public event EventHandler? LoadingStarted;
@@ -46,6 +58,7 @@ namespace Supermarket.Wpf.Admin.Products
             AddCommand = new RelayCommand(Add);
             EditCommand = new RelayCommand(Edit, CanCallDialog);
             DeleteCommand = new RelayCommand(Delete, CanCallDialog);
+            SearchCommand = new RelayCommand(Search);
 
             Products = new();
         }
@@ -55,11 +68,21 @@ namespace Supermarket.Wpf.Admin.Products
             using var _ = new DelegateLoading(this);
 
             _products = await _adminMenuService.GetAdminProducts(new RecordsRange { PageSize = 500, PageNumber = 1 });
-
-            Products.Clear();
-            foreach (var region in _products.Items)
+            if (string.IsNullOrEmpty(SearchText))
             {
-                Products.Add(region);
+                Products.Clear();
+                foreach (var region in _products.Items)
+                {
+                    Products.Add(region);
+                }
+            }
+            else
+            {
+                Products.Clear();
+                foreach (var region in _products.Items.Where(x => x.Name.Contains(SearchText)))
+                {
+                    Products.Add(region);
+                }
             }
         }
 
@@ -71,6 +94,11 @@ namespace Supermarket.Wpf.Admin.Products
             {
                 await ActivateAsync();
             }
+        }
+
+        public async void Search(object? obj)
+        {
+            await ActivateAsync();
         }
 
         public async void Edit(object? obj)
