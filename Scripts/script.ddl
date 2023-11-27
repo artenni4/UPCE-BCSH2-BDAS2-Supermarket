@@ -75,7 +75,7 @@ ALTER TABLE druhy_zbozi ADD CONSTRAINT druhy_zbozi_pk PRIMARY KEY ( druh_zbozi_i
 
 CREATE TABLE logy (
     tabulka  VARCHAR2(32) NOT NULL,
-    operace  VARCHAR2(20) NOT NULL,
+    operace  NVARCHAR2(2000) NOT NULL,
     cas      TIMESTAMP WITH LOCAL TIME ZONE NOT NULL,
     uzivatel VARCHAR2(30) NOT NULL
 );
